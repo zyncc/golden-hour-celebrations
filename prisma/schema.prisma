@@ -1,0 +1,91 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model Account {
+  id                String  @id @default(auto()) @map("_id") @db.ObjectId
+  userId            String  @db.ObjectId
+  type              String
+  provider          String
+  providerAccountId String  @map("provider_account_id")
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@map("accounts")
+}
+
+model User {
+  id               String       @id @default(auto()) @map("_id") @db.ObjectId
+  name             String
+  email            String       @unique
+  phone            String?
+  emailVerified    DateTime?    @map("email_verified")
+  password         String?
+  usingSocialLogin Boolean      @default(true)
+  image            String?
+  accounts         Account[]
+  createdAt        DateTime     @default(now())
+  UserCoupon       UserCoupon[]
+
+  @@map("users")
+}
+
+model Reservations {
+  id                    String   @id @default(auto()) @map("_id") @db.ObjectId
+  paymentStatus         Boolean  @default(false)
+  merchantTransactionID String   @unique
+  paymentTransactionID  String   @default("")
+  balanceAmount         Int
+  branch                String
+  theatre               String
+  timeSlot              String
+  date                  DateTime
+  noPeople              Int      @default(2)
+  occasion              String
+  name                  String
+  phone                 String
+  email                 String
+  secondName            String?
+  cake                  String
+  extraDecoration       String
+  gifts                 String
+  emailSent             Boolean  @default(false)
+  createdAt             DateTime @default(now())
+}
+
+model Coupons {
+  id               String       @id @default(auto()) @map("_id") @db.ObjectId
+  code             String       @unique
+  isActive         Boolean      @default(true)
+  discountType     String
+  discountAmount   Int
+  redeemedCount    Int          @default(0)
+  minBookingAmount Int?
+  createdAt        DateTime     @default(now())
+  updatedAt        DateTime     @updatedAt
+  UserCoupon       UserCoupon[]
+}
+
+model UserCoupon {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId     String   @db.ObjectId
+  couponId   String   @db.ObjectId
+  redeemedAt DateTime
+
+  user   User    @relation(fields: [userId], references: [id])
+  coupon Coupons @relation(fields: [couponId], references: [id])
+
+  @@unique([userId, couponId])
+}
