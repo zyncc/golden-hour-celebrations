@@ -109,3 +109,10 @@ input::-webkit-inner-spin-button {
 input[type="number"] {
   -moz-appearance: textfield;
 }
+
+.list {
+  list-style: upper-alpha;
+}
+.list2 {
+  list-style: upper-roman;
+}

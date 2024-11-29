@@ -126,10 +126,10 @@ export default async function LoginForm({
           </Link>
           ,{" "}
           <Link
-            href="/acceptable-use"
+            href="/refunds"
             className="text-blue-600 hover:underline"
           >
-            acceptable use
+            refunds
           </Link>
           , and{" "}
           <Link href="/privacy" className="text-blue-600 hover:underline">

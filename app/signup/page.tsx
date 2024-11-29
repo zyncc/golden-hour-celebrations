@@ -79,10 +79,10 @@ export default async function SignUpForm({
           </Link>
           ,{" "}
           <Link
-            href="/acceptable-use"
+            href="/refunds"
             className="text-blue-500 hover:underline"
           >
-            acceptable use
+            refunds
           </Link>
           , and{" "}
           <Link href="/privacy" className="text-blue-500 hover:underline">

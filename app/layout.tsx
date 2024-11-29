@@ -5,6 +5,7 @@ import Navbar from "@/components/navbar/navbar";
 import { Toaster } from "@/components/ui/toaster";
 import { ThemeProvider } from "@/components/theme-provider";
 import Providers from "@/lib/authProvider";
+import Marquee from "@/components/ui/marquee";
 
 const poppins = Poppins({
   subsets: ["latin", "latin-ext"],
@@ -40,6 +41,7 @@ export default function RootLayout({
         >
           <Providers>
             <Navbar />
+            <Marquee/>
             <Toaster />
             {children}
           </Providers>
