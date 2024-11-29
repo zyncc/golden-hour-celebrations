@@ -39,3 +39,24 @@ export const validation = z.object({
   theatre: z.enum(["standard-theatre", "romantic-theatre"]),
   time: z.string().min(1, "Please select a time slot"),
 });
+
+export const StepOneFormSchema = z.object({
+  name: z
+    .string({ message: "Name is required" })
+    .min(3, { message: "Name must be atleast 3 characters" })
+    .max(50, { message: "Name cannot be more than 50 characters" }),
+  phone: z.string({ message: "Phone is required" }).regex(/^[6-9]\d{9}$/, {
+    message: "Invalid phone number",
+  }),
+  findus: z.enum(["Instagram / Facebook", "Google", "Word of mouth"]),
+  occasion: z.enum([
+    "Birthday",
+    "Anniversary",
+    "Bride / Groom to be",
+    "Graduation Party",
+    "Proposal",
+    "Mom to be",
+    "Other Surprises",
+  ]),
+  date: z.date({ message: "Date is required" }),
+});

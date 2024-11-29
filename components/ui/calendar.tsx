@@ -9,15 +9,21 @@ import { buttonVariants } from "@/components/ui/button";
 
 export type CalendarProps = React.ComponentProps<typeof DayPicker>;
 
-function Calendar({
-  className,
-  classNames,
-  showOutsideDays = true,
-  ...props
-}: CalendarProps) {
+function Calendar({ className, ...props }: CalendarProps) {
+  const currentDate = new Date();
+  const currentMonth = currentDate.getMonth();
+  let nextMonth = currentMonth + 1;
+  let nextYear = currentDate.getFullYear();
+  if (nextMonth > 11) {
+    nextMonth = 0;
+    nextYear++;
+  }
+  let nextMonthDate = new Date(nextYear, nextMonth, 1);
   return (
     <DayPicker
-      showOutsideDays={showOutsideDays}
+      {...props}
+      fromDate={currentDate}
+      toMonth={nextMonthDate}
       className={cn("p-3", className)}
       classNames={{
         months: "flex flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0",
@@ -51,13 +57,11 @@ function Calendar({
         day_range_middle:
           "aria-selected:bg-accent aria-selected:text-accent-foreground",
         day_hidden: "invisible",
-        ...classNames,
       }}
       components={{
         IconLeft: ({ ...props }) => <ChevronLeft className="h-4 w-4" />,
         IconRight: ({ ...props }) => <ChevronRight className="h-4 w-4" />,
       }}
-      {...props}
     />
   );
 }
