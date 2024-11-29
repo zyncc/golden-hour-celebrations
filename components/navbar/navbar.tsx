@@ -69,7 +69,7 @@ export default async function Navbar() {
               </form>
             )}
             <Link href={"/booking"}>
-              <CustomBtn classes="rounded-full" variant={"fancy"}>
+              <CustomBtn classes="rounded-full" variant={"outline"}>
                 Book now
               </CustomBtn>
             </Link>

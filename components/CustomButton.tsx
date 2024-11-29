@@ -8,7 +8,6 @@ type Props = {
     | "secondary"
     | "ghost"
     | "link"
-    | "fancy"
     | null
     | undefined;
   size?: "default" | "sm" | "lg" | "icon" | null | undefined;
