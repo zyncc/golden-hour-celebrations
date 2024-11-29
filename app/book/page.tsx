@@ -1,8 +1,5 @@
 "use client";
 
-import { IoCalendarNumberOutline } from "react-icons/io5";
-import { FiGift } from "react-icons/fi";
-import { RiMoneyRupeeCircleLine } from "react-icons/ri";
 import {
   TbCircleNumber1Filled,
   TbCircleNumber2Filled,
@@ -19,7 +16,6 @@ import {
 } from "@/components/ui/select";
 import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
-
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
@@ -30,49 +26,70 @@ import {
 } from "@/components/ui/popover";
 import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { BentoGrid, BentoGridItem } from "@/components/ui/bento-grid";
-import {
-  IconClipboardCopy,
-  IconFileBroken,
-  IconSignature,
-  IconTableColumn,
-} from "@tabler/icons-react";
+import Image from "next/image";
+import useEmblaCarousel from "embla-carousel-react";
+import Autoplay from "embla-carousel-autoplay";
+import Fade from "embla-carousel-fade";
 
 const items = [
   {
-    title: "The Dawn of Innovation",
-    description: "Explore the birth of groundbreaking ideas and inventions.",
-    header: "Package 1",
-    className: "md:col-span-2",
-    icon: <IconClipboardCopy className="h-4 w-4 text-neutral-500" />,
+    theatre: "Family Theatre",
+    noPeople: 7,
+    decoration: "₹750 extra",
+    price: 1399,
+    photo: [
+      "https://images.pexels.com/photos/7507067/pexels-photo-7507067.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+      "https://images.pexels.com/photos/7180617/pexels-photo-7180617.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+    ],
   },
   {
-    title: "The Digital Revolution",
-    description: "Dive into the transformative power of technology.",
-    header: "Package 2",
-    className: "md:col-span-1",
-    icon: <IconFileBroken className="h-4 w-4 text-neutral-500" />,
+    theatre: "Family Theatre",
+    noPeople: 7,
+    decoration: "₹750 extra",
+    price: 1399,
+    photo: [
+      "https://images.pexels.com/photos/7507067/pexels-photo-7507067.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+      "https://images.pexels.com/photos/7180617/pexels-photo-7180617.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+    ],
   },
   {
-    title: "The Art of Design",
-    description: "Discover the beauty of thoughtful and functional design.",
-    header: "Package 3",
-    className: "md:col-span-1",
-    icon: <IconSignature className="h-4 w-4 text-neutral-500" />,
+    theatre: "Family Theatre",
+    noPeople: 7,
+    decoration: "₹750 extra",
+    price: 1399,
+    photo: [
+      "https://images.pexels.com/photos/7507067/pexels-photo-7507067.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+      "https://images.pexels.com/photos/7180617/pexels-photo-7180617.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+    ],
   },
   {
-    title: "The Power of Communication",
-    description:
-      "Understand the impact of effective communication in our lives.",
-    header: "Package 4",
-    className: "md:col-span-2",
-    icon: <IconTableColumn className="h-4 w-4 text-neutral-500" />,
+    theatre: "Family Theatre",
+    noPeople: 7,
+    decoration: "₹750 extra",
+    price: 1399,
+    photo: [
+      "https://images.pexels.com/photos/7507067/pexels-photo-7507067.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+      "https://images.pexels.com/photos/7180617/pexels-photo-7180617.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+    ],
   },
 ];
 
 export default function Book() {
+  const currentDate = new Date();
+  const currentMonth = currentDate.getMonth();
+  let nextMonth = currentMonth + 1;
+  let nextYear = currentDate.getFullYear();
+  if (nextMonth > 11) {
+    nextMonth = 0;
+    nextYear++;
+  }
+  let nextMonthDate = new Date(nextYear, nextMonth, 1);
   const [date, setDate] = useState<Date>();
   const searchParams = useSearchParams();
+  const [emblaRef] = useEmblaCarousel({ loop: true }, [
+    Fade(),
+    Autoplay({ delay: 3000 }),
+  ]);
   const packages = Number(searchParams.get("package"));
   let step = Number(searchParams.get("step"));
   if (!step) {
@@ -90,7 +107,7 @@ export default function Book() {
           <h1
             className={`${
               step == 1 && "text-yellow-500"
-            } flex items-center gap-x-3`}
+            } flex items-center gap-x-3 font-medium`}
           >
             <TbCircleNumber1Filled
               color={`step == 1 ? "#eab308" : "#ffffff"`}
@@ -99,12 +116,11 @@ export default function Book() {
             Choose Date
           </h1>
         </div>
-
         <div>
           <h1
             className={`${
               step == 2 && "text-yellow-500"
-            } flex items-center gap-x-3`}
+            } flex items-center gap-x-3 font-medium`}
           >
             <TbCircleNumber2Filled
               color={`step == 2 ? "#eab308" : "#ffffff"`}
@@ -117,7 +133,7 @@ export default function Book() {
           <h1
             className={`${
               step == 3 && "text-yellow-500"
-            } flex items-center gap-x-3`}
+            } flex items-center gap-x-3 font-medium`}
           >
             <TbCircleNumber3Filled
               color={`step == 3 ? "#eab308" : "#ffffff"`}
@@ -222,24 +238,38 @@ export default function Book() {
       ) : step == 2 ? (
         <div className={"mt-10 w-full flex"}>
           <div className={"flex flex-col gap-y-5 w-full"}>
-            <BentoGrid className={"w-full"}>
+            <div className={"w-full grid gap-x-4 gap-y-6 grid-cols-3"}>
               {items.map((item, i) => (
-                <BentoGridItem
-                  onClick={() => {
-                    router.push(`?step=2&packages=${i + 1}`);
-                  }}
-                  key={i}
-                  title={item.title}
-                  description={item.description}
-                  header={item.header}
-                  className={`${item.className} ${
-                    packages == i + 1 && "border-2 border-yellow-600"
-                  }`}
-                  icon={item.icon}
-                />
+                <div key={i} className="flex flex-col gap-y-3 md:col-span-1">
+                  <div className="relative w-full aspect-w-16 aspect-h-9">
+                    <div className="embla" ref={emblaRef}>
+                      <div className="embla__container w-full h-full">
+                        {item.photo.map((pic) => (
+                          <div
+                            className="embla__slide aspect-w-16 aspect-h-9"
+                            key={pic}
+                          >
+                            <Image
+                              priority
+                              src={pic}
+                              alt="Package Image"
+                              fill
+                              className="rounded-md object-cover aspect-video"
+                              fetchPriority="high"
+                            />
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                  <h1>{item.theatre}</h1>
+                  <h1>Upto {item.noPeople} people</h1>
+                  <h1>Decoration {item.decoration}</h1>
+                  <h1>₹{item.price}</h1>
+                </div>
               ))}
-            </BentoGrid>
-            <div className={"flex gap-x-3"}>
+            </div>
+            {/* <div className={"flex gap-x-3"}>
               <Button
                 type={"submit"}
                 className={"w-full"}
@@ -260,7 +290,7 @@ export default function Book() {
               >
                 Next
               </Button>
-            </div>
+            </div> */}
           </div>
         </div>
       ) : step == 3 ? (
@@ -336,10 +366,17 @@ export default function Book() {
                 </PopoverTrigger>
                 <PopoverContent className="w-auto p-0">
                   <Calendar
+                    showOutsideDays={false}
+                    required
+                    fromDate={currentDate}
+                    toMonth={nextMonthDate}
                     mode="single"
                     selected={date}
+                    onDayClick={(day) => {
+                      setDate(day);
+                    }}
                     onSelect={setDate}
-                    initialFocus
+                    className="rounded-md w-fit border"
                   />
                 </PopoverContent>
               </Popover>
@@ -355,7 +392,11 @@ export default function Book() {
               >
                 Back
               </Button>
-              <Button type={"submit"} className={"w-full"} variant={"fancy"}>
+              <Button
+                type={"submit"}
+                className={"w-full"}
+                variant={"secondary"}
+              >
                 Pay
               </Button>
             </div>

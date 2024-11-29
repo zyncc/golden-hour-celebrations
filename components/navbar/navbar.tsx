@@ -11,6 +11,7 @@ import { MdOutlineMenu } from "react-icons/md";
 import { Button } from "../ui/button";
 import { signOut } from "@/auth";
 import getSession from "@/lib/getSession";
+import Image from "next/image";
 
 const NavLinks = [
   {
@@ -36,7 +37,15 @@ export default async function Navbar() {
     >
       <nav className="container flex justify-between items-center py-3">
         <Link href={"/"}>
-          <h1 className="font-semibold text-xl">Golden Hour</h1>
+          <Image
+            src={"/logo2.svg"}
+            alt="Logo"
+            width={50}
+            height={50}
+            priority
+            fetchPriority="high"
+            unoptimized
+          />
         </Link>
         <div className="hidden lg:block">
           <ul className="flex gap-x-7">
