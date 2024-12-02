@@ -22,7 +22,6 @@ import { useToast } from "@/components/ui/use-toast";
 import { CouponSubmitButton } from "@/components/formSubmitButton";
 import { checkCoupon } from "@/actions/coupon";
 import { useSession } from "next-auth/react";
-import { Coupons } from "@prisma/client";
 import { validation } from "@/lib/zodSchemas";
 import { Pay } from "@/actions/pay";
 
@@ -63,7 +62,6 @@ export default function BookingComponent() {
   const [decorationPrice, setDecorationPrice] = useState(0);
   const [giftPrice, setGiftPrice] = useState(0);
   const [subTotal, setSubTotal] = useState(1000);
-  const [coupon, setCoupon] = useState<Coupons>();
   const { toast } = useToast();
 
   useEffect(() => {
@@ -110,14 +108,6 @@ export default function BookingComponent() {
     if (validData.success == true) {
       console.log("CALLED SA");
       Pay(validData.data, date, noOfPeople);
-    }
-  }
-
-  async function handleCouponForm(formData: FormData) {
-    setCoupon(undefined);
-    const couponExists = await checkCoupon(formData);
-    if (couponExists) {
-      setCoupon(couponExists);
     }
   }
 
@@ -585,50 +575,33 @@ export default function BookingComponent() {
                   <h1 className="text-right">₹{giftPrice}</h1>
                 </>
               )}
-              {coupon && (
-                <>
-                  <h1>Coupon Code ({coupon.code})</h1>
-                  <h1 className="text-right">- ₹{coupon.discountAmount}</h1>
-                </>
-              )}
-              <h1>Sub Total</h1>
-              <h1 className="text-right">
-                ₹{coupon ? subTotal - coupon.discountAmount : subTotal}
-              </h1>
-              <h1>Advance Amount Payable</h1>
-              <h1 className="text-right">₹750</h1>
-              <h1>Balance Amount Payable</h1>
-              <h1 className="text-right">
-                ₹{(coupon ? subTotal - coupon.discountAmount : subTotal) - 750}
-              </h1>
-            </div>
-            <div className="mt-5">
-              <Label htmlFor="coupon" form="couponForm">
-                Have a Coupon?
-              </Label>
-              <div className="flex gap-3 my-2">
-                <Input
-                  type="string"
-                  name="coupon"
-                  id="coupon"
-                  form="couponForm"
-                  placeholder="Enter your Code Here"
-                />
-                <CouponSubmitButton />
+              <div className="mt-5">
+                <Label htmlFor="coupon" form="couponForm">
+                  Have a Coupon?
+                </Label>
+                <div className="flex gap-3 my-2">
+                  <Input
+                    type="string"
+                    name="coupon"
+                    id="coupon"
+                    form="couponForm"
+                    placeholder="Enter your Code Here"
+                  />
+                  <CouponSubmitButton />
+                </div>
               </div>
+              <Button
+                variant={"default"}
+                type="submit"
+                className="w-full mt-3 font-bold"
+                form="booking-form"
+              >
+                Pay ₹750
+              </Button>
             </div>
-            <Button
-              variant={"default"}
-              type="submit"
-              className="w-full mt-3 font-bold"
-              form="booking-form"
-            >
-              Pay ₹750
-            </Button>
           </div>
         </div>
       </form>
-      <form action={handleCouponForm} id="couponForm" />
     </div>
   );
 }

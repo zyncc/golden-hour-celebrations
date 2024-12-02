@@ -1,16 +1,20 @@
 import { create } from "zustand";
 
-type Reservation = {
-  name: string | undefined;
-  phone: string | undefined;
-  findus: string | undefined;
-  occasion: string | undefined;
-  date: Date | undefined;
+export type Reservation = {
+  name?: string | undefined;
+  phone?: string | undefined;
+  email?: string | undefined;
+  findus?: string | undefined;
+  occasion?: string | undefined;
+  date?: Date | undefined;
+  room?: string | undefined;
+  timeSlot?: string | undefined;
+  price?: number | undefined;
 };
 
 type ReservationType = {
   reservation: Reservation | undefined;
-  setReservationData: (data: Reservation) => void;
+  setReservationData: (data: Reservation | undefined) => void;
 };
 
 export const useReservation = create<ReservationType>((set) => ({

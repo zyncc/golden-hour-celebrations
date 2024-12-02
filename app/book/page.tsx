@@ -5,7 +5,7 @@ import {
   TbCircleNumber2Filled,
   TbCircleNumber3Filled,
 } from "react-icons/tb";
-import { useSearchParams } from "next/navigation";
+import { notFound, useSearchParams } from "next/navigation";
 import StepOneForm from "./components/stepOneForm";
 import StepTwo from "./components/StepTwo";
 import StepThree from "./components/StepThree";
@@ -13,10 +13,10 @@ import StepThree from "./components/StepThree";
 const items = [
   {
     id: 1,
-    theatre: "Family Theatre",
+    room: "Family Room",
     noPeople: 7,
     decoration: "₹750 extra",
-    price: 1399,
+    price: 3200,
     photo: [
       "https://images.pexels.com/photos/3171837/pexels-photo-3171837.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
       "https://images.pexels.com/photos/433452/pexels-photo-433452.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
@@ -24,21 +24,21 @@ const items = [
   },
   {
     id: 2,
-    theatre: "Family Theatre",
+    room: "Love Room",
     noPeople: 7,
     decoration: "₹750 extra",
-    price: 1399,
+    price: 3800,
     photo: [
       "https://images.pexels.com/photos/7507067/pexels-photo-7507067.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
       "https://images.pexels.com/photos/7180617/pexels-photo-7180617.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
     ],
   },
   {
-    id: 2,
-    theatre: "Family Theatre",
+    id: 3,
+    room: "Decoration Room",
     noPeople: 7,
     decoration: "₹750 extra",
-    price: 1399,
+    price: 1200,
     photo: [
       "https://images.pexels.com/photos/7507067/pexels-photo-7507067.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
       "https://images.pexels.com/photos/7180617/pexels-photo-7180617.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
@@ -48,12 +48,13 @@ const items = [
 
 export default function Book() {
   const searchParams = useSearchParams();
-  const packages = Number(searchParams.get("package"));
   let step = Number(searchParams.get("step"));
   if (!step) {
     step = 1;
   }
-
+  if (![1, 2, 3].includes(step)) {
+    return notFound();
+  }
   return (
     <div className={"mt-[100px] container mx-auto"}>
       <div

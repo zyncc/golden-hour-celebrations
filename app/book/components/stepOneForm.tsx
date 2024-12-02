@@ -11,28 +11,19 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { useReservation } from "@/app/context/ReservationStore";
 import { StepOneFormSchema } from "@/lib/zodSchemas";
+import { Label } from "@/components/ui/label";
 
 export default function StepOneForm() {
   const currentDate = new Date();
@@ -44,187 +35,205 @@ export default function StepOneForm() {
     nextYear++;
   }
   let nextMonthDate = new Date(nextYear, nextMonth, 1);
-  const [date, setDate] = useState<Date | undefined>(undefined);
   const router = useRouter();
-
-  const form = useForm<z.infer<typeof StepOneFormSchema>>({
-    resolver: zodResolver(StepOneFormSchema),
-    defaultValues: {
-      name: "",
-    },
-  });
-
   const { setReservationData, reservation } = useReservation();
+  const [date, setDate] = useState<Date | undefined>(reservation?.date);
+  const [errors, setErrors] = useState<z.ZodIssue[]>();
 
-  function onSubmit(values: z.infer<typeof StepOneFormSchema>) {
-    setReservationData(values);
-    router.push("?step=2");
+  function handleFormSubmit(FormData: FormData) {
+    const formData = Object.fromEntries(FormData);
+    let validation;
+    if (date) {
+      validation = StepOneFormSchema.safeParse({ ...formData, date });
+    } else {
+      const resDate = reservation?.date as Date;
+      validation = StepOneFormSchema.safeParse({ ...formData, resDate });
+    }
+    if (validation.success) {
+      setDate(validation.data.date);
+      setReservationData(undefined);
+      setReservationData(validation.data);
+      router.push("/book?step=2");
+    } else {
+      setErrors(validation.error.issues);
+    }
   }
+
   return (
     <div className={"mt-10 flex"}>
       <div
         className={"flex w-full items-center justify-center flex-col gap-y-5"}
       >
-        <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(onSubmit)}
-            className="space-y-8 w-full"
-          >
-            <FormField
-              control={form.control}
+        <form
+          className="space-y-8 w-full"
+          action={(formData) => handleFormSubmit(formData)}
+        >
+          <div className="flex flex-col gap-y-3">
+            <Label htmlFor="name">Enter your Name</Label>
+            <Input
+              placeholder={"Name"}
               name="name"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Enter your Name</FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder={"Name"}
-                      {...field}
-                      defaultValue={reservation?.name}
-                      value={field.value || reservation?.name}
-                      onChange={field.onChange}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
+              defaultValue={reservation?.name}
             />
-            <FormField
-              control={form.control}
+            {errors?.map((error) => {
+              if (error.path[0] == "name") {
+                return (
+                  <p
+                    className="text-sm text-red-600 font-medium"
+                    key={error.path[0]}
+                  >
+                    {error.message}
+                  </p>
+                );
+              }
+            })}
+          </div>
+          <div className="flex flex-col gap-y-3">
+            <Label>Enter your Whatsapp Number</Label>
+            <Input
+              placeholder="Phone"
+              type="text"
+              maxLength={10}
+              minLength={10}
               name="phone"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Enter your Whatsapp Number</FormLabel>
-                  <FormControl>
-                    <Input
-                      {...field}
-                      placeholder="Phone"
-                      type="text"
-                      maxLength={10}
-                      minLength={10}
-                      value={field.value || reservation?.phone}
-                      onChange={field.onChange}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
+              defaultValue={reservation?.phone}
             />
-            <FormField
-              control={form.control}
-              name="findus"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>How did you find us?</FormLabel>
-                  <FormControl>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                      value={field.value || reservation?.findus}
-                    >
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="Instagram / Facebook">
-                          Instagram / Facebook
-                        </SelectItem>
-                        <SelectItem value="Google">Google</SelectItem>
-                        <SelectItem value="Word of mouth">
-                          Word of mouth
-                        </SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
+            {errors?.map((error) => {
+              if (error.path[0] == "phone") {
+                return (
+                  <p
+                    className="text-sm text-red-600 font-medium"
+                    key={error.path[0]}
+                  >
+                    {error.message}
+                  </p>
+                );
+              }
+            })}
+          </div>
+          <div className="flex flex-col gap-y-3">
+            <Label>Enter your Email</Label>
+            <Input
+              placeholder="Email"
+              type="email"
+              name="email"
+              defaultValue={reservation?.email}
             />
-            <FormField
-              control={form.control}
-              name="occasion"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Choose Occasion</FormLabel>
-                  <FormControl>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                      value={field.value || reservation?.occasion}
-                    >
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="Birthday">Birthday</SelectItem>
-                        <SelectItem value="Anniversary">Anniversary</SelectItem>
-                        <SelectItem value="Bride / Groom to be">
-                          Bride / Groom to be
-                        </SelectItem>
-                        <SelectItem value="Graduation Party">
-                          Graduation Party
-                        </SelectItem>
-                        <SelectItem value="Proposal">Proposal</SelectItem>
-                        <SelectItem value="Mom to be">Mom to be</SelectItem>
-                        <SelectItem value="Other Surprises">
-                          Other Surprises
-                        </SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="date"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Pick your Date</FormLabel>
-                  <FormControl>
-                    <Popover>
-                      <PopoverTrigger asChild>
-                        <Button
-                          variant={"outline"}
-                          className={cn(
-                            "w-full justify-start text-left font-normal",
-                            !field.value && "text-muted-foreground"
-                          )}
-                        >
-                          <CalendarIcon />
-                          {field.value || reservation?.date ? (
-                            format(field.value || reservation?.date, "PPP")
-                          ) : (
-                            <span>Pick a date</span>
-                          )}
-                        </Button>
-                      </PopoverTrigger>
-                      <PopoverContent className="w-auto p-0">
-                        <Calendar
-                          showOutsideDays={false}
-                          mode="single"
-                          fromDate={currentDate}
-                          toMonth={nextMonthDate}
-                          selected={field.value || reservation?.date}
-                          onSelect={field.onChange}
-                          onDayClick={(day) => {
-                            setDate(day);
-                          }}
-                          className="rounded-md w-fit border"
-                        />
-                      </PopoverContent>
-                    </Popover>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <Button type={"submit"} className="w-full" variant={"outline"}>
-              Next
-            </Button>
-          </form>
-        </Form>
+            {errors?.map((error) => {
+              if (error.path[0] == "email") {
+                return (
+                  <p
+                    className="text-sm text-red-600 font-medium"
+                    key={error.path[0]}
+                  >
+                    {error.message}
+                  </p>
+                );
+              }
+            })}
+          </div>
+          <div className="flex flex-col gap-y-3">
+            <Label>How did you find us?</Label>
+            <Select name="findus" defaultValue={reservation?.findus}>
+              <SelectTrigger>
+                <SelectValue placeholder="Select" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="Instagram / Facebook">
+                  Instagram / Facebook
+                </SelectItem>
+                <SelectItem value="Google">Google</SelectItem>
+                <SelectItem value="Word of mouth">Word of mouth</SelectItem>
+              </SelectContent>
+            </Select>
+            {errors?.map((error) => {
+              if (error.path[0] == "findus") {
+                return (
+                  <p
+                    className="text-sm text-red-600 font-medium"
+                    key={error.path[0]}
+                  >
+                    {error.message}
+                  </p>
+                );
+              }
+            })}
+          </div>
+          <div className="flex flex-col gap-y-3">
+            <Label>Choose Occasion</Label>
+            <Select name="occasion" defaultValue={reservation?.occasion}>
+              <SelectTrigger>
+                <SelectValue placeholder="Select" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="Birthday">Birthday</SelectItem>
+                <SelectItem value="Anniversary">Anniversary</SelectItem>
+                <SelectItem value="Bride / Groom to be">
+                  Bride / Groom to be
+                </SelectItem>
+                <SelectItem value="Graduation Party">
+                  Graduation Party
+                </SelectItem>
+                <SelectItem value="Proposal">Proposal</SelectItem>
+                <SelectItem value="Mom to be">Mom to be</SelectItem>
+                <SelectItem value="Other Surprises">Other Surprises</SelectItem>
+              </SelectContent>
+            </Select>
+            {errors?.map((error) => {
+              if (error.path[0] == "occasion") {
+                return (
+                  <p
+                    className="text-sm text-red-600 font-medium"
+                    key={error.path[0]}
+                  >
+                    {error.message}
+                  </p>
+                );
+              }
+            })}
+          </div>
+          <div className="flex flex-col gap-y-3">
+            <Label>Pick your Date</Label>
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button
+                  variant={"outline"}
+                  className={cn(
+                    "w-full justify-start text-left font-normal",
+                    !date && "text-muted-foreground"
+                  )}
+                >
+                  <CalendarIcon className="mr-2 h-4 w-4" />
+                  {date ? format(date, "PPP") : <span>Pick a date</span>}
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="p-0">
+                <Calendar
+                  mode="single"
+                  // fromDate={currentDate}
+                  // toMonth={nextMonthDate}
+                  selected={date}
+                  onSelect={setDate}
+                />
+              </PopoverContent>
+            </Popover>
+            {errors?.map((error) => {
+              if (error.path[0] == "date") {
+                return (
+                  <p
+                    className="text-sm text-red-600 font-medium"
+                    key={error.path[0]}
+                  >
+                    {error.message}
+                  </p>
+                );
+              }
+            })}
+          </div>
+          <Button type={"submit"} className="w-full" variant={"outline"}>
+            Next
+          </Button>
+        </form>
       </div>
     </div>
   );

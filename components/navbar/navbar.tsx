@@ -35,13 +35,13 @@ export default async function Navbar() {
       id="header"
       className="text-white z-50 fixed top-0 right-0 left-0 bg-transparent backdrop-blur-xl"
     >
-      <nav className="container flex justify-between items-center py-3">
+      <nav className="container flex justify-between items-center py-2.5">
         <Link href={"/"}>
           <Image
-            src={"/logo2.svg"}
+            src={"/logo.svg"}
             alt="Logo"
-            width={50}
-            height={50}
+            width={120}
+            height={120}
             priority
             fetchPriority="high"
             unoptimized
@@ -68,7 +68,7 @@ export default async function Navbar() {
                 <Button type="submit">Sign out</Button>
               </form>
             )}
-            <Link href={"/booking"}>
+            <Link href={"/book"}>
               <CustomBtn classes="rounded-full" variant={"outline"}>
                 Book now
               </CustomBtn>
