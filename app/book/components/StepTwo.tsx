@@ -76,7 +76,7 @@ export default function StepTwo({ items }: { items: Props }) {
     refetchOnWindowFocus: true,
     queryFn: async () => {
       const res = await fetch(
-        `http://localhost:3000/api/fetchReservations?date=${reservation?.date?.toISOString()}`
+        `/api/fetchReservations?date=${reservation?.date?.toISOString()}`
       );
       return res.json();
     },
