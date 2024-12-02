@@ -27,15 +27,11 @@ export default async function Page({ params }: { params: { id: string } }) {
             </div>
             <div className="flex flex-col gap-y-2 mt-5 text-lg">
               <h1>Transaction ID: {response.merchantTransactionID}</h1>
-              <h1>Branch: {capitalizeFirstLetter(response.branch)}</h1>
-              <h1>Theatre: {response.theatre}</h1>
+              <h1>Theatre: {response.room}</h1>
               <h1>Time: {response.timeSlot}</h1>
               <h1>Booking Name: {capitalizeFirstLetter(response.name)}</h1>
               <h1>Email: {response.email}</h1>
               <h1>Occasion: {response.occasion}</h1>
-              <h1>Cake: {response.cake}</h1>
-              <h1>Extra Decoration: {response.extraDecoration}</h1>
-              <h1>Gifts: {response.gifts}</h1>
               <h1>
                 Balance Amount:{" "}
                 <span className="font-semibold">

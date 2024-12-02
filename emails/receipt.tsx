@@ -21,16 +21,11 @@ export const NikeReceiptEmail = ({
   getReservationDetails: {
     merchantTransactionID,
     balanceAmount,
-    branch,
-    cake,
     date,
     email,
-    extraDecoration,
-    gifts,
     phone,
     timeSlot,
-    theatre,
-    noPeople,
+    room,
     occasion,
     name,
   },
@@ -66,12 +61,10 @@ export const NikeReceiptEmail = ({
           <Text style={{ ...global.text, marginTop: 24, textAlign: "left" }}>
             Dear {name},
             <br />
-            We're thrilled to confirm your reservation with us! 🎉
-            <br />
-            Branch - {capitalizeFirstLetter(branch)}
+            We&#39re thrilled to confirm your reservation with us! 🎉
             <br />
             Theatre -{" "}
-            {theatre == "standard-theatre"
+            {room == "standard-theatre"
               ? "Standard Theatre"
               : "Romantic Theatre"}
             <br />
@@ -81,18 +74,12 @@ export const NikeReceiptEmail = ({
             <br />
             Phone - {phone}
             <br />
-            {cake && `Cake - ${cake}`}
-            <br />
-            {extraDecoration && `Extra Decoration - ${extraDecoration}`}
-            <br />
-            {gifts && `Gifts - ${gifts}`}
-            <br />
             Balance Amount Payable -{" "}
             {formatCurrency(balanceAmount).split(".")[0]}
             <br />
             <br />
             If you have any special requests or need further assistance, please
-            don't hesitate to reach out.
+            don&#39t hesitate to reach out.
           </Text>
         </Section>
         <Section style={paddingY}>
@@ -105,7 +92,7 @@ export const NikeReceiptEmail = ({
           <Row>
             <Text style={{ ...footer.text, paddingTop: 30, paddingBottom: 30 }}>
               Please contact us if you have any questions. (If you reply to this
-              email, we won't be able to see it.)
+              email, we won&#39t be able to see it.)
             </Text>
           </Row>
           <Row>
