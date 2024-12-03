@@ -23,7 +23,11 @@ export async function POST(req: Request) {
         process.env.SALT_INDEX;
       const options = {
         method: "get",
-        url: `https://api-preprod.phonepe.com/apis/pg-sandbox/pg/v1/status/${process.env.MERCHANT_ID}/${mtrID}`,
+        url: `${
+          process.env.NODE_ENV == "development"
+            ? "https://api-preprod.phonepe.com/apis/pg-sandbox/pg/v1/status"
+            : "https://api.phonepe.com/apis/hermes/v1/status"
+        }/${process.env.MERCHANT_ID}/${mtrID}`,
         headers: {
           accept: "application/json",
           "Content-Type": "application/json",
