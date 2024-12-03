@@ -39,13 +39,11 @@ export default async function Navbar() {
       <nav className="container flex justify-between items-center py-2.5">
         <Link href={"/"}>
           <Image
-            src={"/logo.svg"}
-            alt="Logo"
+            src={"/logo.png"}
+            alt="Golden Hour"
             width={120}
             height={120}
             priority
-            fetchPriority="high"
-            unoptimized
           />
         </Link>
         <div className="hidden lg:block">

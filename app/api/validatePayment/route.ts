@@ -16,19 +16,19 @@ export async function POST(req: Request) {
     try {
       const checksum =
         SHA256(
-          `/pg/v1/status/${process.env.NEXT_PUBLIC_MERCHANT_ID}/${mtrID}` +
-            process.env.NEXT_PUBLIC_SALT_KEY
+          `/pg/v1/status/${process.env.MERCHANT_ID}/${mtrID}` +
+            process.env.SALT_KEY
         ) +
         "###" +
-        process.env.NEXT_PUBLIC_SALT_INDEX;
+        process.env.SALT_INDEX;
       const options = {
         method: "get",
-        url: `https://api-preprod.phonepe.com/apis/pg-sandbox/pg/v1/status/${process.env.NEXT_PUBLIC_MERCHANT_ID}/${mtrID}`,
+        url: `https://api-preprod.phonepe.com/apis/pg-sandbox/pg/v1/status/${process.env.MERCHANT_ID}/${mtrID}`,
         headers: {
           accept: "application/json",
           "Content-Type": "application/json",
           "X-VERIFY": checksum,
-          "X-MERCHANT-ID": process.env.NEXT_PUBLIC_MERCHANT_ID,
+          "X-MERCHANT-ID": process.env.MERCHANT_ID,
         },
       };
       const response = await axios.request(options);

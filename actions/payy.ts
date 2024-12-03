@@ -3,7 +3,6 @@
 import { Reservation } from "@/app/context/ReservationStore";
 import prisma from "@/lib/prisma";
 import { payReservationSchema } from "@/lib/zodSchemas";
-import { Prisma } from "@prisma/client";
 import axios from "axios";
 import { SHA256 } from "crypto-js";
 import { redirect } from "next/navigation";
@@ -20,10 +19,10 @@ export async function Payy(reservation: Reservation, balanceAmount: number) {
   }
   const mtrID = uuidv4().split("-")[0];
   const payload = {
-    merchantId: process.env.NEXT_PUBLIC_MERCHANT_ID,
+    merchantId: process.env.MERCHANT_ID,
     merchantTransactionId: mtrID,
     merchantUserId: "MUID123",
-    amount: 75000,
+    amount: 100,
     redirectUrl:
       process.env.NODE_ENV == "development"
         ? `http://localhost:3000/payment/${mtrID}`
@@ -40,13 +39,16 @@ export async function Payy(reservation: Reservation, balanceAmount: number) {
   };
   const base64Payload = Buffer.from(JSON.stringify(payload)).toString("base64");
   const checksum =
-    SHA256(base64Payload + "/pg/v1/pay" + process.env.NEXT_PUBLIC_SALT_KEY) +
+    SHA256(base64Payload + "/pg/v1/pay" + process.env.SALT_KEY) +
     "###" +
-    process.env.NEXT_PUBLIC_SALT_INDEX;
+    process.env.SALT_INDEX;
 
   const options = {
     method: "POST",
-    url: "https://api-preprod.phonepe.com/apis/pg-sandbox/pg/v1/pay",
+    url:
+      process.env.NODE_ENV == "development"
+        ? "https://api-preprod.phonepe.com/apis/pg-sandbox/pg/v1/pay"
+        : "https://api.phonepe.com/apis/hermes/pg/v1/pay",
     headers: {
       accept: "application/json",
       "Content-Type": "application/json",
