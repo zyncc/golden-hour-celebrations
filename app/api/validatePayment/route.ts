@@ -11,6 +11,7 @@ export async function POST(req: Request) {
   if (parsedResponse.success) {
     try {
       const mtrID = parsedResponse.data.merchantTransactionId;
+      const txnID = parsedResponse.data.transactionId;
       revalidatePath("/book");
       await prisma.reservations.update({
         where: {
@@ -18,7 +19,7 @@ export async function POST(req: Request) {
         },
         data: {
           paymentStatus: true,
-          paymentTransactionID: response.data.data.transactionId,
+          paymentTransactionID: txnID,
         },
       });
       SendReceipt(mtrID);
