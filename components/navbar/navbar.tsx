@@ -3,6 +3,7 @@ import Link from "next/link";
 import CustomBtn from "../CustomButton";
 import {
   Sheet,
+  SheetClose,
   SheetContent,
   SheetHeader,
   SheetTrigger,
@@ -82,8 +83,12 @@ export default async function Navbar() {
               <SheetHeader>
                 <ul className="flex flex-col gap-y-7 items-start">
                   {NavLinks.map((link) => (
-                    <Link key={link.Link} href={link.Link}>
-                      <li className="font-medium text-[15px]">{link.Label}</li>
+                    <Link href={link.Link} key={link.Link}>
+                      <SheetClose>
+                        <li className="font-medium text-[15px]">
+                          {link.Label}
+                        </li>
+                      </SheetClose>
                     </Link>
                   ))}
                 </ul>
