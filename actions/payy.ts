@@ -22,7 +22,7 @@ export async function Payy(reservation: Reservation, balanceAmount: number) {
     merchantId: process.env.MERCHANT_ID,
     merchantTransactionId: mtrID,
     merchantUserId: "MUID123",
-    amount: 100,
+    amount: 500 * 100,
     redirectUrl:
       process.env.NODE_ENV == "development"
         ? `http://localhost:3000/payment/${mtrID}`

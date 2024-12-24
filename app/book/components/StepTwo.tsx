@@ -6,8 +6,8 @@ import Autoplay from "embla-carousel-autoplay";
 import Fade from "embla-carousel-fade";
 import useEmblaCarousel from "embla-carousel-react";
 import Image from "next/image";
-import { redirect, useRouter, useSearchParams } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import { redirect, useRouter } from "next/navigation";
+import React, { useState } from "react";
 import { FaAngleDown } from "react-icons/fa";
 import {
   Dialog,
@@ -309,10 +309,14 @@ export default function StepTwo({ items }: { items: Props }) {
             </div>
           ))}
         </div>
-        <div className={"flex gap-x-3 mb-10"}>
+        <div
+          className={
+            "flex max-md:px-3 max-md:bg-black mb-10 max-md:mb-0 gap-x-2 max-md:py-3 max-md:border-t-2 max-md:fixed max-md:bottom-0 max-md:left-0 w-full"
+          }
+        >
           <Button
             type={"submit"}
-            className={"w-full"}
+            className={"flex-1"}
             variant={"outline"}
             onClick={() => {
               router.push("?step=1");
@@ -322,7 +326,7 @@ export default function StepTwo({ items }: { items: Props }) {
           </Button>
           <Button
             type={"submit"}
-            className={"w-full"}
+            className={"flex-1"}
             variant={"outline"}
             onClick={handleNextButton}
           >

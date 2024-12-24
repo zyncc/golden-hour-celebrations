@@ -9,9 +9,6 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { MdOutlineMenu } from "react-icons/md";
-import { Button } from "../ui/button";
-import { signOut } from "@/auth";
-import getSession from "@/lib/getSession";
 import Image from "next/image";
 
 const NavLinks = [
@@ -30,7 +27,6 @@ const NavLinks = [
 ];
 
 export default async function Navbar() {
-  const session = await getSession();
   return (
     <header
       id="header"
@@ -57,16 +53,6 @@ export default async function Navbar() {
         </div>
         <div className="flex gap-2 items-center justify-center">
           <div className="flex gap-x-3">
-            {session?.user && (
-              <form
-                action={async () => {
-                  "use server";
-                  await signOut();
-                }}
-              >
-                <Button type="submit">Sign out</Button>
-              </form>
-            )}
             <Link href={"/book"}>
               <CustomBtn classes="rounded-full" variant={"outline"}>
                 Book now

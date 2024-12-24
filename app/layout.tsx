@@ -4,8 +4,8 @@ import "./globals.css";
 import Navbar from "@/components/navbar/navbar";
 import { Toaster } from "@/components/ui/toaster";
 import { ThemeProvider } from "@/components/theme-provider";
-import Providers from "@/lib/authProvider";
 import TanstackProvider from "@/providers/TanstackProvider";
+import Marquee from "@/components/ui/marquee";
 
 const poppins = Poppins({
   subsets: ["latin", "latin-ext"],
@@ -39,14 +39,12 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <Providers>
-            <TanstackProvider>
-              <Navbar />
-              {/*<Marquee/>*/}
-              <Toaster />
-              {children}
-            </TanstackProvider>
-          </Providers>
+          <TanstackProvider>
+            <Navbar />
+            <Marquee />
+            <Toaster />
+            {children}
+          </TanstackProvider>
         </ThemeProvider>
       </body>
     </html>
