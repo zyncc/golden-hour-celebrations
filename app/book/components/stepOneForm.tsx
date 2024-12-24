@@ -195,8 +195,8 @@ export default function StepOneForm() {
               <PopoverContent className="p-0">
                 <Calendar
                   mode="single"
-                  // fromDate={currentDate}
-                  // toMonth={nextMonthDate}
+                  fromDate={currentDate}
+                  toMonth={nextMonthDate}
                   selected={date}
                   onSelect={setDate}
                 />

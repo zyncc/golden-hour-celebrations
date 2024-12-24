@@ -9,7 +9,6 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { MdOutlineMenu } from "react-icons/md";
-import { Button } from "../ui/button";
 import Image from "next/image";
 
 const NavLinks = [
