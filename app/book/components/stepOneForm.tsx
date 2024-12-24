@@ -10,13 +10,6 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { useRouter } from "next/navigation";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -134,18 +127,15 @@ export default function StepOneForm() {
           </div>
           <div className="flex flex-col gap-y-3">
             <Label>How did you find us?</Label>
-            <Select name="findus" defaultValue={reservation?.findus}>
-              <SelectTrigger>
-                <SelectValue placeholder="Select" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="Instagram / Facebook">
-                  Instagram / Facebook
-                </SelectItem>
-                <SelectItem value="Google">Google</SelectItem>
-                <SelectItem value="Word of mouth">Word of mouth</SelectItem>
-              </SelectContent>
-            </Select>
+            <select
+              name="findus"
+              defaultValue={reservation?.findus}
+              className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              <option value="Instagram / Facebook">Instagram / Facebook</option>
+              <option value="Google">Google</option>
+              <option value="Word of mouth">Word of mouth</option>
+            </select>
             {errors?.map((error) => {
               if (error.path[0] == "findus") {
                 return (
@@ -161,24 +151,19 @@ export default function StepOneForm() {
           </div>
           <div className="flex flex-col gap-y-3">
             <Label>Choose Occasion</Label>
-            <Select name="occasion" defaultValue={reservation?.occasion}>
-              <SelectTrigger>
-                <SelectValue placeholder="Select" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="Birthday">Birthday</SelectItem>
-                <SelectItem value="Anniversary">Anniversary</SelectItem>
-                <SelectItem value="Bride / Groom to be">
-                  Bride / Groom to be
-                </SelectItem>
-                <SelectItem value="Graduation Party">
-                  Graduation Party
-                </SelectItem>
-                <SelectItem value="Proposal">Proposal</SelectItem>
-                <SelectItem value="Mom to be">Mom to be</SelectItem>
-                <SelectItem value="Other Surprises">Other Surprises</SelectItem>
-              </SelectContent>
-            </Select>
+            <select
+              name="occasion"
+              defaultValue={reservation?.occasion}
+              className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              <option value="Birthday">Birthday</option>
+              <option value="Anniversary">Anniversary</option>
+              <option value="Bride / Groom to be">Bride / Groom to be</option>
+              <option value="Graduation Party">Graduation Party</option>
+              <option value="Proposal">Proposal</option>
+              <option value="Mom to be">Mom to be</option>
+              <option value="Other Surprises">Other Surprises</option>
+            </select>
             {errors?.map((error) => {
               if (error.path[0] == "occasion") {
                 return (

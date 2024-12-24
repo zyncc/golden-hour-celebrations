@@ -59,7 +59,7 @@ export default function Book() {
     <div className={"mt-[100px] container mx-auto"}>
       <div
         className={
-          "flex rounded-full py-2 justify-center gap-x-10 items-center font-medium text-md flex-wrap gap-y-3"
+          "grid grid-cols-2 md:grid-cols-3 md:place-items-center place-items-start rounded-full py-2 justify-center gap-x-10 items-center font-medium text-md flex-wrap gap-y-3"
         }
       >
         <div>

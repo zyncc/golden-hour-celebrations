@@ -34,7 +34,7 @@ export default function StepThree() {
       <h1>{reservation.phone}</h1>
       <h1>{formatCurrency(reservation.price as number)}</h1>
       <h1>
-        Balance Amount - {formatCurrency((reservation.price as number) - 750)}
+        Balance Amount - {formatCurrency((reservation.price as number) - 500)}
       </h1>
       <form action={handlePayButton}>
         <Button
