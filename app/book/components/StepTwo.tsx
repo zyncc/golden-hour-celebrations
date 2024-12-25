@@ -54,6 +54,7 @@ export default function StepTwo({ items }: { items: Props }) {
       toast({
         title: "Select a time slot",
         variant: "destructive",
+        duration: 3000,
       });
     } else {
       setReservationData({

@@ -3,7 +3,6 @@ import { Poppins } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/navbar/navbar";
 import { Toaster } from "@/components/ui/toaster";
-import { ThemeProvider } from "@/components/theme-provider";
 import TanstackProvider from "@/providers/TanstackProvider";
 import Marquee from "@/components/ui/marquee";
 
@@ -32,20 +31,13 @@ export default function RootLayout({
           content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
         />
       </head>
-      <body className={poppins.className}>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="dark"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <TanstackProvider>
-            <Navbar />
-            <Marquee />
-            <Toaster />
-            {children}
-          </TanstackProvider>
-        </ThemeProvider>
+      <body className={`dark ${poppins.className}`}>
+        <TanstackProvider>
+          <Navbar />
+          <Marquee />
+          <Toaster />
+          {children}
+        </TanstackProvider>
       </body>
     </html>
   );

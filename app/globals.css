@@ -68,6 +68,10 @@
   }
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 .section {
   padding-top: 50px;
   padding-bottom: 50px;
@@ -75,6 +79,7 @@
 
 body {
   overflow-x: hidden;
+  scroll-behavior: smooth;
 }
 
 /* ::-webkit-scrollbar {

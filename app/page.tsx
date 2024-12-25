@@ -1,3 +1,4 @@
+import { Footer } from "@/components/footer/footer";
 import { BackgroundGradientAnimation } from "@/components/ui/background-gradient-animation";
 import { Spotlight } from "@/components/ui/Spotlight";
 import { TextGenerateEffect } from "@/components/ui/text-generate-effect";
@@ -25,7 +26,10 @@ export default function Page() {
           />
         </div>
       </section>
-      <section className="h-[200vh] section container flex flex-col items-center">
+      <section
+        id="about"
+        className="container min-h-screen flex flex-col items-center"
+      >
         <h1 className="font-semibold bg-clip-text text-transparent bg-gradient-to-b from-neutral-200 to-neutral-500 text-4xl text-center lg:text-7xl">
           About us
         </h1>
@@ -44,6 +48,7 @@ export default function Page() {
           </div>
         </BackgroundGradientAnimation>
       </section>
+      <Footer />
     </>
   );
 }

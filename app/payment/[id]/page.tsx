@@ -7,7 +7,7 @@ import { RiVerifiedBadgeFill } from "react-icons/ri";
 export default async function Page({ params }: { params: { id: string } }) {
   const response = await prisma.reservations.findFirst({
     where: {
-      merchantTransactionID: params.id,
+      orderID: params.id,
     },
   });
   if (!response) {
@@ -26,7 +26,7 @@ export default async function Page({ params }: { params: { id: string } }) {
               <h1>Payment Succesful</h1>
             </div>
             <div className="flex flex-col gap-y-2 mt-5 text-lg">
-              <h1>Transaction ID: {response.merchantTransactionID}</h1>
+              <h1>Order ID: {response.orderID}</h1>
               <h1>Theatre: {response.room}</h1>
               <h1>Time: {response.timeSlot}</h1>
               <h1>Booking Name: {capitalizeFirstLetter(response.name)}</h1>

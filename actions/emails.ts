@@ -4,10 +4,10 @@ import NikeReceiptEmail from "@/emails/receipt";
 import prisma from "@/lib/prisma";
 import { Resend } from "resend";
 
-export async function SendReceipt(merchantTransactionID: string) {
+export async function SendReceipt(orderID: string) {
   const resend = new Resend(process.env.RESEND_API_KEY);
   const getReservationDetails = await prisma.reservations.findUnique({
-    where: { merchantTransactionID },
+    where: { orderID },
   });
   try {
     if (getReservationDetails) {
@@ -18,10 +18,10 @@ export async function SendReceipt(merchantTransactionID: string) {
         react: NikeReceiptEmail({ getReservationDetails }),
       });
       console.log(emailSent);
-      if (!emailSent.error && merchantTransactionID !== null) {
+      if (!emailSent.error && orderID !== null) {
         const updateEmail = await prisma.reservations.update({
           where: {
-            merchantTransactionID: merchantTransactionID,
+            orderID: orderID,
           },
           data: {
             emailSent: true,

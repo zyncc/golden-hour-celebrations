@@ -19,7 +19,7 @@ import * as React from "react";
 
 export const NikeReceiptEmail = ({
   getReservationDetails: {
-    merchantTransactionID,
+    orderID,
     balanceAmount,
     date,
     email,
@@ -41,7 +41,7 @@ export const NikeReceiptEmail = ({
           <Row>
             <Column>
               <Text style={global.paragraphWithBold}>Transaction Number</Text>
-              <Text style={track.number}>{merchantTransactionID}</Text>
+              <Text style={track.number}>{orderID}</Text>
             </Column>
             <Column align="right">
               <Link
