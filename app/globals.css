@@ -68,6 +68,11 @@
   }
 }
 
+* {
+  -webkit-text-size-adjust: none;
+  text-size-adjust: none;
+}
+
 html {
   scroll-behavior: smooth;
 }
