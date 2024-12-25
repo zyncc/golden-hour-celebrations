@@ -108,5 +108,6 @@ export const payReservationSchema = z.object({
     "2PM - 4PM",
     "4PM - 6PM",
     "6PM - 8PM",
+    "8PM - 10PM",
   ]),
 });

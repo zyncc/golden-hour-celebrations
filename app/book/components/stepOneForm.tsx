@@ -55,7 +55,9 @@ export default function StepOneForm() {
   return (
     <div className={"mt-10 flex"}>
       <div
-        className={"flex w-full items-center justify-center flex-col gap-y-5"}
+        className={
+          "flex w-full items-center mb-8 justify-center flex-col gap-y-5"
+        }
       >
         <form
           className="space-y-8 w-full"

@@ -83,7 +83,7 @@ export default function StepTwo({ items }: { items: Props }) {
     },
   });
   return (
-    <div className={"mt-10 w-full flex"}>
+    <div className={"mt-10 mb-24 w-full flex"}>
       <div className={"flex flex-col gap-y-5 w-full"}>
         <div
           className={
@@ -287,6 +287,39 @@ export default function StepTwo({ items }: { items: Props }) {
                   className={"flex-1"}
                 >
                   6 PM - 8PM
+                </Button>
+                <Button
+                  disabled={
+                    data?.find(
+                      (reservation: Reservations) =>
+                        reservation.timeSlot == "8PM - 10PM" &&
+                        item.room == reservation.room &&
+                        reservation.paymentStatus
+                    ) || isLoading
+                  }
+                  variant={
+                    selectedPackage.time == "8PM - 10PM" &&
+                    selectedPackage.room == item.room
+                      ? "default"
+                      : data?.find(
+                          (reservation: Reservations) =>
+                            reservation.timeSlot == "8PM - 10PM" &&
+                            item.room == reservation.room &&
+                            reservation.paymentStatus
+                        )
+                      ? "destructive"
+                      : "outline"
+                  }
+                  onClick={() => {
+                    setSelectedPackage({
+                      room: item.room,
+                      time: "8PM - 10PM",
+                      price: item.price,
+                    });
+                  }}
+                  className={"flex-1"}
+                >
+                  8PM - 10PM
                 </Button>
               </div>
               <div className={"flex items-center"}>

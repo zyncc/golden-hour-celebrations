@@ -32,7 +32,10 @@ export function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="#" className="hover:text-white transition-colors">
+                <Link
+                  href="/contact"
+                  className="hover:text-white transition-colors"
+                >
                   Contact
                 </Link>
               </li>
@@ -72,7 +75,8 @@ export function Footer() {
             <ul className="space-y-2">
               <li>
                 <Link
-                  href="#"
+                  href="https://instagram.com/privatetheatreblr/"
+                  target="_blank"
                   className="hover:text-white transition-colors flex items-center gap-x-2"
                 >
                   Instagram
