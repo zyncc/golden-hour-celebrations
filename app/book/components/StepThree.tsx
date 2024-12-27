@@ -139,7 +139,7 @@ export default function StepThree() {
                   </div>
                   <div className="flex justify-between">
                     <span className="text-muted-foreground">Balance Amount (Pay after event)</span>
-                    <span className="text-green-600 font-semibold">- {formatCurrency(reservation.price as number - 500)}</span>
+                    <span className="text-green-600 font-semibold whitespace-nowrap">- {formatCurrency(reservation.price as number - 500)}</span>
                   </div>
                   <Separator/>
                   <div className="flex justify-between text-lg font-medium">
