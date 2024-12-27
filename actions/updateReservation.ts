@@ -15,5 +15,4 @@ export async function updateReservation(orderID: string, paymentID: string) {
     },
   });
   SendReceipt(orderID);
-  redirect("/");
 }

@@ -24,8 +24,7 @@ import { toast } from "@/components/ui/use-toast";
 type Props = {
   id: number;
   room: string;
-  noPeople: number;
-  decoration: string;
+  description: string[];
   price: number;
   photo: string[];
 }[];
@@ -117,12 +116,13 @@ export default function StepTwo({ items }: { items: Props }) {
                 </div>
               </div>
               <div className={"px-3"}>
-                <h1 className={"font-semibold"}>{item.room}</h1>
-                <h1>Upto {item.noPeople} people</h1>
-                <h1>Decoration {item.decoration}</h1>
-                <h1 className={"font-semibold"}>₹{item.price}</h1>
+                <h1 className={"font-bold text-xl"}>{item.room}</h1>
+                <ul>
+                {item.description.map((desc, i) => <li className={'list-disc ml-4'} key={i}>{desc}</li>)}
+                </ul>
+                <h1 className={"font-bold"}>₹{item.price}</h1>
               </div>
-              <div className={"grid grid-cols-3 gap-3 px-3"}>
+              <div className={"grid grid-cols-3 gap-3 px-3 pb-5"}>
                 <Button
                   disabled={
                     data?.find(
@@ -322,24 +322,22 @@ export default function StepTwo({ items }: { items: Props }) {
                   8PM - 10PM
                 </Button>
               </div>
-              <div className={"flex items-center"}>
-                <Dialog>
-                  <DialogTrigger asChild>
-                    <Button variant={"link"} className={"pb-5"}>
-                      <h1>View more details</h1>
-                      <FaAngleDown />
-                    </Button>
-                  </DialogTrigger>
-                  <DialogContent
-                    className={"h-screen max-sm:w-screen md:h-[80vh]"}
-                  >
-                    <DialogHeader>
-                      <DialogTitle>{item.room}</DialogTitle>
-                      <DialogDescription>{item.id}</DialogDescription>
-                    </DialogHeader>
-                  </DialogContent>
-                </Dialog>
-              </div>
+              {/*<div className={"flex items-center"}>*/}
+              {/*  <Dialog>*/}
+              {/*    <DialogTrigger asChild>*/}
+              {/*      <Button variant={"link"} className={"pb-5"}>*/}
+              {/*        <h1>View more details</h1>*/}
+              {/*        <FaAngleDown />*/}
+              {/*      </Button>*/}
+              {/*    </DialogTrigger>*/}
+              {/*    <DialogContent>*/}
+              {/*      <DialogHeader>*/}
+              {/*        <DialogTitle>{item.room}</DialogTitle>*/}
+              {/*        <DialogDescription>{item.id}</DialogDescription>*/}
+              {/*      </DialogHeader>*/}
+              {/*    </DialogContent>*/}
+              {/*  </Dialog>*/}
+              {/*</div>*/}
             </div>
           ))}
         </div>
