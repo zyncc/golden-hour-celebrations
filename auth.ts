@@ -20,8 +20,25 @@ export const auth = betterAuth({
       impersonationSessionDuration: 60 * 10, // 10 minutes
     }),
     phoneNumber({
-      sendOTP: ({ phoneNumber, code }, request) => {
-        console.log(code);
+      sendOTP: async ({ phoneNumber, code }, request) => {
+        const res = await fetch("https://graph.facebook.com/v21.0/541328782390732/messages", {
+          headers: {
+            Authorization: `Bearer ${process.env.WHATSAPP_TOKEN}`,
+            "Content-Type": "application/json", // Corrected header key
+          },
+          cache: "no-cache",
+          method: "POST",
+          body: JSON.stringify({
+            messaging_product: "whatsapp",
+            recipient_type: "individual",
+            to: `91${phoneNumber}`,
+            type: "text",
+            text: {
+              body: `Your Login OTP is ${code}`,
+            },
+          }),
+        });
+        console.log(await res.json());
       },
       signUpOnVerification: {
         getTempEmail: (phoneNumber) => {
