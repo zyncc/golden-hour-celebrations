@@ -1,4 +1,3 @@
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -18,7 +17,7 @@ model User {
   phoneNumberVerified Boolean?
 
   createdAt DateTime @default(now())
-  updatedAt DateTime
+  updatedAt DateTime @updatedAt
 
   sessions Session[]
   accounts Account[]
@@ -45,9 +44,11 @@ model Reservations {
   findUs        String
   date          DateTime
   orderID       String   @unique
-  paymentID     String? @unique
+  paymentID     String?  @unique
   emailSent     Boolean  @default(false)
   paymentStatus Boolean  @default(false)
+
+  @@map("reservations")
 }
 
 model Session {

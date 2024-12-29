@@ -10,6 +10,10 @@ import {
 } from "@/components/ui/sheet";
 import { MdOutlineMenu } from "react-icons/md";
 import Image from "next/image";
+import SignOutButton from "@/components/SignOutButton";
+import { auth } from "@/auth";
+import { headers } from "next/headers";
+import { Button } from "@/components/ui/button";
 
 const NavLinks = [
   {
@@ -24,9 +28,16 @@ const NavLinks = [
     Label: "Contact",
     Link: "/contact",
   },
+  {
+    Label: "Account",
+    Link: "/account",
+  },
 ];
 
 export default async function Navbar() {
+  const session = await auth.api.getSession({
+    headers: headers(),
+  });
   return (
     <header
       id="header"
@@ -49,6 +60,11 @@ export default async function Navbar() {
                 <li className="font-medium text-[15px]">{link.Label}</li>
               </Link>
             ))}
+            {session?.user.role == "admin" && (
+              <Link href={"/admin"}>
+                <li className="font-medium text-[15px]">Admin</li>
+              </Link>
+            )}
           </ul>
         </div>
         <div className="flex gap-2 items-center justify-center">
@@ -58,6 +74,15 @@ export default async function Navbar() {
                 Book now
               </CustomBtn>
             </Link>
+            {session?.session ? (
+              <SignOutButton />
+            ) : (
+              <Link href={"/signin"}>
+                <Button variant={"outline"} className="hidden lg:block">
+                  Sign in
+                </Button>
+              </Link>
+            )}
           </div>
           <Sheet>
             <SheetTrigger>
@@ -75,6 +100,20 @@ export default async function Navbar() {
                       </SheetClose>
                     </Link>
                   ))}
+                  {session?.user.role == "admin" && (
+                    <Link href={"/admin"}>
+                      <SheetClose>
+                        <li className="font-medium text-[15px]">Admin</li>
+                      </SheetClose>
+                    </Link>
+                  )}
+                  {!session?.session && (
+                    <Link href={"/signin"}>
+                      <SheetClose>
+                        <li className="font-medium text-[15px]">Sign in</li>
+                      </SheetClose>
+                    </Link>
+                  )}
                 </ul>
               </SheetHeader>
             </SheetContent>

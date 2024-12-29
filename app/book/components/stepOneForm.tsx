@@ -17,6 +17,7 @@ import { Calendar } from "@/components/ui/calendar";
 import { useReservation } from "@/app/context/ReservationStore";
 import { StepOneFormSchema } from "@/lib/zodSchemas";
 import { Label } from "@/components/ui/label";
+import {CreateUser} from "@/actions/createUser";
 
 export default function StepOneForm() {
   const currentDate = new Date();
@@ -43,6 +44,7 @@ export default function StepOneForm() {
       validation = StepOneFormSchema.safeParse({ ...formData, resDate });
     }
     if (validation.success) {
+      CreateUser(validation.data)
       setDate(validation.data.date);
       setReservationData(undefined);
       setReservationData(validation.data);
