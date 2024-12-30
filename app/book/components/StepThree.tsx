@@ -148,7 +148,7 @@ export default function StepThree() {
                 </div>
               </CardContent>
             </Card>
-            <Link href={"/book?step=2"}>
+            <Link href={"/book?step=2"} scroll={true}>
               <Button variant={"outline"} className={"w-full mt-4"}>
                 Back
               </Button>

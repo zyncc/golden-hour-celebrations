@@ -53,7 +53,9 @@ export default function StepTwo({ items }: { items: Props }) {
         timeSlot: selectedPackage.time,
         price: selectedPackage.price,
       });
-      router.push("?step=3");
+      router.push("?step=3", {
+        scroll: true,
+      });
     }
   }
 
@@ -346,7 +348,9 @@ export default function StepTwo({ items }: { items: Props }) {
             className={"flex-1"}
             variant={"outline"}
             onClick={() => {
-              router.push("?step=1");
+              router.push("?step=1", {
+                scroll: true,
+              });
             }}
           >
             Back
