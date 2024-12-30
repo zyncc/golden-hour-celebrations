@@ -55,7 +55,7 @@ export default function StepThree() {
           setPending(false);
         },
       },
-      callback_url: `http://localhost:3000/success?orderId=${orderID}`,
+      callback_url: process.env.NODE_ENV == 'development' ? `http://localhost:3000/success?orderId=${orderID}` : `https://goldenhourcelebrations.in/success?orderId=${orderID}`,
       prefill: {
         name: reservation?.name,
         email: reservation?.email,
