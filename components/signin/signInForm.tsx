@@ -53,16 +53,17 @@ function SignInForm() {
     await authClient.phoneNumber.sendOtp({
       phoneNumber,
       fetchOptions: {
-        onRequest: () => setLoadingSendOtp(true),
+        onRequest: (ctx) => setLoadingSendOtp(true),
         onSuccess: () => {
           setLoadingSendOtp(false);
           setOpen(true);
         },
-        onError: () => {
+        onError: (ctx) => {
           setLoadingSendOtp(false);
           toast({
             variant: "destructive",
-            title: "No Account with this Phone Number exists",
+            title: "Error",
+            description: ctx.error.message,
           });
         },
       },

@@ -8,15 +8,6 @@ import useEmblaCarousel from "embla-carousel-react";
 import Image from "next/image";
 import { redirect, useRouter } from "next/navigation";
 import React, { useState } from "react";
-import { FaAngleDown } from "react-icons/fa";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
 import { useQuery } from "@tanstack/react-query";
 import { Reservations } from "@prisma/client";
 import { toast } from "@/components/ui/use-toast";
@@ -118,7 +109,11 @@ export default function StepTwo({ items }: { items: Props }) {
               <div className={"px-3"}>
                 <h1 className={"font-bold text-xl"}>{item.room}</h1>
                 <ul>
-                {item.description.map((desc, i) => <li className={'list-disc ml-4'} key={i}>{desc}</li>)}
+                  {item.description.map((desc, i) => (
+                    <li className={"list-disc ml-4"} key={i}>
+                      {desc}
+                    </li>
+                  ))}
                 </ul>
                 <h1 className={"font-bold"}>₹{item.price}</h1>
               </div>
@@ -359,7 +354,7 @@ export default function StepTwo({ items }: { items: Props }) {
           <Button
             type={"submit"}
             className={"flex-1"}
-            variant={"outline"}
+            variant={"default"}
             onClick={handleNextButton}
           >
             Next
