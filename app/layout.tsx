@@ -4,6 +4,7 @@ import "./globals.css";
 import Navbar from "@/components/navbar/navbar";
 import { Toaster } from "@/components/ui/toaster";
 import TanstackProvider from "@/providers/TanstackProvider";
+import { GoogleAnalytics } from "@next/third-parties/google";
 
 const poppins = Poppins({
   subsets: ["latin", "latin-ext"],
@@ -38,6 +39,7 @@ export default function RootLayout({
         />
       </head>
       <body className={`dark ${poppins.className}`}>
+        <GoogleAnalytics gaId="G-QL5YQVXZ5V" />
         <TanstackProvider>
           <Navbar />
           <Toaster />
