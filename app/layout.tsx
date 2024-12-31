@@ -14,8 +14,15 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: "Golden Hour Celebrations",
-  description: "Golden Hour Celebrations",
+  title: {
+    template: "%s - Golden Hour Celebrations",
+    default: "Golden Hour Celebrations",
+  },
+  description:
+    "We at Golden Hour Celebrations plan your loved ones special day with personalised decorations exclusively in a private theatre.",
+  twitter: {
+    card: "summary_large_image",
+  },
 };
 
 export default function RootLayout({
