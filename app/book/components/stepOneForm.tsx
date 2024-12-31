@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { z } from "zod";
 import { format } from "date-fns";
-import { CalendarIcon } from "lucide-react";
+import { CalendarIcon, MapPin } from "lucide-react";
 import { cn } from "@/lib/utils";
 import {
   Popover,
@@ -18,6 +18,7 @@ import { useReservation } from "@/app/context/ReservationStore";
 import { StepOneFormSchema } from "@/lib/zodSchemas";
 import { Label } from "@/components/ui/label";
 import { CreateUser } from "@/actions/createUser";
+import { Card, CardContent } from "@/components/ui/card";
 
 export default function StepOneForm() {
   const currentDate = new Date();
@@ -57,10 +58,10 @@ export default function StepOneForm() {
   }
 
   return (
-    <div className={"mt-10 flex"}>
+    <div className={"my-16 flex gap-10 items-start flex-col md:flex-row"}>
       <div
         className={
-          "flex w-full items-center mb-8 justify-center flex-col gap-y-5"
+          "flex w-full items-center mb-8 justify-center flex-1 flex-col"
         }
       >
         <form
@@ -221,10 +222,45 @@ export default function StepOneForm() {
               }
             })}
           </div>
-          <Button type={"submit"} className="w-full" variant={"outline"}>
+          <Button type={"submit"} className="w-full" variant={"default"}>
             Next
           </Button>
         </form>
+      </div>
+      <div className="space-y-6 rounded-lg w-full flex-1 bg-card p-6">
+        <div className="space-y-2">
+          <h2 className="text-2xl font-bold">Visit Us</h2>
+          <div className="flex items-start space-x-2">
+            <MapPin className="mt-1 h-5 w-5 shrink-0" />
+            <p className="text-muted-foreground">
+              1st floor, #66,
+              <br />
+              29th main, 29th A Cross Rd, Geetha Colony,
+              <br />
+              4th Block, Jayanagar, 560041
+            </p>
+          </div>
+        </div>
+        {/* Google Maps Embed */}
+        <div className="aspect-square overflow-hidden rounded-lg lg:aspect-[4/3]">
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3888.667895154625!2d77.58295797630976!3d12.929053887382432!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bae15ccac350657%3A0xfeeb73c49998e57b!2sGolden%20Hour%20private%20theatre%20Celebration!5e0!3m2!1sen!2sin!4v1735631684154!5m2!1sen!2sin"
+            className="invert-[90%]"
+            width="100%"
+            height="100%"
+            style={{ border: 0 }}
+            allowFullScreen
+            loading="lazy"
+            referrerPolicy="no-referrer-when-downgrade"
+          ></iframe>
+        </div>
+
+        <div className="space-y-2">
+          <h3 className="font-semibold">Opening Hours</h3>
+          <p className="text-sm text-muted-foreground">
+            Everyday: 9:00 AM - 9:00 PM
+          </p>
+        </div>
       </div>
     </div>
   );

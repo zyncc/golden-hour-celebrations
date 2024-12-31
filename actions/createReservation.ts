@@ -10,7 +10,6 @@ export async function createReservation(
   orderID: string
 ) {
   let balanceAmount = 0;
-  console.log(reservation.room);
   if (reservation.room === "Basic Package") {
     balanceAmount = 1999 - 500;
   } else if (reservation.room === "Standard Package") {
