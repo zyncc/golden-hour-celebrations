@@ -14,7 +14,7 @@ import { useRouter } from "next/navigation";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
-import { useReservation } from "@/app/context/ReservationStore";
+import { useReservation } from "@/context/ReservationStore";
 import { StepOneFormSchema } from "@/lib/zodSchemas";
 import { Label } from "@/components/ui/label";
 import { CreateUser } from "@/actions/createUser";

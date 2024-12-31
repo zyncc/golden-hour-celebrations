@@ -2,7 +2,7 @@
 
 import { createOrder } from "@/actions/createOrder";
 import { createReservation } from "@/actions/createReservation";
-import { useReservation } from "@/app/context/ReservationStore";
+import { useReservation } from "@/context/ReservationStore";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/components/ui/use-toast";
 import { redirect } from "next/navigation";

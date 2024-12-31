@@ -1,6 +1,6 @@
 "use server";
 
-import { Reservation } from "@/app/context/ReservationStore";
+import { Reservation } from "@/context/ReservationStore";
 import prisma from "@/lib/prisma";
 import { payReservationSchema } from "@/lib/zodSchemas";
 

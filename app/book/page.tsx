@@ -1,15 +1,21 @@
-"use client";
-
-import { notFound, useSearchParams } from "next/navigation";
+import { notFound } from "next/navigation";
 import StepOneForm from "./components/stepOneForm";
 import StepTwo from "./components/StepTwo";
 import StepThree from "./components/StepThree";
 import { items } from "@/lib/constants";
 import { Steps } from "@/components/steps";
+import { Metadata } from "next";
 
-export default function Book() {
-  const searchParams = useSearchParams();
-  let step = Number(searchParams.get("step"));
+export const metadata: Metadata = {
+  title: "Book a Slot",
+};
+
+export default function Book({
+  searchParams,
+}: {
+  searchParams?: { [key: string]: string | string[] | undefined };
+}) {
+  let step = Number(searchParams?.step);
   if (!step) {
     step = 1;
   }

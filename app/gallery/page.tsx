@@ -1,5 +1,12 @@
 import { BentoGrid, BentoGridItem } from "@/components/ui/bento-grid";
+import { Metadata } from "next";
 import React from "react";
+
+export const metadata: Metadata = {
+  title: {
+    absolute: "Gallery",
+  },
+};
 
 export default function Page() {
   const images = [

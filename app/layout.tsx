@@ -15,8 +15,8 @@ const poppins = Poppins({
 
 export const metadata: Metadata = {
   title: {
-    template: "%s - Golden Hour Celebrations",
-    default: "Golden Hour Celebrations",
+    template: "%s - Golden Hour Private Theatre Celebrations",
+    default: "Golden Hour Private Theatre Celebrations",
   },
   description:
     "We at Golden Hour Celebrations plan your loved ones special day with personalised decorations exclusively in a private theatre.",

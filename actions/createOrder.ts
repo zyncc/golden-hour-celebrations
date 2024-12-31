@@ -1,6 +1,6 @@
 "use server";
 
-import { Reservation } from "@/app/context/ReservationStore";
+import { Reservation } from "@/context/ReservationStore";
 import Razorpay from "razorpay";
 
 export async function createOrder(
