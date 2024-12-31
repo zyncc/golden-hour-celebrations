@@ -1,16 +1,11 @@
 "use client";
 
-import {
-  TbCircleNumber1Filled,
-  TbCircleNumber2Filled,
-  TbCircleNumber3Filled,
-} from "react-icons/tb";
 import { notFound, useSearchParams } from "next/navigation";
 import StepOneForm from "./components/stepOneForm";
 import StepTwo from "./components/StepTwo";
 import StepThree from "./components/StepThree";
 import { items } from "@/lib/constants";
-import {Steps} from "@/components/steps";
+import { Steps } from "@/components/steps";
 
 export default function Book() {
   const searchParams = useSearchParams();
@@ -23,7 +18,7 @@ export default function Book() {
   }
   return (
     <div className={"mt-[100px] container mx-auto"}>
-      <Steps currentStep={step}/>
+      <Steps currentStep={step} />
       {step == 1 ? (
         <StepOneForm />
       ) : step == 2 ? (

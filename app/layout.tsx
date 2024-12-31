@@ -4,7 +4,6 @@ import "./globals.css";
 import Navbar from "@/components/navbar/navbar";
 import { Toaster } from "@/components/ui/toaster";
 import TanstackProvider from "@/providers/TanstackProvider";
-import Marquee from "@/components/ui/marquee";
 
 const poppins = Poppins({
   subsets: ["latin", "latin-ext"],
@@ -41,7 +40,6 @@ export default function RootLayout({
       <body className={`dark ${poppins.className}`}>
         <TanstackProvider>
           <Navbar />
-          <Marquee />
           <Toaster />
           {children}
         </TanstackProvider>

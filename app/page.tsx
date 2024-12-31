@@ -40,11 +40,11 @@ export default function Page() {
           birthdays, anniversaries, bride / groom-to-be, baby showers, valentine
           day, celebrate your achievements with us.
         </p>
-        <AuroraBackground className="mt-10 mx-3">
+        {/* <AuroraBackground className="mt-10 mx-3">
           <h1 className="font-semibold bg-clip-text text-transparent bg-gradient-to-b from-neutral-200 to-neutral-500 text-4xl text-center lg:text-7xl">
             Why choose us?
           </h1>
-        </AuroraBackground>
+        </AuroraBackground> */}
       </section>
       <section className="container my-[200px]">
         <FAQSection />
