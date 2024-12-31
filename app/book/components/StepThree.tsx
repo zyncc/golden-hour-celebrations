@@ -14,17 +14,19 @@ import { Separator } from "@/components/ui/separator";
 import formatCurrency from "@/lib/formatCurrency";
 import { items } from "@/lib/constants";
 import Link from "next/link";
+import { Switch } from "@/components/ui/switch";
 
 export default function StepThree() {
   const { reservation } = useReservation();
   const { Razorpay } = useRazorpay();
   const [pending, setPending] = useState(false);
+  const [payFull, setPayFull] = useState(false);
   if (!reservation) {
     redirect("?step=1");
   }
   async function handlePayButton() {
     setPending(true);
-    const orderID: string = await createOrder();
+    const orderID: string = await createOrder(payFull, reservation);
     const err = await createReservation(reservation!, orderID);
     if (err) {
       toast({
@@ -37,7 +39,7 @@ export default function StepThree() {
     }
     const options: RazorpayOrderOptions = {
       key: process.env.RAZORPAY_KEY_ID as string,
-      amount: 500 * 100,
+      amount: payFull ? reservation?.price! * 100 : 500 * 100,
       currency: "INR",
       name: "Golden Hour Celebrations",
       description: reservation?.room,
@@ -55,7 +57,10 @@ export default function StepThree() {
           setPending(false);
         },
       },
-      callback_url: process.env.NODE_ENV == 'development' ? `http://localhost:3000/success?orderId=${orderID}` : `https://goldenhourcelebrations.in/success?orderId=${orderID}`,
+      callback_url:
+        process.env.NODE_ENV == "development"
+          ? `http://localhost:3000/success?orderId=${orderID}`
+          : `https://goldenhourcelebrations.in/success?orderId=${orderID}`,
       prefill: {
         name: reservation?.name,
         email: reservation?.email,
@@ -168,16 +173,30 @@ export default function StepThree() {
                 </div>
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">
-                    Balance Amount (Pay after event)
+                    Pay Full Price (Optional)
                   </span>
-                  <span className="text-green-600 font-semibold whitespace-nowrap">
-                    - {formatCurrency((reservation.price as number) - 500)}
+                  <span className={"font-semibold"}>
+                    <Switch checked={payFull} onCheckedChange={setPayFull} />
                   </span>
                 </div>
+                {!payFull && (
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">
+                      Balance Amount (Pay after event)
+                    </span>
+                    <span className="text-green-600 font-semibold whitespace-nowrap">
+                      - {formatCurrency((reservation.price as number) - 500)}
+                    </span>
+                  </div>
+                )}
                 <Separator />
                 <div className="flex justify-between text-lg font-medium">
                   <span>Advance Amount</span>
-                  <span className={"font-semibold"}>{formatCurrency(500)}</span>
+                  <span className={"font-semibold"}>
+                    {payFull
+                      ? formatCurrency(reservation.price as number)
+                      : formatCurrency(500)}
+                  </span>
                 </div>
                 <Button
                   className="w-full mt-4 bg-yellow-500 hover:bg-yellow-300"

@@ -1,15 +1,19 @@
 "use server";
 
+import { Reservation } from "@/app/context/ReservationStore";
 import Razorpay from "razorpay";
 
-export async function createOrder() {
+export async function createOrder(
+  payFull: boolean,
+  reservation: Reservation | undefined
+) {
   const instance = new Razorpay({
     key_id: process.env.RAZORPAY_KEY_ID as string,
     key_secret: process.env.RAZORPAY_KEY_SECRET as string,
   });
 
   const response = await instance.orders.create({
-    amount: 500 * 100,
+    amount: payFull ? reservation?.price! * 100 : 500 * 100,
     currency: "INR",
     receipt: "receipt#1",
     notes: {
