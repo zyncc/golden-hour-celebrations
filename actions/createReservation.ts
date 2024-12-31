@@ -5,10 +5,20 @@ import prisma from "@/lib/prisma";
 import { payReservationSchema } from "@/lib/zodSchemas";
 
 export async function createReservation(
+  payFull: boolean,
   reservation: Reservation,
   orderID: string
 ) {
-  const balanceAmount = 1000;
+  let balanceAmount = 0;
+  console.log(reservation.room);
+  if (reservation.room === "Basic Package") {
+    balanceAmount = 1999 - 500;
+  } else if (reservation.room === "Standard Package") {
+    balanceAmount = 2999 - 500;
+  } else if (reservation.room === "Premium Package") {
+    balanceAmount = 3999 - 500;
+  }
+  if (payFull) balanceAmount = 0;
   const { success, data, error } = payReservationSchema.safeParse({
     ...reservation,
     balanceAmount,

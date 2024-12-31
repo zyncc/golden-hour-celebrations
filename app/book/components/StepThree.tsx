@@ -27,7 +27,7 @@ export default function StepThree() {
   async function handlePayButton() {
     setPending(true);
     const orderID: string = await createOrder(payFull, reservation);
-    const err = await createReservation(reservation!, orderID);
+    const err = await createReservation(payFull, reservation!, orderID);
     if (err) {
       toast({
         variant: "destructive",
