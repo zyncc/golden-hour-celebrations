@@ -117,7 +117,7 @@ export default function StepTwo({ items }: { items: Props }) {
                     </li>
                   ))}
                 </ul>
-                <h1 className={"font-bold"}>₹{item.price}</h1>
+                <h1 className={"font-bold text-xl mt-2"}>₹{item.price}</h1>
               </div>
               <div className={"grid grid-cols-3 gap-3 px-3 pb-5"}>
                 <Button
@@ -319,22 +319,6 @@ export default function StepTwo({ items }: { items: Props }) {
                   8PM - 10PM
                 </Button>
               </div>
-              {/*<div className={"flex items-center"}>*/}
-              {/*  <Dialog>*/}
-              {/*    <DialogTrigger asChild>*/}
-              {/*      <Button variant={"link"} className={"pb-5"}>*/}
-              {/*        <h1>View more details</h1>*/}
-              {/*        <FaAngleDown />*/}
-              {/*      </Button>*/}
-              {/*    </DialogTrigger>*/}
-              {/*    <DialogContent>*/}
-              {/*      <DialogHeader>*/}
-              {/*        <DialogTitle>{item.room}</DialogTitle>*/}
-              {/*        <DialogDescription>{item.id}</DialogDescription>*/}
-              {/*      </DialogHeader>*/}
-              {/*    </DialogContent>*/}
-              {/*  </Dialog>*/}
-              {/*</div>*/}
             </div>
           ))}
         </div>

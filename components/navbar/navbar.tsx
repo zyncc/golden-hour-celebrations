@@ -70,9 +70,12 @@ export default async function Navbar() {
         <div className="flex gap-2 items-center justify-center">
           <div className="flex gap-x-3">
             <Link href={"/book"}>
-              <CustomBtn classes="rounded-full" variant={"outline"}>
+              <Button
+                className="rounded-full text-black bg-yellow-500 hover:bg-yellow-300"
+                variant={"outline"}
+              >
                 Book now
-              </CustomBtn>
+              </Button>
             </Link>
             {session?.session ? (
               <SignOutButton />
