@@ -10,7 +10,7 @@ export const BackgroundGradientAnimation = ({
   thirdColor = "100, 220, 255",
   fourthColor = "200, 50, 50",
   fifthColor = "180, 180, 50",
-  pointerColor = "212, 175, 55",
+  pointerColor = "140, 100, 255",
   size = "80%",
   blendingValue = "hard-light",
   children,
@@ -71,7 +71,7 @@ export const BackgroundGradientAnimation = ({
     }
 
     move();
-  });
+  }, [tgX, tgY]);
 
   const handleMouseMove = (event: React.MouseEvent<HTMLDivElement>) => {
     if (interactiveRef.current) {
@@ -89,7 +89,7 @@ export const BackgroundGradientAnimation = ({
   return (
     <div
       className={cn(
-        "aspect-video max-h-[400px] container mt-10 rounded-3xl relative overflow-hidden top-0 left-0 bg-[linear-gradient(40deg,var(--gradient-background-start),var(--gradient-background-end))]",
+        "h-[300px] rounded-lg w-full container relative overflow-hidden top-0 left-0 bg-[linear-gradient(40deg,var(--gradient-background-start),var(--gradient-background-end))]",
         containerClassName
       )}
     >

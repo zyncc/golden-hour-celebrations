@@ -80,6 +80,19 @@ const config = {
         sm: "calc(var(--radius) - 4px)",
       },
       keyframes: {
+        aurora: {
+          from: {
+            backgroundPosition: "50% 50%, 50% 50%",
+          },
+          to: {
+            backgroundPosition: "350% 50%, 350% 50%",
+          },
+        },
+        scroll: {
+          to: {
+            transform: "translate(calc(-50% - 0.5rem))",
+          },
+        },
         "caret-blink": {
           "0%,70%,100%": {
             opacity: "1",
@@ -157,6 +170,7 @@ const config = {
         },
       },
       animation: {
+        aurora: "aurora 60s linear infinite",
         "caret-blink": "caret-blink 1.25s ease-out infinite",
         first: "moveVertical 30s ease infinite",
         second: "moveInCircle 20s reverse infinite",
@@ -167,10 +181,13 @@ const config = {
         spotlight: "spotlight 2s ease .75s 1 forwards",
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        scroll:
+          "scroll var(--animation-duration, 40s) var(--animation-direction, forwards) linear infinite",
       },
     },
   },
   plugins: [
+    addVariablesForColors,
     require("@tailwindcss/aspect-ratio"),
     addVariablesForColors,
     require("tailwindcss-animate"),

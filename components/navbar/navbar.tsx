@@ -71,7 +71,7 @@ export default async function Navbar() {
           <div className="flex gap-x-3">
             <Link href={"/book"}>
               <Button
-                className="rounded-full text-black bg-yellow-500 hover:bg-yellow-300"
+                className="rounded-full text-black hover:text-black bg-yellow-500 hover:bg-yellow-300"
                 variant={"outline"}
               >
                 Book now

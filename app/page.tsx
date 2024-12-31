@@ -1,8 +1,12 @@
 import { Footer } from "@/components/footer/footer";
 import { BackgroundGradientAnimation } from "@/components/ui/background-gradient-animation";
+import { InfiniteMovingCards } from "@/components/ui/infinite-moving-cards";
 import { Spotlight } from "@/components/ui/Spotlight";
 import { TextGenerateEffect } from "@/components/ui/text-generate-effect";
 import React from "react";
+import { reviews } from "@/lib/constants";
+import { FAQSection } from "@/components/faqs/faq";
+import { AuroraBackground } from "@/components/ui/aurora-background";
 
 export default function Page() {
   //bg-grid   bg-grid-small   bg-dot
@@ -26,10 +30,7 @@ export default function Page() {
           />
         </div>
       </section>
-      <section
-        id="about"
-        className="container min-h-screen flex flex-col items-center"
-      >
+      <section id="about" className="container flex flex-col items-center">
         <h1 className="font-semibold bg-clip-text text-transparent bg-gradient-to-b from-neutral-200 to-neutral-500 text-4xl text-center lg:text-7xl">
           About us
         </h1>
@@ -39,14 +40,20 @@ export default function Page() {
           birthdays, anniversaries, bride / groom-to-be, baby showers, valentine
           day, celebrate your achievements with us.
         </p>
-
-        <BackgroundGradientAnimation interactive={true}>
-          <div className="absolute rounded-lg container z-10 inset-0 flex items-center justify-center text-white font-bold px-4 pointer-events-none text-4xl text-center lg:text-7xl">
-            <p className="bg-clip-text text-transparent drop-shadow-2xl bg-gradient-to-b from-white/80 to-white/20">
-              Why Choose Us?
-            </p>
-          </div>
-        </BackgroundGradientAnimation>
+        <AuroraBackground className="mt-10 mx-3">
+          <h1 className="font-semibold bg-clip-text text-transparent bg-gradient-to-b from-neutral-200 to-neutral-500 text-4xl text-center lg:text-7xl">
+            Why choose us?
+          </h1>
+        </AuroraBackground>
+      </section>
+      <section className="container my-[200px]">
+        <FAQSection />
+      </section>
+      <section className="container my-[200px]">
+        <h1 className="font-semibold bg-clip-text text-transparent bg-gradient-to-b from-neutral-200 to-neutral-500 text-4xl text-center lg:text-7xl">
+          Testimonials
+        </h1>
+        <InfiniteMovingCards className="mt-5" items={reviews} speed="slow" />
       </section>
       <Footer />
     </>

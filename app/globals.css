@@ -59,6 +59,16 @@
   }
 }
 
+::-moz-selection {
+  color: black;
+  background: white;
+}
+
+::selection {
+  color: black;
+  background: white;
+}
+
 @layer base {
   * {
     @apply border-border;
