@@ -59,6 +59,7 @@ export const items = [
       "Photoshoot",
       "Upto 4 people",
     ],
+    popular: true,
     noPeople: 4,
     price: 2999,
     photo: [

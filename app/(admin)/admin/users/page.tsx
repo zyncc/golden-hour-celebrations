@@ -16,9 +16,9 @@ async function Page() {
   const session = await auth.api.getSession({
     headers: headers(),
   });
-  // if (session?.user.role !== "admin") {
-  //     return notFound()
-  // }
+  if (session?.user.role !== "admin") {
+    return notFound();
+  }
   const users = await prisma.user.findMany({
     where: {
       phoneNumber: {

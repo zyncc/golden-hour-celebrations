@@ -31,6 +31,9 @@ export default function Page() {
     {
       link: "/l4.jpg",
     },
+    {
+      link: "/l5.jpg",
+    },
   ];
   return (
     <div className="my-[100px] container">
@@ -69,7 +72,7 @@ export default function Page() {
         />
         <BentoGridItem
           className={"aspect-w-16 aspect-h-9"}
-          image={images[2].link}
+          image={images[6].link}
         />
       </BentoGrid>
     </div>

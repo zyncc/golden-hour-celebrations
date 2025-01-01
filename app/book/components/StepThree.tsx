@@ -191,7 +191,7 @@ export default function StepThree() {
                 )}
                 <Separator />
                 <div className="flex justify-between text-lg font-medium">
-                  <span>Advance Amount</span>
+                  <span>{payFull ? "Total" : "Advance Amount"}</span>
                   <span className={"font-semibold"}>
                     {payFull
                       ? formatCurrency(reservation.price as number)

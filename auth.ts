@@ -29,7 +29,7 @@ export const auth = betterAuth({
         });
         if (accountExists) {
           const res = await fetch(
-            "https://graph.facebook.com/v21.0/541328782390732/messages",
+            "https://graph.facebook.com/v21.0/529703236891962/messages",
             {
               headers: {
                 Authorization: `Bearer ${process.env.WHATSAPP_TOKEN}`,

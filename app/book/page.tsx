@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import StepOneForm from "./components/stepOneForm";
 import StepTwo from "./components/StepTwo";
 import StepThree from "./components/StepThree";
-import { items } from "@/lib/constants";
+
 import { Steps } from "@/components/steps";
 import { Metadata } from "next";
 
@@ -28,7 +28,7 @@ export default function Book({
       {step == 1 ? (
         <StepOneForm />
       ) : step == 2 ? (
-        <StepTwo items={items} />
+        <StepTwo />
       ) : step == 3 ? (
         <StepThree />
       ) : (

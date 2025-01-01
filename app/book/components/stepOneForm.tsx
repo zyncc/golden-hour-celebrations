@@ -18,7 +18,6 @@ import { useReservation } from "@/context/ReservationStore";
 import { StepOneFormSchema } from "@/lib/zodSchemas";
 import { Label } from "@/components/ui/label";
 import { CreateUser } from "@/actions/createUser";
-import { Card, CardContent } from "@/components/ui/card";
 
 export default function StepOneForm() {
   const currentDate = new Date();
@@ -33,6 +32,7 @@ export default function StepOneForm() {
   const router = useRouter();
   const { setReservationData, reservation } = useReservation();
   const [date, setDate] = useState<Date | undefined>(reservation?.date);
+  const [open, setOpen] = useState(false);
   const [errors, setErrors] = useState<z.ZodIssue[]>();
 
   function handleFormSubmit(FormData: FormData) {
@@ -186,7 +186,7 @@ export default function StepOneForm() {
           </div>
           <div className="flex flex-col gap-y-3">
             <Label>Pick your Date</Label>
-            <Popover>
+            <Popover open={open} onOpenChange={setOpen}>
               <PopoverTrigger asChild>
                 <Button
                   variant={"outline"}
@@ -205,7 +205,10 @@ export default function StepOneForm() {
                   fromDate={currentDate}
                   toMonth={nextMonthDate}
                   selected={date}
-                  onSelect={setDate}
+                  onSelect={(date) => {
+                    setDate(date);
+                    setOpen(false);
+                  }}
                 />
               </PopoverContent>
             </Popover>
