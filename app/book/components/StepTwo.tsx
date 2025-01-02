@@ -13,10 +13,11 @@ import { Badge } from "@/components/ui/badge";
 import formatCurrency from "@/lib/formatCurrency";
 import { items } from "@/lib/constants";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Autoplay } from "swiper/modules";
+import { Autoplay, EffectFade } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
+import "swiper/css/effect-fade";
 
 export default function StepTwo() {
   const { reservation, setReservationData } = useReservation();
@@ -91,9 +92,11 @@ export default function StepTwo() {
                     <Swiper
                       autoplay={{
                         delay: 2500,
+                        pauseOnMouseEnter: true,
                       }}
+                      effect={"fade"}
                       loop
-                      modules={[Autoplay]}
+                      modules={[Autoplay, EffectFade]}
                       spaceBetween={0}
                       slidesPerView={1}
                     >
@@ -105,6 +108,7 @@ export default function StepTwo() {
                             layout="fill"
                             objectFit="cover"
                             className="object-cover"
+                            placeholder="blur"
                           />
                         </SwiperSlide>
                       ))}
