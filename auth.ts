@@ -4,6 +4,7 @@ import { prismaAdapter } from "better-auth/adapters/prisma";
 import { phoneNumber } from "better-auth/plugins";
 import { admin } from "better-auth/plugins/admin";
 import prisma from "./lib/prisma";
+import { sendLoginOTP } from "./actions/whatsapp.action";
 
 export const auth = betterAuth({
   database: prismaAdapter(prisma, {
@@ -21,34 +22,14 @@ export const auth = betterAuth({
       defaultRole: "user",
     }),
     phoneNumber({
-      sendOTP: async ({ phoneNumber, code }, request) => {
+      sendOTP: async ({ phoneNumber, code }) => {
         const accountExists = await prisma.user.findUnique({
           where: {
             phoneNumber,
           },
         });
         if (accountExists) {
-          const res = await fetch(
-            "https://graph.facebook.com/v21.0/529703236891962/messages",
-            {
-              headers: {
-                Authorization: `Bearer ${process.env.WHATSAPP_TOKEN}`,
-                "Content-Type": "application/json",
-              },
-              cache: "no-cache",
-              method: "POST",
-              body: JSON.stringify({
-                messaging_product: "whatsapp",
-                recipient_type: "individual",
-                to: `91${phoneNumber}`,
-                type: "text",
-                text: {
-                  body: `Your Login OTP is ${code}`,
-                },
-              }),
-            }
-          );
-          console.log(await res.json());
+          sendLoginOTP(phoneNumber, code);
         } else {
           throw new APIError("BAD_REQUEST", {
             message: "No Account found with this Phone Number",
