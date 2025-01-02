@@ -2,9 +2,6 @@
 
 import { Button } from "@/components/ui/button";
 import { useReservation } from "@/context/ReservationStore";
-import Autoplay from "embla-carousel-autoplay";
-import Fade from "embla-carousel-fade";
-import useEmblaCarousel from "embla-carousel-react";
 import Image from "next/image";
 import { redirect, useRouter } from "next/navigation";
 import React, { useState } from "react";
@@ -15,6 +12,11 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import formatCurrency from "@/lib/formatCurrency";
 import { items } from "@/lib/constants";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Autoplay } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/pagination";
+import "swiper/css/navigation";
 
 export default function StepTwo() {
   const { reservation, setReservationData } = useReservation();
@@ -63,11 +65,6 @@ export default function StepTwo() {
     "6PM - 8PM",
     "8PM - 10PM",
   ];
-
-  const [emblaRef] = useEmblaCarousel({ loop: true }, [
-    Fade(),
-    Autoplay({ delay: 2000, stopOnInteraction: false, stopOnFocusIn: false }),
-  ]);
   const { data, isLoading } = useQuery({
     queryKey: ["getReservation"],
     refetchInterval: 1000 * 20,
@@ -91,13 +88,27 @@ export default function StepTwo() {
               >
                 <div className="flex flex-col md:flex-row">
                   <div className="relative h-64 md:h-auto md:w-1/2 overflow-hidden">
-                    <Image
-                      src={pkg.photo[0]}
-                      alt={`${pkg.room} celebration scene`}
-                      layout="fill"
-                      objectFit="cover"
-                      className="object-cover"
-                    />
+                    <Swiper
+                      autoplay={{
+                        delay: 2500,
+                      }}
+                      loop
+                      modules={[Autoplay]}
+                      spaceBetween={0}
+                      slidesPerView={1}
+                    >
+                      {pkg.photo.map((pic, i) => (
+                        <SwiperSlide key={i} className="z-0">
+                          <Image
+                            src={pic}
+                            alt={`${pkg.room} celebration scene`}
+                            layout="fill"
+                            objectFit="cover"
+                            className="object-cover"
+                          />
+                        </SwiperSlide>
+                      ))}
+                    </Swiper>
                   </div>
                   <div className="p-3 md:p-6 md:w-1/2 flex flex-col">
                     <div className="space-y-4 mb-6">
@@ -138,7 +149,6 @@ export default function StepTwo() {
                         </li>
                       ))}
                     </ul>
-                    {/* Time Slots */}
                     <div className="grid grid-cols-3 gap-2">
                       {timeSlots.map((slot) => (
                         <Button
@@ -188,9 +198,7 @@ export default function StepTwo() {
               </Card>
             ))}
           </div>
-
-          {/* Navigation Buttons */}
-          <div className="sticky bottom-0 bg-black pt-4 pb-4">
+          <div className="sticky bottom-0 bg-black pt-4 pb-4 z-10">
             <div className="flex gap-4">
               <Button
                 type={"submit"}

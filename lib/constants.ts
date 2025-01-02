@@ -1,3 +1,9 @@
+import l1 from "@/public/l1.jpg";
+import l2 from "@/public/l2.jpg";
+import l3 from "@/public/l3.jpg";
+import l4 from "@/public/l4.jpg";
+import l5 from "@/public/l5.jpg";
+
 export const selectFindUs = [
   {
     title: "Instagram / Facebook",
@@ -45,10 +51,7 @@ export const items = [
       "Upto 4 people",
     ],
     price: 1999,
-    photo: [
-      "https://images.pexels.com/photos/3171837/pexels-photo-3171837.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-      "https://images.pexels.com/photos/433452/pexels-photo-433452.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-    ],
+    photo: [l1, l2],
   },
   {
     id: 2,
@@ -62,10 +65,7 @@ export const items = [
     popular: true,
     noPeople: 4,
     price: 2999,
-    photo: [
-      "https://images.pexels.com/photos/7507067/pexels-photo-7507067.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-      "https://images.pexels.com/photos/7180617/pexels-photo-7180617.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-    ],
+    photo: [l2, l3],
   },
   {
     id: 3,
@@ -79,10 +79,7 @@ export const items = [
     ],
     noPeople: 4,
     price: 3999,
-    photo: [
-      "https://images.pexels.com/photos/7507067/pexels-photo-7507067.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-      "https://images.pexels.com/photos/7180617/pexels-photo-7180617.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-    ],
+    photo: [l1, l2, l3, l4, l5],
   },
 ];
 
