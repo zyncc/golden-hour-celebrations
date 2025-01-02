@@ -40,7 +40,7 @@ export async function sendLoginOTP(phoneNumber: string, code: string) {
     }),
   };
   await fetch(
-    `https://graph.facebook.com/v21.0/${process.env.CLOUD_API_ACCESS_TOKEN}/messages`,
+    `https://graph.facebook.com/v21.0/${process.env.WA_PHONE_NUMBER_ID}/messages`,
     options
   );
 }
