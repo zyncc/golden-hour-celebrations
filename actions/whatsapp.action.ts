@@ -1,13 +1,12 @@
 "use server";
 
 export async function sendLoginOTP(phoneNumber: string, code: string) {
-  const recipient_number = Number(`91${phoneNumber}`);
   const options = {
     method: "POST",
     "Content-Type": "application/json",
     Authorization: `Bearer ${process.env.WHATSAPP_API_TOKEN}`,
     body: JSON.stringify({
-      to: `91${recipient_number}`,
+      to: `91${phoneNumber}`,
       messaging_product: "whatsapp",
       type: "template",
       template: {
@@ -21,7 +20,7 @@ export async function sendLoginOTP(phoneNumber: string, code: string) {
             parameters: [
               {
                 type: "text",
-                text: "123456",
+                text: code,
               },
             ],
           },
@@ -32,7 +31,7 @@ export async function sendLoginOTP(phoneNumber: string, code: string) {
             parameters: [
               {
                 type: "text",
-                text: "J$FpnYnP",
+                text: code,
               },
             ],
           },
