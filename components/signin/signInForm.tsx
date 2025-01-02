@@ -53,7 +53,7 @@ function SignInForm() {
     await authClient.phoneNumber.sendOtp({
       phoneNumber,
       fetchOptions: {
-        onRequest: (ctx) => setLoadingSendOtp(true),
+        onRequest: () => setLoadingSendOtp(true),
         onSuccess: () => {
           setLoadingSendOtp(false);
           setOpen(true);
