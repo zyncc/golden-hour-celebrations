@@ -9,7 +9,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${baseURL}/contact` },
     { url: `${baseURL}/about` },
     { url: `${baseURL}/services` },
-    { url: `${baseURL}/book`, priority: 10 },
-    { url: `${baseURL}/gallery`, priority: 9 },
+    { url: `${baseURL}/book` },
+    { url: `${baseURL}/gallery` },
   ];
 }

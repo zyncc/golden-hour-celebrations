@@ -79,7 +79,7 @@ async function Page() {
             ))}
             {reservations.length == 0 && (
               <TableRow>
-                <TableCell>No Reservations found</TableCell>
+                <TableCell>No Bookings found</TableCell>
               </TableRow>
             )}
           </TableBody>

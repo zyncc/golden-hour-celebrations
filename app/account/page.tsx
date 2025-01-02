@@ -32,18 +32,22 @@ export default async function Page() {
         <Table>
           <TableHeader>
             <TableRow>
+              <TableHead>Order ID</TableHead>
               <TableHead>Name</TableHead>
               <TableHead>Phone</TableHead>
               <TableHead>Package</TableHead>
               <TableHead>Time</TableHead>
               <TableHead>Event Type</TableHead>
               <TableHead>Date</TableHead>
-              <TableHead>Payment ID</TableHead>
+              <TableHead>Payment Status</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {bookings.map((reservation, index) => (
               <TableRow key={index}>
+                <TableCell className="font-medium">
+                  {reservation.orderID}
+                </TableCell>
                 <TableCell className="font-medium">
                   {reservation.name}
                 </TableCell>
@@ -66,7 +70,17 @@ export default async function Page() {
                     reservation.date.toDateString()
                   )}
                 </TableCell>
-                <TableCell>{reservation.paymentID}</TableCell>
+                <TableCell>
+                  {reservation.paymentStatus ? (
+                    <span className="inline-flex whitespace-nowrap items-center rounded-md bg-blue-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-700/10 dark:bg-blue-400/10 dark:text-white-400 dark:ring-green-400/30">
+                      Success
+                    </span>
+                  ) : (
+                    <span className="inline-flex whitespace-nowrap items-center rounded-md bg-blue-50 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-700/10 dark:bg-red-400/10 dark:text-black-400 dark:ring-red-400/30">
+                      Failed
+                    </span>
+                  )}
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
