@@ -1,6 +1,5 @@
 import React from "react";
 import Link from "next/link";
-import CustomBtn from "../CustomButton";
 import {
   Sheet,
   SheetClose,
@@ -14,6 +13,7 @@ import SignOutButton from "@/components/SignOutButton";
 import { auth } from "@/auth";
 import { headers } from "next/headers";
 import { Button } from "@/components/ui/button";
+import logo from "@/public/logo.png";
 
 const NavLinks = [
   {
@@ -46,7 +46,7 @@ export default async function Navbar() {
       <nav className="container flex justify-between items-center py-2.5">
         <Link href={"/"}>
           <Image
-            src={"/logo.png"}
+            src={logo}
             alt="Golden Hour"
             width={120}
             height={120}
