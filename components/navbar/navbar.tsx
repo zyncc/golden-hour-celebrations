@@ -51,6 +51,7 @@ export default async function Navbar() {
             width={120}
             height={120}
             priority
+            fetchPriority="high"
           />
         </Link>
         <div className="hidden lg:block">
