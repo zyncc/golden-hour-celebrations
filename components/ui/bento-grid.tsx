@@ -1,7 +1,6 @@
 import { cn } from "@/lib/utils";
-import Image from "next/image";
+import Image, { StaticImageData } from "next/image";
 import React from "react";
-import v1 from "@/public/v1.jpg";
 
 export const BentoGrid = ({
   className,
@@ -27,7 +26,7 @@ export const BentoGridItem = ({
   image,
 }: {
   className?: string;
-  image?: string;
+  image?: StaticImageData;
 }) => {
   return (
     <div
@@ -39,7 +38,7 @@ export const BentoGridItem = ({
       <div className="w-full h-full">
         <Image
           className="rounded-lg object-cover"
-          src={v1}
+          src={image!}
           alt="Gallery Image"
           fill
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
