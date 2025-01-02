@@ -4,7 +4,6 @@ import { prismaAdapter } from "better-auth/adapters/prisma";
 import { phoneNumber } from "better-auth/plugins";
 import { admin } from "better-auth/plugins/admin";
 import prisma from "./lib/prisma";
-import { sendLoginOTP } from "./actions/whatsapp.action";
 
 export const auth = betterAuth({
   database: prismaAdapter(prisma, {
@@ -29,7 +28,49 @@ export const auth = betterAuth({
           },
         });
         if (accountExists) {
-          sendLoginOTP(phoneNumber, code);
+          await fetch(
+            `https://graph.facebook.com/v21.0/${process.env.WA_PHONE_NUMBER_ID}/messages`,
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${process.env.CLOUD_API_ACCESS_TOKEN}`,
+              },
+              body: JSON.stringify({
+                to: `91${phoneNumber}`,
+                type: "template",
+                messaging_product: "whatsapp",
+                template: {
+                  name: "login_otp",
+                  language: {
+                    code: "en",
+                  },
+                  components: [
+                    {
+                      type: "body",
+                      parameters: [
+                        {
+                          type: "text",
+                          text: code,
+                        },
+                      ],
+                    },
+                    {
+                      type: "button",
+                      sub_type: "url",
+                      index: "0",
+                      parameters: [
+                        {
+                          type: "text",
+                          text: code,
+                        },
+                      ],
+                    },
+                  ],
+                },
+              }),
+            }
+          );
         } else {
           throw new APIError("BAD_REQUEST", {
             message: "No Account found with this Phone Number",
