@@ -28,7 +28,7 @@ export const auth = betterAuth({
           },
         });
         if (accountExists) {
-          await fetch(
+          const res = await fetch(
             `https://graph.facebook.com/v21.0/${process.env.WA_PHONE_NUMBER_ID}/messages`,
             {
               method: "POST",
@@ -71,6 +71,7 @@ export const auth = betterAuth({
               }),
             }
           );
+          console.log(await res.json());
         } else {
           throw new APIError("BAD_REQUEST", {
             message: "No Account found with this Phone Number",

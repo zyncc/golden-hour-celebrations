@@ -39,6 +39,7 @@ async function Page() {
               <TableHead>Name</TableHead>
               <TableHead>Phone</TableHead>
               <TableHead>Email</TableHead>
+              <TableHead>Created At</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -54,6 +55,9 @@ async function Page() {
                   <Link target="_blank" href={`mailto:${user.email}`}>
                     {user.email}
                   </Link>
+                </TableCell>
+                <TableCell className="font-medium">
+                  {user.createdAt.toDateString()}
                 </TableCell>
               </TableRow>
             ))}
