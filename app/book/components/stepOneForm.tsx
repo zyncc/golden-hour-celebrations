@@ -18,6 +18,7 @@ import { useReservation } from "@/context/ReservationStore";
 import { StepOneFormSchema } from "@/lib/zodSchemas";
 import { Label } from "@/components/ui/label";
 import { CreateUser } from "@/actions/createUser";
+import Link from "next/link";
 
 export default function StepOneForm() {
   const currentDate = new Date();
@@ -241,6 +242,10 @@ export default function StepOneForm() {
               29th main, 29th A Cross Rd, Geetha Colony,
               <br />
               4th Block, Jayanagar, 560041
+              <br />
+              Call us
+              <br />
+              <Link href={"tel:9739204918"}>9739204918</Link>
             </p>
           </div>
         </div>

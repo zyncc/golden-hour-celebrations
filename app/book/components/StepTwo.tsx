@@ -193,7 +193,7 @@ export default function StepTwo() {
                           }}
                           className={"flex-1"}
                         >
-                          10 AM - 12 PM
+                          {slot}
                         </Button>
                       ))}
                     </div>

@@ -44,9 +44,6 @@ export default function StepThree() {
       name: "Golden Hour Celebrations",
       description: reservation?.room,
       order_id: orderID,
-      // handler: ({ razorpay_order_id, razorpay_payment_id }) => {
-      //   setPending(false);
-      // },
       modal: {
         backdropclose: false,
         escape: false,
