@@ -96,3 +96,30 @@ export const payReservationSchema = z.object({
     "8PM - 10PM",
   ]),
 });
+
+export const ManualBookingSchema = z.object({
+  advanceAmount: z.number(),
+  balanceAmount: z.number(),
+  date: z.date(),
+  email: z.string().email().trim().toLowerCase(),
+  name: z.string(),
+  occasion: z.enum(
+    [
+      "Birthday",
+      "Anniversary",
+      "Bride / Groom to be",
+      "Graduation Party",
+      "Proposal",
+      "Mom to be",
+      "Other Surprises",
+    ],
+    {
+      message: "Please select one",
+    }
+  ),
+  packageType: z.string(),
+  phone: z.string({ message: "Phone is required" }).regex(/^[6-9]\d{9}$/, {
+    message: "Invalid phone number",
+  }),
+  timeSlot: z.string(),
+});

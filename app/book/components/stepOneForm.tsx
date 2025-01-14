@@ -46,7 +46,11 @@ export default function StepOneForm() {
       validation = StepOneFormSchema.safeParse({ ...formData, resDate });
     }
     if (validation.success) {
-      CreateUser(validation.data);
+      CreateUser({
+        email: validation.data.email,
+        name: validation.data.name,
+        phone: validation.data.phone,
+      });
       setDate(validation.data.date);
       setReservationData(undefined);
       setReservationData(validation.data);

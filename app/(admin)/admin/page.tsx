@@ -1,92 +1,149 @@
+import { Plus, Users, Calendar, ArrowUpRight, Activity } from "lucide-react";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import prisma from "@/lib/prisma";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { auth } from "@/auth";
+import formatCurrency from "@/lib/formatCurrency";
 import { headers } from "next/headers";
+import { auth } from "@/auth";
 import { notFound } from "next/navigation";
 
-async function Page() {
+export default async function AdminDashboard() {
   const session = await auth.api.getSession({
     headers: headers(),
   });
   if (session?.user.role !== "admin") {
     return notFound();
   }
-  const date = new Date();
-  const formattedDate = date.toDateString();
   const now = new Date();
-  const dateOnly = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-  const reservations = await prisma.reservations.findMany({
-    where: {
-      paymentStatus: true,
-      date: {
-        gte: dateOnly,
+  const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+  const startOfNextMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1);
+  const [bookingCount, userCount, reservations] = await Promise.all([
+    prisma.reservations.count({ where: { paymentStatus: true } }),
+    prisma.user.count(),
+    prisma.reservations.findMany({
+      where: {
+        paymentStatus: true,
+        createdAt: {
+          gte: startOfMonth,
+          lt: startOfNextMonth,
+        },
       },
-    },
-    orderBy: {
-      date: "asc",
-    },
-  });
+      select: {
+        balanceAmount: true,
+        room: true,
+      },
+      orderBy: {
+        createdAt: "asc",
+      },
+    }),
+  ]);
+
+  const roomPrices: Record<string, number> = {
+    "Basic Package": 1999,
+    "Standard Package": 2999,
+    "Premium Package": 3999,
+  };
+
+  const totalEarned = reservations.reduce((total, reservation) => {
+    return total + roomPrices[reservation.room];
+  }, 0);
+
   return (
-    <div className={"mt-[100px] container"}>
-      <h1 className={"text-2xl font-medium mb-5"}>Reservations</h1>
-      <div className="rounded-md border">
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Name</TableHead>
-              <TableHead>Phone</TableHead>
-              <TableHead>Package</TableHead>
-              <TableHead>Time</TableHead>
-              <TableHead>Event Type</TableHead>
-              <TableHead>Date</TableHead>
-              <TableHead>Payment ID</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {reservations.map((reservation, index) => (
-              <TableRow key={index}>
-                <TableCell className="font-medium">
-                  {reservation.name}
-                </TableCell>
-                <TableCell>{reservation.phone}</TableCell>
-                <TableCell>{reservation.room}</TableCell>
-                <TableCell className={"whitespace-nowrap"}>
-                  {reservation.timeSlot}
-                </TableCell>
-                <TableCell>
-                  <span className="inline-flex items-center rounded-md bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10 dark:bg-blue-400/10 dark:text-blue-400 dark:ring-blue-400/30">
-                    {reservation.occasion}
-                  </span>
-                </TableCell>
-                <TableCell className={"whitespace-nowrap"}>
-                  {formattedDate === reservation.date.toDateString() ? (
-                    <span className="inline-flex items-center rounded-md bg-blue-50 px-2 py-1 text-xs font-medium text-green-600 ring-1 ring-inset ring-blue-700/10 dark:bg-green-400/10 dark:text-green-600 dark:ring-green-400/30">
-                      Today
-                    </span>
-                  ) : (
-                    reservation.date.toDateString()
-                  )}
-                </TableCell>
-                <TableCell>{reservation.paymentID}</TableCell>
-              </TableRow>
-            ))}
-            {reservations.length == 0 && (
-              <TableRow>
-                <TableCell>No Bookings found</TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
+    <div className="flex mt-[100px] container min-h-screen flex-col bg-background">
+      <div className="flex-1 space-y-4 py-8 pt-6">
+        <div className="flex items-center justify-between space-y-2">
+          <h2 className="text-3xl font-bold tracking-tight">Dashboard</h2>
+          <div className="flex items-center space-x-2">
+            <Link href={"/admin/bookings/create"}>
+              <Button variant={"outline"}>
+                <Plus className="mr-2 h-4 w-4" />
+                Create Booking
+              </Button>
+            </Link>
+          </div>
+        </div>
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+          <Link draggable={false} href={"/admin/bookings"}>
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">
+                  Total Bookings
+                </CardTitle>
+                <Calendar className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">{bookingCount}</div>
+              </CardContent>
+            </Card>
+          </Link>
+          <Link draggable={false} href={"/admin/users"}>
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">
+                  Total Users
+                </CardTitle>
+                <Users className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">{userCount}</div>
+              </CardContent>
+            </Card>
+          </Link>
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Total Money</CardTitle>
+              <div className="h-4 w-4 text-muted-foreground">₹</div>
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">
+                {formatCurrency(totalEarned)}
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
+          <Card className="col-span-4">
+            <CardHeader>
+              <CardTitle>Recent Bookings</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="flex items-center justify-center h-64 text-muted-foreground">
+                No bookings yet
+              </div>
+            </CardContent>
+          </Card>
+          <Card className="col-span-3">
+            <CardHeader>
+              <CardTitle>Recent Activity</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-8">
+                <div className="flex items-center">
+                  <div className="ml-4 space-y-1">
+                    <p className="text-sm font-medium leading-none">
+                      New user registered
+                    </p>
+                    <p className="text-sm text-muted-foreground">
+                      2 minutes ago
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-center">
+                  <div className="ml-4 space-y-1">
+                    <p className="text-sm font-medium leading-none">
+                      Dashboard viewed
+                    </p>
+                    <p className="text-sm text-muted-foreground">
+                      5 minutes ago
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
       </div>
     </div>
   );
 }
-
-export default Page;

@@ -1,8 +1,12 @@
 "use server";
 
+import { auth } from "@/auth";
 import { Reservation } from "@/context/ReservationStore";
 import prisma from "@/lib/prisma";
-import { payReservationSchema } from "@/lib/zodSchemas";
+import { ManualBookingSchema, payReservationSchema } from "@/lib/zodSchemas";
+import { randomUUID } from "crypto";
+import { headers } from "next/headers";
+import { z } from "zod";
 
 export async function createReservation(
   payFull: boolean,
@@ -59,4 +63,39 @@ export async function createReservation(
   } catch (e) {
     console.log(e);
   }
+}
+
+type Data = z.infer<typeof ManualBookingSchema>;
+
+export async function CreateManualBooking(data: Data) {
+  const session = await auth.api.getSession({
+    headers: headers(),
+  });
+  if (session?.user.role !== "admin") {
+    throw new Error("Unauthorized");
+  }
+  const { advanceAmount, packageType, ...rest } = data;
+  const checkExistingBookings = await prisma.reservations.findFirst({
+    where: {
+      date: data.date,
+      room: data.packageType,
+      timeSlot: data.timeSlot,
+      paymentStatus: true,
+    },
+  });
+  if (checkExistingBookings) {
+    return {
+      title: "Error creating Reservation",
+      description:
+        "Someone has booked another reservation at the same Time Slot!",
+    };
+  }
+  await prisma.reservations.create({
+    data: {
+      ...rest,
+      room: data.packageType,
+      paymentStatus: true,
+      orderID: randomUUID(),
+    },
+  });
 }

@@ -41,9 +41,9 @@ model Reservations {
   name          String
   phone         String
   email         String
-  findUs        String
+  findUs        String?
   date          DateTime
-  orderID       String   @unique
+  orderID       String?  @unique
   paymentID     String?
   emailSent     Boolean  @default(false)
   paymentStatus Boolean  @default(false)
