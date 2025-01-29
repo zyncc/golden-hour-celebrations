@@ -29,7 +29,8 @@ export const StepOneFormSchema = z.object({
   name: z
     .string({ message: "Name is required" })
     .min(3, { message: "Name must be atleast 3 characters" })
-    .max(50, { message: "Name cannot be more than 50 characters" }),
+    .max(50, { message: "Name cannot be more than 50 characters" })
+    .trim(),
   phone: z.string({ message: "Phone is required" }).regex(/^[6-9]\d{9}$/, {
     message: "Invalid phone number",
   }),
