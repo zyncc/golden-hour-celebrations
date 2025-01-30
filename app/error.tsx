@@ -16,7 +16,7 @@ export default function Error({
 
   return (
     <div className="section h-screen w-screen flex items-center justify-center gap-4 flex-col">
-      <h2 className="font-medium text-2xl">{error.message}</h2>
+      <h2 className="font-medium text-2xl">Something went Wrong!</h2>
       <Button variant={"secondary"} onClick={() => reset()}>
         Try again
       </Button>
