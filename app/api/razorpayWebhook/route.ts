@@ -15,7 +15,7 @@ export async function POST(req: Request) {
     .digest("hex");
 
   if (generatedSignature !== razorpaySignature) {
-    return NextResponse.json({ error: "Invalid signature" }, { status: 400 });
+    return NextResponse.json({ error: "Invalid signature" }, { status: 200 });
   }
 
   await prisma.reservations.update({
