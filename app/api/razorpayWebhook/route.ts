@@ -2,6 +2,7 @@ import prisma from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 import { NextResponse } from "next/server";
 import crypto from "crypto";
+import { SendReceipt } from "@/actions/emails";
 
 export async function POST(req: Request) {
   const rzp_response = await req.json();
@@ -27,6 +28,8 @@ export async function POST(req: Request) {
       paymentID,
     },
   });
+
+  SendReceipt(orderID);
 
   revalidatePath("/admin");
   revalidatePath("/account");
