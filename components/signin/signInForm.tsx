@@ -26,7 +26,7 @@ import { REGEXP_ONLY_DIGITS } from "input-otp";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { phoneValidator } from "@/lib/zodSchemas";
+import { emailValidator } from "@/lib/zodSchemas";
 import { authClient } from "@/lib/authClient";
 import { useRouter } from "next/navigation";
 import { LoaderCircle } from "lucide-react";
@@ -35,23 +35,22 @@ import { useToast } from "@/components/ui/use-toast";
 function SignInForm() {
   const [open, setOpen] = useState(false);
   const [otp, setOtp] = useState("");
-  const [phone, setPhone] = useState("");
+  const [email, setEmail] = useState("");
   const [loadingSendOtp, setLoadingSendOtp] = useState(false);
   const [loadingVerifyOtp, setLoadingVerifyOtp] = useState(false);
   const { toast } = useToast();
   const router = useRouter();
-  const form = useForm<z.infer<typeof phoneValidator>>({
-    resolver: zodResolver(phoneValidator),
+  const form = useForm<z.infer<typeof emailValidator>>({
+    resolver: zodResolver(emailValidator),
     defaultValues: {
-      phone: "",
+      email: "",
     },
   });
-  async function onSubmit({
-    phone: phoneNumber,
-  }: z.infer<typeof phoneValidator>) {
-    setPhone(phoneNumber);
-    await authClient.phoneNumber.sendOtp({
-      phoneNumber,
+  async function onSubmit({ email: EmailID }: z.infer<typeof emailValidator>) {
+    setEmail(EmailID);
+    await authClient.emailOtp.sendVerificationOtp({
+      email,
+      type: "sign-in",
       fetchOptions: {
         onRequest: () => setLoadingSendOtp(true),
         onSuccess: () => {
@@ -70,9 +69,9 @@ function SignInForm() {
     });
   }
   async function handleOtpSubmit() {
-    await authClient.phoneNumber.verify({
-      phoneNumber: phone,
-      code: otp,
+    await authClient.signIn.emailOtp({
+      email,
+      otp,
       fetchOptions: {
         onRequest: () => setLoadingVerifyOtp(true),
         onError: (ctx) => {
@@ -125,12 +124,12 @@ function SignInForm() {
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
           <FormField
             control={form.control}
-            name="phone"
+            name="email"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Whatsapp Phone Number</FormLabel>
+                <FormLabel>Enter your Email</FormLabel>
                 <FormControl>
-                  <Input placeholder="Phone" type={"text"} {...field} />
+                  <Input placeholder="Email" type={"email"} {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>

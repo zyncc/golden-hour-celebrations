@@ -12,8 +12,12 @@ export async function SendReceipt(orderID: string) {
   try {
     if (getReservationDetails) {
       const emailSent = await resend.emails.send({
-        from: "info@goldenhourcelebrations.in",
-        to: [getReservationDetails.email],
+        from: "Golden Hour Celebrations <info@goldenhourcelebrations.in>",
+        to: [
+          getReservationDetails.email,
+          "goldenhourcelebrationsblr@gmail.com",
+          "chandankrishna288@gmail.com",
+        ],
         subject: "Receipt for your Reservation",
         react: NikeReceiptEmail({ getReservationDetails }),
       });

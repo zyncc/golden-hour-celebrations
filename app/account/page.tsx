@@ -20,7 +20,7 @@ export default async function Page() {
   }
   const bookings = await prisma.reservations.findMany({
     where: {
-      phone: session.user.phoneNumber!,
+      phone: session.user.email!,
     },
   });
   const date = new Date();

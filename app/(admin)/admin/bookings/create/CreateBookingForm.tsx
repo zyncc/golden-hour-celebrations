@@ -27,6 +27,8 @@ import {
 } from "@/components/ui/select";
 import formatCurrency from "@/lib/formatCurrency";
 import { CreateManualBooking } from "@/actions/createReservation";
+import { router } from "better-auth/api";
+import { useRouter } from "next/navigation";
 
 const timeSlots = [
   "10AM - 12PM",
@@ -49,6 +51,7 @@ export default function CreateBookingForm() {
   let nextMonthDate = new Date(nextYear, nextMonth, 1);
 
   const { toast } = useToast();
+  const router = useRouter();
   const [open, setOpen] = useState(false);
   const [date, setDate] = useState<Date>();
   const [packageType, setPackageType] = useState<string>();
@@ -84,6 +87,8 @@ export default function CreateBookingForm() {
           description: res.description,
         });
       }
+      setPending(false);
+      router.refresh();
     }
   }
 
@@ -196,7 +201,7 @@ export default function CreateBookingForm() {
         </div>
         <div className="flex gap-x-5 flex-col">
           <Label>Time Slot</Label>
-          <div className="flex gap-5 mt-3">
+          <div className="flex gap-5 mt-3 flex-wrap">
             {timeSlots.map((slot) => (
               <Button
                 variant={

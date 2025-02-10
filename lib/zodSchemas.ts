@@ -1,11 +1,9 @@
 import { z } from "zod";
 
-export const phoneValidator = z.object({
-  phone: z
-    .string()
-    .min(10, "Phone Number must be 10 digits")
-    .max(10, "Phone Number must be 10 digits")
-    .regex(/^[6-9]\d{9}$/, "Invalid Phone Number"),
+export const emailValidator = z.object({
+  email: z
+    .string({ message: "Email is required" })
+    .email("Enter a valid email address"),
 });
 
 export const validation = z.object({

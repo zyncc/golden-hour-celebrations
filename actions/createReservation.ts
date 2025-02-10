@@ -7,6 +7,7 @@ import { ManualBookingSchema, payReservationSchema } from "@/lib/zodSchemas";
 import { randomUUID } from "crypto";
 import { headers } from "next/headers";
 import { z } from "zod";
+import { SendReceipt } from "./emails";
 
 export async function createReservation(
   payFull: boolean,
@@ -90,7 +91,7 @@ export async function CreateManualBooking(data: Data) {
         "Someone has booked another reservation at the same Time Slot!",
     };
   }
-  await prisma.reservations.create({
+  const res = await prisma.reservations.create({
     data: {
       ...rest,
       room: data.packageType,
@@ -98,4 +99,5 @@ export async function CreateManualBooking(data: Data) {
       orderID: randomUUID(),
     },
   });
+  SendReceipt(res.orderID!);
 }

@@ -1,4 +1,3 @@
-import { capitalizeFirstLetter } from "@/lib/caplitaliseFirstLetter";
 import formatCurrency from "@/lib/formatCurrency";
 import { Reservations } from "@prisma/client";
 import {
