@@ -29,7 +29,6 @@ export async function createReservation(
     balanceAmount,
   });
   if (!success) {
-    console.log(error.issues);
     throw new Error("Invalid DATA");
   }
   const checkExistingBookings = await prisma.reservations.findFirst({

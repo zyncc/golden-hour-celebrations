@@ -22,9 +22,6 @@ export default function BookingCalendar() {
       toMonth={nextMonthDate}
       mode="single"
       selected={date}
-      onDayClick={(day) => {
-        console.log(day);
-      }}
       onSelect={setDate}
       className="rounded-md w-fit border"
     />

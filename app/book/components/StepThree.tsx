@@ -3,16 +3,9 @@
 import { Button } from "@/components/ui/button";
 import { useReservation } from "@/context/ReservationStore";
 import { redirect, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import {
   Card,
   CardContent,
@@ -34,10 +27,6 @@ export default function StepTwo() {
   if (reservation == undefined) {
     redirect("/book");
   }
-
-  useEffect(() => {
-    console.log(reservation);
-  }, [reservation]);
 
   const [wantsCake, setWantsCake] = useState(false);
   const [selectedCake, setSelectedCake] = useState<string | null>(null);

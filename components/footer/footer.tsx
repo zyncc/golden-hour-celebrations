@@ -82,22 +82,6 @@ export function Footer() {
                   Instagram
                 </Link>
               </li>
-              <li>
-                <Link
-                  href="#"
-                  className="hover:text-white transition-colors flex items-center gap-x-2"
-                >
-                  YouTube
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="#"
-                  className="hover:text-white transition-colors flex items-center gap-x-2"
-                >
-                  Facebook
-                </Link>
-              </li>
             </ul>
           </div>{" "}
           <div className="space-y-4">

@@ -21,7 +21,6 @@ export async function SendReceipt(orderID: string) {
         subject: "Receipt for your Reservation",
         react: NikeReceiptEmail({ getReservationDetails }),
       });
-      console.log(emailSent);
     }
   } catch (error) {
     console.log(error);

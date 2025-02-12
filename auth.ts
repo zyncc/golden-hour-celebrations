@@ -37,7 +37,6 @@ export const auth = betterAuth({
             subject: "Your Login OTP for Golden Hour Celebrations",
             react: LoginOTP({ verificationCode: otp }),
           });
-          console.log(emailSent);
         } else {
           throw new APIError("BAD_REQUEST", {
             message: "No Account found with this Phone Number",
