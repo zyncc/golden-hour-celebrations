@@ -3,6 +3,7 @@ import { Poppins } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/navbar/navbar";
 import { Toaster } from "@/components/ui/toaster";
+// import { Toaster as Sonner } from "@/components/ui/sonner";
 import TanstackProvider from "@/providers/TanstackProvider";
 import { GoogleAnalytics } from "@next/third-parties/google";
 
@@ -43,6 +44,7 @@ export default function RootLayout({
         <TanstackProvider>
           <Navbar />
           <Toaster />
+          {/* <Sonner /> */}
           {children}
         </TanstackProvider>
       </body>

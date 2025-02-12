@@ -1,8 +1,7 @@
 import { MetadataRoute } from "next";
 
-export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+export default function sitemap(): MetadataRoute.Sitemap {
   const baseURL = "https://goldenhourcelebrations.in";
-
   return [
     { url: `${baseURL}` },
     { url: `${baseURL}/signin` },

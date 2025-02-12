@@ -78,8 +78,8 @@ export default function StepTwo() {
     },
   });
   return (
-    <div className={"mt-10 mb-24 w-full flex"}>
-      <div className="flex flex-col w-full justify-center bg-black">
+    <div className={"mt-10 mb-24 w-full"}>
+      <div className="flex w-full justify-center">
         <div className="w-full mx-auto flex-grow">
           <div className="space-y-6 pb-6">
             {items.map((pkg, index) => (
@@ -101,7 +101,7 @@ export default function StepTwo() {
                       slidesPerView={1}
                     >
                       {pkg.photo.map((pic, i) => (
-                        <SwiperSlide key={i} className="z-0">
+                        <SwiperSlide key={i}>
                           <Image
                             src={pic}
                             alt={`${pkg.room} celebration scene`}
@@ -218,7 +218,7 @@ export default function StepTwo() {
               </Button>
               <Button
                 type={"submit"}
-                className={"flex-1"}
+                className={"flex-1 bg-yellow-500 hover:bg-yellow-500"}
                 variant={"default"}
                 onClick={handleNextButton}
               >

@@ -85,7 +85,7 @@ export const payReservationSchema = z.object({
     }
   ),
   date: z.date({ message: "Date is required" }),
-  room: z.enum(["Basic Package", "Standard Package", "Premium Package"]),
+  room: z.enum(["Majestic Theatre", "Dreamscape Theatre"]),
   timeSlot: z.enum([
     "10AM - 12PM",
     "12PM - 2PM",

@@ -109,12 +109,10 @@ export default function CreateBookingForm() {
   }, [packageType, date, refetch]);
 
   useEffect(() => {
-    if (packageType === "Basic Package") {
-      setBalanceAmount(1999 - advanceAmount!);
-    } else if (packageType === "Standard Package") {
-      setBalanceAmount(2999 - advanceAmount!);
-    } else if (packageType === "Premium Package") {
-      setBalanceAmount(3999 - advanceAmount!);
+    if (packageType === "Majestic Theatre") {
+      setBalanceAmount(1499 - advanceAmount!);
+    } else if (packageType === "Dreamscape Theatre") {
+      setBalanceAmount(1899 - advanceAmount!);
     }
   }, [packageType, advanceAmount]);
 
@@ -193,9 +191,10 @@ export default function CreateBookingForm() {
               <SelectValue placeholder="Select Package" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="Basic Package">Basic Package</SelectItem>
-              <SelectItem value="Standard Package">Standard Package</SelectItem>
-              <SelectItem value="Premium Package">Premium Package</SelectItem>
+              <SelectItem value="">Majestic Theatre</SelectItem>
+              <SelectItem value="Dreamscape Theatre">
+                Dreamscape Theatre
+              </SelectItem>
             </SelectContent>
           </Select>
         </div>

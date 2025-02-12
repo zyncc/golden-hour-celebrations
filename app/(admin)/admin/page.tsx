@@ -40,9 +40,8 @@ export default async function AdminDashboard() {
   ]);
 
   const roomPrices: Record<string, number> = {
-    "Basic Package": 1999,
-    "Standard Package": 2999,
-    "Premium Package": 3999,
+    "Majestic Theatre": 1499,
+    "Dreamscape Theatre": 1899,
   };
 
   const totalEarned = reservations.reduce((total, reservation) => {

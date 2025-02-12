@@ -28,10 +28,6 @@ const NavLinks = [
     Label: "Contact",
     Link: "/contact",
   },
-  {
-    Label: "Account",
-    Link: "/account",
-  },
 ];
 
 export default async function Navbar() {

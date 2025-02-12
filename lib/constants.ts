@@ -43,42 +43,29 @@ export const selectOccasion = [
 export const items = [
   {
     id: 1,
-    room: "Basic Package",
+    room: "Majestic Theatre",
     description: [
       "Standard Decoration",
       "LED Letter Name",
       "Access to OTT Platforms",
-      "Upto 4 people",
+      "Upto 4 people (Additional ₹200 per person)",
     ],
-    price: 1999,
+    popular: true,
+    price: 1499,
     photo: [l1, l2],
   },
   {
     id: 2,
-    room: "Standard Package",
+    room: "Dreamscape Theatre",
     description: [
       "Premium Decoration",
       "500g Pastry cake",
       "Photoshoot",
-      "Upto 4 people",
+      "Upto 4 people (Additional ₹200 per person)",
     ],
-    popular: true,
+
     noPeople: 4,
-    price: 2999,
-    photo: [l2, l3],
-  },
-  {
-    id: 3,
-    room: "Premium Package",
-    description: [
-      "Premium Decoration",
-      "500g Pastry cake and snacks",
-      "Photo and Video shoot",
-      "Upto 4 people",
-      "Customised Gifts",
-    ],
-    noPeople: 4,
-    price: 3999,
+    price: 1899,
     photo: [l1, l2, l3, l4, l5],
   },
 ];

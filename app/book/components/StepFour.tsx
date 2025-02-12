@@ -52,7 +52,7 @@ export default function StepTwo() {
         timeSlot: selectedPackage.time,
         price: selectedPackage.price,
       });
-      router.push("?step=4", {
+      router.push("?step=5", {
         scroll: true,
       });
     }

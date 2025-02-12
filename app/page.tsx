@@ -10,11 +10,10 @@ import { FAQSection } from "@/components/faqs/faq";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Golden Hour Celebrations - Best Private Theatre in Bangalore",
+  title: "Golden Hour Celebrations - The Best Private Theatre in Bangalore",
 };
 
 export default function Page() {
-  //bg-grid   bg-grid-small   bg-dot
   return (
     <>
       <section className="h-screen w-screen dark:bg-black dark:bg-grid-white/[0.07] bg-grid-small-black/[0.2] relative flex items-center justify-center bg-fixed">

@@ -15,12 +15,10 @@ export async function createReservation(
   orderID: string
 ) {
   let balanceAmount = 0;
-  if (reservation.room === "Basic Package") {
-    balanceAmount = 1999 - 500;
-  } else if (reservation.room === "Standard Package") {
-    balanceAmount = 2999 - 500;
-  } else if (reservation.room === "Premium Package") {
-    balanceAmount = 3999 - 500;
+  if (reservation.room === "Majestic Theatre") {
+    balanceAmount = 1499 - 500;
+  } else if (reservation.room === "Dreamscape Theatre") {
+    balanceAmount = 1899 - 500;
   }
   if (payFull) balanceAmount = 0;
   const { success, data, error } = payReservationSchema.safeParse({
