@@ -1,12 +1,17 @@
 import { Footer } from "@/components/footer/footer";
-import { BackgroundGradientAnimation } from "@/components/ui/background-gradient-animation";
+// import { BackgroundGradientAnimation } from "@/components/ui/background-gradient-animation";
 import { InfiniteMovingCards } from "@/components/ui/infinite-moving-cards";
 import { Spotlight } from "@/components/ui/Spotlight";
 import { TextGenerateEffect } from "@/components/ui/text-generate-effect";
 import React from "react";
 import { reviews } from "@/lib/constants";
 import { FAQSection } from "@/components/faqs/faq";
-import { AuroraBackground } from "@/components/ui/aurora-background";
+// import { AuroraBackground } from "@/components/ui/aurora-background";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Golden Hour Celebrations - Best Private Theatre in Bangalore",
+};
 
 export default function Page() {
   //bg-grid   bg-grid-small   bg-dot

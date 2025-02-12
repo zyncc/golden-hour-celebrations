@@ -60,7 +60,7 @@ export const NikeReceiptEmail = ({
           <Text style={{ ...global.text, marginTop: 24, textAlign: "left" }}>
             Dear {name},
             <br />
-            We&#39re thrilled to confirm your reservation with us! 🎉
+            We are thrilled to confirm your reservation with us! 🎉
             <br />
             Theatre -{" "}
             {room == "standard-theatre"
@@ -78,7 +78,7 @@ export const NikeReceiptEmail = ({
             <br />
             <br />
             If you have any special requests or need further assistance, please
-            don&#39t hesitate to reach out.
+            dont hesitate to reach out.
           </Text>
         </Section>
         <Section style={paddingY}>
@@ -91,7 +91,7 @@ export const NikeReceiptEmail = ({
           <Row>
             <Text style={{ ...footer.text, paddingTop: 30, paddingBottom: 30 }}>
               Please contact us if you have any questions. (If you reply to this
-              email, we won&#39t be able to see it.)
+              email, we wont be able to see it.)
             </Text>
           </Row>
           <Row>
