@@ -79,16 +79,16 @@ export default function StepTwo() {
   });
   return (
     <div className={"mt-10 mb-24 w-full"}>
-      <div className="flex w-full justify-center">
-        <div className="w-full mx-auto flex-grow">
-          <div className="space-y-6 pb-6">
+      <div className="flex w-full">
+        <div className="w-full mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 pb-6 gap-5">
             {items.map((pkg, index) => (
               <Card
                 key={index}
                 className="relative overflow-hidden rounded-xl bg-black border-zinc-800"
               >
-                <div className="flex flex-col md:flex-row">
-                  <div className="relative h-64 md:h-auto md:w-1/2 overflow-hidden">
+                <div className="flex flex-col">
+                  <div className="relative h-96 overflow-hidden">
                     <Swiper
                       autoplay={{
                         delay: 2500,
@@ -114,16 +114,19 @@ export default function StepTwo() {
                       ))}
                     </Swiper>
                   </div>
-                  <div className="p-3 md:p-6 md:w-1/2 flex flex-col">
+                  <div className="p-3 md:p-6 flex flex-col">
                     <div className="space-y-4 mb-6">
-                      {pkg.popular && (
-                        <Badge className="bg-rose-500/90 hover:bg-rose-500 text-white border-none font-medium">
-                          Most Popular
-                        </Badge>
-                      )}
-                      <h2 className="text-2xl font-bold text-white">
-                        {pkg.room}
-                      </h2>
+                      <div className="flex justify-between">
+                        <h2 className="text-2xl font-bold w-full text-white">
+                          {pkg.room}
+                        </h2>
+                        {pkg.popular && (
+                          <Badge className="bg-rose-500/90 text-nowrap hover:bg-rose-500 text-white border-none font-medium">
+                            Most Popular
+                          </Badge>
+                        )}
+                      </div>
+
                       <div className="flex items-baseline gap-1">
                         <span className="text-3xl font-bold text-white">
                           {formatCurrency(pkg.price)}
@@ -153,7 +156,7 @@ export default function StepTwo() {
                         </li>
                       ))}
                     </ul>
-                    <div className="grid grid-cols-3 gap-2">
+                    <div className="grid grid-cols-2 gap-2 w-full">
                       {timeSlots.map((slot) => (
                         <Button
                           key={slot}
@@ -180,7 +183,7 @@ export default function StepTwo() {
                           }
                           onClick={() => {
                             toast({
-                              title: `Selected ${pkg.room}`,
+                              title: `${pkg.room}`,
                               description: `Time - ${slot}`,
                               variant: "default",
                               duration: 3000,

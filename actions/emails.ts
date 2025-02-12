@@ -22,17 +22,6 @@ export async function SendReceipt(orderID: string) {
         react: NikeReceiptEmail({ getReservationDetails }),
       });
       console.log(emailSent);
-      if (!emailSent.error && orderID !== null) {
-        const updateEmail = await prisma.reservations.update({
-          where: {
-            orderID: orderID,
-          },
-          data: {
-            emailSent: true,
-          },
-        });
-        if (updateEmail) console.log("Update Email Sent");
-      }
     }
   } catch (error) {
     console.log(error);

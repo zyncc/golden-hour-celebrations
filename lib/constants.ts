@@ -43,30 +43,29 @@ export const selectOccasion = [
 export const items = [
   {
     id: 1,
+    room: "Dreamscape Theatre",
+    description: [
+      "Private Movie Time Experience",
+      "Romantic Date Decor",
+      "Access to OTT Platforms",
+      "2 people (Additional ₹200 per person)",
+    ],
+    noPeople: 4,
+    price: 1499,
+    photo: [l5],
+  },
+  {
+    id: 2,
     room: "Majestic Theatre",
     description: [
-      "Standard Decoration",
+      "Premium Decoration Setup",
       "LED Letter Name",
       "Access to OTT Platforms",
       "Upto 4 people (Additional ₹200 per person)",
     ],
     popular: true,
-    price: 1499,
-    photo: [l1, l2],
-  },
-  {
-    id: 2,
-    room: "Dreamscape Theatre",
-    description: [
-      "Premium Decoration",
-      "500g Pastry cake",
-      "Photoshoot",
-      "Upto 4 people (Additional ₹200 per person)",
-    ],
-
-    noPeople: 4,
     price: 1899,
-    photo: [l1, l2, l3, l4, l5],
+    photo: [l1, l2, l3, l4],
   },
 ];
 
@@ -153,4 +152,12 @@ export const faqData = [
     answer:
       "You can reach us through our website's contact page at goldenhourcelebrations.in.",
   },
+];
+
+export const cakes = [
+  "Chocolate pastry",
+  "Black forest pastry",
+  "Strawberry pastry",
+  "Blackcurrent pastry",
+  "Vanilla pastry",
 ];

@@ -12,8 +12,20 @@ export async function createOrder(
     key_secret: process.env.RAZORPAY_KEY_SECRET as string,
   });
 
+  let price = reservation?.price!;
+
+  if (reservation?.cake) {
+    price += 400;
+  }
+  if (reservation?.photography === "30") {
+    price += 700;
+  }
+  if (reservation?.photography === "60") {
+    price += 1000;
+  }
+
   const response = await instance.orders.create({
-    amount: payFull ? reservation?.price! * 100 : 500 * 100,
+    amount: payFull ? price * 100 : 500 * 100,
     currency: "INR",
     receipt: "receipt#1",
     notes: {

@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import Link from "next/link";
 import {
@@ -9,17 +11,11 @@ import {
 } from "@/components/ui/sheet";
 import { MdOutlineMenu } from "react-icons/md";
 import Image from "next/image";
-import SignOutButton from "@/components/SignOutButton";
-import { auth } from "@/auth";
-import { headers } from "next/headers";
 import { Button } from "@/components/ui/button";
 import logo from "@/public/logo.png";
+import { authClient } from "@/lib/authClient";
 
 const NavLinks = [
-  {
-    Label: "Our Services",
-    Link: "/services",
-  },
   {
     Label: "Gallery",
     Link: "/gallery",
@@ -30,10 +26,8 @@ const NavLinks = [
   },
 ];
 
-export default async function Navbar() {
-  const session = await auth.api.getSession({
-    headers: headers(),
-  });
+export default function Navbar() {
+  const { data: session } = authClient.useSession();
   return (
     <header
       id="header"
@@ -74,15 +68,6 @@ export default async function Navbar() {
                 Book now
               </Button>
             </Link>
-            {session?.session ? (
-              <SignOutButton />
-            ) : (
-              <Link href={"/signin"}>
-                <Button variant={"outline"} className="hidden lg:block">
-                  Sign in
-                </Button>
-              </Link>
-            )}
           </div>
           <Sheet>
             <SheetTrigger>
@@ -104,13 +89,6 @@ export default async function Navbar() {
                     <Link href={"/admin"}>
                       <SheetClose>
                         <li className="font-medium text-[15px]">Admin</li>
-                      </SheetClose>
-                    </Link>
-                  )}
-                  {!session?.session && (
-                    <Link href={"/signin"}>
-                      <SheetClose>
-                        <li className="font-medium text-[15px]">Sign in</li>
                       </SheetClose>
                     </Link>
                   )}

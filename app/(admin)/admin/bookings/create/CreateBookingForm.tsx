@@ -112,7 +112,7 @@ export default function CreateBookingForm() {
     if (packageType === "Majestic Theatre") {
       setBalanceAmount(1499 - advanceAmount!);
     } else if (packageType === "Dreamscape Theatre") {
-      setBalanceAmount(1899 - advanceAmount!);
+      setBalanceAmount(1499 - advanceAmount!);
     }
   }, [packageType, advanceAmount]);
 

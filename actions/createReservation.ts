@@ -18,8 +18,11 @@ export async function createReservation(
   if (reservation.room === "Majestic Theatre") {
     balanceAmount = 1499 - 500;
   } else if (reservation.room === "Dreamscape Theatre") {
-    balanceAmount = 1899 - 500;
+    balanceAmount = 1499 - 500;
   }
+  if (reservation.cake) balanceAmount += 400;
+  if (reservation.photography === "30") balanceAmount += 700;
+  if (reservation.photography === "60") balanceAmount += 1000;
   if (payFull) balanceAmount = 0;
   const { success, data, error } = payReservationSchema.safeParse({
     ...reservation,
@@ -57,6 +60,8 @@ export async function createReservation(
         phone: data.phone as string,
         room: data.room as string,
         timeSlot: data.timeSlot as string,
+        cake: data.cake,
+        photography: data.photography,
       },
     });
   } catch (e) {

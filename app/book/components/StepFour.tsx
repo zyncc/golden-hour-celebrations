@@ -1,230 +1,269 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
+import { createOrder } from "@/actions/createOrder";
+import { createReservation } from "@/actions/createReservation";
 import { useReservation } from "@/context/ReservationStore";
-import Image from "next/image";
-import { redirect, useRouter } from "next/navigation";
-import React, { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
-import { Reservations } from "@prisma/client";
+import { Button } from "@/components/ui/button";
 import { toast } from "@/components/ui/use-toast";
-import { Card } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+import { redirect } from "next/navigation";
+import React, { useState } from "react";
+import { RazorpayOrderOptions, useRazorpay } from "react-razorpay";
+import { Check, CreditCard, LoaderCircle } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
 import formatCurrency from "@/lib/formatCurrency";
 import { items } from "@/lib/constants";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Autoplay, EffectFade } from "swiper/modules";
-import "swiper/css";
-import "swiper/css/pagination";
-import "swiper/css/navigation";
-import "swiper/css/effect-fade";
+import Link from "next/link";
+import { Switch } from "@/components/ui/switch";
 
-export default function StepTwo() {
-  const { reservation, setReservationData } = useReservation();
-  if (reservation == undefined) {
-    redirect("/book");
+export default function StepThree() {
+  const { reservation } = useReservation();
+  const { Razorpay } = useRazorpay();
+  const [pending, setPending] = useState(false);
+  const [payFull, setPayFull] = useState(false);
+  if (!reservation) {
+    redirect("?step=1");
   }
-  const router = useRouter();
-  const [selectedPackage, setSelectedPackage] = useState<{
-    room: string | undefined;
-    time: string | undefined;
-    price: number | undefined;
-  }>({
-    room: undefined,
-    time: undefined,
-    price: undefined,
-  });
-
-  function handleNextButton() {
-    if (
-      selectedPackage.room == undefined ||
-      selectedPackage.time == undefined
-    ) {
+  async function handlePayButton() {
+    setPending(true);
+    const orderID: string = await createOrder(payFull, reservation);
+    const err = await createReservation(payFull, reservation!, orderID);
+    if (err) {
       toast({
-        title: "Select a time slot",
         variant: "destructive",
-        duration: 3000,
+        title: err.title,
+        description: err.description,
+        duration: 5000,
       });
-    } else {
-      setReservationData({
-        ...reservation,
-        room: selectedPackage.room,
-        timeSlot: selectedPackage.time,
-        price: selectedPackage.price,
-      });
-      router.push("?step=5", {
-        scroll: true,
-      });
+      return;
     }
+    const options: RazorpayOrderOptions = {
+      key: process.env.RAZORPAY_KEY_ID as string,
+      amount: payFull ? reservation?.price! * 100 : 500 * 100,
+      currency: "INR",
+      name: "Golden Hour Celebrations",
+      description: reservation?.room,
+      order_id: orderID,
+      modal: {
+        backdropclose: false,
+        escape: false,
+        handleback: false,
+        confirm_close: true,
+        animation: true,
+        ondismiss() {
+          setPending(false);
+        },
+      },
+      callback_url:
+        process.env.NODE_ENV == "development"
+          ? `http://localhost:3000/success?orderId=${orderID}`
+          : `https://goldenhourcelebrations.in/success?orderId=${orderID}`,
+      prefill: {
+        name: reservation?.name,
+        email: reservation?.email,
+        contact: reservation?.phone,
+      },
+      allow_rotation: false,
+      retry: {
+        enabled: true,
+      },
+      remember_customer: true,
+      theme: {
+        hide_topbar: false,
+      },
+    };
+    const razorpayInstance = new Razorpay(options);
+    razorpayInstance.open();
+    razorpayInstance.on("payment.failed", () => {
+      setPending(false);
+    });
   }
+  let price = reservation?.price!;
 
-  const timeSlots = [
-    "10AM - 12PM",
-    "12PM - 2PM",
-    "2PM - 4PM",
-    "4PM - 6PM",
-    "6PM - 8PM",
-    "8PM - 10PM",
-  ];
-  const { data, isLoading } = useQuery({
-    queryKey: ["getReservation"],
-    refetchInterval: 1000 * 20,
-    refetchOnWindowFocus: true,
-    queryFn: async () => {
-      const res = await fetch(
-        `/api/fetchReservations?date=${reservation?.date?.toISOString()}`
-      );
-      return res.json();
-    },
-  });
+  if (reservation?.cake) {
+    price += 400;
+  }
+  if (reservation?.photography === "30") {
+    price += 700;
+  }
+  if (reservation?.photography === "60") {
+    price += 1000;
+  }
   return (
-    <div className={"mt-10 mb-24 w-full flex"}>
-      <div className="flex flex-col w-full justify-center bg-black">
-        <div className="w-full mx-auto flex-grow">
-          <div className="space-y-6 pb-6">
-            {items.map((pkg, index) => (
-              <Card
-                key={index}
-                className="relative overflow-hidden rounded-xl bg-black border-zinc-800"
-              >
-                <div className="flex flex-col md:flex-row">
-                  <div className="relative h-64 md:h-auto md:w-1/2 overflow-hidden">
-                    <Swiper
-                      autoplay={{
-                        delay: 2500,
-                        pauseOnMouseEnter: true,
-                      }}
-                      effect={"fade"}
-                      loop
-                      modules={[Autoplay, EffectFade]}
-                      spaceBetween={0}
-                      slidesPerView={1}
-                    >
-                      {pkg.photo.map((pic, i) => (
-                        <SwiperSlide key={i} className="z-0">
-                          <Image
-                            src={pic}
-                            alt={`${pkg.room} celebration scene`}
-                            layout="fill"
-                            objectFit="cover"
-                            className="object-cover"
-                            placeholder="blur"
-                          />
-                        </SwiperSlide>
-                      ))}
-                    </Swiper>
+    <div className="min-h-screen bg-background py-4 md:p-8 dark">
+      <div className="mx-auto max-w-7xl">
+        <div className="grid gap-8 md:grid-cols-2">
+          <div className="space-y-0">
+            <Card>
+              <CardHeader>
+                <CardTitle>Package Details</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="space-y-3">
+                  <div className="flex justify-between items-center">
+                    <span className="font-medium">Package Type</span>
+                    <span className="text-muted-foreground">
+                      {reservation.room}
+                    </span>
                   </div>
-                  <div className="p-3 md:p-6 md:w-1/2 flex flex-col">
-                    <div className="space-y-4 mb-6">
-                      {pkg.popular && (
-                        <Badge className="bg-rose-500/90 hover:bg-rose-500 text-white border-none font-medium">
-                          Most Popular
-                        </Badge>
-                      )}
-                      <h2 className="text-2xl font-bold text-white">
-                        {pkg.room}
-                      </h2>
-                      <div className="flex items-baseline gap-1">
-                        <span className="text-3xl font-bold text-white">
-                          {formatCurrency(pkg.price)}
-                        </span>
-                      </div>
+                  <div className="flex justify-between items-center">
+                    <span className="font-medium">Occasion</span>
+                    <span className="text-muted-foreground">
+                      {reservation.occasion}
+                    </span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="font-medium">Time</span>
+                    <span className="text-muted-foreground">
+                      {reservation.timeSlot}
+                    </span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="font-medium">Date</span>
+                    <span className="text-muted-foreground">
+                      {reservation.date?.toDateString()}
+                    </span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="font-medium">Customer Name</span>
+                    <span className="text-muted-foreground">
+                      {reservation.name}
+                    </span>
+                  </div>
+                  <div className="flex justify-between gap-x-3 items-center">
+                    <span className="font-medium">Email</span>
+                    <span className="text-muted-foreground">
+                      {reservation.email}
+                    </span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="font-medium">Phone</span>
+                    <span className="text-muted-foreground">
+                      {reservation.phone}
+                    </span>
+                  </div>
+                  {reservation.cake && (
+                    <div className="flex justify-between items-center">
+                      <span className="font-medium">Cake</span>
+                      <span className="text-muted-foreground">
+                        {reservation.cake}
+                      </span>
                     </div>
-                    <ul className="space-y-3 mb-6 flex-grow">
-                      {pkg.description.map((feature) => (
-                        <li
-                          key={feature}
-                          className="flex items-center text-zinc-300"
-                        >
-                          <svg
-                            className="w-5 h-5 mr-2 text-rose-500 shrink-0"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M5 13l4 4L19 7"
-                            />
-                          </svg>
-                          {feature}
-                        </li>
-                      ))}
-                    </ul>
-                    <div className="grid grid-cols-3 gap-2">
-                      {timeSlots.map((slot) => (
-                        <Button
-                          key={slot}
-                          disabled={
-                            data?.find(
-                              (reservation: Reservations) =>
-                                reservation.timeSlot == slot &&
-                                pkg.room == reservation.room &&
-                                reservation.paymentStatus
-                            ) || isLoading
-                          }
-                          variant={
-                            selectedPackage.time == slot &&
-                            selectedPackage.room == pkg.room
-                              ? "default"
-                              : data?.find(
-                                  (reservation: Reservations) =>
-                                    reservation.timeSlot == slot &&
-                                    pkg.room == reservation.room &&
-                                    reservation.paymentStatus
-                                )
-                              ? "destructive"
-                              : "outline"
-                          }
-                          onClick={() => {
-                            toast({
-                              title: `Selected ${pkg.room}`,
-                              description: `Time - ${slot}`,
-                              variant: "default",
-                              duration: 3000,
-                            });
-                            setSelectedPackage({
-                              room: pkg.room,
-                              time: slot,
-                              price: pkg.price,
-                            });
-                          }}
-                          className={"flex-1"}
-                        >
-                          {slot}
-                        </Button>
-                      ))}
+                  )}
+                  {reservation.photography && (
+                    <div className="flex justify-between items-center">
+                      <span className="font-medium">Photography Package</span>
+                      <span className="text-muted-foreground">
+                        {reservation.photography === "30"
+                          ? "30 Mins"
+                          : "60 Mins"}
+                      </span>
                     </div>
+                  )}
+                </div>
+                <div className="rounded-lg bg-muted p-4">
+                  <p className="font-medium mb-2">Package Includes:</p>
+                  <div className="space-y-2">
+                    {items
+                      .find((item) => item.room == reservation.room)
+                      ?.description.map((desc, i) => (
+                        <div
+                          key={i}
+                          className="flex items-center text-sm text-muted-foreground"
+                        >
+                          <Check className="mr-2 h-4 w-4 text-primary" />
+                          {desc}
+                        </div>
+                      ))}
                   </div>
                 </div>
-              </Card>
-            ))}
-          </div>
-          <div className="sticky bottom-0 bg-black pt-4 pb-4 z-10">
-            <div className="flex gap-4">
-              <Button
-                type={"submit"}
-                className={"flex-1"}
-                variant={"outline"}
-                onClick={() => {
-                  router.push("?step=1", {
-                    scroll: true,
-                  });
-                }}
-              >
+              </CardContent>
+            </Card>
+            <Link href={"/book?step=3"} scroll={true}>
+              <Button variant={"outline"} className={"w-full mt-4"}>
                 Back
               </Button>
-              <Button
-                type={"submit"}
-                className={"flex-1 bg-yellow-500 hover:bg-yellow-500"}
-                variant={"default"}
-                onClick={handleNextButton}
-              >
-                Next
-              </Button>
-            </div>
+            </Link>
+          </div>
+          <div>
+            <Card>
+              <CardHeader>
+                <CardTitle>Payment Summary</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="flex justify-between">
+                  <span className="text-muted-foreground">Package Price</span>
+                  <span className={"font-semibold"}>
+                    {formatCurrency(reservation.price as number)}
+                  </span>
+                </div>
+                {reservation.cake && (
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">
+                      Cake - {reservation.cake}
+                    </span>
+                    <span className="text-green-600 font-semibold whitespace-nowrap">
+                      {formatCurrency(400)}
+                    </span>
+                  </div>
+                )}
+                {reservation.photography && (
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">
+                      Photography - {reservation.photography} Mins
+                    </span>
+                    <span className="text-green-600 font-semibold whitespace-nowrap">
+                      {formatCurrency(
+                        reservation.photography === "30" ? 700 : 1000
+                      )}
+                    </span>
+                  </div>
+                )}
+                {!payFull && (
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">
+                      Balance Amount (Pay after event)
+                    </span>
+                    <span className="text-green-600 font-semibold whitespace-nowrap">
+                      {formatCurrency(price - 500)}
+                    </span>
+                  </div>
+                )}
+                <Separator />
+                <div className="flex justify-between">
+                  <span className="text-muted-foreground">
+                    Pay Full Price (Optional)
+                  </span>
+                  <span className={"font-semibold"}>
+                    <Switch checked={payFull} onCheckedChange={setPayFull} />
+                  </span>
+                </div>
+                <div className="flex justify-between text-lg font-medium">
+                  <span>{payFull ? "Total" : "Advance Amount"}</span>
+                  <span className={"font-semibold"}>
+                    {payFull ? formatCurrency(price) : formatCurrency(500)}
+                  </span>
+                </div>
+                <Button
+                  className="w-full mt-4 bg-yellow-500 hover:bg-yellow-300"
+                  size="lg"
+                  disabled={pending}
+                  onClick={() => handlePayButton()}
+                >
+                  {pending ? (
+                    <LoaderCircle className="animate-spin" />
+                  ) : (
+                    <div className="flex items-center">
+                      <CreditCard className="mr-2 h-4 w-4" />
+                      Pay with Razorpay
+                    </div>
+                  )}
+                </Button>
+                <p className="text-sm text-muted-foreground text-center mt-4">
+                  Secure payment powered by Razorpay
+                </p>
+              </CardContent>
+            </Card>
           </div>
         </div>
       </div>

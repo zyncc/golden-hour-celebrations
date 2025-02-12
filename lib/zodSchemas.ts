@@ -94,6 +94,16 @@ export const payReservationSchema = z.object({
     "6PM - 8PM",
     "8PM - 10PM",
   ]),
+  cake: z
+    .enum([
+      "Chocolate pastry",
+      "Black forest pastry",
+      "Strawberry pastry",
+      "Blackcurrent pastry",
+      "Vanilla pastry",
+    ])
+    .optional(),
+  photography: z.enum(["30", "60"]).optional(),
 });
 
 export const ManualBookingSchema = z.object({

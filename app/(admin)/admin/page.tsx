@@ -41,7 +41,7 @@ export default async function AdminDashboard() {
 
   const roomPrices: Record<string, number> = {
     "Majestic Theatre": 1499,
-    "Dreamscape Theatre": 1899,
+    "Dreamscape Theatre": 1499,
   };
 
   const totalEarned = reservations.reduce((total, reservation) => {

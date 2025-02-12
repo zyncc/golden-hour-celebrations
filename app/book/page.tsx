@@ -5,7 +5,6 @@ import StepThree from "./components/StepThree";
 import { Steps } from "@/components/steps";
 import { Metadata } from "next";
 import StepFour from "./components/StepFour";
-import StepFive from "./components/StepFive";
 
 export const metadata: Metadata = {
   title: "Book a Slot",
@@ -25,7 +24,7 @@ export default function Book({
   }
   return (
     <div className={"mt-[100px] container mx-auto"}>
-      {/* <Steps currentStep={step} /> */}
+      <Steps currentStep={step} />
       {step == 1 ? (
         <StepOneForm />
       ) : step == 2 ? (
@@ -34,8 +33,6 @@ export default function Book({
         <StepThree />
       ) : step == 4 ? (
         <StepFour />
-      ) : step == 5 ? (
-        <StepFive />
       ) : (
         <></>
       )}

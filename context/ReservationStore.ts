@@ -10,6 +10,8 @@ export type Reservation = {
   room?: string | undefined;
   timeSlot?: string | undefined;
   price?: number | undefined;
+  cake?: string | undefined;
+  photography?: string | undefined;
 };
 
 type ReservationType = {
