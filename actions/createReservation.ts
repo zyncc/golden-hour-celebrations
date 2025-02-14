@@ -20,7 +20,7 @@ export async function createReservation(
   } else if (reservation.room === "Dreamscape Theatre") {
     balanceAmount = 1499 - 500;
   }
-  if (reservation.cake) balanceAmount += 400;
+  if (reservation.cake) balanceAmount += 500;
   if (reservation.photography === "30") balanceAmount += 700;
   if (reservation.photography === "60") balanceAmount += 1000;
   if (payFull) balanceAmount = 0;

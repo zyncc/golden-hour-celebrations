@@ -15,7 +15,7 @@ export async function createOrder(
   let price = reservation?.price!;
 
   if (reservation?.cake) {
-    price += 400;
+    price += 500;
   }
   if (reservation?.photography === "30") {
     price += 700;

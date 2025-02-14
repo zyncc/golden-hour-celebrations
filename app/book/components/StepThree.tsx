@@ -75,7 +75,7 @@ export default function StepTwo() {
             <CardHeader>
               <CardTitle>Cake Selection</CardTitle>
               <CardDescription>
-                All cakes cost 400 rupees and weigh 500 grams
+                All cakes cost ₹500 and weigh 500 grams
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -130,7 +130,7 @@ export default function StepTwo() {
                         </p>
                       </div>
                       <span className="text-sm font-medium text-green-500">
-                        + ₹400
+                        + ₹500
                       </span>
                     </Label>
                   ))}

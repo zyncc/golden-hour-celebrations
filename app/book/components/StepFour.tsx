@@ -81,7 +81,7 @@ export default function StepThree() {
   let price = reservation?.price!;
 
   if (reservation?.cake) {
-    price += 400;
+    price += 500;
   }
   if (reservation?.photography === "30") {
     price += 700;
@@ -203,7 +203,7 @@ export default function StepThree() {
                       Cake - {reservation.cake}
                     </span>
                     <span className="text-green-600 font-semibold whitespace-nowrap">
-                      {formatCurrency(400)}
+                      {formatCurrency(500)}
                     </span>
                   </div>
                 )}
