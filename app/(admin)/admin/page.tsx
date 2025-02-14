@@ -4,17 +4,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import prisma from "@/lib/prisma";
 import formatCurrency from "@/lib/formatCurrency";
-import { headers } from "next/headers";
-import { auth } from "@/auth";
-import { notFound } from "next/navigation";
 
 export default async function AdminDashboard() {
-  const session = await auth.api.getSession({
-    headers: headers(),
-  });
-  if (session?.user.role !== "admin") {
-    return notFound();
-  }
   const now = new Date();
   const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
   const startOfNextMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1);

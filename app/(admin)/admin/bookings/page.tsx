@@ -7,17 +7,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { auth } from "@/auth";
-import { headers } from "next/headers";
-import { notFound } from "next/navigation";
 
 async function Page() {
-  const session = await auth.api.getSession({
-    headers: headers(),
-  });
-  if (session?.user.role !== "admin") {
-    return notFound();
-  }
   const date = new Date();
   const formattedDate = date.toDateString();
   const now = new Date();
