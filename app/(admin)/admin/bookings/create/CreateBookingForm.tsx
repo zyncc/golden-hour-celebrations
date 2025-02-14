@@ -27,7 +27,6 @@ import {
 } from "@/components/ui/select";
 import formatCurrency from "@/lib/formatCurrency";
 import { CreateManualBooking } from "@/actions/createReservation";
-import { router } from "better-auth/api";
 import { useRouter } from "next/navigation";
 
 const timeSlots = [
@@ -191,7 +190,9 @@ export default function CreateBookingForm() {
               <SelectValue placeholder="Select Package" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">Majestic Theatre</SelectItem>
+              <SelectItem value="Dreamscape Theatre">
+                Majestic Theatre
+              </SelectItem>
               <SelectItem value="Dreamscape Theatre">
                 Dreamscape Theatre
               </SelectItem>

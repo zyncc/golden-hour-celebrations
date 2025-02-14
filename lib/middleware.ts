@@ -5,6 +5,7 @@ import { NextResponse, type NextRequest } from "next/server";
 type Session = typeof auth.$Infer.Session;
 
 export default async function authMiddleware(request: NextRequest) {
+  const { pathname } = request.nextUrl;
   const { data: session } = await betterFetch<Session>(
     "/api/auth/get-session",
     {
@@ -15,8 +16,10 @@ export default async function authMiddleware(request: NextRequest) {
     }
   );
 
-  if (session?.user.role !== "admin") {
-    return new NextResponse(null, { status: 404 });
+  if (pathname.startsWith("/admin")) {
+    if (session?.user.role !== "admin") {
+      return NextResponse.redirect(new URL("/", request.url));
+    }
   }
   return NextResponse.next();
 }
