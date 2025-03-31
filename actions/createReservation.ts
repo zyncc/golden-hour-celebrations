@@ -7,7 +7,6 @@ import { ManualBookingSchema, payReservationSchema } from "@/lib/zodSchemas";
 import { randomUUID } from "crypto";
 import { headers } from "next/headers";
 import { z } from "zod";
-import { SendReceipt } from "./emails";
 
 export async function createReservation(
   payFull: boolean,
@@ -21,14 +20,17 @@ export async function createReservation(
     balanceAmount = 1499 - 500;
   }
   if (reservation.cake) balanceAmount += 500;
+  if (reservation.fogEntry) balanceAmount += 400;
+  if (reservation.rosePath) balanceAmount += 400;
   if (reservation.photography === "30") balanceAmount += 700;
   if (reservation.photography === "60") balanceAmount += 1000;
   if (payFull) balanceAmount = 0;
-  const { success, data, error } = payReservationSchema.safeParse({
+  const { success, error, data } = payReservationSchema.safeParse({
     ...reservation,
     balanceAmount,
   });
   if (!success) {
+    console.log(error.issues);
     throw new Error("Invalid DATA");
   }
   const checkExistingBookings = await prisma.reservations.findFirst({
@@ -61,6 +63,8 @@ export async function createReservation(
         timeSlot: data.timeSlot as string,
         cake: data.cake,
         photography: data.photography,
+        fogEntry: data.fogEntry,
+        rosePath: data.rosePath,
       },
     });
   } catch (e) {
@@ -101,5 +105,4 @@ export async function CreateManualBooking(data: Data) {
       orderID: randomUUID(),
     },
   });
-  SendReceipt(res.orderID!);
 }

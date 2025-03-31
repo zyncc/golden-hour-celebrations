@@ -17,6 +17,12 @@ export async function createOrder(
   if (reservation?.cake) {
     price += 500;
   }
+  if (reservation?.fogEntry) {
+    price += 400;
+  }
+  if (reservation?.rosePath) {
+    price += 400;
+  }
   if (reservation?.photography === "30") {
     price += 700;
   }

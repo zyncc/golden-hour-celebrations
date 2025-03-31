@@ -18,6 +18,7 @@ export const auth = betterAuth({
     expiresIn: 3600 * 24 * 31,
     updateAge: 3600,
   },
+  trustedOrigins: ["https://tuna-darling-overly.ngrok-free.app"],
   plugins: [
     admin({
       defaultRole: "user",
@@ -39,7 +40,7 @@ export const auth = betterAuth({
           });
         } else {
           throw new APIError("BAD_REQUEST", {
-            message: "No Account found with this Phone Number",
+            message: "No Account found with this Email id Exists",
           });
         }
       },

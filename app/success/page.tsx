@@ -1,4 +1,3 @@
-import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -9,7 +8,6 @@ import {
 import formatCurrency from "@/lib/formatCurrency";
 import prisma from "@/lib/prisma";
 import { Check, Clock, Mail, Phone, User } from "lucide-react";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 
 export default async function SuccessPage({
@@ -37,7 +35,6 @@ export default async function SuccessPage({
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-6">
-          {/* Booking Details */}
           <div className="grid gap-4 md:grid-cols-2">
             <div className="space-y-1">
               <p className="text-sm text-muted-foreground">Balance Amount</p>
@@ -63,8 +60,6 @@ export default async function SuccessPage({
               <p className="font-medium text-foreground">{booking.occasion}</p>
             </div>
           </div>
-
-          {/* Customer Details */}
           <div className="space-y-4">
             <h3 className="text-lg font-semibold text-foreground">
               Customer Details
@@ -94,6 +89,29 @@ export default async function SuccessPage({
             </div>
           </div>
           <div className="space-y-4">
+            <h3 className="text-lg font-semibold text-foreground">Addons</h3>
+            <div className="grid gap-4 md:grid-cols-2">
+              <div className="space-y-1">
+                <p className="text-sm text-muted-foreground">Cake</p>
+                <p className="font-medium text-foreground">{booking.cake}</p>
+              </div>
+              <div className="space-y-1">
+                <p className="text-sm text-muted-foreground">Photography</p>
+                <p className="font-medium text-foreground">
+                  {booking.photography ? "60 min" : "30 min"}
+                </p>
+              </div>
+              <div className="space-y-1">
+                <p className="text-sm text-muted-foreground">Fog Entry</p>
+                <p className="font-medium text-foreground">Added</p>
+              </div>
+              <div className="space-y-1">
+                <p className="text-sm text-muted-foreground">Rose Path</p>
+                <p className="font-medium text-foreground">Added</p>
+              </div>
+            </div>
+          </div>
+          <div className="space-y-4">
             <h3 className="text-lg font-semibold text-foreground">
               Order Details
             </h3>
@@ -110,20 +128,12 @@ export default async function SuccessPage({
                   {booking.paymentID}
                 </p>
               </div>
-              <div className="space-y-1 md:col-span-2">
-                <p className="text-sm text-muted-foreground">Payment Status</p>
-                <p className="text-emerald-500 font-medium">Paid</p>
-              </div>
             </div>
           </div>
         </CardContent>
         <CardFooter className="flex flex-col items-center space-y-4">
-          <Button asChild className="w-full">
-            <Link href="/account">View All Your Bookings</Link>
-          </Button>
           <p className="text-sm text-muted-foreground text-center">
-            A copy of this receipt has been sent to your email and WhatsApp
-            number.
+            A copy of this receipt has been sent to your email.
           </p>
         </CardFooter>
       </Card>

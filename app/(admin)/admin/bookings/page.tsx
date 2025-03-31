@@ -7,12 +7,16 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import Link from "next/link";
 
 async function Page() {
   const date = new Date();
-  const formattedDate = date.toDateString();
-  const now = new Date();
-  const dateOnly = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const formattedDate = date.toISOString();
+  const dateOnly = new Date(
+    date.getFullYear(),
+    date.getMonth(),
+    date.getDate()
+  );
   const reservations = await prisma.reservations.findMany({
     where: {
       paymentStatus: true,
@@ -46,9 +50,13 @@ async function Page() {
                 <TableCell className="font-medium">
                   {reservation.name}
                 </TableCell>
-                <TableCell>{reservation.phone}</TableCell>
+                <TableCell>
+                  <Link href={"tel:" + reservation.phone}>
+                    {reservation.phone}
+                  </Link>
+                </TableCell>
                 <TableCell>{reservation.room}</TableCell>
-                <TableCell className={"whitespace-nowrap"}>
+                <TableCell className={"whitespace-daterap"}>
                   {reservation.timeSlot}
                 </TableCell>
                 <TableCell>
@@ -56,14 +64,8 @@ async function Page() {
                     {reservation.occasion}
                   </span>
                 </TableCell>
-                <TableCell className={"whitespace-nowrap"}>
-                  {formattedDate === reservation.date.toDateString() ? (
-                    <span className="inline-flex items-center rounded-md bg-blue-50 px-2 py-1 text-xs font-medium text-green-600 ring-1 ring-inset ring-blue-700/10 dark:bg-green-400/10 dark:text-green-600 dark:ring-green-400/30">
-                      Today
-                    </span>
-                  ) : (
-                    reservation.date.toDateString()
-                  )}
+                <TableCell className={"whitespace-daterap"}>
+                  {reservation.date.toDateString()}
                 </TableCell>
                 <TableCell>{reservation.paymentID}</TableCell>
               </TableRow>

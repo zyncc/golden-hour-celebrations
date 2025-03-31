@@ -83,6 +83,12 @@ export default function StepThree() {
   if (reservation?.cake) {
     price += 500;
   }
+  if (reservation?.fogEntry) {
+    price += 400;
+  }
+  if (reservation?.rosePath) {
+    price += 400;
+  }
   if (reservation?.photography === "30") {
     price += 700;
   }
@@ -160,6 +166,18 @@ export default function StepThree() {
                       </span>
                     </div>
                   )}
+                  {reservation.fogEntry && (
+                    <div className="flex justify-between items-center">
+                      <span className="font-medium">Fog Entry</span>
+                      <span className="text-muted-foreground">Added</span>
+                    </div>
+                  )}
+                  {reservation.rosePath && (
+                    <div className="flex justify-between items-center">
+                      <span className="font-medium">Rose Path</span>
+                      <span className="text-muted-foreground">Added</span>
+                    </div>
+                  )}
                 </div>
                 <div className="rounded-lg bg-muted p-4">
                   <p className="font-medium mb-2">Package Includes:</p>
@@ -216,6 +234,24 @@ export default function StepThree() {
                       {formatCurrency(
                         reservation.photography === "30" ? 700 : 1000
                       )}
+                    </span>
+                  </div>
+                )}
+                {reservation.fogEntry && (
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">Fog Entry</span>
+                    <span className="text-green-600 font-semibold whitespace-nowrap">
+                      {formatCurrency(400)}
+                    </span>
+                  </div>
+                )}
+                {reservation.rosePath && (
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">
+                      Candle Light Rose Path
+                    </span>
+                    <span className="text-green-600 font-semibold whitespace-nowrap">
+                      {formatCurrency(400)}
                     </span>
                   </div>
                 )}

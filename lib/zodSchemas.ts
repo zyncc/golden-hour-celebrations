@@ -104,6 +104,8 @@ export const payReservationSchema = z.object({
     ])
     .optional(),
   photography: z.enum(["30", "60"]).optional(),
+  fogEntry: z.enum(["Fog Entry"]).optional(),
+  rosePath: z.enum(["Rose Path"]).optional(),
 });
 
 export const ManualBookingSchema = z.object({

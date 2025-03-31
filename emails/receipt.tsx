@@ -17,17 +17,7 @@ import {
 import * as React from "react";
 
 export const NikeReceiptEmail = ({
-  getReservationDetails: {
-    orderID,
-    balanceAmount,
-    date,
-    email,
-    phone,
-    timeSlot,
-    room,
-    occasion,
-    name,
-  },
+  getReservationDetails,
 }: {
   getReservationDetails: Reservations;
 }) => (
@@ -40,7 +30,7 @@ export const NikeReceiptEmail = ({
           <Row>
             <Column>
               <Text style={global.paragraphWithBold}>Transaction Number</Text>
-              <Text style={track.number}>{orderID}</Text>
+              <Text style={track.number}>{getReservationDetails.orderID}</Text>
             </Column>
             <Column align="right">
               <Link
@@ -58,23 +48,37 @@ export const NikeReceiptEmail = ({
             Your Reservation has been Booked!
           </Heading>
           <Text style={{ ...global.text, marginTop: 24, textAlign: "left" }}>
-            Dear {name},
+            Dear {getReservationDetails.name},
             <br />
             We are thrilled to confirm your reservation with us! 🎉
             <br />
-            Theatre -{" "}
-            {room == "standard-theatre"
-              ? "Standard Theatre"
-              : "Romantic Theatre"}
+            Theatre - {getReservationDetails.room}
             <br />
-            Time - {timeSlot}
+            Time - {getReservationDetails.timeSlot}
             <br />
-            Ocassion - {occasion}
+            {getReservationDetails.cake &&
+              "Cake - " + getReservationDetails.cake}
             <br />
-            Phone - {phone}
+            {getReservationDetails.photography &&
+              "Photography - " +
+                (getReservationDetails.photography == "60"
+                  ? "60 min"
+                  : "30 min")}
+            <br />
+            Ocassion - {getReservationDetails.occasion}
+            <br />
+            {getReservationDetails.fogEntry && "Fog Entry Added"}
+            <br />
+            {getReservationDetails.rosePath && "Candle Light Rose Path Added"}
+            <br />
+            Date - {getReservationDetails.date.toDateString()}
+            <br />
+            Payment ID - {getReservationDetails.paymentID}
+            <br />
+            Phone - {getReservationDetails.phone}
             <br />
             Balance Amount Payable -{" "}
-            {formatCurrency(balanceAmount).split(".")[0]}
+            {formatCurrency(getReservationDetails.balanceAmount).split(".")[0]}
             <br />
             <br />
             If you have any special requests or need further assistance, please

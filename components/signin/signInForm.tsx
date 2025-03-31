@@ -12,12 +12,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import {
   InputOTP,
   InputOTPGroup,
   InputOTPSlot,
@@ -31,6 +25,12 @@ import { authClient } from "@/lib/authClient";
 import { useRouter } from "next/navigation";
 import { LoaderCircle } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
+import {
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "../ui/alert-dialog";
 
 function SignInForm() {
   const [open, setOpen] = useState(false);
@@ -60,7 +60,7 @@ function SignInForm() {
         onError: (ctx) => {
           setLoadingSendOtp(false);
           toast({
-            variant: "destructive",
+            variant: "default",
             title: "Error",
             description: ctx.error.message,
           });
@@ -91,10 +91,12 @@ function SignInForm() {
   }
   return (
     <>
-      <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Enter the OTP sent to your Whatsapp</DialogTitle>
+      <AlertDialog open={open} onOpenChange={setOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>
+              Enter the OTP sent to your Email
+            </AlertDialogTitle>
             <InputOTP
               maxLength={6}
               pattern={REGEXP_ONLY_DIGITS}
@@ -117,9 +119,9 @@ function SignInForm() {
                 "Submit"
               )}
             </Button>
-          </DialogHeader>
-        </DialogContent>
-      </Dialog>
+          </AlertDialogHeader>
+        </AlertDialogContent>
+      </AlertDialog>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
           <FormField
