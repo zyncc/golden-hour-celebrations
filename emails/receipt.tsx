@@ -71,7 +71,13 @@ export const NikeReceiptEmail = ({
             <br />
             {getReservationDetails.rosePath && "Candle Light Rose Path Added"}
             <br />
-            Date - {getReservationDetails.date.toDateString()}
+            Date -{" "}
+            {getReservationDetails.date.toLocaleDateString("en-GB", {
+              timeZone: "Asia/Kolkata",
+              weekday: "short",
+              month: "short",
+              day: "2-digit",
+            })}
             <br />
             Payment ID - {getReservationDetails.paymentID}
             <br />

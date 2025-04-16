@@ -65,7 +65,12 @@ async function Page() {
                   </span>
                 </TableCell>
                 <TableCell className={"whitespace-daterap"}>
-                  {reservation.date.toDateString()}
+                  {reservation.date.toLocaleDateString("en-GB", {
+                    timeZone: "Asia/Kolkata",
+                    weekday: "short",
+                    month: "short",
+                    day: "2-digit",
+                  })}
                 </TableCell>
                 <TableCell>{reservation.paymentID}</TableCell>
               </TableRow>
