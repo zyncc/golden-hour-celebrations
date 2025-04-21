@@ -5,6 +5,7 @@ import Navbar from "@/components/navbar/navbar";
 import { Toaster } from "@/components/ui/toaster";
 import TanstackProvider from "@/providers/TanstackProvider";
 import { GoogleAnalytics } from "@next/third-parties/google";
+import Whatsapp from "@/components/whatsapp";
 
 const poppins = Poppins({
   subsets: ["latin", "latin-ext"],
@@ -39,6 +40,7 @@ export default function RootLayout({
         />
       </head>
       <body className={`dark ${poppins.className}`}>
+        <Whatsapp />
         <GoogleAnalytics gaId="G-QL5YQVXZ5V" />
         <TanstackProvider>
           <Navbar />

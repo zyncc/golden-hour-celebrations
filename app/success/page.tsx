@@ -93,21 +93,28 @@ export default async function SuccessPage({
             <div className="grid gap-4 md:grid-cols-2">
               <div className="space-y-1">
                 <p className="text-sm text-muted-foreground">Cake</p>
-                <p className="font-medium text-foreground">{booking.cake}</p>
+                <p className="font-medium text-foreground">
+                  {booking.cake || "None"}
+                </p>
               </div>
               <div className="space-y-1">
                 <p className="text-sm text-muted-foreground">Photography</p>
                 <p className="font-medium text-foreground">
-                  {booking.photography ? "60 min" : "30 min"}
+                  {booking.photography == "60" ? "60 min" : "None"}
+                  {booking.photography == "30" ? "30 min" : "None"}
                 </p>
               </div>
               <div className="space-y-1">
                 <p className="text-sm text-muted-foreground">Fog Entry</p>
-                <p className="font-medium text-foreground">Added</p>
+                <p className="font-medium text-foreground">
+                  {booking.fogEntry ? "Added" : "None"}
+                </p>
               </div>
               <div className="space-y-1">
                 <p className="text-sm text-muted-foreground">Rose Path</p>
-                <p className="font-medium text-foreground">Added</p>
+                <p className="font-medium text-foreground">
+                  {booking.rosePath ? "Added" : "None"}
+                </p>
               </div>
             </div>
           </div>
