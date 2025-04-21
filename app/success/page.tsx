@@ -99,10 +99,14 @@ export default async function SuccessPage({
               </div>
               <div className="space-y-1">
                 <p className="text-sm text-muted-foreground">Photography</p>
-                <p className="font-medium text-foreground">
-                  {booking.photography == "60" ? "60 min" : "None"}
-                  {booking.photography == "30" ? "30 min" : "None"}
-                </p>
+                {booking.photography ? (
+                  <p className="font-medium text-foreground">
+                    {booking.photography == "60" && "60 min"}
+                    {booking.photography == "30" && "30 min"}
+                  </p>
+                ) : (
+                  <p className="font-medium text-foreground">None</p>
+                )}
               </div>
               <div className="space-y-1">
                 <p className="text-sm text-muted-foreground">Fog Entry</p>
