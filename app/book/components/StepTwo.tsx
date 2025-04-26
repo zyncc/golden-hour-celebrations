@@ -11,7 +11,7 @@ import { toast } from "@/components/ui/use-toast";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import formatCurrency from "@/lib/formatCurrency";
-import { items } from "@/lib/constants";
+import { items, timeSlots } from "@/lib/constants";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, EffectFade } from "swiper/modules";
 import "swiper/css";
@@ -58,14 +58,6 @@ export default function StepTwo() {
     }
   }
 
-  const timeSlots = [
-    "10AM - 12PM",
-    "12PM - 2PM",
-    "2PM - 4PM",
-    "4PM - 6PM",
-    "6PM - 8PM",
-    "8PM - 10PM",
-  ];
   const { data, isLoading } = useQuery({
     queryKey: ["getReservation"],
     refetchInterval: 1000 * 20,

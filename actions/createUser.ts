@@ -4,8 +4,8 @@ import prisma from "@/lib/prisma";
 
 type user = {
   name: string;
-  email: string;
   phone: string;
+  email: string;
 };
 
 export async function CreateUser(user: user) {

@@ -44,7 +44,7 @@ async function Page() {
                 </TableCell>
                 <TableCell>
                   <Link target="_blank" href={`mailto:${user.email}`}>
-                    {user.email}
+                    {user.email ?? ""}
                   </Link>
                 </TableCell>
                 <TableCell className="font-medium">

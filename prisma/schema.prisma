@@ -49,8 +49,10 @@ model Reservations {
 
   cake        String?
   photography String?
-  fogEntry    String?
-  rosePath    String?
+  fogEntry    Boolean?
+  rosePath    Boolean?
+
+  manualBooking Boolean?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

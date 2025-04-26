@@ -87,12 +87,12 @@ export const payReservationSchema = z.object({
   date: z.date({ message: "Date is required" }),
   room: z.enum(["Majestic Theatre", "Dreamscape Theatre"]),
   timeSlot: z.enum([
-    "10AM - 12PM",
+    "9:30AM - 11:30AM",
     "12PM - 2PM",
-    "2PM - 4PM",
-    "4PM - 6PM",
-    "6PM - 8PM",
-    "8PM - 10PM",
+    "2:30PM - 4:30PM",
+    "5PM - 7PM",
+    "7:30PM - 9:30PM",
+    "10PM - 12AM",
   ]),
   cake: z
     .enum([
@@ -104,16 +104,23 @@ export const payReservationSchema = z.object({
     ])
     .optional(),
   photography: z.enum(["30", "60"]).optional(),
-  fogEntry: z.enum(["Fog Entry"]).optional(),
-  rosePath: z.enum(["Rose Path"]).optional(),
+  fogEntry: z.boolean().optional(),
+  rosePath: z.boolean().optional(),
 });
 
 export const ManualBookingSchema = z.object({
-  advanceAmount: z.number(),
   balanceAmount: z.number(),
-  date: z.date(),
-  email: z.string().email().trim().toLowerCase(),
-  name: z.string(),
+  advanceAmount: z.number(),
+  name: z
+    .string({ message: "Name is required" })
+    .min(3, { message: "Name must be atleast 3 characters" })
+    .max(50, { message: "Name cannot be more than 50 characters" }),
+  phone: z.string({ message: "Phone is required" }).regex(/^[6-9]\d{9}$/, {
+    message: "Invalid phone number",
+  }),
+  email: z
+    .string({ message: "Email is required" })
+    .email("Enter a valid email address"),
   occasion: z.enum(
     [
       "Birthday",
@@ -128,9 +135,26 @@ export const ManualBookingSchema = z.object({
       message: "Please select one",
     }
   ),
-  packageType: z.string(),
-  phone: z.string({ message: "Phone is required" }).regex(/^[6-9]\d{9}$/, {
-    message: "Invalid phone number",
-  }),
-  timeSlot: z.string(),
+  date: z.date({ message: "Date is required" }),
+  room: z.enum(["Majestic Theatre", "Dreamscape Theatre"]),
+  timeSlot: z.enum([
+    "9:30AM - 11:30AM",
+    "12PM - 2PM",
+    "2:30PM - 4:30PM",
+    "5PM - 7PM",
+    "7:30PM - 9:30PM",
+    "10PM - 12AM",
+  ]),
+  cake: z
+    .enum([
+      "Chocolate pastry",
+      "Black forest pastry",
+      "Strawberry pastry",
+      "Blackcurrent pastry",
+      "Vanilla pastry",
+    ])
+    .optional(),
+  photography: z.enum(["30", "60"]).optional(),
+  fogEntry: z.boolean().optional(),
+  rosePath: z.boolean().optional(),
 });

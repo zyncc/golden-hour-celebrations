@@ -58,19 +58,19 @@ export const NikeReceiptEmail = ({
             <br />
             {getReservationDetails.cake &&
               "Cake - " + getReservationDetails.cake}
-            <br />
+            {getReservationDetails.cake && <br />}
             {getReservationDetails.photography &&
               "Photography - " +
                 (getReservationDetails.photography == "60"
                   ? "60 min"
                   : "30 min")}
-            <br />
+            {getReservationDetails.photography && <br />}
             Ocassion - {getReservationDetails.occasion}
             <br />
             {getReservationDetails.fogEntry && "Fog Entry Added"}
-            <br />
+            {getReservationDetails.fogEntry && <br />}
             {getReservationDetails.rosePath && "Candle Light Rose Path Added"}
-            <br />
+            {getReservationDetails.rosePath && <br />}
             Date -{" "}
             {getReservationDetails.date.toLocaleDateString("en-GB", {
               timeZone: "Asia/Kolkata",
@@ -79,8 +79,9 @@ export const NikeReceiptEmail = ({
               day: "2-digit",
             })}
             <br />
-            Payment ID - {getReservationDetails.paymentID}
-            <br />
+            {getReservationDetails.paymentID &&
+              "Payment ID - " + getReservationDetails.paymentID}
+            {getReservationDetails.paymentID && <br />}
             Phone - {getReservationDetails.phone}
             <br />
             Balance Amount Payable -{" "}

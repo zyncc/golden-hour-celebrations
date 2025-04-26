@@ -2,10 +2,12 @@
 
 import { auth } from "@/auth";
 import { Reservation } from "@/context/ReservationStore";
+import NikeReceiptEmail from "@/emails/receipt";
 import prisma from "@/lib/prisma";
 import { ManualBookingSchema, payReservationSchema } from "@/lib/zodSchemas";
 import { randomUUID } from "crypto";
 import { headers } from "next/headers";
+import { Resend } from "resend";
 import { z } from "zod";
 
 export async function createReservation(
@@ -75,34 +77,68 @@ export async function createReservation(
 type Data = z.infer<typeof ManualBookingSchema>;
 
 export async function CreateManualBooking(data: Data) {
-  const session = await auth.api.getSession({
-    headers: headers(),
-  });
-  if (session?.user.role !== "admin") {
-    throw new Error("Unauthorized");
-  }
-  const { advanceAmount, packageType, ...rest } = data;
+  // const session = await auth.api.getSession({
+  //   headers: headers(),
+  // });
+  // if (session?.user.role !== "admin") {
+  //   throw new Error("Unauthorized");
+  // }
+
+  const { advanceAmount, ...rest } = data;
+
   const checkExistingBookings = await prisma.reservations.findFirst({
     where: {
       date: data.date,
-      room: data.packageType,
+      room: data.room,
       timeSlot: data.timeSlot,
       paymentStatus: true,
     },
   });
   if (checkExistingBookings) {
-    return {
-      title: "Error creating Reservation",
-      description:
-        "Someone has booked another reservation at the same Time Slot!",
-    };
+    throw new Error(
+      "Someone has booked another reservation at the same Time Slot!"
+    );
   }
-  const res = await prisma.reservations.create({
+  let balanceAmount = -data.advanceAmount;
+  if (data.room == "Dreamscape Theatre") {
+    balanceAmount += 1499;
+  } else if (data.room == "Majestic Theatre") {
+    balanceAmount += 1899;
+  }
+  if (data.cake) {
+    balanceAmount += 500;
+  }
+  if (data.fogEntry) {
+    balanceAmount += 400;
+  }
+  if (data.rosePath) {
+    balanceAmount += 400;
+  }
+  if (data.photography == "30") {
+    balanceAmount += 700;
+  } else if (data.photography == "60") {
+    balanceAmount += 1000;
+  }
+
+  const booking = await prisma.reservations.create({
     data: {
       ...rest,
-      room: data.packageType,
+      balanceAmount,
       paymentStatus: true,
       orderID: randomUUID(),
+      manualBooking: true,
     },
   });
+  const resend = new Resend(process.env.RESEND_API_KEY);
+  const emailSent = await resend.emails.send({
+    from: "Golden Hour Celebrations <info@goldenhourcelebrations.in>",
+    to: [
+      booking.email,
+      "goldenhourcelebrationsblr@gmail.com",
+      "chandankrishna288@gmail.com",
+    ],
+    subject: "Receipt for your Reservation",
+    react: NikeReceiptEmail({ getReservationDetails: booking }),
+  });
+  console.log(emailSent);
 }

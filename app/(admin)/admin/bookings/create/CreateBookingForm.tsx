@@ -13,10 +13,8 @@ import { format } from "date-fns";
 import { Calendar } from "@/components/ui/calendar";
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
-import { useToast } from "@/components/ui/use-toast";
 import { Reservations } from "@prisma/client";
 import { useQuery } from "@tanstack/react-query";
-import { Label } from "@/components/ui/label";
 import { CreateUser } from "@/actions/createUser";
 import {
   Select,
@@ -27,16 +25,20 @@ import {
 } from "@/components/ui/select";
 import formatCurrency from "@/lib/formatCurrency";
 import { CreateManualBooking } from "@/actions/createReservation";
-import { useRouter } from "next/navigation";
-
-const timeSlots = [
-  "10AM - 12PM",
-  "12PM - 2PM",
-  "2PM - 4PM",
-  "4PM - 6PM",
-  "6PM - 8PM",
-  "8PM - 10PM",
-];
+import { cakes, timeSlots } from "@/lib/constants";
+import { Switch } from "@/components/ui/switch";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { toast } from "sonner";
 
 export default function CreateBookingForm() {
   const currentDate = new Date();
@@ -49,47 +51,28 @@ export default function CreateBookingForm() {
   }
   let nextMonthDate = new Date(nextYear, nextMonth, 1);
 
-  const { toast } = useToast();
-  const router = useRouter();
   const [open, setOpen] = useState(false);
-  const [date, setDate] = useState<Date>();
-  const [packageType, setPackageType] = useState<string>();
+  const [pending, setPending] = useState(false);
   const [advanceAmount, setAdvanceAmount] = useState<number>();
   const [balanceAmount, setBalanceAmount] = useState<number>();
-  const [pending, setPending] = useState(false);
-  const [timeSlot, setTimeSlot] = useState<string>();
 
-  async function handleFormSubmit(FormData: FormData) {
-    setPending(true);
-    const formData = Object.fromEntries(FormData);
-    const data = {
-      ...formData,
-      packageType,
-      advanceAmount,
-      balanceAmount,
-      timeSlot,
-      date,
-    };
-
-    const checkValidation = ManualBookingSchema.safeParse(data);
-    if (checkValidation.success) {
-      CreateUser({
-        email: checkValidation.data.email,
-        name: checkValidation.data.name,
-        phone: checkValidation.data.phone,
-      });
-      const res = await CreateManualBooking(checkValidation.data);
-      if (res?.title) {
-        toast({
-          variant: "destructive",
-          title: res.title,
-          description: res.description,
-        });
-      }
-      setPending(false);
-      router.refresh();
-    }
-  }
+  const form = useForm<z.infer<typeof ManualBookingSchema>>({
+    resolver: zodResolver(ManualBookingSchema),
+    defaultValues: {
+      name: undefined,
+      email: undefined,
+      date: undefined,
+      timeSlot: undefined,
+      phone: undefined,
+      occasion: undefined,
+      room: undefined,
+      cake: undefined,
+      photography: undefined,
+      fogEntry: undefined,
+      rosePath: undefined,
+      balanceAmount: undefined,
+    },
+  });
 
   const { data, isLoading, refetch } = useQuery({
     queryKey: ["getReservation"],
@@ -97,173 +80,386 @@ export default function CreateBookingForm() {
     refetchOnWindowFocus: true,
     queryFn: async () => {
       const res = await fetch(
-        `/api/fetchReservations?date=${date?.toISOString()}`
+        `/api/fetchReservations?date=${form.getValues("date").toISOString()}`
       );
       return res.json();
     },
   });
 
-  useEffect(() => {
-    refetch();
-  }, [packageType, date, refetch]);
+  const room = form.watch("room");
+  const date = form.watch("date");
+  const cake = form.watch("cake");
+  const fogEntry = form.watch("fogEntry");
+  const rosePath = form.watch("rosePath");
+  const photography = form.watch("photography");
 
   useEffect(() => {
-    if (packageType === "Majestic Theatre") {
-      setBalanceAmount(1499 - advanceAmount!);
-    } else if (packageType === "Dreamscape Theatre") {
-      setBalanceAmount(1499 - advanceAmount!);
+    refetch();
+  }, [room, date, refetch]);
+
+  useEffect(() => {
+    form.resetField("timeSlot");
+  }, [room, date, form]);
+
+  // Calculate Balance Amount
+  useEffect(() => {
+    if (!advanceAmount) {
+      return;
     }
-  }, [packageType, advanceAmount]);
+    let balanceAmount = -advanceAmount;
+    if (room == "Dreamscape Theatre") {
+      balanceAmount += 1499;
+    } else if (room == "Majestic Theatre") {
+      balanceAmount += 1899;
+    }
+    if (cake) {
+      balanceAmount += 500;
+    }
+    if (fogEntry) {
+      balanceAmount += 400;
+    }
+    if (rosePath) {
+      balanceAmount += 400;
+    }
+    if (photography == "30") {
+      balanceAmount += 700;
+    } else if (photography == "60") {
+      balanceAmount += 1000;
+    }
+    setBalanceAmount(balanceAmount);
+    form.setValue("balanceAmount", balanceAmount);
+  }, [advanceAmount, cake, fogEntry, rosePath, room, photography, form]);
+
+  async function handleFormSubmit(values: z.infer<typeof ManualBookingSchema>) {
+    setPending(true);
+    const validation = ManualBookingSchema.safeParse(values);
+    if (validation.success) {
+      const res = CreateManualBooking(validation.data);
+      toast.promise(res, {
+        loading: "Creating Booking",
+        success: () => {
+          form.reset();
+          return "Succesfully created Booking";
+        },
+        error: "Someone has booked another reservation at the same Time Slot!",
+      });
+    }
+    setPending(false);
+  }
 
   return (
     <>
-      <form
-        className="space-y-8 w-full"
-        action={(formData) => handleFormSubmit(formData)}
-      >
-        <div className="flex flex-col gap-y-3">
-          <Label htmlFor="name">Enter your Name</Label>
-          <Input placeholder={"Name"} name="name" />
-        </div>
-        <div className="flex flex-col gap-y-3">
-          <Label>Enter your Whatsapp Number</Label>
-          <Input
-            placeholder="Phone"
-            type="text"
-            maxLength={10}
-            minLength={10}
-            name="phone"
+      <Form {...form}>
+        <form
+          className="w-full grid grid-cols-1 lg:grid-cols-2 gap-6"
+          onSubmit={form.handleSubmit(handleFormSubmit)}
+        >
+          <FormField
+            control={form.control}
+            name="timeSlot"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Time Slot</FormLabel>
+                <div className="mt-3 gap-2 grid grid-cols-2 md:grid-cols-3">
+                  {timeSlots.map((slot) => (
+                    <Button
+                      variant={
+                        field.value === slot
+                          ? "default"
+                          : data?.find(
+                              (reservation: Reservations) =>
+                                reservation.timeSlot === slot &&
+                                form.getValues("room") === reservation.room &&
+                                reservation.paymentStatus
+                            )
+                          ? "destructive"
+                          : "outline"
+                      }
+                      type="button"
+                      onClick={() => field.onChange(slot)}
+                      key={slot}
+                      disabled={
+                        data?.find(
+                          (reservation: Reservations) =>
+                            reservation.timeSlot === slot &&
+                            form.getValues("room") === reservation.room &&
+                            reservation.paymentStatus
+                        ) ||
+                        isLoading ||
+                        !form.getValues("date") ||
+                        !form.getValues("room")
+                      }
+                      className={"flex-1"}
+                    >
+                      {slot}
+                    </Button>
+                  ))}
+                </div>
+                <FormMessage />
+              </FormItem>
+            )}
           />
-        </div>
-        <div className="flex flex-col gap-y-3">
-          <Label>Enter your Email</Label>
-          <Input placeholder="Email" type="email" name="email" />
-        </div>
-        <div className="flex flex-col gap-y-3">
-          <Label>Choose Occasion</Label>
-          <select
+          <FormField
+            control={form.control}
+            name="date"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Pick your Date</FormLabel>
+                <FormControl>
+                  <Popover open={open} onOpenChange={setOpen}>
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant={"outline"}
+                        className={cn(
+                          "w-full justify-start text-left font-normal",
+                          !field.value && "text-muted-foreground"
+                        )}
+                      >
+                        <CalendarIcon className="mr-2 h-4 w-4" />
+                        {field.value ? (
+                          format(field.value, "PPP")
+                        ) : (
+                          <span>Pick a date</span>
+                        )}
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="p-0">
+                      <Calendar
+                        mode="single"
+                        fromDate={currentDate}
+                        toMonth={nextMonthDate}
+                        selected={field.value}
+                        onSelect={(date) => {
+                          field.onChange(date);
+                          setOpen(false);
+                        }}
+                      />
+                    </PopoverContent>
+                  </Popover>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="room"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Package</FormLabel>
+                <FormControl>
+                  <Select value={field.value} onValueChange={field.onChange}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select Package" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="Dreamscape Theatre">
+                        Dreamscape Theatre
+                      </SelectItem>
+                      <SelectItem value="Majestic Theatre">
+                        Majestic Theatre
+                      </SelectItem>
+                    </SelectContent>
+                  </Select>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
             name="occasion"
-            className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
-          >
-            <option value="Birthday">Birthday</option>
-            <option value="Anniversary">Anniversary</option>
-            <option value="Bride / Groom to be">Bride / Groom to be</option>
-            <option value="Graduation Party">Graduation Party</option>
-            <option value="Proposal">Proposal</option>
-            <option value="Mom to be">Mom to be</option>
-            <option value="Other Surprises">Other Surprises</option>
-          </select>
-        </div>
-        <div className="flex flex-col gap-y-3">
-          <Label>Pick your Date</Label>
-          <Popover open={open} onOpenChange={setOpen}>
-            <PopoverTrigger asChild>
-              <Button
-                variant={"outline"}
-                className={cn(
-                  "w-full justify-start text-left font-normal",
-                  !date && "text-muted-foreground"
-                )}
-              >
-                <CalendarIcon className="mr-2 h-4 w-4" />
-                {date ? format(date, "PPP") : <span>Pick a date</span>}
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent className="p-0">
-              <Calendar
-                mode="single"
-                fromDate={currentDate}
-                toMonth={nextMonthDate}
-                selected={date}
-                onSelect={(date) => {
-                  setDate(date);
-                  setOpen(false);
-                }}
-              />
-            </PopoverContent>
-          </Popover>
-        </div>
-        <div>
-          <Label>Package</Label>
-          <Select value={packageType} onValueChange={setPackageType}>
-            <SelectTrigger>
-              <SelectValue placeholder="Select Package" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="Dreamscape Theatre">
-                Majestic Theatre
-              </SelectItem>
-              <SelectItem value="Dreamscape Theatre">
-                Dreamscape Theatre
-              </SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-        <div className="flex gap-x-5 flex-col">
-          <Label>Time Slot</Label>
-          <div className="flex gap-5 mt-3 flex-wrap">
-            {timeSlots.map((slot) => (
-              <Button
-                variant={
-                  timeSlot == slot
-                    ? "default"
-                    : data?.find(
-                        (reservation: Reservations) =>
-                          reservation.timeSlot == slot &&
-                          packageType == reservation.room &&
-                          reservation.paymentStatus
-                      )
-                    ? "destructive"
-                    : "outline"
-                }
-                type="button"
-                onClick={() => setTimeSlot(slot)}
-                key={slot}
-                disabled={
-                  data?.find(
-                    (reservation: Reservations) =>
-                      reservation.timeSlot == slot &&
-                      packageType == reservation.room &&
-                      reservation.paymentStatus
-                  ) ||
-                  isLoading ||
-                  !date ||
-                  !packageType
-                }
-                className={"flex-1"}
-              >
-                {slot}
-              </Button>
-            ))}
-          </div>
-        </div>
-        <div>
-          <Label>Advance Amount</Label>
-          <Input
-            className="mt-3"
-            placeholder="Amound Paid"
-            onChange={(value) => setAdvanceAmount(Number(value.target.value))}
-            type="number"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Choose Occasion</FormLabel>
+                <FormControl>
+                  <Select value={field.value} onValueChange={field.onChange}>
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder="Select an occasion" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="Birthday">Birthday</SelectItem>
+                      <SelectItem value="Anniversary">Anniversary</SelectItem>
+                      <SelectItem value="Bride / Groom to be">
+                        Bride / Groom to be
+                      </SelectItem>
+                      <SelectItem value="Graduation Party">
+                        Graduation Party
+                      </SelectItem>
+                      <SelectItem value="Proposal">Proposal</SelectItem>
+                      <SelectItem value="Mom to be">Mom to be</SelectItem>
+                      <SelectItem value="Other Surprises">
+                        Other Surprises
+                      </SelectItem>
+                    </SelectContent>
+                  </Select>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
           />
-          <div
-            className={`${
-              !date || !packageType || !advanceAmount ? "hidden" : "mt-5"
-            }`}
-          >
+          <FormField
+            control={form.control}
+            name="name"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Name</FormLabel>
+                <FormControl>
+                  <Input placeholder={"Name"} {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Email</FormLabel>
+                <FormControl>
+                  <Input placeholder={"Email"} {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="phone"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>WhatsApp Number</FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder="Phone"
+                    type="text"
+                    maxLength={10}
+                    minLength={10}
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="cake"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Cake (Optional)</FormLabel>
+                <FormControl>
+                  <Select value={field.value} onValueChange={field.onChange}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select Cake" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {cakes.map((cake) => (
+                        <SelectItem key={cake} value={cake}>
+                          {cake}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="photography"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Photography (Optional)</FormLabel>
+                <FormControl>
+                  <Select value={field.value} onValueChange={field.onChange}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select Photography Package" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="30">30 Minutes Package</SelectItem>
+                      <SelectItem value="60">60 Minutes Package</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="advanceAmount"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Advance Amount</FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder="Amound Paid"
+                    type="text"
+                    value={field.value}
+                    onChange={(e) => {
+                      field.onChange(parseInt(e.target.value));
+                      setAdvanceAmount(parseInt(e.target.value));
+                    }}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <div className="flex flex-col gap-y-4">
+            <FormField
+              control={form.control}
+              name="fogEntry"
+              render={({ field }) => (
+                <FormItem>
+                  <div className="flex items-center gap-x-4">
+                    <FormLabel>Wants Fog Entry (Optional)</FormLabel>
+                    <FormControl>
+                      <Switch
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                      />
+                    </FormControl>
+                  </div>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="rosePath"
+              render={({ field }) => (
+                <FormItem>
+                  <div className="flex items-center gap-x-4">
+                    <FormLabel>Wants Rose Path (Optional)</FormLabel>
+                    <FormControl>
+                      <Switch
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                      />
+                    </FormControl>
+                  </div>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+          <div className={`${!room || !advanceAmount ? "hidden" : "mt-5"}`}>
             <h1>Balance Amount Remaining</h1>
             <p>{formatCurrency(balanceAmount || 0)}</p>
           </div>
-        </div>
-        <Button
-          disabled={pending}
-          type="submit"
-          className="w-full"
-          variant={"secondary"}
-        >
-          {pending && <Loader2 className="animate-spin" />}
-          Create Booking
-        </Button>
-      </form>
+          <Button
+            disabled={pending}
+            type="submit"
+            className="w-full bg-yellow-500 hover:bg-yellow-300 text-black font-medium"
+          >
+            {pending ? "Creating" : "Create Booking"}
+          </Button>
+        </form>
+      </Form>
     </>
   );
 }

@@ -27,6 +27,15 @@ async function Page() {
     orderBy: {
       date: "asc",
     },
+    select: {
+      name: true,
+      phone: true,
+      room: true,
+      timeSlot: true,
+      occasion: true,
+      date: true,
+      paymentID: true,
+    },
   });
   return (
     <div className={"mt-[100px] container"}>

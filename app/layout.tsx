@@ -6,6 +6,7 @@ import { Toaster } from "@/components/ui/toaster";
 import TanstackProvider from "@/providers/TanstackProvider";
 import { GoogleAnalytics } from "@next/third-parties/google";
 import Whatsapp from "@/components/whatsapp";
+import { Toaster as Sonner } from "sonner";
 
 const poppins = Poppins({
   subsets: ["latin", "latin-ext"],
@@ -45,6 +46,7 @@ export default function RootLayout({
         <TanstackProvider>
           <Navbar />
           <Toaster />
+          <Sonner richColors position="top-right" theme="dark" />
           {children}
         </TanstackProvider>
       </body>

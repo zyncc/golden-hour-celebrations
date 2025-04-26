@@ -16,6 +16,15 @@ export const selectFindUs = [
   },
 ];
 
+export const timeSlots = [
+  "9:30AM - 11:30AM",
+  "12PM - 2PM",
+  "2:30PM - 4:30PM",
+  "5PM - 7PM",
+  "7:30PM - 9:30PM",
+  "10PM - 12AM",
+];
+
 export const selectOccasion = [
   {
     title: "Birthday",
