@@ -77,12 +77,12 @@ export async function createReservation(
 type Data = z.infer<typeof ManualBookingSchema>;
 
 export async function CreateManualBooking(data: Data) {
-  // const session = await auth.api.getSession({
-  //   headers: headers(),
-  // });
-  // if (session?.user.role !== "admin") {
-  //   throw new Error("Unauthorized");
-  // }
+  const session = await auth.api.getSession({
+    headers: headers(),
+  });
+  if (session?.user.role !== "admin") {
+    throw new Error("Unauthorized");
+  }
 
   const { advanceAmount, ...rest } = data;
 
