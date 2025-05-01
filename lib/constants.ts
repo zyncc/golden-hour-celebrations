@@ -16,13 +16,22 @@ export const selectFindUs = [
   },
 ];
 
-export const timeSlots = [
+export const dreamscapeTimeSlots = [
   "9:30AM - 11:30AM",
   "12PM - 2PM",
   "2:30PM - 4:30PM",
   "5PM - 7PM",
   "7:30PM - 9:30PM",
   "10PM - 12AM",
+];
+
+export const majesticTimeSlots = [
+  "10:00AM - 12:00PM",
+  "12:30PM - 02:30PM",
+  "03:00PM - 05:00PM",
+  "05:30PM - 07:30PM",
+  "08:00PM - 10:00PM",
+  "10:30PM - 12:30AM",
 ];
 
 export const selectOccasion = [

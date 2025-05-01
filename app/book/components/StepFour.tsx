@@ -38,7 +38,7 @@ export default function StepThree() {
       return;
     }
     const options: RazorpayOrderOptions = {
-      key: process.env.RAZORPAY_KEY_ID as string,
+      key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID as string,
       amount: payFull ? reservation?.price! * 100 : 500 * 100,
       currency: "INR",
       name: "Golden Hour Celebrations",

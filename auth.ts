@@ -32,7 +32,7 @@ export const auth = betterAuth({
         });
         if (accountExists) {
           const resend = new Resend(process.env.RESEND_API_KEY);
-          const emailSent = await resend.emails.send({
+          await resend.emails.send({
             from: "Golden Hour Celebrations <info@goldenhourcelebrations.in>",
             to: [email],
             subject: "Your Login OTP for Golden Hour Celebrations",

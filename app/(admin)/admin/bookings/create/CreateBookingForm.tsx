@@ -8,14 +8,13 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { CalendarIcon, Loader2 } from "lucide-react";
+import { CalendarIcon } from "lucide-react";
 import { format } from "date-fns";
 import { Calendar } from "@/components/ui/calendar";
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import { Reservations } from "@prisma/client";
 import { useQuery } from "@tanstack/react-query";
-import { CreateUser } from "@/actions/createUser";
 import {
   Select,
   SelectContent,
@@ -25,7 +24,7 @@ import {
 } from "@/components/ui/select";
 import formatCurrency from "@/lib/formatCurrency";
 import { CreateManualBooking } from "@/actions/createReservation";
-import { cakes, timeSlots } from "@/lib/constants";
+import { cakes, dreamscapeTimeSlots, majesticTimeSlots } from "@/lib/constants";
 import { Switch } from "@/components/ui/switch";
 import {
   Form,
@@ -53,6 +52,7 @@ export default function CreateBookingForm() {
 
   const [open, setOpen] = useState(false);
   const [pending, setPending] = useState(false);
+  const [selectedRoom, setSelectedRoom] = useState<string | undefined>();
   const [advanceAmount, setAdvanceAmount] = useState<number>();
   const [balanceAmount, setBalanceAmount] = useState<number>();
 
@@ -161,39 +161,75 @@ export default function CreateBookingForm() {
               <FormItem>
                 <FormLabel>Time Slot</FormLabel>
                 <div className="mt-3 gap-2 grid grid-cols-2 md:grid-cols-3">
-                  {timeSlots.map((slot) => (
-                    <Button
-                      variant={
-                        field.value === slot
-                          ? "default"
-                          : data?.find(
+                  {selectedRoom === "Dreamscape Theatre"
+                    ? dreamscapeTimeSlots.map((slot) => (
+                        <Button
+                          variant={
+                            field.value === slot
+                              ? "default"
+                              : data?.find(
+                                  (reservation: Reservations) =>
+                                    reservation.timeSlot === slot &&
+                                    form.getValues("room") ===
+                                      reservation.room &&
+                                    reservation.paymentStatus
+                                )
+                              ? "destructive"
+                              : "outline"
+                          }
+                          type="button"
+                          onClick={() => field.onChange(slot)}
+                          key={slot}
+                          disabled={
+                            data?.find(
                               (reservation: Reservations) =>
                                 reservation.timeSlot === slot &&
                                 form.getValues("room") === reservation.room &&
                                 reservation.paymentStatus
-                            )
-                          ? "destructive"
-                          : "outline"
-                      }
-                      type="button"
-                      onClick={() => field.onChange(slot)}
-                      key={slot}
-                      disabled={
-                        data?.find(
-                          (reservation: Reservations) =>
-                            reservation.timeSlot === slot &&
-                            form.getValues("room") === reservation.room &&
-                            reservation.paymentStatus
-                        ) ||
-                        isLoading ||
-                        !form.getValues("date") ||
-                        !form.getValues("room")
-                      }
-                      className={"flex-1"}
-                    >
-                      {slot}
-                    </Button>
-                  ))}
+                            ) ||
+                            isLoading ||
+                            !form.getValues("date") ||
+                            !form.getValues("room")
+                          }
+                          className={"flex-1"}
+                        >
+                          {slot}
+                        </Button>
+                      ))
+                    : majesticTimeSlots.map((slot) => (
+                        <Button
+                          variant={
+                            field.value === slot
+                              ? "default"
+                              : data?.find(
+                                  (reservation: Reservations) =>
+                                    reservation.timeSlot === slot &&
+                                    form.getValues("room") ===
+                                      reservation.room &&
+                                    reservation.paymentStatus
+                                )
+                              ? "destructive"
+                              : "outline"
+                          }
+                          type="button"
+                          onClick={() => field.onChange(slot)}
+                          key={slot}
+                          disabled={
+                            data?.find(
+                              (reservation: Reservations) =>
+                                reservation.timeSlot === slot &&
+                                form.getValues("room") === reservation.room &&
+                                reservation.paymentStatus
+                            ) ||
+                            isLoading ||
+                            !form.getValues("date") ||
+                            !form.getValues("room")
+                          }
+                          className={"flex-1"}
+                        >
+                          {slot}
+                        </Button>
+                      ))}
                 </div>
                 <FormMessage />
               </FormItem>
@@ -248,7 +284,13 @@ export default function CreateBookingForm() {
               <FormItem>
                 <FormLabel>Package</FormLabel>
                 <FormControl>
-                  <Select value={field.value} onValueChange={field.onChange}>
+                  <Select
+                    value={field.value}
+                    onValueChange={(e) => {
+                      field.onChange(e);
+                      setSelectedRoom(e);
+                    }}
+                  >
                     <SelectTrigger>
                       <SelectValue placeholder="Select Package" />
                     </SelectTrigger>

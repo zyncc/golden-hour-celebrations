@@ -11,7 +11,7 @@ import { toast } from "@/components/ui/use-toast";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import formatCurrency from "@/lib/formatCurrency";
-import { items, timeSlots } from "@/lib/constants";
+import { dreamscapeTimeSlots, items, majesticTimeSlots } from "@/lib/constants";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, EffectFade } from "swiper/modules";
 import "swiper/css";
@@ -149,48 +149,91 @@ export default function StepTwo() {
                       ))}
                     </ul>
                     <div className="grid grid-cols-2 gap-2 w-full">
-                      {timeSlots.map((slot) => (
-                        <Button
-                          key={slot}
-                          disabled={
-                            data?.find(
-                              (reservation: Reservations) =>
-                                reservation.timeSlot == slot &&
-                                pkg.room == reservation.room &&
-                                reservation.paymentStatus
-                            ) || isLoading
-                          }
-                          variant={
-                            selectedPackage.time == slot &&
-                            selectedPackage.room == pkg.room
-                              ? "default"
-                              : data?.find(
+                      {pkg.room == "Dreamscape Theatre"
+                        ? dreamscapeTimeSlots.map((slot) => (
+                            <Button
+                              key={slot}
+                              disabled={
+                                data?.find(
                                   (reservation: Reservations) =>
                                     reservation.timeSlot == slot &&
                                     pkg.room == reservation.room &&
                                     reservation.paymentStatus
-                                )
-                              ? "destructive"
-                              : "outline"
-                          }
-                          onClick={() => {
-                            toast({
-                              title: `${pkg.room}`,
-                              description: `Time - ${slot}`,
-                              variant: "default",
-                              duration: 3000,
-                            });
-                            setSelectedPackage({
-                              room: pkg.room,
-                              time: slot,
-                              price: pkg.price,
-                            });
-                          }}
-                          className={"flex-1"}
-                        >
-                          {slot}
-                        </Button>
-                      ))}
+                                ) || isLoading
+                              }
+                              variant={
+                                selectedPackage.time == slot &&
+                                selectedPackage.room == pkg.room
+                                  ? "default"
+                                  : data?.find(
+                                      (reservation: Reservations) =>
+                                        reservation.timeSlot == slot &&
+                                        pkg.room == reservation.room &&
+                                        reservation.paymentStatus
+                                    )
+                                  ? "destructive"
+                                  : "outline"
+                              }
+                              onClick={() => {
+                                toast({
+                                  title: `${pkg.room}`,
+                                  description: `Time - ${slot}`,
+                                  variant: "default",
+                                  duration: 3000,
+                                });
+                                setSelectedPackage({
+                                  room: pkg.room,
+                                  time: slot,
+                                  price: pkg.price,
+                                });
+                              }}
+                              className={"flex-1"}
+                            >
+                              {slot}
+                            </Button>
+                          ))
+                        : majesticTimeSlots.map((slot) => (
+                            <Button
+                              key={slot}
+                              disabled={
+                                data?.find(
+                                  (reservation: Reservations) =>
+                                    reservation.timeSlot == slot &&
+                                    pkg.room == reservation.room &&
+                                    reservation.paymentStatus
+                                ) || isLoading
+                              }
+                              variant={
+                                selectedPackage.time == slot &&
+                                selectedPackage.room == pkg.room
+                                  ? "default"
+                                  : data?.find(
+                                      (reservation: Reservations) =>
+                                        reservation.timeSlot == slot &&
+                                        pkg.room == reservation.room &&
+                                        reservation.paymentStatus
+                                    )
+                                  ? "destructive"
+                                  : "outline"
+                              }
+                              onClick={() => {
+                                toast({
+                                  title: `${pkg.room}`,
+                                  description: `Time - ${slot}`,
+                                  variant: "default",
+                                  duration: 3000,
+                                });
+                                setSelectedPackage({
+                                  room: pkg.room,
+                                  time: slot,
+                                  price: pkg.price,
+                                });
+                              }}
+                              className={"flex-1"}
+                            >
+                              {slot}
+                            </Button>
+                          ))}
                     </div>
                   </div>
                 </div>

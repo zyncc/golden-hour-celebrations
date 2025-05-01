@@ -86,14 +86,7 @@ export const payReservationSchema = z.object({
   ),
   date: z.date({ message: "Date is required" }),
   room: z.enum(["Majestic Theatre", "Dreamscape Theatre"]),
-  timeSlot: z.enum([
-    "9:30AM - 11:30AM",
-    "12PM - 2PM",
-    "2:30PM - 4:30PM",
-    "5PM - 7PM",
-    "7:30PM - 9:30PM",
-    "10PM - 12AM",
-  ]),
+  timeSlot: z.string(),
   cake: z
     .enum([
       "Chocolate pastry",
@@ -137,14 +130,7 @@ export const ManualBookingSchema = z.object({
   ),
   date: z.date({ message: "Date is required" }),
   room: z.enum(["Majestic Theatre", "Dreamscape Theatre"]),
-  timeSlot: z.enum([
-    "9:30AM - 11:30AM",
-    "12PM - 2PM",
-    "2:30PM - 4:30PM",
-    "5PM - 7PM",
-    "7:30PM - 9:30PM",
-    "10PM - 12AM",
-  ]),
+  timeSlot: z.string(),
   cake: z
     .enum([
       "Chocolate pastry",
