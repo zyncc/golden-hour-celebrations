@@ -32,20 +32,17 @@ export async function POST(req: Request) {
   });
 
   const resend = new Resend(process.env.RESEND_API_KEY);
-  const getReservationDetails = await prisma.reservations.findUnique({
-    where: { orderID },
-  });
   try {
-    if (getReservationDetails) {
+    if (updatedReservation) {
       const emailSent = await resend.emails.send({
         from: "Golden Hour Celebrations <info@goldenhourcelebrations.in>",
         to: [
-          getReservationDetails.email,
+          updatedReservation.email.toLowerCase(),
           "goldenhourcelebrationsblr@gmail.com",
           "chandankrishna288@gmail.com",
         ],
         subject: "Receipt for your Reservation",
-        react: NikeReceiptEmail({ getReservationDetails }),
+        react: NikeReceiptEmail({ getReservationDetails: updatedReservation }),
       });
       console.log(emailSent);
     }

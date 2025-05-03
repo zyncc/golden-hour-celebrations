@@ -14,21 +14,15 @@ export async function createOrder(
 
   let price = reservation?.price!;
 
-  if (reservation?.cake) {
-    price += 500;
-  }
-  if (reservation?.fogEntry) {
-    price += 400;
-  }
-  if (reservation?.rosePath) {
-    price += 400;
-  }
-  if (reservation?.photography === "30") {
-    price += 700;
-  }
-  if (reservation?.photography === "60") {
-    price += 1000;
-  }
+  if (reservation?.cake) price += 500;
+
+  if (reservation?.fogEntry) price += 400;
+
+  if (reservation?.rosePath) price += 400;
+
+  if (reservation?.photography === "30") price += 700;
+
+  if (reservation?.photography === "60") price += 1000;
 
   const response = await instance.orders.create({
     amount: payFull ? price * 100 : 500 * 100,

@@ -60,7 +60,7 @@ function SignInForm() {
         onError: (ctx) => {
           setLoadingSendOtp(false);
           toast({
-            variant: "default",
+            variant: "destructive",
             title: "Error",
             description: ctx.error.message,
           });

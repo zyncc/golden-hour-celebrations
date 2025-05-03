@@ -8,10 +8,18 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import Link from "next/link";
+import { headers } from "next/headers";
+import { notFound } from "next/navigation";
+import { auth } from "@/auth";
 
 async function Page() {
+  const session = await auth.api.getSession({
+    headers: headers(),
+  });
+  if (session?.user.role !== "admin") {
+    return notFound();
+  }
   const date = new Date();
-  const formattedDate = date.toISOString();
   const dateOnly = new Date(
     date.getFullYear(),
     date.getMonth(),

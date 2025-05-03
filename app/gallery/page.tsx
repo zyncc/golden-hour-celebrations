@@ -1,6 +1,5 @@
 import { BentoGrid, BentoGridItem } from "@/components/ui/bento-grid";
 import { Metadata } from "next";
-import React from "react";
 import v1 from "@/public/v1.jpg";
 import v2 from "@/public/v2.jpg";
 import v3 from "@/public/v3.jpg";

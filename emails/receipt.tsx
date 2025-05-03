@@ -87,6 +87,9 @@ export const NikeReceiptEmail = ({
             Balance Amount Payable -{" "}
             {formatCurrency(getReservationDetails.balanceAmount).split(".")[0]}
             <br />
+            Advance Amount Paid -{" "}
+            {formatCurrency(getReservationDetails.advanceAmount).split(".")[0]}
+            <br />
             <br />
             If you have any special requests or need further assistance, please
             dont hesitate to reach out.

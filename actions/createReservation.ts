@@ -16,17 +16,38 @@ export async function createReservation(
   orderID: string
 ) {
   let balanceAmount = 0;
+  let advanceAmount = 0;
+
   if (reservation.room === "Majestic Theatre") {
-    balanceAmount = 1499 - 500;
+    balanceAmount += 1899 - 500;
+    advanceAmount += 1899;
   } else if (reservation.room === "Dreamscape Theatre") {
-    balanceAmount = 1499 - 500;
+    balanceAmount += 1499 - 500;
+    advanceAmount += 1499;
   }
-  if (reservation.cake) balanceAmount += 500;
-  if (reservation.fogEntry) balanceAmount += 400;
-  if (reservation.rosePath) balanceAmount += 400;
-  if (reservation.photography === "30") balanceAmount += 700;
-  if (reservation.photography === "60") balanceAmount += 1000;
+  if (reservation.cake) {
+    balanceAmount += 500;
+    advanceAmount += 500;
+  }
+  if (reservation.fogEntry) {
+    balanceAmount += 400;
+    advanceAmount += 400;
+  }
+  if (reservation.rosePath) {
+    balanceAmount += 400;
+    advanceAmount += 400;
+  }
+  if (reservation.photography === "30") {
+    balanceAmount += 700;
+    advanceAmount += 700;
+  }
+  if (reservation.photography === "60") {
+    balanceAmount += 1000;
+    advanceAmount += 1000;
+  }
   if (payFull) balanceAmount = 0;
+  if (!payFull) advanceAmount = 500;
+
   const { success, error, data } = payReservationSchema.safeParse({
     ...reservation,
     balanceAmount,
@@ -55,6 +76,7 @@ export async function createReservation(
       data: {
         orderID,
         balanceAmount,
+        advanceAmount,
         date: data.date as Date,
         email: data.email as string,
         findUs: data.findus as string,
@@ -84,7 +106,7 @@ export async function CreateManualBooking(data: Data) {
     throw new Error("Unauthorized");
   }
 
-  const { advanceAmount, ...rest } = data;
+  const { advanceAmount, discount, ...rest } = data;
 
   const checkExistingBookings = await prisma.reservations.findFirst({
     where: {
@@ -100,6 +122,9 @@ export async function CreateManualBooking(data: Data) {
     );
   }
   let balanceAmount = -data.advanceAmount;
+  if (discount) {
+    balanceAmount -= discount;
+  }
   if (data.room == "Dreamscape Theatre") {
     balanceAmount += 1499;
   } else if (data.room == "Majestic Theatre") {
@@ -123,7 +148,9 @@ export async function CreateManualBooking(data: Data) {
   const booking = await prisma.reservations.create({
     data: {
       ...rest,
+      discount,
       balanceAmount,
+      advanceAmount,
       paymentStatus: true,
       orderID: randomUUID(),
       manualBooking: true,
@@ -133,7 +160,7 @@ export async function CreateManualBooking(data: Data) {
   const emailSent = await resend.emails.send({
     from: "Golden Hour Celebrations <info@goldenhourcelebrations.in>",
     to: [
-      booking.email,
+      booking.email.toLowerCase(),
       "goldenhourcelebrationsblr@gmail.com",
       "chandankrishna288@gmail.com",
     ],

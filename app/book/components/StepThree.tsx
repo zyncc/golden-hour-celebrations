@@ -18,6 +18,7 @@ import "swiper/css/navigation";
 import "swiper/css/effect-fade";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { cakes } from "@/lib/constants";
+import { Switch } from "@/components/ui/switch";
 
 export default function StepTwo() {
   const { reservation, setReservationData } = useReservation();
@@ -29,8 +30,8 @@ export default function StepTwo() {
   const [photographyPackage, setPhotographyPackage] = useState<string | null>(
     null
   );
-  const [wantsFogEntry, setWantsFogEntry] = useState<string | null>(null);
-  const [wantsRosePath, setWantsRosePath] = useState<string | null>(null);
+  const [wantsFogEntry, setWantsFogEntry] = useState<boolean>(false);
+  const [wantsRosePath, setWantsRosePath] = useState<boolean>(false);
   const router = useRouter();
 
   function handleNextButton() {
@@ -41,7 +42,7 @@ export default function StepTwo() {
 
   return (
     <div className={"mt-10 mb-24 w-full flex flex-col"}>
-      <div className="container mx-auto px-4 py-8">
+      <div>
         <h1 className="text-3xl font-bold mb-4">Choose Optional Addons</h1>
         <p className="mb-6 text-muted-foreground">
           These Addon&apos;s are optional and can be skipped.
@@ -155,90 +156,47 @@ export default function StepTwo() {
               </RadioGroup>
             </CardContent>
           </Card>
-          <Card className="w-full">
+          <Card className="w-full h-fit">
             <CardHeader>
-              <CardTitle>Fog Entry</CardTitle>
-              <CardDescription>
-                Enhance your grand entrance with a mesmerizing fog effect
+              <CardTitle>Fog Entry </CardTitle>
+              <CardDescription className="flex justify-between">
+                <p>
+                  Enhance your grand entrance with a mesmerizing fog effect{" "}
+                  <span className="text-green-500">(₹400)</span>
+                </p>
+                <Switch
+                  checked={reservation.fogEntry || wantsFogEntry}
+                  onCheckedChange={(value) => {
+                    setWantsFogEntry(value);
+                    setReservationData({
+                      ...reservation,
+                      fogEntry: value,
+                    });
+                  }}
+                />
               </CardDescription>
             </CardHeader>
-            <CardContent>
-              <RadioGroup
-                onValueChange={(value: string) => {
-                  setWantsFogEntry(value);
-                  setReservationData({
-                    ...reservation,
-                    fogEntry: value,
-                  });
-                }}
-                defaultValue={
-                  reservation.fogEntry || wantsFogEntry || undefined
-                }
-                className="gap-3"
-              >
-                <Label
-                  className={`flex items-center justify-between p-4 border rounded-lg cursor-pointer transition-all ${
-                    wantsFogEntry
-                      ? "border-primary bg-primary/5"
-                      : "border-border hover:border-primary/50"
-                  }`}
-                >
-                  <div className="space-y-1">
-                    <div className="flex items-center space-x-2">
-                      <RadioGroupItem value="Fog Entry" />
-                      <span className="font-medium">Fog Entry</span>
-                    </div>
-                  </div>
-                  <span className="text-sm font-medium text-green-500">
-                    + ₹400
-                  </span>
-                </Label>
-              </RadioGroup>
-            </CardContent>
           </Card>
           <Card className="w-full">
             <CardHeader>
               <CardTitle>Candle Light Rose Path</CardTitle>
-              <CardDescription>
-                Add a touch of elegance with a candlelit path
+              <CardDescription className="flex justify-between">
+                <p>
+                  Add a touch of elegance with a candlelit path{" "}
+                  <span className="text-green-500">(₹400)</span>
+                </p>
+                <Switch
+                  checked={reservation.rosePath || wantsRosePath}
+                  onCheckedChange={(value) => {
+                    setWantsRosePath(value);
+                    setReservationData({
+                      ...reservation,
+                      rosePath: value,
+                    });
+                  }}
+                />
               </CardDescription>
             </CardHeader>
-            <CardContent>
-              <RadioGroup
-                onValueChange={(value: string) => {
-                  setWantsRosePath(value);
-                  setReservationData({
-                    ...reservation,
-                    rosePath: value,
-                  });
-                }}
-                defaultValue={
-                  reservation.rosePath || wantsRosePath || undefined
-                }
-                className="gap-3"
-              >
-                <Label
-                  className={`flex items-center justify-between p-4 border rounded-lg cursor-pointer transition-all ${
-                    wantsRosePath
-                      ? "border-primary bg-primary/5"
-                      : "border-border hover:border-primary/50"
-                  }`}
-                  htmlFor="rosePath"
-                >
-                  <div className="space-y-1">
-                    <div className="flex items-center space-x-2">
-                      <RadioGroupItem value="Rose Path" id="rosePath" />
-                      <span className="font-medium">
-                        Candle Light Rose Path
-                      </span>
-                    </div>
-                  </div>
-                  <span className="text-sm font-medium text-green-500">
-                    + ₹400
-                  </span>
-                </Label>
-              </RadioGroup>
-            </CardContent>
           </Card>
         </div>
       </div>

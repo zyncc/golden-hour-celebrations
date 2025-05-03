@@ -104,6 +104,7 @@ export const payReservationSchema = z.object({
 export const ManualBookingSchema = z.object({
   balanceAmount: z.number(),
   advanceAmount: z.number(),
+  discount: z.number(),
   name: z
     .string({ message: "Name is required" })
     .min(3, { message: "Name must be atleast 3 characters" })

@@ -221,7 +221,7 @@ export default function StepThree() {
                       Cake - {reservation.cake}
                     </span>
                     <span className="text-green-600 font-semibold whitespace-nowrap">
-                      {formatCurrency(500)}
+                      + {formatCurrency(500)}
                     </span>
                   </div>
                 )}
@@ -231,6 +231,7 @@ export default function StepThree() {
                       Photography - {reservation.photography} Mins
                     </span>
                     <span className="text-green-600 font-semibold whitespace-nowrap">
+                      +{" "}
                       {formatCurrency(
                         reservation.photography === "30" ? 700 : 1000
                       )}
@@ -241,7 +242,7 @@ export default function StepThree() {
                   <div className="flex justify-between">
                     <span className="text-muted-foreground">Fog Entry</span>
                     <span className="text-green-600 font-semibold whitespace-nowrap">
-                      {formatCurrency(400)}
+                      + {formatCurrency(400)}
                     </span>
                   </div>
                 )}
@@ -251,7 +252,7 @@ export default function StepThree() {
                       Candle Light Rose Path
                     </span>
                     <span className="text-green-600 font-semibold whitespace-nowrap">
-                      {formatCurrency(400)}
+                      + {formatCurrency(400)}
                     </span>
                   </div>
                 )}
@@ -260,7 +261,7 @@ export default function StepThree() {
                     <span className="text-muted-foreground">
                       Balance Amount (Pay after event)
                     </span>
-                    <span className="text-green-600 font-semibold whitespace-nowrap">
+                    <span className="text-red-500 font-semibold whitespace-nowrap">
                       {formatCurrency(price - 500)}
                     </span>
                   </div>

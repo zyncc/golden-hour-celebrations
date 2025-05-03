@@ -54,23 +54,26 @@ export default function CreateBookingForm() {
   const [pending, setPending] = useState(false);
   const [selectedRoom, setSelectedRoom] = useState<string | undefined>();
   const [advanceAmount, setAdvanceAmount] = useState<number>();
+  const [discount, setDiscount] = useState<number>(0);
   const [balanceAmount, setBalanceAmount] = useState<number>();
 
   const form = useForm<z.infer<typeof ManualBookingSchema>>({
     resolver: zodResolver(ManualBookingSchema),
     defaultValues: {
-      name: undefined,
-      email: undefined,
+      name: "",
+      email: "",
       date: undefined,
       timeSlot: undefined,
-      phone: undefined,
+      phone: "",
       occasion: undefined,
       room: undefined,
       cake: undefined,
       photography: undefined,
-      fogEntry: undefined,
-      rosePath: undefined,
+      fogEntry: false,
+      rosePath: false,
       balanceAmount: undefined,
+      discount: undefined,
+      advanceAmount: undefined,
     },
   });
 
@@ -126,9 +129,18 @@ export default function CreateBookingForm() {
     } else if (photography == "60") {
       balanceAmount += 1000;
     }
-    setBalanceAmount(balanceAmount);
+    setBalanceAmount(balanceAmount - discount);
     form.setValue("balanceAmount", balanceAmount);
-  }, [advanceAmount, cake, fogEntry, rosePath, room, photography, form]);
+  }, [
+    advanceAmount,
+    cake,
+    fogEntry,
+    rosePath,
+    room,
+    photography,
+    form,
+    discount,
+  ]);
 
   async function handleFormSubmit(values: z.infer<typeof ManualBookingSchema>) {
     setPending(true);
@@ -138,7 +150,7 @@ export default function CreateBookingForm() {
       toast.promise(res, {
         loading: "Creating Booking",
         success: () => {
-          form.reset();
+          window.document.location.reload();
           return "Succesfully created Booking";
         },
         error: "Someone has booked another reservation at the same Time Slot!",
@@ -430,27 +442,50 @@ export default function CreateBookingForm() {
               </FormItem>
             )}
           />
-          <FormField
-            control={form.control}
-            name="advanceAmount"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Advance Amount</FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder="Amound Paid"
-                    type="text"
-                    value={field.value}
-                    onChange={(e) => {
-                      field.onChange(parseInt(e.target.value));
-                      setAdvanceAmount(parseInt(e.target.value));
-                    }}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+          <div className="flex flex-row justify-between gap-x-4">
+            <FormField
+              control={form.control}
+              name="advanceAmount"
+              render={({ field }) => (
+                <FormItem className="flex-1">
+                  <FormLabel>Advance Amount</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="Amound Paid"
+                      type="number"
+                      value={field.value}
+                      onChange={(e) => {
+                        field.onChange(parseInt(e.target.value));
+                        setAdvanceAmount(parseInt(e.target.value));
+                      }}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="discount"
+              render={({ field }) => (
+                <FormItem className="flex-1">
+                  <FormLabel>Discount</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="Discount"
+                      type="number"
+                      value={field.value}
+                      onChange={(e) => {
+                        field.onChange(parseInt(e.target.value));
+                        setDiscount(parseInt(e.target.value));
+                      }}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
           <div className="flex flex-col gap-y-4">
             <FormField
               control={form.control}

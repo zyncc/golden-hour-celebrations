@@ -12,8 +12,8 @@ export type Reservation = {
   price?: number | undefined;
   cake?: string | undefined;
   photography?: string | undefined;
-  fogEntry?: string | undefined;
-  rosePath?: string | undefined;
+  fogEntry?: boolean | undefined;
+  rosePath?: boolean | undefined;
 };
 
 type ReservationType = {
