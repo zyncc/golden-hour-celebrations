@@ -109,7 +109,9 @@ export const ManualBookingSchema = z.object({
     .string({ message: "Name is required" })
     .min(3, { message: "Name must be atleast 3 characters" })
     .max(50, { message: "Name cannot be more than 50 characters" }),
-  phone: z.string({ message: "Phone is required" }),
+  phone: z
+    .string({ message: "Phone is required" })
+    .min(10, "Phone number must me atleast 10 characters"),
   email: z
     .string({ message: "Email is required" })
     .email("Enter a valid email address"),
