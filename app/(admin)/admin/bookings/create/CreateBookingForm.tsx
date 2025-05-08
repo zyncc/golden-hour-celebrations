@@ -388,7 +388,6 @@ export default function CreateBookingForm() {
                   <Input
                     placeholder="Phone"
                     type="text"
-                    maxLength={10}
                     minLength={10}
                     {...field}
                   />
