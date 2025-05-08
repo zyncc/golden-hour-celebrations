@@ -72,7 +72,7 @@ export default function CreateBookingForm() {
       fogEntry: false,
       rosePath: false,
       balanceAmount: undefined,
-      discount: undefined,
+      discount: 0,
       advanceAmount: undefined,
     },
   });
