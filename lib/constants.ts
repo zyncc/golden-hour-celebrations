@@ -60,19 +60,6 @@ export const selectOccasion = [
 
 export const items = [
   {
-    id: 1,
-    room: "Dreamscape Theatre",
-    description: [
-      "Private Movie Time Experience",
-      "Romantic Date Decor",
-      "Access to OTT Platforms",
-      "2 people (Additional ₹200 per person)",
-    ],
-    noPeople: 4,
-    price: 1499,
-    photo: [l5],
-  },
-  {
     id: 2,
     room: "Majestic Theatre",
     description: [
@@ -84,6 +71,19 @@ export const items = [
     popular: true,
     price: 1899,
     photo: [l1, l2, l3, l4],
+  },
+  {
+    id: 1,
+    room: "Dreamscape Theatre",
+    description: [
+      "Private Movie Time Experience",
+      "Romantic Date Decor",
+      "Access to OTT Platforms",
+      "2 people (Additional ₹200 per person)",
+    ],
+    noPeople: 4,
+    price: 1499,
+    photo: [l5],
   },
 ];
 
