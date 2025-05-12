@@ -24,6 +24,7 @@ export default function StepThree() {
   if (!reservation) {
     redirect("?step=1");
   }
+
   async function handlePayButton() {
     setPending(true);
     const orderID: string = await createOrder(payFull, reservation);
@@ -95,6 +96,19 @@ export default function StepThree() {
   if (reservation?.photography === "60") {
     price += 1000;
   }
+  let priceIncreaseForAdditionalPeople = 0;
+  if (
+    reservation?.room == "Dreamscape Theatre" &&
+    reservation.noOfPeople! > 2
+  ) {
+    priceIncreaseForAdditionalPeople = (reservation.noOfPeople! - 2) * 200;
+  } else if (
+    reservation?.room == "Majestic Theatre" &&
+    reservation.noOfPeople! > 4
+  ) {
+    priceIncreaseForAdditionalPeople = (reservation.noOfPeople! - 4) * 200;
+  }
+  price += priceIncreaseForAdditionalPeople;
   return (
     <div className="min-h-screen bg-background py-4 md:p-8 dark">
       <div className="mx-auto max-w-7xl">
@@ -122,6 +136,12 @@ export default function StepThree() {
                     <span className="font-medium">Time</span>
                     <span className="text-muted-foreground">
                       {reservation.timeSlot}
+                    </span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="font-medium">No of People</span>
+                    <span className="text-muted-foreground">
+                      {reservation.noOfPeople}
                     </span>
                   </div>
                   <div className="flex justify-between items-center">
@@ -256,16 +276,39 @@ export default function StepThree() {
                     </span>
                   </div>
                 )}
+                {reservation.room == "Dreamscape Theatre" &&
+                  reservation.noOfPeople! > 2 && (
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">
+                        ₹200 per Additional Person
+                      </span>
+                      <span className="text-green-600 font-semibold whitespace-nowrap">
+                        + {formatCurrency(priceIncreaseForAdditionalPeople)}
+                      </span>
+                    </div>
+                  )}
+                {reservation.room == "Majestic Theatre" &&
+                  reservation.noOfPeople! > 4 && (
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">
+                        ₹200 per Additional Person
+                      </span>
+                      <span className="text-red-500 font-semibold whitespace-nowrap">
+                        + {formatCurrency(priceIncreaseForAdditionalPeople)}
+                      </span>
+                    </div>
+                  )}
                 {!payFull && (
                   <div className="flex justify-between">
                     <span className="text-muted-foreground">
                       Balance Amount (Pay after event)
                     </span>
-                    <span className="text-red-500 font-semibold whitespace-nowrap">
-                      {formatCurrency(price - 500)}
+                    <span className="text-green-600 font-semibold whitespace-nowrap">
+                      + {formatCurrency(price - 500)}
                     </span>
                   </div>
                 )}
+
                 <Separator />
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">

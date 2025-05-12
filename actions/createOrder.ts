@@ -24,6 +24,21 @@ export async function createOrder(
 
   if (reservation?.photography === "60") price += 1000;
 
+  let priceIncreaseForAdditionalPeople = 0;
+  if (
+    reservation?.room == "Dreamscape Theatre" &&
+    reservation.noOfPeople! > 2
+  ) {
+    priceIncreaseForAdditionalPeople = (reservation.noOfPeople! - 2) * 200;
+  } else if (
+    reservation?.room == "Majestic Theatre" &&
+    reservation.noOfPeople! > 4
+  ) {
+    priceIncreaseForAdditionalPeople = (reservation.noOfPeople! - 4) * 200;
+  }
+
+  price += priceIncreaseForAdditionalPeople;
+
   const response = await instance.orders.create({
     amount: payFull ? price * 100 : 500 * 100,
     currency: "INR",

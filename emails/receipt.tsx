@@ -54,6 +54,8 @@ export const NikeReceiptEmail = ({
             <br />
             Theatre - {getReservationDetails.room}
             <br />
+            No of people - {getReservationDetails.noOfPeople}
+            <br />
             Time - {getReservationDetails.timeSlot}
             <br />
             {getReservationDetails.cake &&

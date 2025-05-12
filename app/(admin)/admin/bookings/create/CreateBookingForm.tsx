@@ -55,6 +55,7 @@ export default function CreateBookingForm() {
   const [selectedRoom, setSelectedRoom] = useState<string | undefined>();
   const [advanceAmount, setAdvanceAmount] = useState<number>();
   const [discount, setDiscount] = useState<number>(0);
+  const [noOfPeople, setNoOfPeople] = useState<number>();
   const [balanceAmount, setBalanceAmount] = useState<number>();
 
   const form = useForm<z.infer<typeof ManualBookingSchema>>({
@@ -74,6 +75,7 @@ export default function CreateBookingForm() {
       balanceAmount: undefined,
       discount: 0,
       advanceAmount: undefined,
+      noOfPeople: undefined,
     },
   });
 
@@ -102,7 +104,7 @@ export default function CreateBookingForm() {
 
   useEffect(() => {
     form.resetField("timeSlot");
-  }, [room, date, form]);
+  }, [room, date, form, noOfPeople]);
 
   // Calculate Balance Amount
   useEffect(() => {
@@ -129,6 +131,11 @@ export default function CreateBookingForm() {
     } else if (photography == "60") {
       balanceAmount += 1000;
     }
+    if (room == "Dreamscape Theatre" && noOfPeople && noOfPeople > 2) {
+      balanceAmount += (noOfPeople - 2) * 200;
+    } else if (room == "Majestic Theatre" && noOfPeople && noOfPeople > 4) {
+      balanceAmount += (noOfPeople - 4) * 200;
+    }
     setBalanceAmount(balanceAmount - discount);
     form.setValue("balanceAmount", balanceAmount);
   }, [
@@ -140,6 +147,7 @@ export default function CreateBookingForm() {
     photography,
     form,
     discount,
+    noOfPeople,
   ]);
 
   async function handleFormSubmit(values: z.infer<typeof ManualBookingSchema>) {
@@ -168,81 +176,53 @@ export default function CreateBookingForm() {
         >
           <FormField
             control={form.control}
-            name="timeSlot"
+            name="noOfPeople"
+            render={({ field }) => (
+              <FormItem className="flex-1">
+                <FormLabel>No of People</FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder="No of People"
+                    type="number"
+                    value={field.value}
+                    onChange={(e) => {
+                      field.onChange(parseInt(e.target.value));
+                      setNoOfPeople(parseInt(e.target.value));
+                    }}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="room"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Time Slot</FormLabel>
-                <div className="mt-3 gap-2 grid grid-cols-2 md:grid-cols-3">
-                  {selectedRoom === "Dreamscape Theatre"
-                    ? dreamscapeTimeSlots.map((slot) => (
-                        <Button
-                          variant={
-                            field.value === slot
-                              ? "default"
-                              : data?.find(
-                                  (reservation: Reservations) =>
-                                    reservation.timeSlot === slot &&
-                                    form.getValues("room") ===
-                                      reservation.room &&
-                                    reservation.paymentStatus
-                                )
-                              ? "destructive"
-                              : "outline"
-                          }
-                          type="button"
-                          onClick={() => field.onChange(slot)}
-                          key={slot}
-                          disabled={
-                            data?.find(
-                              (reservation: Reservations) =>
-                                reservation.timeSlot === slot &&
-                                form.getValues("room") === reservation.room &&
-                                reservation.paymentStatus
-                            ) ||
-                            isLoading ||
-                            !form.getValues("date") ||
-                            !form.getValues("room")
-                          }
-                          className={"flex-1"}
-                        >
-                          {slot}
-                        </Button>
-                      ))
-                    : majesticTimeSlots.map((slot) => (
-                        <Button
-                          variant={
-                            field.value === slot
-                              ? "default"
-                              : data?.find(
-                                  (reservation: Reservations) =>
-                                    reservation.timeSlot === slot &&
-                                    form.getValues("room") ===
-                                      reservation.room &&
-                                    reservation.paymentStatus
-                                )
-                              ? "destructive"
-                              : "outline"
-                          }
-                          type="button"
-                          onClick={() => field.onChange(slot)}
-                          key={slot}
-                          disabled={
-                            data?.find(
-                              (reservation: Reservations) =>
-                                reservation.timeSlot === slot &&
-                                form.getValues("room") === reservation.room &&
-                                reservation.paymentStatus
-                            ) ||
-                            isLoading ||
-                            !form.getValues("date") ||
-                            !form.getValues("room")
-                          }
-                          className={"flex-1"}
-                        >
-                          {slot}
-                        </Button>
-                      ))}
-                </div>
+                <FormLabel>Package</FormLabel>
+                <FormControl>
+                  <Select
+                    value={field.value}
+                    onValueChange={(e) => {
+                      field.onChange(e);
+                      setSelectedRoom(e);
+                    }}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select Package" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="Dreamscape Theatre">
+                        Dreamscape Theatre
+                      </SelectItem>
+                      <SelectItem value="Majestic Theatre">
+                        Majestic Theatre
+                      </SelectItem>
+                    </SelectContent>
+                  </Select>
+                </FormControl>
                 <FormMessage />
               </FormItem>
             )}
@@ -291,35 +271,89 @@ export default function CreateBookingForm() {
           />
           <FormField
             control={form.control}
-            name="room"
+            name="timeSlot"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Package</FormLabel>
-                <FormControl>
-                  <Select
-                    value={field.value}
-                    onValueChange={(e) => {
-                      field.onChange(e);
-                      setSelectedRoom(e);
-                    }}
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select Package" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="Dreamscape Theatre">
-                        Dreamscape Theatre
-                      </SelectItem>
-                      <SelectItem value="Majestic Theatre">
-                        Majestic Theatre
-                      </SelectItem>
-                    </SelectContent>
-                  </Select>
-                </FormControl>
+                <FormLabel>Time Slot</FormLabel>
+                <div className="mt-3 gap-2 grid grid-cols-2 md:grid-cols-3">
+                  {selectedRoom === "Dreamscape Theatre"
+                    ? dreamscapeTimeSlots.map((slot) => (
+                        <Button
+                          variant={
+                            field.value === slot
+                              ? "default"
+                              : data?.find(
+                                  (reservation: Reservations) =>
+                                    reservation.timeSlot === slot &&
+                                    form.getValues("room") ===
+                                      reservation.room &&
+                                    reservation.paymentStatus
+                                )
+                              ? "destructive"
+                              : "outline"
+                          }
+                          type="button"
+                          onClick={() => field.onChange(slot)}
+                          key={slot}
+                          disabled={
+                            noOfPeople! > 5 ||
+                            data?.find(
+                              (reservation: Reservations) =>
+                                reservation.timeSlot === slot &&
+                                form.getValues("room") === reservation.room &&
+                                reservation.paymentStatus
+                            ) ||
+                            isLoading ||
+                            !form.getValues("date") ||
+                            !form.getValues("room") ||
+                            !noOfPeople
+                          }
+                          className={"flex-1"}
+                        >
+                          {slot}
+                        </Button>
+                      ))
+                    : majesticTimeSlots.map((slot) => (
+                        <Button
+                          variant={
+                            field.value === slot
+                              ? "default"
+                              : data?.find(
+                                  (reservation: Reservations) =>
+                                    reservation.timeSlot === slot &&
+                                    form.getValues("room") ===
+                                      reservation.room &&
+                                    reservation.paymentStatus
+                                )
+                              ? "destructive"
+                              : "outline"
+                          }
+                          type="button"
+                          onClick={() => field.onChange(slot)}
+                          key={slot}
+                          disabled={
+                            data?.find(
+                              (reservation: Reservations) =>
+                                reservation.timeSlot === slot &&
+                                form.getValues("room") === reservation.room &&
+                                reservation.paymentStatus
+                            ) ||
+                            isLoading ||
+                            !form.getValues("date") ||
+                            !form.getValues("room") ||
+                            !noOfPeople
+                          }
+                          className={"flex-1"}
+                        >
+                          {slot}
+                        </Button>
+                      ))}
+                </div>
                 <FormMessage />
               </FormItem>
             )}
           />
+
           <FormField
             control={form.control}
             name="occasion"
@@ -378,6 +412,7 @@ export default function CreateBookingForm() {
               </FormItem>
             )}
           />
+
           <FormField
             control={form.control}
             name="phone"

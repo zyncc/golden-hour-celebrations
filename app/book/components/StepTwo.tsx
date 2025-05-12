@@ -154,12 +154,14 @@ export default function StepTwo() {
                             <Button
                               key={slot}
                               disabled={
+                                reservation.noOfPeople! > 5 ||
                                 data?.find(
                                   (reservation: Reservations) =>
                                     reservation.timeSlot == slot &&
                                     pkg.room == reservation.room &&
                                     reservation.paymentStatus
-                                ) || isLoading
+                                ) ||
+                                isLoading
                               }
                               variant={
                                 selectedPackage.time == slot &&
@@ -235,6 +237,12 @@ export default function StepTwo() {
                             </Button>
                           ))}
                     </div>
+                    {pkg.room == "Dreamscape Theatre" &&
+                      reservation.noOfPeople! > 5 && (
+                        <h1 className="text-red-800 font-medium mt-4">
+                          Only upto 5 People are allowed
+                        </h1>
+                      )}
                   </div>
                 </div>
               </Card>

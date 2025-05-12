@@ -6,6 +6,7 @@ export type Reservation = {
   email?: string | undefined;
   findus?: string | undefined;
   occasion?: string | undefined;
+  noOfPeople?: number | undefined;
   date?: Date | undefined;
   room?: string | undefined;
   timeSlot?: string | undefined;

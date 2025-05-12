@@ -38,9 +38,15 @@ export default function StepOneForm() {
 
   function handleFormSubmit(FormData: FormData) {
     const formData = Object.fromEntries(FormData);
+    const noOfPeople = Number(FormData.get("noOfPeople"));
     let validation;
     if (date) {
-      validation = StepOneFormSchema.safeParse({ ...formData, date });
+      validation = StepOneFormSchema.safeParse({
+        ...formData,
+        noOfPeople,
+        date,
+      });
+      console.log(validation.data);
     } else {
       const resDate = reservation?.date as Date;
       validation = StepOneFormSchema.safeParse({ ...formData, resDate });
@@ -178,6 +184,27 @@ export default function StepOneForm() {
             </select>
             {errors?.map((error) => {
               if (error.path[0] == "occasion") {
+                return (
+                  <p
+                    className="text-sm text-red-600 font-medium"
+                    key={error.path[0]}
+                  >
+                    {error.message}
+                  </p>
+                );
+              }
+            })}
+          </div>
+          <div className="flex flex-col gap-y-3">
+            <Label>Enter Number of People</Label>
+            <Input
+              placeholder="Number of People"
+              defaultValue={reservation?.noOfPeople}
+              type="number"
+              name="noOfPeople"
+            />
+            {errors?.map((error) => {
+              if (error.path[0] == "noOfPeople") {
                 return (
                   <p
                     className="text-sm text-red-600 font-medium"

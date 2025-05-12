@@ -37,6 +37,7 @@ model Reservations {
   balanceAmount Int
   advanceAmount Int
   room          String
+  noOfPeople    Int
   timeSlot      String
   occasion      String
   name          String

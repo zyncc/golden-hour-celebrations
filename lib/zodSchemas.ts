@@ -52,6 +52,9 @@ export const StepOneFormSchema = z.object({
       message: "Please select one",
     }
   ),
+  noOfPeople: z
+    .number({ message: "Please select a number of people" })
+    .min(2, "Minimum 2 people are required!"),
   date: z.date({ message: "Date is required" }),
 });
 
@@ -64,6 +67,9 @@ export const payReservationSchema = z.object({
   phone: z.string({ message: "Phone is required" }).regex(/^[6-9]\d{9}$/, {
     message: "Invalid phone number",
   }),
+  noOfPeople: z
+    .number({ message: "Please select a number of people" })
+    .min(2, "Minimum 2 people are required!"),
   email: z
     .string({ message: "Email is required" })
     .email("Enter a valid email address"),
@@ -112,6 +118,9 @@ export const ManualBookingSchema = z.object({
   phone: z
     .string({ message: "Phone is required" })
     .min(10, "Phone number must me atleast 10 characters"),
+  noOfPeople: z
+    .number({ message: "Please select a number of people" })
+    .min(2, "Minimum 2 people are required!"),
   email: z
     .string({ message: "Email is required" })
     .email("Enter a valid email address"),

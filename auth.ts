@@ -1,3 +1,5 @@
+import "server-only";
+
 import { betterAuth } from "better-auth";
 import { APIError } from "better-auth/api";
 import { prismaAdapter } from "better-auth/adapters/prisma";
@@ -24,7 +26,7 @@ export const auth = betterAuth({
       defaultRole: "user",
     }),
     emailOTP({
-      async sendVerificationOTP({ email, otp, type }) {
+      async sendVerificationOTP({ email, otp }) {
         const accountExists = await prisma.user.findUnique({
           where: {
             email,

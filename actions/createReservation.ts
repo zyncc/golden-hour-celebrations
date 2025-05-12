@@ -45,6 +45,21 @@ export async function createReservation(
     balanceAmount += 1000;
     advanceAmount += 1000;
   }
+  if (
+    reservation.room == "Dreamscape Theatre" &&
+    reservation.noOfPeople &&
+    reservation.noOfPeople > 2
+  ) {
+    balanceAmount += (reservation.noOfPeople - 2) * 200;
+    advanceAmount += (reservation.noOfPeople - 2) * 200;
+  } else if (
+    reservation.room == "Majestic Theatre" &&
+    reservation.noOfPeople &&
+    reservation.noOfPeople > 4
+  ) {
+    balanceAmount += (reservation.noOfPeople - 4) * 200;
+    advanceAmount += (reservation.noOfPeople - 4) * 200;
+  }
   if (payFull) balanceAmount = 0;
   if (!payFull) advanceAmount = 500;
 
@@ -77,6 +92,7 @@ export async function createReservation(
         orderID,
         balanceAmount,
         advanceAmount,
+        noOfPeople: data.noOfPeople,
         date: data.date as Date,
         email: data.email as string,
         findUs: data.findus as string,
@@ -145,6 +161,20 @@ export async function CreateManualBooking(data: Data) {
     balanceAmount += 1000;
   }
 
+  if (
+    data.room == "Dreamscape Theatre" &&
+    data.noOfPeople &&
+    data.noOfPeople > 2
+  ) {
+    balanceAmount += (data.noOfPeople - 2) * 200;
+  } else if (
+    data.room == "Majestic Theatre" &&
+    data.noOfPeople &&
+    data.noOfPeople > 4
+  ) {
+    balanceAmount += (data.noOfPeople - 4) * 200;
+  }
+
   const booking = await prisma.reservations.create({
     data: {
       ...rest,
@@ -159,11 +189,7 @@ export async function CreateManualBooking(data: Data) {
   const resend = new Resend(process.env.RESEND_API_KEY);
   const emailSent = await resend.emails.send({
     from: "Golden Hour Celebrations <info@goldenhourcelebrations.in>",
-    to: [
-      booking.email.toLowerCase(),
-      "goldenhourcelebrationsblr@gmail.com",
-      "chandankrishna288@gmail.com",
-    ],
+    to: [booking.email.toLowerCase(), "goldenhourcelebrationsblr@gmail.com"],
     subject: "Receipt for your Reservation",
     react: NikeReceiptEmail({ getReservationDetails: booking }),
   });
