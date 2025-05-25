@@ -12,7 +12,7 @@ import { Check, CreditCard, LoaderCircle } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import formatCurrency from "@/lib/formatCurrency";
-import { items } from "@/lib/constants";
+import { advanceAmount, cakePrice, items } from "@/lib/constants";
 import Link from "next/link";
 import { Switch } from "@/components/ui/switch";
 
@@ -40,10 +40,10 @@ export default function StepThree() {
     }
     const options: RazorpayOrderOptions = {
       key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID as string,
-      amount: payFull ? reservation?.price! * 100 : 500 * 100,
+      amount: payFull ? reservation?.price! * 100 : advanceAmount * 100,
       currency: "INR",
-      name: "Golden Hour Celebrations",
-      description: reservation?.room,
+      name: `Booking for ${reservation?.name} `,
+      description: `in ${reservation?.room}`,
       order_id: orderID,
       modal: {
         backdropclose: false,
@@ -145,6 +145,12 @@ export default function StepThree() {
                     </span>
                   </div>
                   <div className="flex justify-between items-center">
+                    <span className="font-medium">Name to Display</span>
+                    <span className="text-muted-foreground">
+                      {reservation.nameToDisplay}
+                    </span>
+                  </div>
+                  <div className="flex justify-between items-center">
                     <span className="font-medium">Date</span>
                     <span className="text-muted-foreground">
                       {reservation.date?.toDateString()}
@@ -241,7 +247,7 @@ export default function StepThree() {
                       Cake - {reservation.cake}
                     </span>
                     <span className="text-green-600 font-semibold whitespace-nowrap">
-                      + {formatCurrency(500)}
+                      + {formatCurrency(cakePrice)}
                     </span>
                   </div>
                 )}
@@ -304,7 +310,7 @@ export default function StepThree() {
                       Balance Amount (Pay after event)
                     </span>
                     <span className="text-green-600 font-semibold whitespace-nowrap">
-                      + {formatCurrency(price - 500)}
+                      + {formatCurrency(price - advanceAmount)}
                     </span>
                   </div>
                 )}
@@ -321,7 +327,9 @@ export default function StepThree() {
                 <div className="flex justify-between text-lg font-medium">
                   <span>{payFull ? "Total" : "Advance Amount"}</span>
                   <span className={"font-semibold"}>
-                    {payFull ? formatCurrency(price) : formatCurrency(500)}
+                    {payFull
+                      ? formatCurrency(price)
+                      : formatCurrency(advanceAmount)}
                   </span>
                 </div>
                 <Button

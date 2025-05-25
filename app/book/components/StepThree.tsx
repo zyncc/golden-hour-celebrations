@@ -17,8 +17,15 @@ import "swiper/css/pagination";
 import "swiper/css/navigation";
 import "swiper/css/effect-fade";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { cakes } from "@/lib/constants";
+import { cakePrice, cakes } from "@/lib/constants";
 import { Switch } from "@/components/ui/switch";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 export default function StepTwo() {
   const { reservation, setReservationData } = useReservation();
@@ -47,16 +54,16 @@ export default function StepTwo() {
         <p className="mb-6 text-muted-foreground">
           These Addon&apos;s are optional and can be skipped.
         </p>
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          <Card className="w-full row-span-2">
+        <div className="grid grid-cols-1 h-fit lg:grid-cols-2 gap-8">
+          <Card className="w-full">
             <CardHeader>
               <CardTitle>Cake Selection</CardTitle>
               <CardDescription>
-                All cakes cost ₹500 and weigh 500 grams
+                All cakes cost ₹{cakePrice} and weigh 500 grams
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <RadioGroup
+              <Select
                 onValueChange={(value: string) => {
                   setSelectedCake(value);
                   setReservationData({
@@ -65,33 +72,21 @@ export default function StepTwo() {
                   });
                 }}
                 defaultValue={reservation.cake || selectedCake || undefined}
-                className="gap-3"
               >
-                {cakes.map((cake) => (
-                  <Label
-                    key={cake}
-                    className={`flex items-center justify-between p-4 border rounded-lg cursor-pointer transition-all ${
-                      selectedCake === cake
-                        ? "border-primary bg-primary/5"
-                        : "border-border hover:border-primary/50"
-                    }`}
-                    htmlFor={cake}
-                  >
-                    <div className="space-y-1">
-                      <div className="flex items-center space-x-2">
-                        <RadioGroupItem value={cake} id={cake} />
-                        <span className="font-medium">{cake}</span>
-                      </div>
-                      <p className="text-sm text-muted-foreground pl-6">
-                        500 grams
-                      </p>
-                    </div>
-                    <span className="text-sm font-medium text-green-500">
-                      + ₹500
-                    </span>
-                  </Label>
-                ))}
-              </RadioGroup>
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Select a cake" />
+                </SelectTrigger>
+                <SelectContent>
+                  {cakes.map((cake) => (
+                    <SelectItem key={cake} value={cake}>
+                      <span className="font-medium">{cake} </span>
+                      <span className="text-sm font-medium text-green-500">
+                        ₹{cakePrice}
+                      </span>
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </CardContent>
           </Card>
           <Card className="w-full">

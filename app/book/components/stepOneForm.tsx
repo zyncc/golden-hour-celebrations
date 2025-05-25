@@ -39,6 +39,7 @@ export default function StepOneForm() {
   function handleFormSubmit(FormData: FormData) {
     const formData = Object.fromEntries(FormData);
     const noOfPeople = Number(FormData.get("noOfPeople"));
+    console.log(noOfPeople);
     let validation;
     if (date) {
       validation = StepOneFormSchema.safeParse({
@@ -46,7 +47,6 @@ export default function StepOneForm() {
         noOfPeople,
         date,
       });
-      console.log(validation.data);
     } else {
       const resDate = reservation?.date as Date;
       validation = StepOneFormSchema.safeParse({ ...formData, resDate });
@@ -176,14 +176,37 @@ export default function StepOneForm() {
             >
               <option value="Birthday">Birthday</option>
               <option value="Anniversary">Anniversary</option>
-              <option value="Bride / Groom to be">Bride / Groom to be</option>
+              <option value="Bride to be">Bride to be</option>
+              <option value="Groom to be">Groom to be</option>
+              <option value="Movie Date">Movie Date</option>
               <option value="Graduation Party">Graduation Party</option>
               <option value="Proposal">Proposal</option>
               <option value="Mom to be">Mom to be</option>
-              <option value="Other Surprises">Other Surprises</option>
+              <option value="Other">Others</option>
             </select>
             {errors?.map((error) => {
               if (error.path[0] == "occasion") {
+                return (
+                  <p
+                    className="text-sm text-red-600 font-medium"
+                    key={error.path[0]}
+                  >
+                    {error.message}
+                  </p>
+                );
+              }
+            })}
+          </div>
+          <div className="flex flex-col gap-y-3">
+            <Label>Name to Display (For cake and Decoration)</Label>
+            <Input
+              placeholder="Name to Display"
+              defaultValue={reservation?.nameToDisplay}
+              type="text"
+              name="nameToDisplay"
+            />
+            {errors?.map((error) => {
+              if (error.path[0] == "nameToDisplay") {
                 return (
                   <p
                     className="text-sm text-red-600 font-medium"

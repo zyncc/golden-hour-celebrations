@@ -2,6 +2,7 @@
 
 import { Reservation } from "@/context/ReservationStore";
 import Razorpay from "razorpay";
+import { advanceAmount, cakePrice } from "@/lib/constants";
 
 export async function createOrder(
   payFull: boolean,
@@ -14,7 +15,7 @@ export async function createOrder(
 
   let price = reservation?.price!;
 
-  if (reservation?.cake) price += 500;
+  if (reservation?.cake) price += cakePrice;
 
   if (reservation?.fogEntry) price += 400;
 
@@ -40,7 +41,7 @@ export async function createOrder(
   price += priceIncreaseForAdditionalPeople;
 
   const response = await instance.orders.create({
-    amount: payFull ? price * 100 : 500 * 100,
+    amount: payFull ? price * 100 : advanceAmount * 100,
     currency: "INR",
     receipt: "receipt#1",
     notes: {

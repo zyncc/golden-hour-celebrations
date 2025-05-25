@@ -3,6 +3,7 @@
 import { auth } from "@/auth";
 import { Reservation } from "@/context/ReservationStore";
 import NikeReceiptEmail from "@/emails/receipt";
+import { cakePrice } from "@/lib/constants";
 import prisma from "@/lib/prisma";
 import { ManualBookingSchema, payReservationSchema } from "@/lib/zodSchemas";
 import { randomUUID } from "crypto";
@@ -19,15 +20,15 @@ export async function createReservation(
   let advanceAmount = 0;
 
   if (reservation.room === "Majestic Theatre") {
-    balanceAmount += 1899 - 500;
+    balanceAmount += 1899 - advanceAmount;
     advanceAmount += 1899;
   } else if (reservation.room === "Dreamscape Theatre") {
-    balanceAmount += 1499 - 500;
+    balanceAmount += 1499 - advanceAmount;
     advanceAmount += 1499;
   }
   if (reservation.cake) {
-    balanceAmount += 500;
-    advanceAmount += 500;
+    balanceAmount += cakePrice;
+    advanceAmount += cakePrice;
   }
   if (reservation.fogEntry) {
     balanceAmount += 400;
@@ -61,7 +62,7 @@ export async function createReservation(
     advanceAmount += (reservation.noOfPeople - 4) * 200;
   }
   if (payFull) balanceAmount = 0;
-  if (!payFull) advanceAmount = 500;
+  if (!payFull) advanceAmount = advanceAmount;
 
   const { success, error, data } = payReservationSchema.safeParse({
     ...reservation,
@@ -93,6 +94,7 @@ export async function createReservation(
         balanceAmount,
         advanceAmount,
         noOfPeople: data.noOfPeople,
+        nameToDisplay: data.nameToDisplay,
         date: data.date as Date,
         email: data.email as string,
         findUs: data.findus as string,
@@ -147,7 +149,7 @@ export async function CreateManualBooking(data: Data) {
     balanceAmount += 1899;
   }
   if (data.cake) {
-    balanceAmount += 500;
+    balanceAmount += cakePrice;
   }
   if (data.fogEntry) {
     balanceAmount += 400;

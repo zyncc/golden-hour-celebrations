@@ -4,6 +4,9 @@ import l3 from "@/public/l3.jpg";
 import l4 from "@/public/l4.jpg";
 import l5 from "@/public/l5.jpg";
 
+export const advanceAmount = 1000;
+export const cakePrice = 600;
+
 export const selectFindUs = [
   {
     title: "Instagram / Facebook",
@@ -173,9 +176,15 @@ export const faqData = [
 ];
 
 export const cakes = [
-  "Chocolate pastry",
-  "Black forest pastry",
-  "Strawberry pastry",
-  "Blackcurrent pastry",
-  "Vanilla pastry",
+  "Chocolate",
+  "Black forest",
+  "Red velvet",
+  "Butter scotch",
+  "White forest",
+  "Strawberry",
+  "Rasmalai",
+  "Pineapple",
+  "Blueberry",
+  "Blackcurrent",
+  "Vanilla",
 ];

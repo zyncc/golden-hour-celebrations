@@ -368,17 +368,15 @@ export default function CreateBookingForm() {
                     <SelectContent>
                       <SelectItem value="Birthday">Birthday</SelectItem>
                       <SelectItem value="Anniversary">Anniversary</SelectItem>
-                      <SelectItem value="Bride / Groom to be">
-                        Bride / Groom to be
-                      </SelectItem>
+                      <SelectItem value="Bride to be">Bride to be</SelectItem>
+                      <SelectItem value="Groom to be">Groom to be</SelectItem>
+                      <SelectItem value="Movie Date">Movie Date</SelectItem>
                       <SelectItem value="Graduation Party">
                         Graduation Party
                       </SelectItem>
                       <SelectItem value="Proposal">Proposal</SelectItem>
                       <SelectItem value="Mom to be">Mom to be</SelectItem>
-                      <SelectItem value="Other Surprises">
-                        Other Surprises
-                      </SelectItem>
+                      <SelectItem value="Other">Other</SelectItem>
                     </SelectContent>
                   </Select>
                 </FormControl>
@@ -420,12 +418,20 @@ export default function CreateBookingForm() {
               <FormItem>
                 <FormLabel>WhatsApp Number</FormLabel>
                 <FormControl>
-                  <Input
-                    placeholder="Phone"
-                    type="text"
-                    minLength={10}
-                    {...field}
-                  />
+                  <Input placeholder="Phone" type="text" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="nameToDisplay"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Name to Display</FormLabel>
+                <FormControl>
+                  <Input placeholder="Name to Display" type="text" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
