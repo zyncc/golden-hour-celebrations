@@ -7,6 +7,7 @@ import TanstackProvider from "@/providers/TanstackProvider";
 import { GoogleAnalytics } from "@next/third-parties/google";
 import Whatsapp from "@/components/whatsapp";
 import { Toaster as Sonner } from "sonner";
+import Script from "next/script";
 
 const poppins = Poppins({
   subsets: ["latin", "latin-ext"],
@@ -35,6 +36,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
+        <GoogleAnalytics gaId="GTM-MHK9L5HR" />
+        <GoogleAnalytics gaId="AW-17081168224" />
         <meta
           name="viewport"
           content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
