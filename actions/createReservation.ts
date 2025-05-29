@@ -3,7 +3,7 @@
 import { auth } from "@/auth";
 import { Reservation } from "@/context/ReservationStore";
 import NikeReceiptEmail from "@/emails/receipt";
-import { cakePrice } from "@/lib/constants";
+import { advanceAmount, cakePrice } from "@/lib/constants";
 import prisma from "@/lib/prisma";
 import { ManualBookingSchema, payReservationSchema } from "@/lib/zodSchemas";
 import { randomUUID } from "crypto";
@@ -16,62 +16,58 @@ export async function createReservation(
   reservation: Reservation,
   orderID: string
 ) {
-  let balanceAmount = 0;
-  let advanceAmount = 0;
+  let total = 0;
 
   if (reservation.room === "Majestic Theatre") {
-    balanceAmount += 1899 - advanceAmount;
-    advanceAmount += 1899;
+    total += 1899;
   } else if (reservation.room === "Dreamscape Theatre") {
-    balanceAmount += 1499 - advanceAmount;
-    advanceAmount += 1499;
+    total += 1499;
   }
+
   if (reservation.cake) {
-    balanceAmount += cakePrice;
-    advanceAmount += cakePrice;
+    total += cakePrice;
   }
+
   if (reservation.fogEntry) {
-    balanceAmount += 400;
-    advanceAmount += 400;
+    total += 400;
   }
+
   if (reservation.rosePath) {
-    balanceAmount += 400;
-    advanceAmount += 400;
+    total += 400;
   }
+
   if (reservation.photography === "30") {
-    balanceAmount += 700;
-    advanceAmount += 700;
+    total += 700;
+  } else if (reservation.photography === "60") {
+    total += 1000;
   }
-  if (reservation.photography === "60") {
-    balanceAmount += 1000;
-    advanceAmount += 1000;
-  }
+
   if (
-    reservation.room == "Dreamscape Theatre" &&
+    reservation.room === "Dreamscape Theatre" &&
     reservation.noOfPeople &&
     reservation.noOfPeople > 2
   ) {
-    balanceAmount += (reservation.noOfPeople - 2) * 200;
-    advanceAmount += (reservation.noOfPeople - 2) * 200;
+    total += (reservation.noOfPeople - 2) * 200;
   } else if (
-    reservation.room == "Majestic Theatre" &&
+    reservation.room === "Majestic Theatre" &&
     reservation.noOfPeople &&
     reservation.noOfPeople > 4
   ) {
-    balanceAmount += (reservation.noOfPeople - 4) * 200;
-    advanceAmount += (reservation.noOfPeople - 4) * 200;
+    total += (reservation.noOfPeople - 4) * 200;
   }
-  if (payFull) balanceAmount = 0;
-  if (!payFull) advanceAmount = advanceAmount;
+
+  let AdvanceAmount = payFull ? total : advanceAmount;
+  let BalanceAmount = payFull ? 0 : total - advanceAmount;
 
   const { success, error, data } = payReservationSchema.safeParse({
     ...reservation,
-    balanceAmount,
+    balanceAmount: BalanceAmount,
   });
   if (!success) {
     console.log(error.issues);
     throw new Error("Invalid DATA");
   }
+
   const checkExistingBookings = await prisma.reservations.findFirst({
     where: {
       date: data.date,
@@ -87,12 +83,13 @@ export async function createReservation(
         "Someone has booked another reservation at the same Time Slot!",
     };
   }
+
   try {
     await prisma.reservations.create({
       data: {
         orderID,
-        balanceAmount,
-        advanceAmount,
+        balanceAmount: BalanceAmount,
+        advanceAmount: AdvanceAmount,
         noOfPeople: data.noOfPeople,
         nameToDisplay: data.nameToDisplay,
         date: data.date as Date,
@@ -120,11 +117,12 @@ export async function CreateManualBooking(data: Data) {
   const session = await auth.api.getSession({
     headers: headers(),
   });
+
   if (session?.user.role !== "admin") {
     throw new Error("Unauthorized");
   }
 
-  const { advanceAmount, discount, ...rest } = data;
+  const { advanceAmount, discount = 0, ...rest } = data;
 
   const checkExistingBookings = await prisma.reservations.findFirst({
     where: {
@@ -134,48 +132,43 @@ export async function CreateManualBooking(data: Data) {
       paymentStatus: true,
     },
   });
+
   if (checkExistingBookings) {
     throw new Error(
       "Someone has booked another reservation at the same Time Slot!"
     );
   }
-  let balanceAmount = -data.advanceAmount;
-  if (discount) {
-    balanceAmount -= discount;
-  }
-  if (data.room == "Dreamscape Theatre") {
-    balanceAmount += 1499;
-  } else if (data.room == "Majestic Theatre") {
-    balanceAmount += 1899;
-  }
-  if (data.cake) {
-    balanceAmount += cakePrice;
-  }
-  if (data.fogEntry) {
-    balanceAmount += 400;
-  }
-  if (data.rosePath) {
-    balanceAmount += 400;
-  }
-  if (data.photography == "30") {
-    balanceAmount += 700;
-  } else if (data.photography == "60") {
-    balanceAmount += 1000;
+
+  let total = 0;
+
+  if (data.room === "Dreamscape Theatre") {
+    total += 1499;
+  } else if (data.room === "Majestic Theatre") {
+    total += 1899;
   }
 
+  if (data.cake) total += cakePrice;
+  if (data.fogEntry) total += 400;
+  if (data.rosePath) total += 400;
+
+  if (data.photography === "30") total += 700;
+  else if (data.photography === "60") total += 1000;
+
   if (
-    data.room == "Dreamscape Theatre" &&
+    data.room === "Dreamscape Theatre" &&
     data.noOfPeople &&
     data.noOfPeople > 2
   ) {
-    balanceAmount += (data.noOfPeople - 2) * 200;
+    total += (data.noOfPeople - 2) * 200;
   } else if (
-    data.room == "Majestic Theatre" &&
+    data.room === "Majestic Theatre" &&
     data.noOfPeople &&
     data.noOfPeople > 4
   ) {
-    balanceAmount += (data.noOfPeople - 4) * 200;
+    total += (data.noOfPeople - 4) * 200;
   }
+
+  const balanceAmount = total - discount - advanceAmount;
 
   const booking = await prisma.reservations.create({
     data: {
@@ -188,12 +181,18 @@ export async function CreateManualBooking(data: Data) {
       manualBooking: true,
     },
   });
+
   const resend = new Resend(process.env.RESEND_API_KEY);
   const emailSent = await resend.emails.send({
     from: "Golden Hour Celebrations <info@goldenhourcelebrations.in>",
-    to: [booking.email.toLowerCase(), "goldenhourcelebrationsblr@gmail.com"],
+    to: [
+      booking.email.toLowerCase(),
+      "goldenhourcelebrationsblr@gmail.com",
+      "chandankrishna288@gmail.com",
+    ],
     subject: "Receipt for your Reservation",
     react: NikeReceiptEmail({ getReservationDetails: booking }),
   });
+
   console.log(emailSent);
 }

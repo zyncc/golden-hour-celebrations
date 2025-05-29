@@ -15,9 +15,12 @@ export const StepOneFormSchema = z.object({
   phone: z.string({ message: "Phone is required" }).regex(/^[6-9]\d{9}$/, {
     message: "Invalid phone number",
   }),
-  nameToDisplay: z.string({ message: "Name is required" }).min(3, {
-    message: "Name must be atleast 3 characters",
-  }),
+  nameToDisplay: z
+    .string({ message: "Name is required" })
+    .min(3, {
+      message: "Name must be atleast 3 characters",
+    })
+    .max(6, { message: "Maximum 6 letters allowed" }),
   email: z
     .string({ message: "Email is required" })
     .email("Enter a valid email address")
@@ -29,7 +32,10 @@ export const StepOneFormSchema = z.object({
   occasion: z.string({
     message: "Please select one",
   }),
-  noOfPeople: z.coerce.number().min(2, "Minimum 2 people are required!"),
+  noOfPeople: z.coerce
+    .number()
+    .min(2, "Minimum 2 people are required!")
+    .max(15, "Maximum 15 people are allowed"),
   date: z.date({ message: "Date is required" }),
 });
 

@@ -24,7 +24,12 @@ import {
 } from "@/components/ui/select";
 import formatCurrency from "@/lib/formatCurrency";
 import { CreateManualBooking } from "@/actions/createReservation";
-import { cakes, dreamscapeTimeSlots, majesticTimeSlots } from "@/lib/constants";
+import {
+  cakePrice,
+  cakes,
+  dreamscapeTimeSlots,
+  majesticTimeSlots,
+} from "@/lib/constants";
 import { Switch } from "@/components/ui/switch";
 import {
   Form,
@@ -118,7 +123,7 @@ export default function CreateBookingForm() {
       balanceAmount += 1899;
     }
     if (cake) {
-      balanceAmount += 500;
+      balanceAmount += cakePrice;
     }
     if (fogEntry) {
       balanceAmount += 400;

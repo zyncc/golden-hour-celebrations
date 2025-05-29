@@ -82,7 +82,7 @@ export default function StepThree() {
   let price = reservation?.price!;
 
   if (reservation?.cake) {
-    price += 500;
+    price += cakePrice;
   }
   if (reservation?.fogEntry) {
     price += 400;

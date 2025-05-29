@@ -40,6 +40,7 @@ export async function POST(req: Request) {
         to: [
           updatedReservation.email.toLowerCase(),
           "goldenhourcelebrationsblr@gmail.com",
+          "chandankrishna288@gmail.com",
         ],
         subject: "Receipt for your Reservation",
         react: NikeReceiptEmail({
