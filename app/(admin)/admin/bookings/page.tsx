@@ -19,26 +19,30 @@ async function Page() {
   if (session?.user.role !== "admin") {
     return notFound();
   }
-  const istDateOnly = new Date(
-    new Date().toLocaleString("en-US", { timeZone: "Asia/Kolkata" })
+
+  const nowUtc = new Date();
+  const nowIst = new Date(nowUtc.getTime() + 5.5 * 60 * 60 * 1000);
+
+  const istStart = new Date(
+    nowIst.getFullYear(),
+    nowIst.getMonth(),
+    nowIst.getDate()
   );
-  const dateOnly = new Date(
-    istDateOnly.getFullYear(),
-    istDateOnly.getMonth(),
-    istDateOnly.getDate()
-  );
+
+  const utcStart = new Date(istStart.getTime() - 5.5 * 60 * 60 * 1000);
 
   const reservations = await prisma.reservations.findMany({
     where: {
       paymentStatus: true,
       date: {
-        gte: dateOnly,
+        gte: utcStart,
       },
     },
     orderBy: {
       date: "asc",
     },
   });
+
   return (
     <div className={"mt-[100px] container"}>
       <h1 className={"text-2xl font-medium mb-5"}>Reservations</h1>

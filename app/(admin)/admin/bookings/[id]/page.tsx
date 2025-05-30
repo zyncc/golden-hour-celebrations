@@ -209,7 +209,7 @@ export default async function Page({ params }: { params: { id: string } }) {
                 )}
               </span>
             </div>
-            {reservation.discount > 0 && (
+            {reservation.discount && reservation.discount > 0 && (
               <div className="flex items-center justify-between text-green-600">
                 <span className="text-sm">Discount Applied</span>
                 <span className="font-medium">
