@@ -20,8 +20,16 @@ import {
 } from "lucide-react";
 import formatCurrency from "@/lib/formatCurrency";
 import Link from "next/link";
+import { headers } from "next/headers";
+import { auth } from "@/auth";
 
 export default async function Page({ params }: { params: { id: string } }) {
+  const session = await auth.api.getSession({
+    headers: headers(),
+  });
+  if (session?.user.role !== "admin") {
+    return notFound();
+  }
   const { id } = params;
   const reservation = await prisma.reservations.findUnique({
     where: {
