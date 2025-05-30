@@ -100,6 +100,7 @@ export async function createReservation(
         phone: data.phone as string,
         room: data.room as string,
         timeSlot: data.timeSlot as string,
+        discount: 0,
         cake: data.cake,
         photography: data.photography,
         fogEntry: data.fogEntry,
