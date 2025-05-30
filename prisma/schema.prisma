@@ -38,7 +38,7 @@ model Reservations {
   advanceAmount Int
   room          String
   noOfPeople    Int
-  nameToDisplay String
+  nameToDisplay String?
   timeSlot      String
   occasion      String
   name          String

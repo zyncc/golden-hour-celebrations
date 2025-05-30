@@ -20,7 +20,8 @@ export const StepOneFormSchema = z.object({
     .min(3, {
       message: "Name must be atleast 3 characters",
     })
-    .max(6, { message: "Maximum 6 letters allowed" }),
+    .max(6, { message: "Maximum 6 letters allowed" })
+    .optional(),
   email: z
     .string({ message: "Email is required" })
     .email("Enter a valid email address")
@@ -48,9 +49,13 @@ export const payReservationSchema = z.object({
   phone: z.string({ message: "Phone is required" }).regex(/^[6-9]\d{9}$/, {
     message: "Invalid phone number",
   }),
-  nameToDisplay: z.string({ message: "Name is required" }).min(3, {
-    message: "Name must be atleast 3 characters",
-  }),
+  nameToDisplay: z
+    .string({ message: "Name is required" })
+    .min(3, {
+      message: "Name must be atleast 3 characters",
+    })
+    .max(6, { message: "Maximum 6 letters allowed" })
+    .optional(),
   noOfPeople: z.coerce.number().min(2, "Minimum 2 people are required!"),
   email: z
     .string({ message: "Email is required" })
@@ -82,9 +87,13 @@ export const ManualBookingSchema = z.object({
     .string({ message: "Phone is required" })
     .min(10, "Phone number must me atleast 10 characters"),
   noOfPeople: z.coerce.number().min(2, "Minimum 2 people are required!"),
-  nameToDisplay: z.string({ message: "Name is required" }).min(3, {
-    message: "Name must be atleast 3 characters",
-  }),
+  nameToDisplay: z
+    .string({ message: "Name is required" })
+    .min(3, {
+      message: "Name must be atleast 3 characters",
+    })
+    .max(6, { message: "Maximum 6 letters allowed" })
+    .optional(),
   email: z
     .string({ message: "Email is required" })
     .email("Enter a valid email address"),

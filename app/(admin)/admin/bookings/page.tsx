@@ -19,12 +19,15 @@ async function Page() {
   if (session?.user.role !== "admin") {
     return notFound();
   }
-  const date = new Date();
-  const dateOnly = new Date(
-    date.getFullYear(),
-    date.getMonth(),
-    date.getDate()
+  const istDateOnly = new Date(
+    new Date().toLocaleString("en-US", { timeZone: "Asia/Kolkata" })
   );
+  const dateOnly = new Date(
+    istDateOnly.getFullYear(),
+    istDateOnly.getMonth(),
+    istDateOnly.getDate()
+  );
+
   const reservations = await prisma.reservations.findMany({
     where: {
       paymentStatus: true,
@@ -34,15 +37,6 @@ async function Page() {
     },
     orderBy: {
       date: "asc",
-    },
-    select: {
-      name: true,
-      phone: true,
-      room: true,
-      timeSlot: true,
-      occasion: true,
-      date: true,
-      paymentID: true,
     },
   });
   return (
@@ -62,10 +56,12 @@ async function Page() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {reservations.map((reservation, index) => (
-              <TableRow key={index}>
-                <TableCell className="font-medium">
-                  {reservation.name}
+            {reservations.map((reservation) => (
+              <TableRow key={reservation.id}>
+                <TableCell className="font-medium whitespace-nowrap">
+                  <Link href={`/admin/bookings/${reservation.id}`}>
+                    {reservation.name}
+                  </Link>
                 </TableCell>
                 <TableCell>
                   <Link href={"tel:" + reservation.phone}>
@@ -73,7 +69,7 @@ async function Page() {
                   </Link>
                 </TableCell>
                 <TableCell>{reservation.room}</TableCell>
-                <TableCell className={"whitespace-daterap"}>
+                <TableCell className={"whitespace-nowrap"}>
                   {reservation.timeSlot}
                 </TableCell>
                 <TableCell>
@@ -81,7 +77,7 @@ async function Page() {
                     {reservation.occasion}
                   </span>
                 </TableCell>
-                <TableCell className={"whitespace-daterap"}>
+                <TableCell className={"whitespace-nowrap"}>
                   {reservation.date.toLocaleDateString("en-GB", {
                     timeZone: "Asia/Kolkata",
                     weekday: "short",
