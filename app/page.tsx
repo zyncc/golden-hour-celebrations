@@ -10,7 +10,7 @@ import { FAQSection } from "@/components/faqs/faq";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Golden Hour Celebrations - The Best Private Theatre in Bangalore",
+  title: "The Best Private Theatre in Bangalore - Golden Hour Celebrations",
 };
 
 export default function Page() {
