@@ -23,7 +23,9 @@ export const NikeReceiptEmail = ({
 }) => (
   <Html>
     <Head />
-    <Preview>Get your order summary, estimated delivery date and more</Preview>
+    <Preview>
+      This is your Receipt for your Booking at Golden Hour Celebrations
+    </Preview>
     <Body style={main}>
       <Container style={container}>
         <Section style={track.container}>
