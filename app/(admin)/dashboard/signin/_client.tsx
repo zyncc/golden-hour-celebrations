@@ -15,8 +15,10 @@ import {
 import { Input } from "@/components/ui/input";
 import { authClient } from "@/lib/authClient";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 export default function SigninClient() {
+  const router = useRouter();
   const formSchema = z.object({
     email: z.string().email({
       message: "Please enter a valid email address.",
@@ -40,6 +42,7 @@ export default function SigninClient() {
       password: values.password,
       fetchOptions: {
         onSuccess: () => {
+          router.push("/dashboard");
           toast.success("Signed in successfully");
         },
         onError: (ctx) => {

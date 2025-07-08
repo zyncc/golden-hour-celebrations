@@ -4,6 +4,7 @@ import "../globals.css";
 import TanstackProvider from "@/providers/TanstackProvider";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
+import { Toaster as Sonner } from "sonner";
 
 const poppins = Poppins({
   subsets: ["latin", "latin-ext"],
@@ -25,6 +26,7 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className={`dark ${poppins.className}`}>
         <SidebarProvider>
+          <Sonner richColors position="top-right" theme="dark" />
           <AppSidebar />
           <TanstackProvider>{children}</TanstackProvider>
         </SidebarProvider>
