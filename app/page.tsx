@@ -1,12 +1,10 @@
 import { Footer } from "@/components/footer/footer";
-// import { BackgroundGradientAnimation } from "@/components/ui/background-gradient-animation";
 import { InfiniteMovingCards } from "@/components/ui/infinite-moving-cards";
 import { Spotlight } from "@/components/ui/Spotlight";
 import { TextGenerateEffect } from "@/components/ui/text-generate-effect";
 import React from "react";
 import { reviews } from "@/lib/constants";
 import { FAQSection } from "@/components/faqs/faq";
-// import { AuroraBackground } from "@/components/ui/aurora-background";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -44,11 +42,6 @@ export default function Page() {
           birthdays, anniversaries, bride / groom-to-be, baby showers, valentine
           day, celebrate your achievements with us.
         </p>
-        {/* <AuroraBackground className="mt-10 mx-3">
-          <h1 className="font-semibold bg-clip-text text-transparent bg-gradient-to-b from-neutral-200 to-neutral-500 text-4xl text-center lg:text-7xl">
-            Why choose us?
-          </h1>
-        </AuroraBackground> */}
       </section>
       <section className="container my-[200px]">
         <FAQSection />
