@@ -6,7 +6,7 @@ export function middleware(request: NextRequest) {
   const url = request.nextUrl.clone();
 
   if (host.startsWith("admin.")) {
-    url.pathname = `/admin${url.pathname === "/" ? "" : url.pathname}`;
+    url.pathname = `/dashboard${url.pathname === "/" ? "" : url.pathname}`;
     return NextResponse.rewrite(url);
   }
 
