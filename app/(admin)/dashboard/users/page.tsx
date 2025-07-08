@@ -10,14 +10,14 @@ import {
 import Link from "next/link";
 import { auth } from "@/auth";
 import { headers } from "next/headers";
-import { notFound } from "next/navigation";
+import { redirect } from "next/navigation";
 
 async function Page() {
   const session = await auth.api.getSession({
     headers: headers(),
   });
   if (session?.user.role !== "admin") {
-    return notFound();
+    return redirect("/dashboard/signin");
   }
   const users = await prisma.user.findMany({
     where: {

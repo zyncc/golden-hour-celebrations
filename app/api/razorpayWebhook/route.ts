@@ -52,7 +52,7 @@ export async function POST(req: Request) {
   } catch (error) {
     console.log(error);
   } finally {
-    revalidatePath("/admin");
+    revalidatePath("/dashboard");
     revalidatePath("/account");
   }
   return NextResponse.json({ status: "ok" }, { status: 203 });

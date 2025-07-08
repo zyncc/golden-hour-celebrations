@@ -1,5 +1,3 @@
-"use client";
-
 import React from "react";
 import Link from "next/link";
 import {
@@ -13,7 +11,6 @@ import { MdOutlineMenu } from "react-icons/md";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import logo from "@/public/logo.png";
-import { authClient } from "@/lib/authClient";
 
 const NavLinks = [
   {
@@ -27,14 +24,13 @@ const NavLinks = [
 ];
 
 export default function Navbar() {
-  const { data: session } = authClient.useSession();
   return (
     <header
       id="header"
       className="text-white z-50 fixed top-0 right-0 left-0 bg-transparent backdrop-blur-xl"
     >
       <nav className="container flex justify-between items-center py-2.5">
-        <Link href={"/"}>
+        <Link href={`${process.env.NEXT_PUBLIC_BASE_URL}`}>
           <Image
             src={logo}
             alt="Golden Hour"
@@ -51,11 +47,6 @@ export default function Navbar() {
                 <li className="font-medium text-[15px]">{link.Label}</li>
               </Link>
             ))}
-            {session?.user.role == "admin" && (
-              <Link href={"/admin"}>
-                <li className="font-medium text-[15px]">Admin</li>
-              </Link>
-            )}
           </ul>
         </div>
         <div className="flex gap-2 items-center justify-center">
@@ -85,13 +76,6 @@ export default function Navbar() {
                       </SheetClose>
                     </Link>
                   ))}
-                  {session?.user.role == "admin" && (
-                    <Link href={"/admin"}>
-                      <SheetClose>
-                        <li className="font-medium text-[15px]">Admin</li>
-                      </SheetClose>
-                    </Link>
-                  )}
                 </ul>
               </SheetHeader>
             </SheetContent>

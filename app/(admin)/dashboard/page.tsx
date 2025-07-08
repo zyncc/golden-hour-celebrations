@@ -6,9 +6,15 @@ import prisma from "@/lib/prisma";
 import formatCurrency from "@/lib/formatCurrency";
 import { auth } from "@/auth";
 import { headers } from "next/headers";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 
 export default async function AdminDashboard() {
+  const session = await auth.api.getSession({
+    headers: headers(),
+  });
+  if (session?.user.role !== "admin") {
+    return redirect("/dashboard/signin");
+  }
   const now = new Date();
   const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
   const startOfNextMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1);
@@ -43,12 +49,12 @@ export default async function AdminDashboard() {
   }, 0);
 
   return (
-    <div className="flex mt-[100px] container min-h-screen flex-col bg-background">
-      <div className="flex-1 space-y-4 py-8 pt-6">
-        <div className="flex items-center justify-between space-y-2">
+    <div className="flex container pt-10 w-full min-h-screen flex-col bg-background">
+      <div className="space-y-4">
+        <div className="flex justify-between space-y-2">
           <h2 className="text-3xl font-bold tracking-tight">Dashboard</h2>
           <div className="flex items-center space-x-2">
-            <Link href={"/admin/bookings/create"}>
+            <Link href={"/dashboard/bookings/create"}>
               <Button variant={"outline"}>
                 <Plus className="mr-2 h-4 w-4" />
                 Create Booking
@@ -57,7 +63,7 @@ export default async function AdminDashboard() {
           </div>
         </div>
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-          <Link draggable={false} href={"/admin/bookings"}>
+          <Link draggable={false} href={"/dashboard/bookings"}>
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">
@@ -70,7 +76,7 @@ export default async function AdminDashboard() {
               </CardContent>
             </Card>
           </Link>
-          <Link draggable={false} href={"/admin/users"}>
+          <Link draggable={false} href={"/dashboard/users"}>
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">

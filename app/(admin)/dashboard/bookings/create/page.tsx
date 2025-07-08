@@ -1,14 +1,14 @@
 import { auth } from "@/auth";
 import CreateBookingForm from "./CreateBookingForm";
 import { headers } from "next/headers";
-import { notFound } from "next/navigation";
+import { redirect } from "next/navigation";
 
 export default async function CreateBooking() {
   const session = await auth.api.getSession({
     headers: headers(),
   });
   if (session?.user.role !== "admin") {
-    return notFound();
+    return redirect("/dashboard/signin");
   }
   return (
     <div className="container my-[100px]">

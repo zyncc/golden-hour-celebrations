@@ -1,13 +1,12 @@
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
-import "./globals.css";
+import "../globals.css";
 import Navbar from "@/components/navbar/navbar";
 import { Toaster } from "@/components/ui/toaster";
 import TanstackProvider from "@/providers/TanstackProvider";
 import { GoogleAnalytics } from "@next/third-parties/google";
 import Whatsapp from "@/components/whatsapp";
 import { Toaster as Sonner } from "sonner";
-import Script from "next/script";
 
 const poppins = Poppins({
   subsets: ["latin", "latin-ext"],

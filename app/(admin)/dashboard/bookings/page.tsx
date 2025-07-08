@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/table";
 import Link from "next/link";
 import { headers } from "next/headers";
-import { notFound } from "next/navigation";
+import { redirect } from "next/navigation";
 import { auth } from "@/auth";
 
 async function Page() {
@@ -17,9 +17,8 @@ async function Page() {
     headers: headers(),
   });
   if (session?.user.role !== "admin") {
-    return notFound();
+    return redirect("/dashboard/signin");
   }
-
   const nowUtc = new Date();
   const nowIst = new Date(nowUtc.getTime() + 5.5 * 60 * 60 * 1000);
 
@@ -63,7 +62,7 @@ async function Page() {
             {reservations.map((reservation) => (
               <TableRow key={reservation.id}>
                 <TableCell className="font-medium whitespace-nowrap">
-                  <Link href={`/admin/bookings/${reservation.id}`}>
+                  <Link href={`/dashboard/bookings/${reservation.id}`}>
                     {reservation.name}
                   </Link>
                 </TableCell>

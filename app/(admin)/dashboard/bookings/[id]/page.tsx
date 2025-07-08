@@ -1,5 +1,5 @@
 import prisma from "@/lib/prisma";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
@@ -28,7 +28,7 @@ export default async function Page({ params }: { params: { id: string } }) {
     headers: headers(),
   });
   if (session?.user.role !== "admin") {
-    return notFound();
+    return redirect("/dashboard/signin");
   }
   const { id } = params;
   const reservation = await prisma.reservations.findUnique({
