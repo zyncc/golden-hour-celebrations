@@ -101,8 +101,8 @@ export default async function SuccessPage({
                 <p className="text-sm text-muted-foreground">Photography</p>
                 {booking.photography ? (
                   <p className="font-medium text-foreground">
-                    {booking.photography == "60" && "60 min"}
-                    {booking.photography == "30" && "30 min"}
+                    {booking.photography == "photoshoot" && "Photoshoot"}
+                    {booking.photography == "video" && "Photo & Video Shoot"}
                   </p>
                 ) : (
                   <p className="font-medium text-foreground">None</p>

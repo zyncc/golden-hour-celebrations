@@ -153,6 +153,7 @@ export default function StepOneForm() {
               <option value="Instagram / Facebook">Instagram / Facebook</option>
               <option value="Google">Google</option>
               <option value="Word of mouth">Word of mouth</option>
+              <option value="Other Advertisements">Other Advertisements</option>
             </select>
             {errors?.map((error) => {
               if (error.path[0] == "findus") {
@@ -174,39 +175,18 @@ export default function StepOneForm() {
               defaultValue={reservation?.occasion}
               className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
             >
+              <option value="Movie Time">Movie Time</option>
               <option value="Birthday">Birthday</option>
               <option value="Anniversary">Anniversary</option>
               <option value="Bride to be">Bride to be</option>
               <option value="Groom to be">Groom to be</option>
-              <option value="Movie Date">Movie Date</option>
-              <option value="Graduation Party">Graduation Party</option>
-              <option value="Proposal">Proposal</option>
+              <option value="Proposal Planning">Proposal Planning</option>
+              <option value="Surprise">Surprise</option>
               <option value="Mom to be">Mom to be</option>
               <option value="Other">Others</option>
             </select>
             {errors?.map((error) => {
               if (error.path[0] == "occasion") {
-                return (
-                  <p
-                    className="text-sm text-red-600 font-medium"
-                    key={error.path[0]}
-                  >
-                    {error.message}
-                  </p>
-                );
-              }
-            })}
-          </div>
-          <div className="flex flex-col gap-y-3">
-            <Label>Name to Display (For cake and Decoration)</Label>
-            <Input
-              placeholder="Name to Display"
-              defaultValue={reservation?.nameToDisplay}
-              type="text"
-              name="nameToDisplay"
-            />
-            {errors?.map((error) => {
-              if (error.path[0] == "nameToDisplay") {
                 return (
                   <p
                     className="text-sm text-red-600 font-medium"
@@ -280,7 +260,11 @@ export default function StepOneForm() {
               }
             })}
           </div>
-          <Button type={"submit"} className="w-full" variant={"default"}>
+          <Button
+            type={"submit"}
+            className="w-full bg-yellow-500 hover:bg-yellow-300"
+            variant={"default"}
+          >
             Next
           </Button>
         </form>

@@ -30,7 +30,7 @@ async function Page() {
     },
   });
   return (
-    <div className={"mt-[100px] container"}>
+    <div className={"mt-10 container"}>
       <h1 className={"text-2xl font-medium mb-5"}>All Users</h1>
       <div className="rounded-md border">
         <Table>

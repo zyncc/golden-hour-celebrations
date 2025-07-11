@@ -123,7 +123,12 @@ export default function CreateBookingForm() {
       balanceAmount += 1899;
     }
     if (cake) {
-      balanceAmount += cakePrice;
+      if (cake == "Red velvet" || cake == "Rasmalai") {
+        balanceAmount += 620;
+      } else {
+        balanceAmount += cakePrice;
+        setAdvanceAmount(advanceAmount + cakePrice);
+      }
     }
     if (fogEntry) {
       balanceAmount += 400;
@@ -131,10 +136,10 @@ export default function CreateBookingForm() {
     if (rosePath) {
       balanceAmount += 400;
     }
-    if (photography == "30") {
+    if (photography == "photoshoot") {
       balanceAmount += 700;
-    } else if (photography == "60") {
-      balanceAmount += 1000;
+    } else if (photography == "video") {
+      balanceAmount += 1500;
     }
     if (room == "Dreamscape Theatre" && noOfPeople && noOfPeople > 2) {
       balanceAmount += (noOfPeople - 2) * 200;
@@ -478,8 +483,8 @@ export default function CreateBookingForm() {
                       <SelectValue placeholder="Select Photography Package" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="30">30 Minutes Package</SelectItem>
-                      <SelectItem value="60">60 Minutes Package</SelectItem>
+                      <SelectItem value="photoshoot">Photoshoot</SelectItem>
+                      <SelectItem value="video">Photography & Video</SelectItem>
                     </SelectContent>
                   </Select>
                 </FormControl>

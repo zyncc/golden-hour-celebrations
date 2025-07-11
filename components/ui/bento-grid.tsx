@@ -12,7 +12,7 @@ export const BentoGrid = ({
   return (
     <div
       className={cn(
-        "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mx-auto",
+        "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mx-auto",
         className
       )}
     >
@@ -26,7 +26,7 @@ export const BentoGridItem = ({
   image,
 }: {
   className?: string;
-  image?: StaticImageData;
+  image: StaticImageData;
 }) => {
   return (
     <div
@@ -38,12 +38,11 @@ export const BentoGridItem = ({
       <div className="w-full h-full">
         <Image
           className="rounded-lg object-cover"
-          src={image!}
+          src={image}
           alt="Gallery Image"
           fill
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           priority
-          placeholder="blur"
         />
       </div>
     </div>

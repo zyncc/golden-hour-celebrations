@@ -25,6 +25,10 @@ export const auth = betterAuth({
   session: {
     expiresIn: 3600 * 24 * 31,
     updateAge: 3600,
+    cookieCache: {
+      enabled: true,
+      maxAge: 3600,
+    },
   },
   trustedOrigins: [
     "http://admin.localhost:3000",

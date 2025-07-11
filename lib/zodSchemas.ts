@@ -50,6 +50,11 @@ export const payReservationSchema = z.object({
     .string({ message: "Name is required" })
     .max(6, { message: "Maximum 6 letters allowed" })
     .optional(),
+  writingOnCake: z.string().max(15, "Maximum 15 characters allowed").optional(),
+  specialRequests: z
+    .string()
+    .max(200, "Maximum 200 characters allowed")
+    .optional(),
   noOfPeople: z.coerce.number().min(2, "Minimum 2 people are required!"),
   email: z
     .string({ message: "Email is required" })

@@ -1,11 +1,8 @@
-import l1 from "@/public/l1.jpg";
-import l2 from "@/public/l2.jpg";
-import l3 from "@/public/l3.jpg";
-import l4 from "@/public/l4.jpg";
-import l5 from "@/public/l5.jpg";
+import l8 from "@/public/l8.jpg";
+import l9 from "@/public/l9.jpg";
 
 export const advanceAmount = 1000;
-export const cakePrice = 600;
+export const cakePrice = 550;
 
 export const selectFindUs = [
   {
@@ -67,13 +64,14 @@ export const items = [
     room: "Majestic Theatre",
     description: [
       "Premium Decoration Setup",
+      "Private Movie Time Experience",
       "LED Letter Name",
       "Access to OTT Platforms",
       "Upto 4 people (Additional ₹200 per person)",
     ],
     popular: true,
     price: 1899,
-    photo: [l1, l2, l3, l4],
+    photo: [l8, l9],
   },
   {
     id: 1,
@@ -81,12 +79,14 @@ export const items = [
     description: [
       "Private Movie Time Experience",
       "Romantic Date Decor",
+      "LED Letter Name",
+      "Cozy Private Theatre",
       "Access to OTT Platforms",
       "2 people (Additional ₹200 per person)",
     ],
     noPeople: 4,
     price: 1499,
-    photo: [l5],
+    photo: [l8, l9],
   },
 ];
 
@@ -180,11 +180,6 @@ export const cakes = [
   "Black forest",
   "Red velvet",
   "Butter scotch",
-  "White forest",
-  "Strawberry",
   "Rasmalai",
-  "Pineapple",
   "Blueberry",
-  "Blackcurrent",
-  "Vanilla",
 ];

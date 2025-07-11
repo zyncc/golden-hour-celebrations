@@ -33,22 +33,24 @@ model User {
 }
 
 model Reservations {
-  id            String   @id @default(auto()) @map("_id") @db.ObjectId
-  balanceAmount Int
-  advanceAmount Int
-  room          String
-  noOfPeople    Int
-  nameToDisplay String?
-  timeSlot      String
-  occasion      String
-  name          String
-  phone         String
-  email         String
-  findUs        String?
-  date          DateTime
-  orderID       String?  @unique
-  paymentID     String?
-  paymentStatus Boolean  @default(false)
+  id              String   @id @default(auto()) @map("_id") @db.ObjectId
+  balanceAmount   Int
+  advanceAmount   Int
+  room            String
+  noOfPeople      Int
+  nameToDisplay   String?
+  writingOnCake   String?
+  specialRequests String?
+  timeSlot        String
+  occasion        String
+  name            String
+  phone           String
+  email           String
+  findUs          String?
+  date            DateTime
+  orderID         String?  @unique
+  paymentID       String?
+  paymentStatus   Boolean  @default(false)
 
   cake        String?
   photography String?

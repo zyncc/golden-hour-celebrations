@@ -1,38 +1,19 @@
+import { BentoGrid, BentoGridItem } from "@/components/ui/bento-grid";
 import { Metadata } from "next";
 import v1 from "@/public/v1.jpg";
-import v2 from "@/public/v2.jpg";
-import v3 from "@/public/v3.jpg";
-import v4 from "@/public/v4.jpg";
-import v5 from "@/public/v5.jpg";
-import v6 from "@/public/v6.jpg";
-import v7 from "@/public/v7.jpg";
-import v8 from "@/public/v8.jpg";
-import v9 from "@/public/v9.jpg";
 import v10 from "@/public/v10.jpg";
+import v17 from "@/public/v17.jpg";
 import v11 from "@/public/v11.jpg";
 import v12 from "@/public/v12.jpg";
-import v13 from "@/public/v13.jpg";
-import v14 from "@/public/v14.jpg";
-import v15 from "@/public/v15.jpg";
-import v16 from "@/public/v16.jpg";
-import v17 from "@/public/v17.jpg";
-import v18 from "@/public/v18.jpg";
-import v19 from "@/public/v19.jpg";
-import v20 from "@/public/v20.jpg";
-import v21 from "@/public/v21.jpg";
-import v22 from "@/public/v22.jpg";
-import l1 from "@/public/l1.jpg";
 import l2 from "@/public/l2.jpg";
-import l3 from "@/public/l3.jpg";
-import l4 from "@/public/l4.jpg";
 import l5 from "@/public/l5.jpg";
 import l6 from "@/public/l6.jpg";
 import l7 from "@/public/l7.jpg";
 import l8 from "@/public/l8.jpg";
 import l9 from "@/public/l9.jpg";
 import l10 from "@/public/l10.jpg";
-import AutomatedBentoGrid from "@/components/automated-bento-grid";
 import _ from "lodash";
+import { StaticImageData } from "next/image";
 
 export const metadata: Metadata = {
   title: {
@@ -40,44 +21,117 @@ export const metadata: Metadata = {
   },
 };
 
+const PATTERN_LOOP = ["First", "Second", "Third", "Second", "First"];
+
 export default function Page() {
-  const images = [
-    v1,
-    v2,
-    v3,
-    v4,
-    v5,
-    v6,
-    v7,
-    v8,
-    v9,
-    v10,
-    v11,
-    v12,
-    v13,
-    v14,
-    v15,
-    v16,
-    v17,
-    v18,
-    v19,
-    v20,
-    v21,
-    v22,
-    l1,
-    l2,
-    l3,
-    l4,
-    l5,
-    l6,
-    l7,
-    l8,
-    l9,
-    l10,
-  ];
+  const verticalImages = _.shuffle([v1, v10, v17, v11, v12]);
+  const horizontalImages = _.shuffle([l2, l5, l6, l7, l8, l9, l10]);
+
+  const rowCount = Math.floor(horizontalImages.length / 2);
+
+  let vIndex = 0;
+  let hIndex = 0;
+
+  const rows = Array.from({ length: rowCount }).map((_, idx) => {
+    const pattern = PATTERN_LOOP[idx % PATTERN_LOOP.length];
+    const verticalSlice = verticalImages.slice(vIndex, vIndex + 1);
+    const horizontalSlice = horizontalImages.slice(hIndex, hIndex + 2);
+
+    if (verticalSlice.length < 1 || horizontalSlice.length < 2) return null;
+
+    vIndex += 1;
+    hIndex += 2;
+
+    switch (pattern) {
+      case "First":
+        return (
+          <FirstRow
+            key={`row-${idx}`}
+            vertical={verticalSlice}
+            horizontal={horizontalSlice}
+          />
+        );
+      case "Second":
+        return (
+          <SecondRow
+            key={`row-${idx}`}
+            vertical={verticalSlice}
+            horizontal={horizontalSlice}
+          />
+        );
+      case "Third":
+        return (
+          <ThirdRow
+            key={`row-${idx}`}
+            vertical={verticalSlice}
+            horizontal={horizontalSlice}
+          />
+        );
+      default:
+        return null;
+    }
+  });
+
   return (
     <div className="my-[100px] container">
-      <AutomatedBentoGrid images={_.shuffle(images)} />
+      <BentoGrid className="w-full">{rows}</BentoGrid>
     </div>
+  );
+}
+
+function FirstRow({
+  vertical,
+  horizontal,
+}: {
+  vertical: StaticImageData[];
+  horizontal: StaticImageData[];
+}) {
+  return (
+    <>
+      <BentoGridItem
+        className="max-md:aspect-w-9 max-md:aspect-h-16 row-span-2"
+        image={vertical[0]}
+      />
+      <BentoGridItem className="aspect-w-4 aspect-h-3" image={horizontal[0]} />
+      <BentoGridItem className="aspect-w-4 aspect-h-3" image={horizontal[1]} />
+    </>
+  );
+}
+
+function SecondRow({
+  vertical,
+  horizontal,
+}: {
+  vertical: StaticImageData[];
+  horizontal: StaticImageData[];
+}) {
+  return (
+    <>
+      <BentoGridItem
+        className="max-md:aspect-w-9 max-md:aspect-h-16 row-span-2"
+        image={vertical[0]}
+      />
+      <BentoGridItem className="aspect-w-4 aspect-h-3" image={horizontal[0]} />
+      <BentoGridItem className="aspect-w-4 aspect-h-3" image={horizontal[1]} />
+    </>
+  );
+}
+
+function ThirdRow({
+  vertical,
+  horizontal,
+}: {
+  vertical: StaticImageData[];
+  horizontal: StaticImageData[];
+}) {
+  return (
+    <>
+      <BentoGridItem
+        className="max-md:aspect-w-9 max-md:aspect-h-16 row-span-2"
+        image={vertical[0]}
+      />
+      <BentoGridItem className="aspect-w-4 aspect-h-3" image={horizontal[0]} />
+      <BentoGridItem className="aspect-w-4 aspect-h-3" image={horizontal[1]} />
+    </>
   );
 }

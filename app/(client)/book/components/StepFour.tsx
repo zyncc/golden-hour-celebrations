@@ -81,20 +81,29 @@ export default function StepThree() {
   }
   let price = reservation?.price!;
 
+  let advanceAmountPrice = advanceAmount;
+
   if (reservation?.cake) {
-    price += cakePrice;
+    if (reservation.cake == "Red velvet" || reservation.cake == "Rasmalai") {
+      price += 620;
+      advanceAmountPrice += 620;
+    } else {
+      price += cakePrice;
+      advanceAmountPrice += cakePrice;
+    }
   }
   if (reservation?.fogEntry) {
     price += 400;
+    advanceAmountPrice += 400;
   }
   if (reservation?.rosePath) {
     price += 400;
   }
-  if (reservation?.photography === "30") {
+  if (reservation?.photography === "photoshoot") {
     price += 700;
   }
-  if (reservation?.photography === "60") {
-    price += 1000;
+  if (reservation?.photography === "video") {
+    price += 1500;
   }
   let priceIncreaseForAdditionalPeople = 0;
   if (
@@ -144,12 +153,32 @@ export default function StepThree() {
                       {reservation.noOfPeople}
                     </span>
                   </div>
-                  <div className="flex justify-between items-center">
-                    <span className="font-medium">Name to Display</span>
-                    <span className="text-muted-foreground">
-                      {reservation.nameToDisplay}
-                    </span>
-                  </div>
+                  {reservation.cake && reservation.writingOnCake && (
+                    <div className="flex justify-between items-center">
+                      <span className="font-medium">Writing on Cake</span>
+                      <span className="text-muted-foreground">
+                        {reservation.writingOnCake}
+                      </span>
+                    </div>
+                  )}
+                  {reservation.nameToDisplay && (
+                    <div className="flex justify-between items-center">
+                      <span className="font-medium">Name to Display</span>
+                      <span className="text-muted-foreground">
+                        {reservation.nameToDisplay}
+                      </span>
+                    </div>
+                  )}
+                  {reservation.specialRequests && (
+                    <div className="flex justify-between gap-5 items-center">
+                      <span className="font-medium whitespace-nowrap">
+                        Special Requests
+                      </span>
+                      <span className="text-muted-foreground line-clamp-1">
+                        {reservation.specialRequests}
+                      </span>
+                    </div>
+                  )}
                   <div className="flex justify-between items-center">
                     <span className="font-medium">Date</span>
                     <span className="text-muted-foreground">
@@ -186,9 +215,9 @@ export default function StepThree() {
                     <div className="flex justify-between items-center">
                       <span className="font-medium">Photography Package</span>
                       <span className="text-muted-foreground">
-                        {reservation.photography === "30"
-                          ? "30 Mins"
-                          : "60 Mins"}
+                        {reservation.photography === "photoshoot"
+                          ? "Photoshoot"
+                          : "Photography & Video"}
                       </span>
                     </div>
                   )}
@@ -247,19 +276,26 @@ export default function StepThree() {
                       Cake - {reservation.cake}
                     </span>
                     <span className="text-green-600 font-semibold whitespace-nowrap">
-                      + {formatCurrency(cakePrice)}
+                      +{" "}
+                      {formatCurrency(
+                        reservation.cake == "Red velvet"
+                          ? 620
+                          : reservation.cake == "Rasmalai"
+                          ? 620
+                          : cakePrice
+                      )}
                     </span>
                   </div>
                 )}
                 {reservation.photography && (
                   <div className="flex justify-between">
                     <span className="text-muted-foreground">
-                      Photography - {reservation.photography} Mins
+                      Photography Package
                     </span>
                     <span className="text-green-600 font-semibold whitespace-nowrap">
                       +{" "}
                       {formatCurrency(
-                        reservation.photography === "30" ? 700 : 1000
+                        reservation.photography === "photoshoot" ? 700 : 1500
                       )}
                     </span>
                   </div>
@@ -304,13 +340,12 @@ export default function StepThree() {
                       </span>
                     </div>
                   )}
+                {!payFull && <Separator />}
                 {!payFull && (
                   <div className="flex justify-between">
-                    <span className="text-muted-foreground">
-                      Balance Amount (Pay after event)
-                    </span>
+                    <span className="text-muted-foreground">Total</span>
                     <span className="text-green-600 font-semibold whitespace-nowrap">
-                      + {formatCurrency(price - advanceAmount)}
+                      {formatCurrency(price)}
                     </span>
                   </div>
                 )}
@@ -329,9 +364,17 @@ export default function StepThree() {
                   <span className={"font-semibold"}>
                     {payFull
                       ? formatCurrency(price)
-                      : formatCurrency(advanceAmount)}
+                      : formatCurrency(advanceAmountPrice)}
                   </span>
                 </div>
+                {!payFull && (
+                  <div className="flex justify-between text-lg font-medium">
+                    <span>Balance Amount (Pay after event)</span>
+                    <span className={"font-semibold"}>
+                      {formatCurrency(price - advanceAmountPrice)}
+                    </span>
+                  </div>
+                )}
                 <Button
                   className="w-full mt-4 bg-yellow-500 hover:bg-yellow-300"
                   size="lg"

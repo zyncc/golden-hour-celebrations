@@ -7,6 +7,7 @@ export type Reservation = {
   findus?: string | undefined;
   occasion?: string | undefined;
   nameToDisplay?: string | undefined;
+  writingOnCake?: string | undefined;
   noOfPeople?: number | undefined;
   date?: Date | undefined;
   room?: string | undefined;
@@ -16,6 +17,7 @@ export type Reservation = {
   photography?: string | undefined;
   fogEntry?: boolean | undefined;
   rosePath?: boolean | undefined;
+  specialRequests?: string | undefined;
 };
 
 type ReservationType = {

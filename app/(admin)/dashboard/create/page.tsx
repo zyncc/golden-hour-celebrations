@@ -11,7 +11,7 @@ export default async function CreateBooking() {
     return redirect("/dashboard/signin");
   }
   return (
-    <div className="container my-[100px]">
+    <div className="container my-10">
       <h1 className="text-xl font-medium">Create Booking</h1>
       <div className="mt-5">
         <CreateBookingForm />

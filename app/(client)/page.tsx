@@ -8,6 +8,7 @@ import { FAQSection } from "@/components/faqs/faq";
 import { Metadata } from "next";
 import { Marquee } from "@/components/magicui/marquee";
 import { cn } from "@/lib/utils";
+import { BackgroundGradientAnimation } from "@/components/ui/background-gradient-animation";
 
 export const metadata: Metadata = {
   title: "The Best Private Theatre in Bangalore - Golden Hour Celebrations",
@@ -41,25 +42,22 @@ export default function Page() {
   const secondRow = reviews.slice(reviews.length / 2);
   return (
     <>
-      <section className="h-screen w-screen dark:bg-black dark:bg-grid-white/[0.07] bg-grid-small-black/[0.2] relative flex items-center justify-center bg-fixed">
-        <div className="absolute pointer-events-none inset-0 flex items-center justify-center dark:bg-black bg-white [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)] bg-fixed"></div>
-        <Spotlight className="left-0 hidden lg:block" />
-        <div className="flex flex-col text-center lg:text-left w-screen items-center container">
-          <p className="goldText text-5xl select-none sm:text-7xl font-bold relative z-20 bg-clip-text text-transparent bg-gradient-to-b">
-            Golden Hour
-          </p>
-          <p className="goldText text-5xl select-none sm:text-7xl font-bold relative z-20 bg-clip-text text-transparent bg-gradient-to-b">
-            Celebrations
-          </p>
-          <TextGenerateEffect
-            className="text-sm"
-            filter
-            duration={3}
-            words="It's Time to Surprise your Loved ones"
-          />
-        </div>
+      <section className="min-h-screen">
+        <BackgroundGradientAnimation interactive={false}>
+          <div className="absolute z-50 inset-0 flex-col flex items-center justify-center text-white font-bold px-4 pointer-events-none text-3xl text-center md:text-4xl lg:text-7xl">
+            <p className="bg-clip-text text-transparent drop-shadow-2xl bg-gradient-to-b from-white/80 to-white/20">
+              Golden Hour
+            </p>
+            <p className="bg-clip-text text-transparent drop-shadow-2xl bg-gradient-to-b from-white/80 to-white/20">
+              Celebrations
+            </p>
+          </div>
+        </BackgroundGradientAnimation>
       </section>
-      <section id="about" className="container flex flex-col items-center">
+      <section
+        id="about"
+        className="container mt-10 flex flex-col items-center"
+      >
         <h1 className="font-semibold bg-clip-text text-transparent bg-gradient-to-b from-neutral-200 to-neutral-500 text-4xl text-center lg:text-7xl">
           About us
         </h1>
@@ -70,6 +68,7 @@ export default function Page() {
           day, celebrate your achievements with us.
         </p>
       </section>
+
       <section className="container my-[200px]">
         <FAQSection />
       </section>
@@ -78,7 +77,7 @@ export default function Page() {
           Testimonials
         </h1>
         <div className="relative flex w-full flex-col items-center justify-center overflow-hidden">
-          <Marquee pauseOnHover className="[--duration:20s]">
+          <Marquee className="[--duration:20s]">
             {firstRow.map((review) => (
               <ReviewCard
                 key={review.name}
@@ -87,7 +86,7 @@ export default function Page() {
               />
             ))}
           </Marquee>
-          <Marquee reverse pauseOnHover className="[--duration:20s]">
+          <Marquee reverse className="[--duration:20s]">
             {secondRow.map((review) => (
               <ReviewCard
                 key={review.name}

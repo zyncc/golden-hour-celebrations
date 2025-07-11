@@ -18,28 +18,37 @@ export async function createReservation(
 ) {
   let total = 0;
 
+  let advanceAmountPrice = advanceAmount;
+
   if (reservation.room === "Majestic Theatre") {
     total += 1899;
   } else if (reservation.room === "Dreamscape Theatre") {
     total += 1499;
   }
 
-  if (reservation.cake) {
-    total += cakePrice;
+  if (reservation?.cake) {
+    if (reservation.cake == "Red velvet" || reservation.cake == "Rasmalai") {
+      total += 620;
+      advanceAmountPrice += 620;
+    } else {
+      total += cakePrice;
+      advanceAmountPrice += cakePrice;
+    }
   }
 
   if (reservation.fogEntry) {
     total += 400;
+    advanceAmountPrice += 400;
   }
 
   if (reservation.rosePath) {
     total += 400;
   }
 
-  if (reservation.photography === "30") {
+  if (reservation.photography === "photoshoot") {
     total += 700;
-  } else if (reservation.photography === "60") {
-    total += 1000;
+  } else if (reservation.photography === "video") {
+    total += 1500;
   }
 
   if (
@@ -56,8 +65,8 @@ export async function createReservation(
     total += (reservation.noOfPeople - 4) * 200;
   }
 
-  let AdvanceAmount = payFull ? total : advanceAmount;
-  let BalanceAmount = payFull ? 0 : total - advanceAmount;
+  let AdvanceAmount = payFull ? total : advanceAmountPrice;
+  let BalanceAmount = payFull ? 0 : total - advanceAmountPrice;
 
   const { success, error, data } = payReservationSchema.safeParse({
     ...reservation,
@@ -92,6 +101,8 @@ export async function createReservation(
         advanceAmount: AdvanceAmount,
         noOfPeople: data.noOfPeople,
         nameToDisplay: data.nameToDisplay,
+        writingOnCake: data.writingOnCake,
+        specialRequests: data.specialRequests,
         date: data.date as Date,
         email: data.email as string,
         findUs: data.findus as string,
@@ -148,12 +159,18 @@ export async function CreateManualBooking(data: Data) {
     total += 1899;
   }
 
-  if (data.cake) total += cakePrice;
+  if (data.cake) {
+    if (data.cake == "Red velvet" || data.cake == "Rasmalai") {
+      total += 620;
+    } else {
+      total += cakePrice;
+    }
+  }
   if (data.fogEntry) total += 400;
   if (data.rosePath) total += 400;
 
-  if (data.photography === "30") total += 700;
-  else if (data.photography === "60") total += 1000;
+  if (data.photography === "photoshoot") total += 700;
+  else if (data.photography === "video") total += 1500;
 
   if (
     data.room === "Dreamscape Theatre" &&

@@ -26,6 +26,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { toast } from "sonner";
 
 export default function StepTwo() {
   const { reservation, setReservationData } = useReservation();
@@ -81,18 +84,39 @@ export default function StepTwo() {
                     <SelectItem key={cake} value={cake}>
                       <span className="font-medium">{cake} </span>
                       <span className="text-sm font-medium text-green-500">
-                        ₹{cakePrice}
+                        ₹
+                        {cake == "Red velvet"
+                          ? 620
+                          : cake == "Rasmalai"
+                          ? 620
+                          : cakePrice}
                       </span>
                     </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
+              <div className="flex flex-col gap-y-3 mt-5">
+                <Input
+                  placeholder="Writing on Cake"
+                  disabled={!reservation.cake}
+                  defaultValue={reservation?.writingOnCake || undefined}
+                  type="text"
+                  maxLength={15}
+                  name="writingOnCake"
+                  onChange={(e) => {
+                    setReservationData({
+                      ...reservation,
+                      writingOnCake: e.target.value,
+                    });
+                  }}
+                />
+              </div>
             </CardContent>
           </Card>
+
           <Card className="w-full">
             <CardHeader>
-              <CardTitle>Professional Photography Services</CardTitle>
-              <CardDescription>Capture your special moments</CardDescription>
+              <CardTitle>Photo and Video Shoot</CardTitle>
             </CardHeader>
             <CardContent>
               <RadioGroup
@@ -110,45 +134,69 @@ export default function StepTwo() {
               >
                 <Label
                   className={`flex items-center justify-between p-4 border rounded-lg cursor-pointer transition-all ${
-                    photographyPackage === "30"
+                    photographyPackage === "photoshoot"
                       ? "border-primary bg-primary/5"
                       : "border-border hover:border-primary/50"
                   }`}
                 >
                   <div className="space-y-1">
                     <div className="flex items-center space-x-2">
-                      <RadioGroupItem value="30" id="30min" />
-                      <span className="font-medium">30 Minutes Package</span>
+                      <RadioGroupItem value="photoshoot" id="photoshoot" />
+                      <span className="font-medium">Photoshoot</span>
                     </div>
                     <p className="text-sm text-muted-foreground pl-6">
-                      Professional Photo Shoot
+                      Complete Celebration Coverage
                     </p>
                   </div>
-                  <span className="text-sm font-medium text-green-500">
+                  <span className="text-sm font-medium text-green-500 whitespace-nowrap">
                     + ₹700
                   </span>
                 </Label>
                 <Label
                   className={`flex items-center justify-between p-4 border rounded-lg cursor-pointer transition-all ${
-                    photographyPackage === "60"
+                    photographyPackage === "video"
                       ? "border-primary bg-primary/5"
                       : "border-border hover:border-primary/50"
                   }`}
                 >
                   <div className="space-y-1">
                     <div className="flex items-center space-x-2">
-                      <RadioGroupItem value="60" id="60min" />
-                      <span className="font-medium">60 Minutes Package</span>
+                      <RadioGroupItem value="video" id="video" />
+                      <span className="font-medium">Photography & Video</span>
                     </div>
                     <p className="text-sm text-muted-foreground pl-6">
-                      Extended coverage with more shots
+                      Photo Shoot & Video Shoot with Edited Video Clip
                     </p>
                   </div>
-                  <span className="text-sm font-medium text-green-500">
-                    + ₹1000
+                  <span className="text-sm font-medium text-green-500 whitespace-nowrap">
+                    + ₹1500
                   </span>
                 </Label>
               </RadioGroup>
+            </CardContent>
+          </Card>
+          <Card className="w-full h-fit">
+            <CardHeader>
+              <CardDescription>
+                Name / Age for display (optional)
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="flex flex-col gap-y-3">
+                <Input
+                  placeholder="Type here"
+                  defaultValue={reservation?.nameToDisplay || undefined}
+                  type="text"
+                  name="nameToDisplay"
+                  maxLength={6}
+                  onChange={(e) => {
+                    setReservationData({
+                      ...reservation,
+                      nameToDisplay: e.target.value,
+                    });
+                  }}
+                />
+              </div>
             </CardContent>
           </Card>
           <Card className="w-full h-fit">
@@ -192,6 +240,28 @@ export default function StepTwo() {
                 />
               </CardDescription>
             </CardHeader>
+          </Card>
+          <Card className="w-full p-0">
+            <CardHeader>
+              <CardTitle className="text-base">
+                Special Requests (optional)
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <Textarea
+                placeholder="Type here"
+                defaultValue={reservation?.specialRequests || undefined}
+                name="specialRequests"
+                className="resize-none"
+                maxLength={200}
+                onChange={(e) => {
+                  setReservationData({
+                    ...reservation,
+                    specialRequests: e.target.value,
+                  });
+                }}
+              />
+            </CardContent>
           </Card>
         </div>
       </div>

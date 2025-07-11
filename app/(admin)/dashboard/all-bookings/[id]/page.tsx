@@ -17,6 +17,8 @@ import {
   Heart,
   User,
   Building,
+  NotebookPen,
+  Monitor,
 } from "lucide-react";
 import formatCurrency from "@/lib/formatCurrency";
 import Link from "next/link";
@@ -63,7 +65,7 @@ export default async function Page({ params }: { params: { id: string } }) {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8 mt-[100px] max-w-4xl">
+    <div className="container mx-auto px-4 py-8 mt-10">
       <div className="mb-8">
         <h1 className="text-3xl font-bold mb-2">Reservation Details</h1>
         <p className="text-muted-foreground">
@@ -193,11 +195,16 @@ export default async function Page({ params }: { params: { id: string } }) {
                 {formatCurrency(reservation.advanceAmount)}
               </span>
             </div>
-
             <div className="flex items-center justify-between">
               <span className="text-sm text-gray-500">Balance Amount</span>
               <span className="font-medium">
                 {formatCurrency(reservation.balanceAmount)}
+              </span>
+            </div>
+            <div className="flex items-center justify-between">
+              <span className="text-sm text-gray-500">Discount</span>
+              <span className="font-medium">
+                {formatCurrency(reservation.discount ?? 0)}
               </span>
             </div>
             <Separator />
@@ -205,19 +212,12 @@ export default async function Page({ params }: { params: { id: string } }) {
               <span>Total Amount</span>
               <span>
                 {formatCurrency(
-                  reservation.advanceAmount + reservation.balanceAmount
+                  reservation.advanceAmount +
+                    reservation.balanceAmount -
+                    (reservation.discount ?? 0)
                 )}
               </span>
             </div>
-            {reservation.discount && reservation.discount > 0 && (
-              <div className="flex items-center justify-between text-green-600">
-                <span className="text-sm">Discount Applied</span>
-                <span className="font-medium">
-                  -{formatCurrency(reservation.discount)}
-                </span>
-              </div>
-            )}
-
             <div className="flex items-center justify-between">
               <span className="text-sm text-gray-500">Payment Status</span>
               <Badge
@@ -263,6 +263,24 @@ export default async function Page({ params }: { params: { id: string } }) {
                 </div>
               </div>
             )}
+            {reservation.nameToDisplay && (
+              <div className="flex items-center gap-3">
+                <Monitor className="h-4 w-4 text-gray-500" />
+                <div>
+                  <p className="text-sm text-gray-500">Display Name</p>
+                  <p className="font-medium">{reservation.nameToDisplay}</p>
+                </div>
+              </div>
+            )}
+            {reservation.writingOnCake && (
+              <div className="flex items-center gap-3">
+                <Cake className="h-4 w-4 text-gray-500" />
+                <div>
+                  <p className="text-sm text-gray-500">Writing on Cake</p>
+                  <p className="font-medium">{reservation.writingOnCake}</p>
+                </div>
+              </div>
+            )}
 
             {reservation.photography && (
               <div className="flex items-center gap-3">
@@ -288,6 +306,12 @@ export default async function Page({ params }: { params: { id: string } }) {
                 </Badge>
               </div>
             </div>
+            {reservation.specialRequests && (
+              <div className="flex flex-col gap-3">
+                <p className="text-sm text-gray-500">Special Requests</p>
+                <p className="font-medium">{reservation.specialRequests}</p>
+              </div>
+            )}
             {!reservation.cake &&
               !reservation.photography &&
               !reservation.fogEntry &&
@@ -299,7 +323,7 @@ export default async function Page({ params }: { params: { id: string } }) {
           </CardContent>
         </Card>
       </div>
-      <Card className="mt-6">
+      <Card className="mt-6 w-fit">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             Other Information

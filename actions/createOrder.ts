@@ -15,15 +15,28 @@ export async function createOrder(
 
   let price = reservation?.price!;
 
-  if (reservation?.cake) price += cakePrice;
+  let advanceAmountPrice = advanceAmount;
 
-  if (reservation?.fogEntry) price += 400;
+  if (reservation?.cake) {
+    if (reservation.cake == "Red velvet" || reservation.cake == "Rasmalai") {
+      price += 620;
+      advanceAmountPrice += 620;
+    } else {
+      price += cakePrice;
+      advanceAmountPrice += cakePrice;
+    }
+  }
+
+  if (reservation?.fogEntry) {
+    price += 400;
+    advanceAmountPrice += 400;
+  }
 
   if (reservation?.rosePath) price += 400;
 
-  if (reservation?.photography === "30") price += 700;
+  if (reservation?.photography === "photoshoot") price += 700;
 
-  if (reservation?.photography === "60") price += 1000;
+  if (reservation?.photography === "video") price += 1500;
 
   let priceIncreaseForAdditionalPeople = 0;
   if (
@@ -41,7 +54,7 @@ export async function createOrder(
   price += priceIncreaseForAdditionalPeople;
 
   const response = await instance.orders.create({
-    amount: payFull ? price * 100 : advanceAmount * 100,
+    amount: payFull ? price * 100 : advanceAmountPrice * 100,
     currency: "INR",
     receipt: "receipt#1",
     notes: {

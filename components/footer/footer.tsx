@@ -4,9 +4,9 @@ import Link from "next/link";
 
 export function Footer() {
   return (
-    <footer className="bg-[#1B202C] w-screen text-gray-300 py-12">
+    <footer className="border-t w-screen text-gray-300 py-12">
       <div className="container mx-auto px-4">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div className="space-y-4">
             <h3 className="text-lg font-semibold text-white">Quick Links</h3>
             <ul className="space-y-2">
@@ -82,26 +82,19 @@ export function Footer() {
                   Instagram
                 </Link>
               </li>
+              <li>
+                <Link
+                  href="https://youtube.com/"
+                  target="_blank"
+                  className="hover:text-white transition-colors flex items-center gap-x-2"
+                >
+                  YouTube
+                </Link>
+              </li>
             </ul>
-          </div>{" "}
-          <div className="space-y-4">
-            <h3 className="text-lg font-semibold text-white">Newsletter</h3>
-            <p className="text-sm">
-              Stay updated with our latest news and offers.
-            </p>
-            <form className="flex space-x-2">
-              <Input
-                type="email"
-                placeholder="Enter your email"
-                className="bg-gray-800 text-white border-gray-700 focus:border-gray-600"
-              />
-              <Button type="submit" variant="secondary">
-                Subscribe
-              </Button>
-            </form>
           </div>
         </div>
-        <div className="mt-8 pt-8 border-t border-gray-800 text-center">
+        <div className="mt-8 pt-8 border-t text-center">
           <p className="text-sm">
             &copy; 2025 Golden Hour Celebrations. All rights reserved.
           </p>
