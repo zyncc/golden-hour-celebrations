@@ -18,9 +18,11 @@ import {
 } from "@/components/ui/sidebar";
 import { authClient } from "@/lib/authClient";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export function NavUser() {
   const { isMobile } = useSidebar();
+  const router = useRouter();
   const { data: session, isPending } = authClient.useSession();
 
   return (
@@ -88,7 +90,18 @@ export function NavUser() {
                 Exit
               </DropdownMenuItem>
             </Link>
-            <DropdownMenuItem onSelect={async () => await authClient.signOut()}>
+            <DropdownMenuItem
+              onSelect={async () =>
+                await authClient.signOut({
+                  fetchOptions: {
+                    onSuccess: () => {
+                      router.push("/dashboard/signin");
+                      router.refresh();
+                    },
+                  },
+                })
+              }
+            >
               <LogOut />
               Log out
             </DropdownMenuItem>
