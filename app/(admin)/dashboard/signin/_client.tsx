@@ -59,7 +59,7 @@ export default function SigninClient() {
     });
   }
   return (
-    <Card className="space-y-4 w-full">
+    <Card className="space-y-4 w-full max-w-[500px]">
       <CardHeader>
         <CardTitle>Sign in to Admin</CardTitle>
       </CardHeader>
