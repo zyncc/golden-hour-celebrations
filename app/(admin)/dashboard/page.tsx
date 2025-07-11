@@ -66,14 +66,6 @@ export default async function AdminDashboard() {
       <div className="space-y-4">
         <div className="flex justify-between space-y-2">
           <h2 className="text-3xl font-bold tracking-tight">Dashboard</h2>
-          <div className="flex items-center space-x-2">
-            <Link href={"/dashboard/create"}>
-              <Button variant={"outline"}>
-                <Plus className="mr-2 h-4 w-4" />
-                Create Booking
-              </Button>
-            </Link>
-          </div>
         </div>
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
           <Link draggable={false} href={"/dashboard/recent-bookings"}>
