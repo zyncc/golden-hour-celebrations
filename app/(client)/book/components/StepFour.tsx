@@ -57,7 +57,7 @@ export default function StepThree() {
       },
       callback_url:
         process.env.NODE_ENV == "development"
-          ? `http://localhost:3000/success?orderId=${orderID}`
+          ? `${process.env.NEXT_PUBLIC_BASE_URL}/success?orderId=${orderID}`
           : `https://goldenhourcelebrations.in/success?orderId=${orderID}`,
       prefill: {
         name: reservation?.name,
@@ -335,7 +335,7 @@ export default function StepThree() {
                       <span className="text-muted-foreground">
                         ₹200 per Additional Person
                       </span>
-                      <span className="text-red-500 font-semibold whitespace-nowrap">
+                      <span className="text-green-600 font-semibold whitespace-nowrap">
                         + {formatCurrency(priceIncreaseForAdditionalPeople)}
                       </span>
                     </div>
@@ -376,7 +376,7 @@ export default function StepThree() {
                   </div>
                 )}
                 <Button
-                  className="w-full mt-4 bg-yellow-500 hover:bg-yellow-300"
+                  className="w-full mt-4 bg-highlight hover:bg-highlight-foreground"
                   size="lg"
                   disabled={pending}
                   onClick={() => handlePayButton()}

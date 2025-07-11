@@ -265,7 +265,7 @@ export default function StepTwo() {
           </Card>
         </div>
       </div>
-      <div className="sticky bottom-0 w-full bg-black pt-4 pb-4 z-10">
+      <div className="sticky bottom-0 w-full  pt-4 pb-4 z-10">
         <div className="flex gap-4">
           <Button
             type={"submit"}
@@ -281,7 +281,7 @@ export default function StepTwo() {
           </Button>
           <Button
             type={"submit"}
-            className={"flex-1 bg-yellow-500 hover:bg-yellow-500"}
+            className={"flex-1 bg-highlight hover:bg-highlight-foreground"}
             variant={"default"}
             onClick={() => handleNextButton()}
           >

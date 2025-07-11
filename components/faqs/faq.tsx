@@ -5,7 +5,6 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { faqData } from "@/lib/constants";
-import { Button } from "../ui/button";
 
 export const FAQSection = () => {
   return (

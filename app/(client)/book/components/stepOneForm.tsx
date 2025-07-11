@@ -1,7 +1,6 @@
 "use client";
-
-import React, { useState } from "react";
-import { z } from "zod";
+import { useState } from "react";
+import type { z } from "zod";
 import { format } from "date-fns";
 import { CalendarIcon, MapPin } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -16,9 +15,26 @@ import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { useReservation } from "@/context/ReservationStore";
 import { StepOneFormSchema } from "@/lib/zodSchemas";
-import { Label } from "@/components/ui/label";
 import { CreateUser } from "@/actions/createUser";
 import Link from "next/link";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Separator } from "@/components/ui/separator";
 
 export default function StepOneForm() {
   const currentDate = new Date();
@@ -29,43 +45,37 @@ export default function StepOneForm() {
     nextMonth = 0;
     nextYear++;
   }
-  let nextMonthDate = new Date(nextYear, nextMonth, 1);
+  const nextMonthDate = new Date(nextYear, nextMonth, 1);
+
   const router = useRouter();
   const { setReservationData, reservation } = useReservation();
-  const [date, setDate] = useState<Date | undefined>(reservation?.date);
   const [open, setOpen] = useState(false);
-  const [errors, setErrors] = useState<z.ZodIssue[]>();
 
-  function handleFormSubmit(FormData: FormData) {
-    const formData = Object.fromEntries(FormData);
-    const noOfPeople = Number(FormData.get("noOfPeople"));
-    console.log(noOfPeople);
-    let validation;
-    if (date) {
-      validation = StepOneFormSchema.safeParse({
-        ...formData,
-        noOfPeople,
-        date,
-      });
-    } else {
-      const resDate = reservation?.date as Date;
-      validation = StepOneFormSchema.safeParse({ ...formData, resDate });
-    }
-    if (validation.success) {
-      CreateUser({
-        email: validation.data.email,
-        name: validation.data.name,
-        phone: validation.data.phone,
-      });
-      setDate(validation.data.date);
-      setReservationData(undefined);
-      setReservationData(validation.data);
-      router.push("/book?step=2", {
-        scroll: true,
-      });
-    } else {
-      setErrors(validation.error.issues);
-    }
+  const form = useForm<z.infer<typeof StepOneFormSchema>>({
+    resolver: zodResolver(StepOneFormSchema),
+    defaultValues: {
+      name: reservation?.name || "",
+      phone: reservation?.phone || "",
+      email: reservation?.email || "",
+      findus: reservation?.findus || "",
+      occasion: reservation?.occasion || "",
+      noOfPeople: reservation?.noOfPeople || 0,
+      date: reservation?.date || undefined,
+    },
+  });
+
+  function handleFormSubmit(values: z.infer<typeof StepOneFormSchema>) {
+    CreateUser({
+      email: values.email,
+      name: values.name,
+      phone: values.phone,
+    });
+
+    setReservationData(undefined);
+    setReservationData(values);
+    router.push("/book?step=2", {
+      scroll: true,
+    });
   }
 
   return (
@@ -75,216 +85,211 @@ export default function StepOneForm() {
           "flex w-full items-center mb-8 justify-center flex-1 flex-col"
         }
       >
-        <form
-          className="space-y-8 w-full"
-          action={(formData) => handleFormSubmit(formData)}
-        >
-          <div className="flex flex-col gap-y-3">
-            <Label htmlFor="name">Enter your Name</Label>
-            <Input
-              placeholder={"Name"}
-              name="name"
-              defaultValue={reservation?.name}
-            />
-            {errors?.map((error) => {
-              if (error.path[0] == "name") {
-                return (
-                  <p
-                    className="text-sm text-red-600 font-medium"
-                    key={error.path[0]}
-                  >
-                    {error.message}
-                  </p>
-                );
-              }
-            })}
-          </div>
-          <div className="flex flex-col gap-y-3">
-            <Label>Enter your Whatsapp Number</Label>
-            <Input
-              placeholder="Phone"
-              type="text"
-              maxLength={10}
-              minLength={10}
-              name="phone"
-              defaultValue={reservation?.phone}
-            />
-            {errors?.map((error) => {
-              if (error.path[0] == "phone") {
-                return (
-                  <p
-                    className="text-sm text-red-600 font-medium"
-                    key={error.path[0]}
-                  >
-                    {error.message}
-                  </p>
-                );
-              }
-            })}
-          </div>
-          <div className="flex flex-col gap-y-3">
-            <Label>Enter your Email</Label>
-            <Input
-              placeholder="Email"
-              type="email"
-              name="email"
-              defaultValue={reservation?.email}
-            />
-            {errors?.map((error) => {
-              if (error.path[0] == "email") {
-                return (
-                  <p
-                    className="text-sm text-red-600 font-medium"
-                    key={error.path[0]}
-                  >
-                    {error.message}
-                  </p>
-                );
-              }
-            })}
-          </div>
-          <div className="flex flex-col gap-y-3">
-            <Label>How did you find us?</Label>
-            <select
-              name="findus"
-              defaultValue={reservation?.findus}
-              className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
-            >
-              <option value="Instagram / Facebook">Instagram / Facebook</option>
-              <option value="Google">Google</option>
-              <option value="Word of mouth">Word of mouth</option>
-              <option value="Other Advertisements">Other Advertisements</option>
-            </select>
-            {errors?.map((error) => {
-              if (error.path[0] == "findus") {
-                return (
-                  <p
-                    className="text-sm text-red-600 font-medium"
-                    key={error.path[0]}
-                  >
-                    {error.message}
-                  </p>
-                );
-              }
-            })}
-          </div>
-          <div className="flex flex-col gap-y-3">
-            <Label>Choose Occasion</Label>
-            <select
-              name="occasion"
-              defaultValue={reservation?.occasion}
-              className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
-            >
-              <option value="Movie Time">Movie Time</option>
-              <option value="Birthday">Birthday</option>
-              <option value="Anniversary">Anniversary</option>
-              <option value="Bride to be">Bride to be</option>
-              <option value="Groom to be">Groom to be</option>
-              <option value="Proposal Planning">Proposal Planning</option>
-              <option value="Surprise">Surprise</option>
-              <option value="Mom to be">Mom to be</option>
-              <option value="Other">Others</option>
-            </select>
-            {errors?.map((error) => {
-              if (error.path[0] == "occasion") {
-                return (
-                  <p
-                    className="text-sm text-red-600 font-medium"
-                    key={error.path[0]}
-                  >
-                    {error.message}
-                  </p>
-                );
-              }
-            })}
-          </div>
-          <div className="flex flex-col gap-y-3">
-            <Label>Enter Number of People</Label>
-            <Input
-              placeholder="Number of People"
-              defaultValue={reservation?.noOfPeople}
-              type="number"
-              name="noOfPeople"
-            />
-            {errors?.map((error) => {
-              if (error.path[0] == "noOfPeople") {
-                return (
-                  <p
-                    className="text-sm text-red-600 font-medium"
-                    key={error.path[0]}
-                  >
-                    {error.message}
-                  </p>
-                );
-              }
-            })}
-          </div>
-          <div className="flex flex-col gap-y-3">
-            <Label>Pick your Date</Label>
-            <Popover open={open} onOpenChange={setOpen}>
-              <PopoverTrigger asChild>
-                <Button
-                  variant={"outline"}
-                  className={cn(
-                    "w-full justify-start text-left font-normal",
-                    !date && "text-muted-foreground"
-                  )}
-                >
-                  <CalendarIcon className="mr-2 h-4 w-4" />
-                  {date ? format(date, "PPP") : <span>Pick a date</span>}
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="p-0">
-                <Calendar
-                  mode="single"
-                  fromDate={currentDate}
-                  toMonth={nextMonthDate}
-                  selected={date}
-                  onSelect={(date) => {
-                    setDate(date);
-                    setOpen(false);
-                  }}
-                />
-              </PopoverContent>
-            </Popover>
-            {errors?.map((error) => {
-              if (error.path[0] == "date") {
-                return (
-                  <p
-                    className="text-sm text-red-600 font-medium"
-                    key={error.path[0]}
-                  >
-                    {error.message}
-                  </p>
-                );
-              }
-            })}
-          </div>
-          <Button
-            type={"submit"}
-            className="w-full bg-yellow-500 hover:bg-yellow-300"
-            variant={"default"}
+        <Form {...form}>
+          <form
+            onSubmit={form.handleSubmit(handleFormSubmit)}
+            className="space-y-8 w-full"
           >
-            Next
-          </Button>
-        </form>
+            <FormField
+              control={form.control}
+              name="name"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Enter your Name</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Name" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="phone"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Enter your Whatsapp Number</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="Phone"
+                      type="text"
+                      maxLength={10}
+                      minLength={10}
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="email"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Enter your Email</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Email" type="email" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="findus"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>How did you find us?</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="Instagram / Facebook">
+                        Instagram / Facebook
+                      </SelectItem>
+                      <SelectItem value="Google">Google</SelectItem>
+                      <SelectItem value="Word of mouth">
+                        Word of mouth
+                      </SelectItem>
+                      <SelectItem value="Other Advertisements">
+                        Other Advertisements
+                      </SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="occasion"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Choose Occasion</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="Movie Time">Movie Time</SelectItem>
+                      <SelectItem value="Birthday">Birthday</SelectItem>
+                      <SelectItem value="Anniversary">Anniversary</SelectItem>
+                      <SelectItem value="Bride to be">Bride to be</SelectItem>
+                      <SelectItem value="Groom to be">Groom to be</SelectItem>
+                      <SelectItem value="Proposal Planning">
+                        Proposal Planning
+                      </SelectItem>
+                      <SelectItem value="Surprise">Surprise</SelectItem>
+                      <SelectItem value="Mom to be">Mom to be</SelectItem>
+                      <SelectItem value="Other">Others</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="noOfPeople"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Enter Number of People</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="Number of People"
+                      type="number"
+                      {...field}
+                      onChange={(e) => field.onChange(Number(e.target.value))}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="date"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Pick your Date</FormLabel>
+                  <Popover open={open} onOpenChange={setOpen}>
+                    <PopoverTrigger asChild>
+                      <FormControl>
+                        <Button
+                          variant={"outline"}
+                          className={cn(
+                            "w-full justify-start text-left font-normal",
+                            !field.value && "text-muted-foreground"
+                          )}
+                        >
+                          <CalendarIcon className="mr-2 h-4 w-4" />
+                          {field.value ? (
+                            format(field.value, "PPP")
+                          ) : (
+                            <span>Pick a date</span>
+                          )}
+                        </Button>
+                      </FormControl>
+                    </PopoverTrigger>
+                    <PopoverContent className="p-0">
+                      <Calendar
+                        mode="single"
+                        fromDate={currentDate}
+                        toMonth={nextMonthDate}
+                        selected={field.value}
+                        onSelect={(date) => {
+                          field.onChange(date);
+                          setOpen(false);
+                        }}
+                      />
+                    </PopoverContent>
+                  </Popover>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <Button
+              type={"submit"}
+              className="w-full bg-highlight hover:bg-highlight-foreground"
+              variant={"default"}
+            >
+              Next
+            </Button>
+          </form>
+        </Form>
       </div>
       <div className="space-y-6 rounded-lg w-full flex-1 bg-card p-6">
         <div className="space-y-2">
           <h2 className="text-2xl font-bold">Visit Us</h2>
           <div className="flex items-start space-x-2">
             <MapPin className="mt-1 h-5 w-5 shrink-0" />
-            <p className="text-muted-foreground">
-              1st floor, #66,
-              <br />
-              29th main, 29th A Cross Rd, Geetha Colony,
-              <br />
-              4th Block, Jayanagar, 560041
-              <br />
-              Call us
-              <br />
-              <Link href={"tel:9739204918"}>9739204918</Link>
-            </p>
+            <div className="text-muted-foreground">
+              <p>1st floor, #66, 29th main,</p>
+              <p>29th A Cross Rd, Geetha Colony,</p>
+              <p>4th Block, Jayanagar, 560041</p>
+              <Separator className="my-2" />
+
+              <Link href={"tel:9739204918"}>Call us - 9739204918</Link>
+            </div>
           </div>
         </div>
         {/* Google Maps Embed */}
@@ -300,7 +305,6 @@ export default function StepOneForm() {
             referrerPolicy="no-referrer-when-downgrade"
           ></iframe>
         </div>
-
         <div className="space-y-2">
           <h3 className="font-semibold">Opening Hours</h3>
           <p className="text-sm text-muted-foreground">

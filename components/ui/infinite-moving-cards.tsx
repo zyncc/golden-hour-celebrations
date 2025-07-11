@@ -66,7 +66,7 @@ export const InfiniteMovingCards = ({
       } else if (speed === "normal") {
         containerRef.current.style.setProperty("--animation-duration", "150s");
       } else {
-        containerRef.current.style.setProperty("--animation-duration", "150s");
+        containerRef.current.style.setProperty("--animation-duration", "350s");
       }
     }
   };
@@ -74,7 +74,7 @@ export const InfiniteMovingCards = ({
     <div
       ref={containerRef}
       className={cn(
-        "scroller relative z-20  max-w-7xl overflow-hidden  [mask-image:linear-gradient(to_right,transparent,white_20%,white_80%,transparent)]",
+        "scroller relative z-20 h-fit max-w-7xl overflow-hidden  [mask-image:linear-gradient(to_right,transparent,white_20%,white_80%,transparent)]",
         className
       )}
     >
@@ -90,8 +90,7 @@ export const InfiniteMovingCards = ({
           <li
             className="w-[350px] max-w-full relative rounded-2xl border border-b-0 flex-shrink-0 border-slate-700 px-8 py-6 md:w-[450px]"
             style={{
-              background:
-                "linear-gradient(180deg, var(--slate-800), var(--slate-900)",
+              background: "linear-gradient(to bottom, #000000, #1f2937)",
             }}
             key={item.name}
           >
@@ -102,13 +101,6 @@ export const InfiniteMovingCards = ({
               ></div>
               <span className=" relative flex z-20 text-sm leading-[1.6] text-gray-100 font-normal">
                 {item.name}
-                <div className="flex ml-3">
-                  {[1, 2, 3, 4, 5].map((stars, i) => (
-                    <div key={i}>
-                      <Star color="#eab308" size={20} fill="#eab308" />
-                    </div>
-                  ))}
-                </div>
               </span>
               <div className="relative z-20 mt-6 flex flex-row items-center">
                 <span className="flex flex-col gap-1">

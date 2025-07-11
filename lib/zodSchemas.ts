@@ -15,21 +15,21 @@ export const StepOneFormSchema = z.object({
   phone: z.string({ message: "Phone is required" }).regex(/^[6-9]\d{9}$/, {
     message: "Invalid phone number",
   }),
-  nameToDisplay: z
-    .string({ message: "Name is required" })
-    .max(6, { message: "Maximum 6 letters allowed" })
-    .optional(),
   email: z
     .string({ message: "Email is required" })
     .email("Enter a valid email address")
     .trim()
     .toLowerCase(),
-  findus: z.string({
-    message: "Please select one",
-  }),
-  occasion: z.string({
-    message: "Please select one",
-  }),
+  findus: z
+    .string({
+      message: "Please select one",
+    })
+    .min(1, { message: "Please select one" }),
+  occasion: z
+    .string({
+      message: "Please select one",
+    })
+    .min(1, { message: "Please select one" }),
   noOfPeople: z.coerce
     .number()
     .min(2, "Minimum 2 people are required!")

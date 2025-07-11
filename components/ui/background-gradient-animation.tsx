@@ -176,6 +176,7 @@ export const BackgroundGradientAnimation = ({
           ></div>
         )}
       </div>
+      <div className="absolute bottom-0 left-0 w-full h-48 pointer-events-none z-30 bg-[linear-gradient(to_bottom,transparent,#0f0f1a)]" />
     </div>
   );
 };

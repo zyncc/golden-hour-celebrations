@@ -94,7 +94,7 @@ export default async function SuccessPage({
               <div className="space-y-1">
                 <p className="text-sm text-muted-foreground">Cake</p>
                 <p className="font-medium text-foreground">
-                  {booking.cake || "None"}
+                  {booking.cake || "Not Added"}
                 </p>
               </div>
               <div className="space-y-1">
@@ -105,19 +105,19 @@ export default async function SuccessPage({
                     {booking.photography == "video" && "Photo & Video Shoot"}
                   </p>
                 ) : (
-                  <p className="font-medium text-foreground">None</p>
+                  <p className="font-medium text-foreground">Not Added</p>
                 )}
               </div>
               <div className="space-y-1">
                 <p className="text-sm text-muted-foreground">Fog Entry</p>
                 <p className="font-medium text-foreground">
-                  {booking.fogEntry ? "Added" : "None"}
+                  {booking.fogEntry ? "Added" : "Not Added"}
                 </p>
               </div>
               <div className="space-y-1">
                 <p className="text-sm text-muted-foreground">Rose Path</p>
                 <p className="font-medium text-foreground">
-                  {booking.rosePath ? "Added" : "None"}
+                  {booking.rosePath ? "Added" : "Not Added"}
                 </p>
               </div>
             </div>

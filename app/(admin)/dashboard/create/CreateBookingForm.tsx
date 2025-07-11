@@ -581,7 +581,7 @@ export default function CreateBookingForm() {
           <Button
             disabled={pending}
             type="submit"
-            className="w-full bg-yellow-500 hover:bg-yellow-300 text-black font-medium"
+            className="w-full font-medium"
           >
             {pending ? "Creating" : "Create Booking"}
           </Button>

@@ -18,6 +18,10 @@ const NavLinks = [
     Link: "/gallery",
   },
   {
+    Label: "Reviews",
+    Link: "/#reviews",
+  },
+  {
     Label: "Contact",
     Link: "/contact",
   },
@@ -53,8 +57,8 @@ export default function Navbar() {
           <div className="flex gap-x-3">
             <Link href={"/book"}>
               <Button
-                className="rounded-full text-black hover:text-black bg-yellow-500 hover:bg-yellow-300"
-                variant={"outline"}
+                className="rounded-full bg-highlight hover:bg-highlight-foreground"
+                variant={"default"}
               >
                 Book now
               </Button>

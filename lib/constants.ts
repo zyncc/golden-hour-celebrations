@@ -78,9 +78,8 @@ export const items = [
     room: "Dreamscape Theatre",
     description: [
       "Private Movie Time Experience",
-      "Romantic Date Decor",
+      "Cozy Romantic Date Decor",
       "LED Letter Name",
-      "Cozy Private Theatre",
       "Access to OTT Platforms",
       "2 people (Additional ₹200 per person)",
     ],
@@ -115,8 +114,33 @@ export const reviews = [
     stars: 5,
   },
   {
-    name: "Keshav",
-    description: "Very good place for events",
+    name: "Bhaskar Totam",
+    description:
+      "We had a wonderful experience and created lasting memories on my special day. As a positive suggestion, using a digital DSLR camera could elevate the overall event from good to truly great by enhancing its richness👍",
+    stars: 5,
+  },
+  {
+    name: "Chaya Chandana",
+    description:
+      "The decoration was absolutely stunning and exceeded all my expectations!! Every detail was thoughtfully done from the color scheme to the arrangement and it created such a warm atmosphere, i couldn’t be more thankful. Highly recommended for anyone looking to add a magical touch to their event!!!",
+    stars: 5,
+  },
+  {
+    name: "shwetha nistalavar",
+    description:
+      "Had an amazing experience celebrating a birthday here! The ambiance was perfect, the staff was super helpful, and everything was beautifully organized. The decor , props and overall vibe made it a memorable celebration. Highly recommend this place for special occasions.",
+    stars: 5,
+  },
+  {
+    name: "Girish Prabhakar",
+    description:
+      "Nice hall for small family celebrations!! We watched RCB finals, and was a great experience!!! Food was amazing!!!!",
+    stars: 5,
+  },
+  {
+    name: "Lalitha S",
+    description:
+      "We just celebrated our 25th anniversary with my husband and our kids and it was so amazing. The whole thing was set up so well — the setup was lovely, with a warm and festive ambience that made the day so special.",
     stars: 5,
   },
 ];

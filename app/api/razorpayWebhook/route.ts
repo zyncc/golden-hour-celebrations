@@ -4,6 +4,8 @@ import { Resend } from "resend";
 import { revalidatePath } from "next/cache";
 import { NextResponse } from "next/server";
 import crypto from "crypto";
+import { google } from "googleapis";
+import { getEventTimeRange } from "@/lib/utils";
 
 export async function POST(req: Request) {
   try {
@@ -40,7 +42,6 @@ export async function POST(req: Request) {
         to: [
           updatedReservation.email.toLowerCase(),
           "goldenhourcelebrationsblr@gmail.com",
-          "chandankrishna288@gmail.com",
         ],
         subject: "Receipt for your Reservation",
         react: NikeReceiptEmail({
@@ -49,6 +50,52 @@ export async function POST(req: Request) {
       });
       console.log(emailSent);
     }
+
+    const { startDateTime, endDateTime } = getEventTimeRange(
+      updatedReservation.date.toString(),
+      updatedReservation.timeSlot
+    );
+
+    const oauth2Client = new google.auth.OAuth2(
+      process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!,
+      process.env.GOOGLE_CLIENT_SECRET!,
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/google/callback`
+    );
+
+    oauth2Client.setCredentials({
+      refresh_token: process.env.GOOGLE_REFRESH_TOKEN!,
+    });
+
+    const calendar = google.calendar({ version: "v3", auth: oauth2Client });
+
+    const event = {
+      summary: `Booking confirmed for ${updatedReservation.name} in ${updatedReservation.room}`,
+      description: `Time Slot: ${updatedReservation.timeSlot} , Cake: ${
+        updatedReservation.cake ?? "none"
+      }, Name on Cake: ${
+        updatedReservation.cake && updatedReservation.writingOnCake
+          ? updatedReservation.writingOnCake
+          : "none"
+      }, Fog Entry: ${updatedReservation.fogEntry ?? "none"}`,
+      start: {
+        dateTime: startDateTime,
+        timeZone: "Asia/Kolkata",
+      },
+      end: {
+        dateTime: endDateTime,
+        timeZone: "Asia/Kolkata",
+      },
+      colorId: "5",
+      reminders: {
+        useDefault: false,
+        overrides: [{ method: "popup", minutes: 120 }],
+      },
+    };
+
+    await calendar.events.insert({
+      calendarId: "primary",
+      requestBody: event,
+    });
   } catch (error) {
     console.log(error);
   } finally {

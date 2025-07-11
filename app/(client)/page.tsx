@@ -1,45 +1,16 @@
 import { Footer } from "@/components/footer/footer";
-import { InfiniteMovingCards } from "@/components/ui/infinite-moving-cards";
-import { Spotlight } from "@/components/ui/Spotlight";
-import { TextGenerateEffect } from "@/components/ui/text-generate-effect";
 import React from "react";
 import { reviews } from "@/lib/constants";
 import { FAQSection } from "@/components/faqs/faq";
 import { Metadata } from "next";
-import { Marquee } from "@/components/magicui/marquee";
-import { cn } from "@/lib/utils";
 import { BackgroundGradientAnimation } from "@/components/ui/background-gradient-animation";
+import { InfiniteMovingCards } from "@/components/ui/infinite-moving-cards";
 
 export const metadata: Metadata = {
   title: "The Best Private Theatre in Bangalore - Golden Hour Celebrations",
 };
 
-const ReviewCard = ({ name, body }: { name: string; body: string }) => {
-  return (
-    <figure
-      className={cn(
-        "relative h-full w-fit sm:w-36 cursor-pointer overflow-hidden rounded-xl border p-4",
-        // light styles
-        "border-gray-950/[.1] bg-gray-950/[.01] hover:bg-gray-950/[.05]",
-        // dark styles
-        "dark:border-gray-50/[.1] dark:bg-gray-50/[.10] dark:hover:bg-gray-50/[.15]"
-      )}
-    >
-      <div className="flex flex-row items-center gap-2">
-        <div className="flex flex-col">
-          <figcaption className="text-sm font-medium dark:text-white">
-            {name}
-          </figcaption>
-        </div>
-      </div>
-      <blockquote className="mt-2 text-sm">{body}</blockquote>
-    </figure>
-  );
-};
-
 export default function Page() {
-  const firstRow = reviews.slice(0, reviews.length / 2);
-  const secondRow = reviews.slice(reviews.length / 2);
   return (
     <>
       <section className="min-h-screen">
@@ -72,31 +43,13 @@ export default function Page() {
       <section className="container my-[200px]">
         <FAQSection />
       </section>
-      <section className="container my-[200px]">
+      <section id="reviews" className="container py-[100px]">
         <h1 className="font-semibold bg-clip-text text-transparent bg-gradient-to-b from-neutral-200 to-neutral-500 text-4xl text-center lg:text-7xl">
-          Testimonials
+          Reviews
         </h1>
-        <div className="relative flex w-full flex-col items-center justify-center overflow-hidden">
-          <Marquee className="[--duration:20s]">
-            {firstRow.map((review) => (
-              <ReviewCard
-                key={review.name}
-                body={review.description}
-                name={review.name}
-              />
-            ))}
-          </Marquee>
-          <Marquee reverse className="[--duration:20s]">
-            {secondRow.map((review) => (
-              <ReviewCard
-                key={review.name}
-                body={review.description}
-                name={review.name}
-              />
-            ))}
-          </Marquee>
-          <div className="pointer-events-none absolute inset-y-0 left-0 w-1/4 bg-gradient-to-r from-background"></div>
-          <div className="pointer-events-none absolute inset-y-0 right-0 w-1/4 bg-gradient-to-l from-background"></div>
+        <div className="relative flex w-full flex-col items-center mt-10 justify-center overflow-hidden">
+          <InfiniteMovingCards items={reviews} direction="right" speed="slow" />
+          <InfiniteMovingCards items={reviews} direction="left" speed="slow" />
         </div>
       </section>
       <Footer />

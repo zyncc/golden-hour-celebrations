@@ -13,6 +13,7 @@ export default function robots(): MetadataRoute.Robots {
         "/refunds",
         "/success",
         "/account",
+        "/signin",
       ],
     },
     sitemap: "https://goldenhourcelebrations.in/sitemap.xml",
