@@ -99,6 +99,12 @@ export default function StepThree() {
   if (reservation?.rosePath) {
     price += 400;
   }
+  if (
+    reservation?.timeSlot === "10PM - 12AM" ||
+    reservation?.timeSlot === "10:30PM - 12:30AM"
+  ) {
+    price += 500;
+  }
   if (reservation?.photography === "photoshoot") {
     price += 700;
   }
@@ -315,6 +321,17 @@ export default function StepThree() {
                     </span>
                     <span className="text-green-600 font-semibold whitespace-nowrap">
                       + {formatCurrency(400)}
+                    </span>
+                  </div>
+                )}
+                {(reservation.timeSlot === "10PM - 12AM" ||
+                  reservation.timeSlot === "10:30PM - 12:30AM") && (
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">
+                      Midnight Slot Charges
+                    </span>
+                    <span className="text-green-600 font-semibold whitespace-nowrap">
+                      + {formatCurrency(500)}
                     </span>
                   </div>
                 )}

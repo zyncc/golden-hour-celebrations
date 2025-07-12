@@ -45,6 +45,13 @@ export async function createReservation(
     total += 400;
   }
 
+  if (
+    reservation?.timeSlot === "10PM - 12AM" ||
+    reservation?.timeSlot === "10:30PM - 12:30AM"
+  ) {
+    total += 500;
+  }
+
   if (reservation.photography === "photoshoot") {
     total += 700;
   } else if (reservation.photography === "video") {
@@ -171,6 +178,13 @@ export async function CreateManualBooking(data: Data) {
 
   if (data.photography === "photoshoot") total += 700;
   else if (data.photography === "video") total += 1500;
+
+  if (
+    data.timeSlot === "10PM - 12AM" ||
+    data.timeSlot === "10:30PM - 12:30AM"
+  ) {
+    total += 500;
+  }
 
   if (
     data.room === "Dreamscape Theatre" &&

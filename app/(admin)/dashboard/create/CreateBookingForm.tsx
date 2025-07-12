@@ -43,6 +43,8 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { z } from "zod";
 import { toast } from "sonner";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 
 export default function CreateBookingForm() {
   const currentDate = new Date();
@@ -69,6 +71,7 @@ export default function CreateBookingForm() {
   const [photography, setPhotography] = useState<string>("");
   const [fogEntry, setFogEntry] = useState(false);
   const [rosePath, setRosePath] = useState(false);
+  const [selectedTimeSlot, setSelectedTimeSlot] = useState<string>("");
 
   const form = useForm<z.infer<typeof ManualBookingSchema>>({
     resolver: zodResolver(ManualBookingSchema),
@@ -109,6 +112,7 @@ export default function CreateBookingForm() {
   // Calculate total cost and balance amount
   const calculatedAmounts = useMemo(() => {
     let totalCost = 0;
+    let midnightCharge = 0;
 
     // Base room cost
     if (selectedRoom === "Dreamscape Theatre") {
@@ -144,10 +148,20 @@ export default function CreateBookingForm() {
       totalCost += 1500;
     }
 
+    // Midnight charges
+    if (
+      selectedTimeSlot === "10PM - 12AM" ||
+      selectedTimeSlot === "10:30PM - 12:30AM"
+    ) {
+      midnightCharge = 500;
+      totalCost += midnightCharge;
+    }
+
     const balanceAmount = totalCost - advanceAmount - discount;
 
     return {
       totalCost,
+      midnightCharge,
       balanceAmount: Math.max(0, balanceAmount),
     };
   }, [
@@ -157,6 +171,7 @@ export default function CreateBookingForm() {
     fogEntry,
     rosePath,
     photography,
+    selectedTimeSlot,
     advanceAmount,
     discount,
   ]);
@@ -217,436 +232,615 @@ export default function CreateBookingForm() {
   }
 
   return (
-    <Form {...form}>
-      <form
-        className="w-full grid grid-cols-1 lg:grid-cols-2 gap-6"
-        onSubmit={form.handleSubmit(handleFormSubmit)}
-      >
-        <FormField
-          control={form.control}
-          name="noOfPeople"
-          render={({ field }) => (
-            <FormItem className="flex-1">
-              <FormLabel>No of People</FormLabel>
-              <FormControl>
-                <Input
-                  placeholder="No of People"
-                  type="number"
-                  value={field.value || ""}
-                  onChange={(e) => {
-                    const value = Number.parseInt(e.target.value) || 0;
-                    field.onChange(value);
-                    setNoOfPeople(value);
-                  }}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name="room"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Package</FormLabel>
-              <FormControl>
-                <Select
-                  value={field.value || ""}
-                  onValueChange={(value) => {
-                    field.onChange(value);
-                    setSelectedRoom(value);
-                  }}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select Package" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="Dreamscape Theatre">
-                      Dreamscape Theatre
-                    </SelectItem>
-                    <SelectItem value="Majestic Theatre">
-                      Majestic Theatre
-                    </SelectItem>
-                  </SelectContent>
-                </Select>
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name="date"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Pick your Date</FormLabel>
-              <FormControl>
-                <Popover open={open} onOpenChange={setOpen}>
-                  <PopoverTrigger asChild>
-                    <Button
-                      variant="outline"
-                      className={cn(
-                        "w-full justify-start text-left font-normal",
-                        !field.value && "text-muted-foreground"
-                      )}
-                    >
-                      <CalendarIcon className="mr-2 h-4 w-4" />
-                      {field.value ? (
-                        format(field.value, "PPP")
-                      ) : (
-                        <span>Pick a date</span>
-                      )}
-                    </Button>
-                  </PopoverTrigger>
-                  <PopoverContent className="p-0">
-                    <Calendar
-                      mode="single"
-                      fromDate={currentDate}
-                      toMonth={nextMonthDate}
-                      selected={field.value}
-                      onSelect={(date) => {
-                        field.onChange(date);
-                        setSelectedDate(date);
-                        setOpen(false);
-                      }}
-                    />
-                  </PopoverContent>
-                </Popover>
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name="timeSlot"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Time Slot</FormLabel>
-              <div className="mt-3 gap-2 grid grid-cols-2 md:grid-cols-3">
-                {availableTimeSlots.map((slot) => {
-                  const isBooked = isTimeSlotBooked(slot);
-                  const isSelected = field.value === slot;
-                  const isDisabled =
-                    (selectedRoom === "Dreamscape Theatre" && noOfPeople > 5) ||
-                    isBooked ||
-                    isLoading ||
-                    !selectedDate ||
-                    !selectedRoom ||
-                    !noOfPeople;
-
-                  return (
-                    <Button
-                      key={slot}
-                      variant={
-                        isSelected
-                          ? "default"
-                          : isBooked
-                          ? "destructive"
-                          : "outline"
-                      }
-                      type="button"
-                      onClick={() => field.onChange(slot)}
-                      disabled={isDisabled}
-                      className="flex-1"
-                    >
-                      {slot}
-                    </Button>
-                  );
-                })}
-              </div>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name="occasion"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Choose Occasion</FormLabel>
-              <FormControl>
-                <Select
-                  value={field.value || ""}
-                  onValueChange={field.onChange}
-                >
-                  <SelectTrigger className="w-full">
-                    <SelectValue placeholder="Select an occasion" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="Birthday">Birthday</SelectItem>
-                    <SelectItem value="Anniversary">Anniversary</SelectItem>
-                    <SelectItem value="Bride to be">Bride to be</SelectItem>
-                    <SelectItem value="Groom to be">Groom to be</SelectItem>
-                    <SelectItem value="Movie Date">Movie Date</SelectItem>
-                    <SelectItem value="Graduation Party">
-                      Graduation Party
-                    </SelectItem>
-                    <SelectItem value="Proposal">Proposal</SelectItem>
-                    <SelectItem value="Mom to be">Mom to be</SelectItem>
-                    <SelectItem value="Other">Other</SelectItem>
-                  </SelectContent>
-                </Select>
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name="name"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Name</FormLabel>
-              <FormControl>
-                <Input placeholder="Name" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name="email"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Email</FormLabel>
-              <FormControl>
-                <Input placeholder="Email" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name="phone"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>WhatsApp Number</FormLabel>
-              <FormControl>
-                <Input placeholder="Phone" type="text" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name="nameToDisplay"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Name to Display</FormLabel>
-              <FormControl>
-                <Input placeholder="Name to Display" type="text" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name="cake"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Cake (Optional)</FormLabel>
-              <FormControl>
-                <Select
-                  value={field.value || ""}
-                  onValueChange={(value) => {
-                    field.onChange(value);
-                    setSelectedCake(value);
-                  }}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select Cake" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {cakes.map((cake) => (
-                      <SelectItem key={cake} value={cake}>
-                        {cake}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name="photography"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Photography (Optional)</FormLabel>
-              <FormControl>
-                <Select
-                  value={field.value || ""}
-                  onValueChange={(value) => {
-                    field.onChange(value);
-                    setPhotography(value);
-                  }}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select Photography Package" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="photoshoot">Photoshoot</SelectItem>
-                    <SelectItem value="video">Photography & Video</SelectItem>
-                  </SelectContent>
-                </Select>
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <div className="flex flex-row justify-between gap-x-4">
-          <FormField
-            control={form.control}
-            name="advanceAmount"
-            render={({ field }) => (
-              <FormItem className="flex-1">
-                <FormLabel>Advance Amount</FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder="Amount Paid"
-                    type="number"
-                    value={field.value || ""}
-                    onChange={(e) => {
-                      const value = Number.parseInt(e.target.value) || 0;
-                      field.onChange(value);
-                      setAdvanceAmount(value);
-                    }}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="discount"
-            render={({ field }) => (
-              <FormItem className="flex-1">
-                <FormLabel>Discount</FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder="Discount"
-                    type="number"
-                    value={field.value || ""}
-                    onChange={(e) => {
-                      const value = Number.parseInt(e.target.value) || 0;
-                      field.onChange(value);
-                      setDiscount(value);
-                    }}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </div>
-
-        <div className="flex flex-col gap-y-4">
-          <FormField
-            control={form.control}
-            name="fogEntry"
-            render={({ field }) => (
-              <FormItem>
-                <div className="flex items-center gap-x-4">
-                  <FormLabel>Wants Fog Entry (Optional)</FormLabel>
-                  <FormControl>
-                    <Switch
-                      checked={field.value}
-                      onCheckedChange={(checked) => {
-                        field.onChange(checked);
-                        setFogEntry(checked);
-                      }}
-                    />
-                  </FormControl>
-                </div>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="rosePath"
-            render={({ field }) => (
-              <FormItem>
-                <div className="flex items-center gap-x-4">
-                  <FormLabel>Wants Rose Path (Optional)</FormLabel>
-                  <FormControl>
-                    <Switch
-                      checked={field.value}
-                      onCheckedChange={(checked) => {
-                        field.onChange(checked);
-                        setRosePath(checked);
-                      }}
-                    />
-                  </FormControl>
-                </div>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </div>
-
-        {selectedRoom && advanceAmount > 0 && (
-          <div className="mt-5 p-4 bg-muted rounded-lg">
-            <div className="space-y-2">
-              <div className="flex justify-between">
-                <span>Total Cost:</span>
-                <span className="font-medium">
-                  {formatCurrency(calculatedAmounts.totalCost)}
-                </span>
-              </div>
-              <div className="flex justify-between">
-                <span>Advance Paid:</span>
-                <span className="font-medium">
-                  -{formatCurrency(advanceAmount)}
-                </span>
-              </div>
-              {discount > 0 && (
-                <div className="flex justify-between">
-                  <span>Discount:</span>
-                  <span className="font-medium">
-                    -{formatCurrency(discount)}
-                  </span>
-                </div>
-              )}
-              <hr />
-              <div className="flex justify-between text-lg font-semibold">
-                <span>Balance Remaining:</span>
-                <span>{formatCurrency(calculatedAmounts.balanceAmount)}</span>
-              </div>
-            </div>
-          </div>
-        )}
-
-        <Button
-          disabled={pending}
-          type="submit"
-          className="w-full font-medium lg:col-span-2"
+    <div className="space-y-8">
+      <Form {...form}>
+        <form
+          onSubmit={form.handleSubmit(handleFormSubmit)}
+          className="space-y-8"
         >
-          {pending ? "Creating..." : "Create Booking"}
-        </Button>
-      </form>
-    </Form>
+          {/* Basic Information */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-xl">Basic Information</CardTitle>
+            </CardHeader>
+            <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <FormField
+                control={form.control}
+                name="noOfPeople"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-sm font-medium">
+                      Number of People
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="Enter number of people"
+                        type="number"
+                        value={field.value || ""}
+                        onChange={(e) => {
+                          const value = Number.parseInt(e.target.value) || 0;
+                          field.onChange(value);
+                          setNoOfPeople(value);
+                        }}
+                        className="h-11"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="room"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-sm font-medium">
+                      Package
+                    </FormLabel>
+                    <FormControl>
+                      <Select
+                        value={field.value || ""}
+                        onValueChange={(value) => {
+                          field.onChange(value);
+                          setSelectedRoom(value);
+                        }}
+                      >
+                        <SelectTrigger className="h-11">
+                          <SelectValue placeholder="Select a package" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="Dreamscape Theatre">
+                            <div className="flex items-center gap-2">
+                              <span>Dreamscape Theatre</span>
+                              <Badge variant="secondary">₹1,499</Badge>
+                            </div>
+                          </SelectItem>
+                          <SelectItem value="Majestic Theatre">
+                            <div className="flex items-center gap-2">
+                              <span>Majestic Theatre</span>
+                              <Badge variant="secondary">₹1,899</Badge>
+                            </div>
+                          </SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="date"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-sm font-medium">Date</FormLabel>
+                    <FormControl>
+                      <Popover open={open} onOpenChange={setOpen}>
+                        <PopoverTrigger asChild>
+                          <Button
+                            variant="outline"
+                            className={cn(
+                              "w-full h-11 justify-start text-left font-normal",
+                              !field.value && "text-muted-foreground"
+                            )}
+                          >
+                            <CalendarIcon className="mr-2 h-4 w-4" />
+                            {field.value ? (
+                              format(field.value, "PPP")
+                            ) : (
+                              <span>Pick a date</span>
+                            )}
+                          </Button>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-auto p-0" align="start">
+                          <Calendar
+                            mode="single"
+                            fromDate={currentDate}
+                            toMonth={nextMonthDate}
+                            selected={field.value}
+                            onSelect={(date) => {
+                              field.onChange(date);
+                              setSelectedDate(date);
+                              setOpen(false);
+                            }}
+                          />
+                        </PopoverContent>
+                      </Popover>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="occasion"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-sm font-medium">
+                      Occasion
+                    </FormLabel>
+                    <FormControl>
+                      <Select
+                        value={field.value || ""}
+                        onValueChange={field.onChange}
+                      >
+                        <SelectTrigger className="h-11">
+                          <SelectValue placeholder="Select an occasion" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="Birthday">🎂 Birthday</SelectItem>
+                          <SelectItem value="Anniversary">
+                            💕 Anniversary
+                          </SelectItem>
+                          <SelectItem value="Bride to be">
+                            👰 Bride to be
+                          </SelectItem>
+                          <SelectItem value="Groom to be">
+                            🤵 Groom to be
+                          </SelectItem>
+                          <SelectItem value="Movie Date">
+                            🎬 Movie Date
+                          </SelectItem>
+                          <SelectItem value="Graduation Party">
+                            🎓 Graduation Party
+                          </SelectItem>
+                          <SelectItem value="Proposal">💍 Proposal</SelectItem>
+                          <SelectItem value="Mom to be">
+                            🤱 Mom to be
+                          </SelectItem>
+                          <SelectItem value="Other">🎉 Other</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </CardContent>
+          </Card>
+
+          {/* Time Slot Selection */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-xl">Time Slot Selection</CardTitle>
+              <p className="text-sm text-muted-foreground">
+                Choose your preferred time slot
+              </p>
+            </CardHeader>
+            <CardContent>
+              <FormField
+                control={form.control}
+                name="timeSlot"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-sm font-medium">
+                      Available Time Slots
+                    </FormLabel>
+                    <div className="mt-4 gap-3 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+                      {availableTimeSlots.map((slot) => {
+                        const isBooked = isTimeSlotBooked(slot);
+                        const isSelected = field.value === slot;
+                        const isDisabled =
+                          (selectedRoom === "Dreamscape Theatre" &&
+                            noOfPeople > 5) ||
+                          isBooked ||
+                          isLoading ||
+                          !selectedDate ||
+                          !selectedRoom ||
+                          !noOfPeople;
+
+                        return (
+                          <Button
+                            key={slot}
+                            variant={
+                              isSelected
+                                ? "default"
+                                : isBooked
+                                ? "destructive"
+                                : "outline"
+                            }
+                            type="button"
+                            onClick={() => {
+                              field.onChange(slot);
+                              setSelectedTimeSlot(slot);
+                            }}
+                            disabled={isDisabled}
+                            className="h-12 text-sm font-medium"
+                          >
+                            {slot}
+                          </Button>
+                        );
+                      })}
+                    </div>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </CardContent>
+          </Card>
+
+          {/* Contact Information */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-xl">Contact Information</CardTitle>
+            </CardHeader>
+            <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <FormField
+                control={form.control}
+                name="name"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-sm font-medium">
+                      Full Name
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="Enter full name"
+                        {...field}
+                        className="h-11"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-sm font-medium">
+                      Email Address
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="Enter email address"
+                        {...field}
+                        className="h-11"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="phone"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-sm font-medium">
+                      WhatsApp Number
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="Enter WhatsApp number"
+                        type="text"
+                        {...field}
+                        className="h-11"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="nameToDisplay"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-sm font-medium">
+                      Name to Display
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="Name for display"
+                        type="text"
+                        {...field}
+                        className="h-11"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </CardContent>
+          </Card>
+
+          {/* Add-ons & Extras */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-xl">Add-ons & Extras</CardTitle>
+              <p className="text-sm text-muted-foreground">
+                Enhance your experience with these optional services
+              </p>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <FormField
+                  control={form.control}
+                  name="cake"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-sm font-medium">
+                        Cake Selection
+                      </FormLabel>
+                      <FormControl>
+                        <Select
+                          value={field.value || ""}
+                          onValueChange={(value) => {
+                            field.onChange(value);
+                            setSelectedCake(value);
+                          }}
+                        >
+                          <SelectTrigger className="h-11">
+                            <SelectValue placeholder="Select a cake (optional)" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {cakes.map((cake) => (
+                              <SelectItem key={cake} value={cake}>
+                                {cake}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="photography"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-sm font-medium">
+                        Photography Package
+                      </FormLabel>
+                      <FormControl>
+                        <Select
+                          value={field.value || ""}
+                          onValueChange={(value) => {
+                            field.onChange(value);
+                            setPhotography(value);
+                          }}
+                        >
+                          <SelectTrigger className="h-11">
+                            <SelectValue placeholder="Select photography (optional)" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="photoshoot">
+                              <div className="flex items-center gap-2">
+                                <span>📸 Photoshoot</span>
+                                <Badge variant="outline">+₹700</Badge>
+                              </div>
+                            </SelectItem>
+                            <SelectItem value="video">
+                              <div className="flex items-center gap-2">
+                                <span>🎥 Photography & Video</span>
+                                <Badge variant="outline">+₹1,500</Badge>
+                              </div>
+                            </SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+
+              {/* Enhanced Switch Controls */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <FormField
+                  control={form.control}
+                  name="fogEntry"
+                  render={({ field }) => (
+                    <FormItem>
+                      <div className="flex items-center justify-between p-4 border rounded-lg bg-card">
+                        <div className="space-y-1">
+                          <FormLabel className="text-sm font-medium cursor-pointer">
+                            🌫️ Fog Entry
+                          </FormLabel>
+                          <p className="text-xs text-muted-foreground">
+                            Dramatic fog entrance effect
+                          </p>
+                          <Badge variant="outline" className="text-xs">
+                            +₹400
+                          </Badge>
+                        </div>
+                        <FormControl>
+                          <Switch
+                            checked={field.value}
+                            onCheckedChange={(checked) => {
+                              field.onChange(checked);
+                              setFogEntry(checked);
+                            }}
+                          />
+                        </FormControl>
+                      </div>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="rosePath"
+                  render={({ field }) => (
+                    <FormItem>
+                      <div className="flex items-center justify-between p-4 border rounded-lg bg-card">
+                        <div className="space-y-1">
+                          <FormLabel className="text-sm font-medium cursor-pointer">
+                            🌹 Rose Path
+                          </FormLabel>
+                          <p className="text-xs text-muted-foreground">
+                            Beautiful rose petal pathway
+                          </p>
+                          <Badge variant="outline" className="text-xs">
+                            +₹400
+                          </Badge>
+                        </div>
+                        <FormControl>
+                          <Switch
+                            checked={field.value}
+                            onCheckedChange={(checked) => {
+                              field.onChange(checked);
+                              setRosePath(checked);
+                            }}
+                          />
+                        </FormControl>
+                      </div>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Payment Information */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-xl">Payment Information</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <FormField
+                  control={form.control}
+                  name="advanceAmount"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-sm font-medium">
+                        Advance Amount
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="Amount paid in advance"
+                          type="number"
+                          value={field.value || ""}
+                          onChange={(e) => {
+                            const value = Number.parseInt(e.target.value) || 0;
+                            field.onChange(value);
+                            setAdvanceAmount(value);
+                          }}
+                          className="h-11"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="discount"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-sm font-medium">
+                        Discount
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="Discount amount"
+                          type="number"
+                          value={field.value || ""}
+                          onChange={(e) => {
+                            const value = Number.parseInt(e.target.value) || 0;
+                            field.onChange(value);
+                            setDiscount(value);
+                          }}
+                          className="h-11"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+
+              {/* Cost Breakdown */}
+              {selectedRoom && advanceAmount > 0 && (
+                <Card>
+                  <CardHeader className="pb-3">
+                    <CardTitle className="text-lg">Cost Breakdown</CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-3">
+                    <div className="flex justify-between text-sm">
+                      <span>Base Cost:</span>
+                      <span className="font-medium">
+                        {formatCurrency(
+                          calculatedAmounts.totalCost -
+                            calculatedAmounts.midnightCharge
+                        )}
+                      </span>
+                    </div>
+                    {calculatedAmounts.midnightCharge > 0 && (
+                      <div className="flex justify-between text-sm">
+                        <span>Midnight Charges:</span>
+                        <span className="font-medium">
+                          +{formatCurrency(calculatedAmounts.midnightCharge)}
+                        </span>
+                      </div>
+                    )}
+                    <div className="flex justify-between text-sm font-medium border-t pt-3">
+                      <span>Total Cost:</span>
+                      <span>{formatCurrency(calculatedAmounts.totalCost)}</span>
+                    </div>
+                    <div className="flex justify-between text-sm">
+                      <span>Advance Paid:</span>
+                      <span className="font-medium text-green-600">
+                        -{formatCurrency(advanceAmount)}
+                      </span>
+                    </div>
+                    {discount > 0 && (
+                      <div className="flex justify-between text-sm">
+                        <span>Discount:</span>
+                        <span className="font-medium text-green-600">
+                          -{formatCurrency(discount)}
+                        </span>
+                      </div>
+                    )}
+                    <div className="border-t pt-3">
+                      <div className="flex justify-between text-lg font-bold">
+                        <span>Balance Remaining:</span>
+                        <span>
+                          {formatCurrency(calculatedAmounts.balanceAmount)}
+                        </span>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              )}
+            </CardContent>
+          </Card>
+
+          {/* Submit Button */}
+          <div className="flex justify-center pt-6">
+            <Button
+              disabled={pending}
+              type="submit"
+              size="lg"
+              className="w-full h-12 text-base font-semibold"
+            >
+              {pending ? (
+                <div className="flex items-center gap-2">
+                  <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                  Creating Booking...
+                </div>
+              ) : (
+                "Create Booking"
+              )}
+            </Button>
+          </div>
+        </form>
+      </Form>
+    </div>
   );
 }

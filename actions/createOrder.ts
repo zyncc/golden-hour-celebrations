@@ -34,6 +34,13 @@ export async function createOrder(
 
   if (reservation?.rosePath) price += 400;
 
+  if (
+    reservation?.timeSlot === "10PM - 12AM" ||
+    reservation?.timeSlot === "10:30PM - 12:30AM"
+  ) {
+    price += 500;
+  }
+
   if (reservation?.photography === "photoshoot") price += 700;
 
   if (reservation?.photography === "video") price += 1500;
