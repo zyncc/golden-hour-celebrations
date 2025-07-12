@@ -31,7 +31,7 @@ export default function Navbar() {
   return (
     <header
       id="header"
-      className="text-white z-[100] fixed top-0 right-0 left-0 bg-transparent backdrop-blur-xl"
+      className="text-white z-[49] fixed top-0 right-0 left-0 bg-transparent backdrop-blur-xl"
     >
       <nav className="container flex justify-between items-center py-2.5">
         <Link href={`${process.env.NEXT_PUBLIC_BASE_URL}`}>
