@@ -5,13 +5,21 @@ import v10 from "@/public/v10.jpg";
 import v17 from "@/public/v17.jpg";
 import v11 from "@/public/v11.jpg";
 import v12 from "@/public/v12.jpg";
+import l1 from "@/public/l1.jpg";
 import l2 from "@/public/l2.jpg";
+import l3 from "@/public/l3.jpg";
+import l4 from "@/public/l4.jpg";
 import l5 from "@/public/l5.jpg";
 import l6 from "@/public/l6.jpg";
 import l7 from "@/public/l7.jpg";
 import l8 from "@/public/l8.jpg";
 import l9 from "@/public/l9.jpg";
 import l10 from "@/public/l10.jpg";
+import l11 from "@/public/l11.jpg";
+import l12 from "@/public/l12.jpg";
+import l13 from "@/public/l13.jpg";
+import l14 from "@/public/l14.jpg";
+import l15 from "@/public/l15.jpg";
 import _ from "lodash";
 import { StaticImageData } from "next/image";
 
@@ -25,7 +33,23 @@ const PATTERN_LOOP = ["First", "Second", "Third", "Second", "First"];
 
 export default function Page() {
   const verticalImages = _.shuffle([v1, v10, v17, v11, v12]);
-  const horizontalImages = _.shuffle([l2, l5, l6, l7, l8, l9, l10]);
+  const horizontalImages = _.shuffle([
+    l1,
+    l2,
+    l3,
+    l4,
+    l5,
+    l6,
+    l7,
+    l8,
+    l9,
+    l10,
+    l11,
+    l12,
+    l13,
+    l14,
+    l15,
+  ]);
 
   const rowCount = Math.floor(horizontalImages.length / 2);
 

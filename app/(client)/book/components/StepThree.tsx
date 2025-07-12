@@ -28,7 +28,28 @@ import {
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { toast } from "sonner";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import {
+  Camera,
+  Eye,
+  Heart,
+  IndianRupee,
+  Moon,
+  Move3D,
+  Scissors,
+  Sparkles,
+  Video,
+  Zap,
+} from "lucide-react";
+import { Separator } from "@/components/ui/separator";
 
 export default function StepTwo() {
   const { reservation, setReservationData } = useReservation();
@@ -116,7 +137,232 @@ export default function StepTwo() {
 
           <Card className="w-full">
             <CardHeader>
-              <CardTitle>Photo and Video Shoot</CardTitle>
+              <CardTitle className="flex items-center gap-x-2">
+                Photo and Video Shoot{" "}
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <Button
+                      variant="link"
+                      className="flex items-center gap-2 bg-transparent"
+                    >
+                      More Details
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent className="flex flex-col gap-0 p-0 sm:max-h-[min(640px,80vh)] sm:max-w-2xl [&>button:last-child]:top-3.5">
+                    <ScrollArea className="flex max-h-full flex-col overflow-hidden">
+                      <DialogHeader className="contents space-y-0 text-left">
+                        <DialogTitle className="px-6 pt-6 flex items-center gap-2">
+                          <Camera className="w-5 h-5" />
+                          Photoshoot + Video Coverage
+                        </DialogTitle>
+                        <DialogDescription asChild>
+                          <div className="p-6">
+                            <div className="space-y-6">
+                              {/* Introduction */}
+                              <div className="text-center p-4 bg-background rounded-lg border border-border">
+                                <p className="text-sm text-muted-foreground leading-relaxed">
+                                  <strong>
+                                    📸✨ Photoshoot + Video Coverage
+                                  </strong>
+                                  <br />
+                                  At Golden Hour Celebrations, we&apos;re not
+                                  just capturing visuals — we&apos;re preserving
+                                  emotions, expressions, and the magic of your
+                                  moment. Our setup is designed to offer
+                                  cinematic quality and aesthetic beauty,
+                                  without compromising on clarity.
+                                </p>
+                              </div>
+
+                              {/* Equipment Section */}
+                              <div className="space-y-3">
+                                <div className="flex items-center gap-2">
+                                  <h3 className="font-semibold text-lg">
+                                    Professional Equipment
+                                  </h3>
+                                </div>
+                                <div className="space-y-2 text-sm">
+                                  <div className="rounded-md">
+                                    <p className="mb-2 text-muted-foreground">
+                                      We use the{" "}
+                                      <strong>Samsung Galaxy S24 Ultra</strong>,
+                                      paired with the{" "}
+                                      <strong>DJI Osmo Gimbal</strong>, which
+                                      together offer results comparable to
+                                      professional DSLR setups. Whether
+                                      it&apos;s a surprise entry or a heartfelt
+                                      celebration, our equipment ensures every
+                                      frame looks beautiful, vibrant, and true
+                                      to the moment.
+                                    </p>
+                                  </div>
+                                </div>
+                              </div>
+
+                              <Separator />
+
+                              {/* Quality Features */}
+                              <div className="space-y-3">
+                                <div className="flex items-center gap-2">
+                                  <h3 className="font-semibold text-lg">
+                                    🌟 What Makes Our Capture Quality Stand Out
+                                  </h3>
+                                </div>
+                                <div className="pl-7 space-y-2 text-sm">
+                                  <div className="grid gap-2">
+                                    <div className="flex items-start gap-2">
+                                      <Camera className="w-4 h-4 text-blue-500 mt-0.5 flex-shrink-0" />
+                                      <div>
+                                        <p>
+                                          <strong>
+                                            200MP Ultra High-Resolution Camera
+                                          </strong>
+                                        </p>
+                                      </div>
+                                    </div>
+                                    <div className="flex items-start gap-2">
+                                      <Video className="w-4 h-4 text-red-500 mt-0.5 flex-shrink-0" />
+                                      <div>
+                                        <p>
+                                          <strong>8K Video Recording</strong>
+                                        </p>
+                                      </div>
+                                    </div>
+                                    <div className="flex items-start gap-2">
+                                      <Moon className="w-4 h-4 text-indigo-500 mt-0.5 flex-shrink-0" />
+                                      <div>
+                                        <p>
+                                          <strong>Night Mode</strong> for
+                                          dreamy, low-light settings
+                                        </p>
+                                      </div>
+                                    </div>
+                                    <div className="flex items-start gap-2">
+                                      <Zap className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
+                                      <div>
+                                        <p>
+                                          <strong>
+                                            AI-Enhanced Image Processing
+                                          </strong>
+                                        </p>
+                                      </div>
+                                    </div>
+                                    <div className="flex items-start gap-2">
+                                      <Move3D className="w-4 h-4 text-purple-500 mt-0.5 flex-shrink-0" />
+                                      <div>
+                                        <p>
+                                          <strong>DJI Osmo Gimbal</strong> for
+                                          smooth, cinematic movement
+                                        </p>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+
+                              <Separator />
+
+                              {/* Package Details */}
+                              <div className="space-y-3">
+                                <div className="flex items-center gap-2">
+                                  <h3 className="font-semibold text-lg">
+                                    🎥 ₹1500 Photoshoot + Video Coverage Package
+                                  </h3>
+                                </div>
+                                <div className="pl-7 space-y-2 text-sm">
+                                  <p className="text-muted-foreground mb-3">
+                                    Package Includes:
+                                  </p>
+                                  <div className="grid gap-2">
+                                    <div className="flex items-start gap-2">
+                                      <Camera className="w-4 h-4 text-blue-500 mt-0.5 flex-shrink-0" />
+                                      <div>
+                                        <p>
+                                          <strong>
+                                            📸 Photoshoot + video shoot
+                                          </strong>{" "}
+                                          for up to 1 hour
+                                        </p>
+                                      </div>
+                                    </div>
+                                    <div className="flex items-start gap-2">
+                                      <Video className="w-4 h-4 text-red-500 mt-0.5 flex-shrink-0" />
+                                      <div>
+                                        <p>
+                                          <strong>🎥 Full coverage</strong> of
+                                          your entry and celebration moments
+                                        </p>
+                                      </div>
+                                    </div>
+                                    <div className="flex items-start gap-2">
+                                      <Scissors className="w-4 h-4 text-purple-500 mt-0.5 flex-shrink-0" />
+                                      <div>
+                                        <p>
+                                          <strong>
+                                            ✂ One edited highlight video clip
+                                          </strong>{" "}
+                                          of upto 1 min (with transitions and
+                                          music)
+                                        </p>
+                                      </div>
+                                    </div>
+                                    <div className="flex items-start gap-2">
+                                      <Heart className="w-4 h-4 text-pink-500 mt-0.5 flex-shrink-0" />
+                                      <div>
+                                        <p>
+                                          <strong>
+                                            💌 A selection of candid, aesthetic
+                                            photos
+                                          </strong>{" "}
+                                          from your event
+                                        </p>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+
+                              <Separator />
+
+                              {/* Sample Viewing */}
+                              <div className="space-y-3">
+                                <div className="flex items-center gap-2">
+                                  <h3 className="font-semibold text-lg">
+                                    💬 See Before You Decide
+                                  </h3>
+                                </div>
+                                <div className="pl-7 text-sm">
+                                  <p className="mb-3 text-muted-foreground">
+                                    We understand how personal and important
+                                    this decision is. That&apos;s why we&apos;re
+                                    happy to share real samples of past
+                                    celebrations — so you can view the photo and
+                                    video output before choosing to go ahead.
+                                  </p>
+                                  <p className="text-muted-foreground">
+                                    Our aim is to make this experience
+                                    accessible and meaningful, without ever
+                                    compromising on quality. If you&apos;d like
+                                    to preview our work, just let us know —
+                                    we&apos;d love to share the magic 💛
+                                  </p>
+                                </div>
+                              </div>
+
+                              <div className="text-center p-3 bg-card rounded-lg">
+                                <p className="text-sm font-medium">
+                                  Preserving your precious moments with
+                                  cinematic quality and heartfelt care.
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                        </DialogDescription>
+                      </DialogHeader>
+                    </ScrollArea>
+                  </DialogContent>
+                </Dialog>
+              </CardTitle>
             </CardHeader>
             <CardContent>
               <RadioGroup

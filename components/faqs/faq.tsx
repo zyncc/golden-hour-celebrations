@@ -5,6 +5,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { faqData } from "@/lib/constants";
+import Link from "next/link";
 
 export const FAQSection = () => {
   return (
@@ -19,6 +20,37 @@ export const FAQSection = () => {
             collapsible
             className="w-full flex flex-col gap-5 mt-10"
           >
+            <AccordionItem value="item-5">
+              <AccordionTrigger className="text-left text-gray-100 hover:text-gray-300">
+                Is there parking facility?
+              </AccordionTrigger>
+              <AccordionContent className="text-gray-300 space-y-3">
+                <p>Also, a quick note on parking for your visit.</p>
+                <p>
+                  There is no designated two-wheeler parking directly in front
+                  of our building in Jayanagar 4th Block.
+                </p>
+                <p>
+                  For car parking, guests usually find space in the surrounding
+                  public lanes.
+                </p>
+                <p>
+                  A convenient option is the BMTC-paid parking near the
+                  Jayanagar bus stand, which is approximately 100 meters from
+                  venue.
+                </p>
+                <p>
+                  You can view the location here: BMTC – Jayanagar Parking
+                  <br />
+                  <Link href="https://g.co/kgs/j9A6af1">
+                    https://g.co/kgs/j9A6af1.
+                  </Link>
+                </p>
+                <br />
+                We recommend arriving a bit early to comfortably manage parking
+                before your booking.
+              </AccordionContent>
+            </AccordionItem>
             {faqData.slice(0, 5).map((faq, index) => (
               <AccordionItem key={index} value={`item-${index}`}>
                 <AccordionTrigger className="text-left text-gray-100 hover:text-gray-300">

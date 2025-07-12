@@ -1,5 +1,16 @@
-import l8 from "@/public/l8.jpg";
-import l9 from "@/public/l9.jpg";
+// Majestic Photos
+import l14 from "@/public/l14.jpg";
+import l5 from "@/public/l5.jpg";
+import l3 from "@/public/l3.jpg";
+import l2 from "@/public/l2.jpg";
+// DreamScape Photos
+import l15 from "@/public/l15.jpg";
+import l12 from "@/public/l12.jpg";
+import l6 from "@/public/l6.jpg";
+import l4 from "@/public/l4.jpg";
+import l1 from "@/public/l4.jpg";
+
+import _ from "lodash";
 
 export const advanceAmount = 1000;
 export const cakePrice = 550;
@@ -67,11 +78,11 @@ export const items = [
       "Private Movie Time Experience",
       "LED Letter Name",
       "Access to OTT Platforms",
-      "Upto 4 people (Additional ₹200 per person)",
+      "Upto 4 people (Max 15 people, additional ₹200 per person)",
     ],
     popular: true,
     price: 1899,
-    photo: [l8, l9],
+    photo: _.shuffle([l14, l5, l3, l2]),
   },
   {
     id: 1,
@@ -81,11 +92,11 @@ export const items = [
       "Cozy Romantic Date Decor",
       "LED Letter Name",
       "Access to OTT Platforms",
-      "2 people (Additional ₹200 per person)",
+      "2 people (Max 4 people, additional ₹200 per person)",
     ],
     noPeople: 4,
     price: 1499,
-    photo: [l8, l9],
+    photo: _.shuffle([l15, l12, l6, l4, l1]),
   },
 ];
 

@@ -133,12 +133,7 @@ export default function StepTwo() {
                     <div className="space-y-4 mb-6">
                       <div className="flex justify-between">
                         <h2 className="text-2xl font-bold w-full text-white">
-                          {pkg.room}{" "}
-                          <span className="text-xs">
-                            {pkg.room == "Dreamscape Theatre"
-                              ? "(Max. 4 People)"
-                              : "(Max. 15 People)"}
-                          </span>
+                          {pkg.room}
                         </h2>
                         {pkg.popular && (
                           <Badge className="bg-rose-500/90 text-nowrap hover:bg-rose-500 text-white border-none font-medium whitespace-nowrap">
