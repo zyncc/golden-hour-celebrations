@@ -578,7 +578,11 @@ export default function CreateBookingForm() {
                             setSelectedCake(value);
                           }}
                         >
-                          <SelectTrigger className="h-11">
+                          <SelectTrigger
+                            value={field.value || ""}
+                            onReset={() => form.resetField("cake")}
+                            className="h-11"
+                          >
                             <SelectValue placeholder="Select a cake (optional)" />
                           </SelectTrigger>
                           <SelectContent>
@@ -611,21 +615,19 @@ export default function CreateBookingForm() {
                             setPhotography(value);
                           }}
                         >
-                          <SelectTrigger className="h-11">
+                          <SelectTrigger
+                            className="h-11"
+                            value={field.value || ""}
+                            onReset={() => form.resetField("photography")}
+                          >
                             <SelectValue placeholder="Select photography (optional)" />
                           </SelectTrigger>
                           <SelectContent>
                             <SelectItem value="photoshoot">
-                              <div className="flex items-center gap-2">
-                                <span>📸 Photoshoot</span>
-                                <Badge variant="outline">+₹700</Badge>
-                              </div>
+                              Photoshoot
                             </SelectItem>
                             <SelectItem value="video">
-                              <div className="flex items-center gap-2">
-                                <span>🎥 Photography & Video</span>
-                                <Badge variant="outline">+₹1,500</Badge>
-                              </div>
+                              Photography & Video
                             </SelectItem>
                           </SelectContent>
                         </Select>
@@ -646,14 +648,11 @@ export default function CreateBookingForm() {
                       <div className="flex items-center justify-between p-4 border rounded-lg bg-card">
                         <div className="space-y-1">
                           <FormLabel className="text-sm font-medium cursor-pointer">
-                            🌫️ Fog Entry
+                            Fog Entry
                           </FormLabel>
                           <p className="text-xs text-muted-foreground">
                             Dramatic fog entrance effect
                           </p>
-                          <Badge variant="outline" className="text-xs">
-                            +₹400
-                          </Badge>
                         </div>
                         <FormControl>
                           <Switch
@@ -669,7 +668,6 @@ export default function CreateBookingForm() {
                     </FormItem>
                   )}
                 />
-
                 <FormField
                   control={form.control}
                   name="rosePath"
@@ -678,14 +676,11 @@ export default function CreateBookingForm() {
                       <div className="flex items-center justify-between p-4 border rounded-lg bg-card">
                         <div className="space-y-1">
                           <FormLabel className="text-sm font-medium cursor-pointer">
-                            🌹 Rose Path
+                            Rose Path
                           </FormLabel>
                           <p className="text-xs text-muted-foreground">
                             Beautiful rose petal pathway
                           </p>
-                          <Badge variant="outline" className="text-xs">
-                            +₹400
-                          </Badge>
                         </div>
                         <FormControl>
                           <Switch

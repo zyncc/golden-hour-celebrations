@@ -57,7 +57,7 @@ export default function StepTwo() {
     redirect("/book");
   }
 
-  const [selectedCake, setSelectedCake] = useState<string | null>(null);
+  const [selectedCake, setSelectedCake] = useState<string>("");
   const [photographyPackage, setPhotographyPackage] = useState<string | null>(
     null
   );
@@ -95,9 +95,19 @@ export default function StepTwo() {
                     cake: value,
                   });
                 }}
-                defaultValue={reservation.cake || selectedCake || undefined}
+                value={selectedCake || reservation.cake || ""}
               >
-                <SelectTrigger className="w-full">
+                <SelectTrigger
+                  value={selectedCake || reservation.cake || ""}
+                  onReset={() => {
+                    setSelectedCake("");
+                    setReservationData({
+                      ...reservation,
+                      cake: undefined,
+                    });
+                  }}
+                  className="w-full"
+                >
                   <SelectValue placeholder="Select a cake" />
                 </SelectTrigger>
                 <SelectContent>
@@ -138,7 +148,7 @@ export default function StepTwo() {
           <Card className="w-full">
             <CardHeader>
               <CardTitle className="flex items-center gap-x-2">
-                Photo and Video Shoot{" "}
+                Photo and Video Shoot
                 <Dialog>
                   <DialogTrigger asChild>
                     <Button
@@ -158,11 +168,10 @@ export default function StepTwo() {
                         <DialogDescription asChild>
                           <div className="p-6">
                             <div className="space-y-6">
-                              {/* Introduction */}
                               <div className="text-center p-4 bg-background rounded-lg border border-border">
                                 <p className="text-sm text-muted-foreground leading-relaxed">
                                   <strong>
-                                    📸✨ Photoshoot + Video Coverage
+                                    📸 Photoshoot + Video Coverage
                                   </strong>
                                   <br />
                                   At Golden Hour Celebrations, we&apos;re not

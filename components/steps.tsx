@@ -51,7 +51,7 @@ function StepItem({ number, label, isActive, isCompleted }: StepItemProps) {
         <div
           className={cn(
             "flex h-8 w-8 sm:h-10 sm:w-10 items-center justify-center rounded-full border-2 text-sm sm:text-base font-semibold transition-colors",
-            isActive && "border-primary bg-primary text-primary-foreground",
+            isActive && "border-primary bg-background text-primary",
             isCompleted && "border-primary bg-primary text-primary-foreground",
             !isActive && !isCompleted && "border-muted text-muted-foreground"
           )}
