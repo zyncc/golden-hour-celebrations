@@ -47,7 +47,7 @@ export default function SigninClient() {
       password: values.password,
       fetchOptions: {
         onSuccess: () => {
-          router.push("/dashboard");
+          router.push("/");
           toast.success("Signed in successfully");
           setLoading(false);
         },
