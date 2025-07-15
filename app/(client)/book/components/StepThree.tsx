@@ -82,9 +82,7 @@ export default function StepTwo() {
           <Card className="w-full">
             <CardHeader>
               <CardTitle>Cake Selection</CardTitle>
-              <CardDescription>
-                All cakes cost ₹{cakePrice} and weigh 500 grams
-              </CardDescription>
+              <CardDescription>All cakes weigh 500 grams</CardDescription>
             </CardHeader>
             <CardContent>
               <Select

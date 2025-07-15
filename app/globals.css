@@ -245,3 +245,67 @@ input[type="number"] {
     }
   }
 }
+
+/* Home Page Gallery */
+
+.parent {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(30, 1fr);
+  gap: 8px;
+}
+
+.div1 {
+  grid-row: span 3 / span 3;
+}
+
+.div2 {
+  grid-row: span 2 / span 2;
+  grid-column-start: 2;
+  grid-row-start: 2;
+}
+
+.div3 {
+  grid-row: span 3 / span 3;
+  grid-column-start: 4;
+  grid-row-start: 1;
+}
+
+.div4 {
+  grid-row: span 2 / span 2;
+  grid-column-start: 1;
+  grid-row-start: 4;
+}
+
+.div5 {
+  grid-row: span 2 / span 2;
+  grid-column-start: 3;
+  grid-row-start: 2;
+}
+
+.div6 {
+  grid-row: span 3 / span 3;
+  grid-row-start: 4;
+}
+
+.div7 {
+  grid-row: span 3 / span 3;
+  grid-row-start: 4;
+}
+
+.div8 {
+  grid-row: span 2 / span 2;
+  grid-row-start: 4;
+}
+
+.div9 {
+  grid-row: span 2 / span 2;
+  grid-column-start: 2;
+  grid-row-start: 7;
+}
+
+.div10 {
+  grid-row: span 2 / span 2;
+  grid-column-start: 3;
+  grid-row-start: 7;
+}

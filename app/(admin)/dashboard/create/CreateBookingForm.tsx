@@ -44,7 +44,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import type { z } from "zod";
 import { toast } from "sonner";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 
 export default function CreateBookingForm() {
   const currentDate = new Date();
@@ -291,16 +290,10 @@ export default function CreateBookingForm() {
                         </SelectTrigger>
                         <SelectContent>
                           <SelectItem value="Dreamscape Theatre">
-                            <div className="flex items-center gap-2">
-                              <span>Dreamscape Theatre</span>
-                              <Badge variant="secondary">₹1,499</Badge>
-                            </div>
+                            Dreamscape Theatre
                           </SelectItem>
                           <SelectItem value="Majestic Theatre">
-                            <div className="flex items-center gap-2">
-                              <span>Majestic Theatre</span>
-                              <Badge variant="secondary">₹1,899</Badge>
-                            </div>
+                            Majestic Theatre
                           </SelectItem>
                         </SelectContent>
                       </Select>
@@ -309,7 +302,6 @@ export default function CreateBookingForm() {
                   </FormItem>
                 )}
               />
-
               <FormField
                 control={form.control}
                 name="date"
