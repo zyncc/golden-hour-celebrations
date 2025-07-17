@@ -39,7 +39,6 @@ export default function Page() {
           day, celebrate your achievements with us.
         </p>
       </section>
-
       <section className="container my-[200px]">
         <FAQSection />
       </section>
