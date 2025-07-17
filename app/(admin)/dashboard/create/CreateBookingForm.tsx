@@ -103,7 +103,7 @@ export default function CreateBookingForm() {
     queryFn: async () => {
       if (!selectedDate) return [];
       const res = await fetch(
-        `/api/fetchReservations?date=${selectedDate.toISOString()}`
+        `/api/fetchReservations?date=${selectedDate.getFullYear()}-${selectedDate.getMonth()! + 1}-${selectedDate.getDate()}`
       );
       return res.json();
     },
@@ -291,16 +291,10 @@ export default function CreateBookingForm() {
                         </SelectTrigger>
                         <SelectContent>
                           <SelectItem value="Dreamscape Theatre">
-                            <div className="flex items-center gap-2">
-                              <span>Dreamscape Theatre</span>
-                              <Badge variant="secondary">₹1,499</Badge>
-                            </div>
+                           Dreamscape Theatre
                           </SelectItem>
                           <SelectItem value="Majestic Theatre">
-                            <div className="flex items-center gap-2">
-                              <span>Majestic Theatre</span>
-                              <Badge variant="secondary">₹1,899</Badge>
-                            </div>
+                            Majestic Theatre
                           </SelectItem>
                         </SelectContent>
                       </Select>

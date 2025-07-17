@@ -75,7 +75,7 @@ async function AllBookings() {
                   </span>
                 </TableCell>
                 <TableCell className={"whitespace-nowrap"}>
-                  {reservation.date.toLocaleDateString("en-GB", {
+                  {new Date(reservation.date).toLocaleDateString("en-GB", {
                     timeZone: "Asia/Kolkata",
                     weekday: "short",
                     month: "short",

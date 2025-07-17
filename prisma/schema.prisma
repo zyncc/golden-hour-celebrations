@@ -47,7 +47,7 @@ model Reservations {
   phone           String
   email           String
   findUs          String?
-  date            DateTime
+  date            String
   orderID         String?  @unique
   paymentID       String?
   paymentStatus   Boolean  @default(false)

@@ -78,7 +78,7 @@ export const NikeReceiptEmail = ({
             {getReservationDetails.rosePath && "Candle Light Rose Path Added"}
             {getReservationDetails.rosePath && <br />}
             Date -{" "}
-            {getReservationDetails.date.toLocaleDateString("en-GB", {
+            {new Date(getReservationDetails.date).toLocaleDateString("en-GB", {
               timeZone: "Asia/Kolkata",
               weekday: "short",
               month: "short",

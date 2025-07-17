@@ -28,7 +28,7 @@ export default function SlotsClient({
     enabled: !!date,
     queryFn: async () => {
       const res = await fetch(
-        `/api/fetchReservations?date=${date?.toISOString()}`
+        `/api/fetchReservations?date=${date?.getFullYear()}-${date?.getMonth()! + 1}-${date?.getDate()}`
       );
       const data: ReservationDetails[] = await res.json();
       return data;

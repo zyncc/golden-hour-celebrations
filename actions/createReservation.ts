@@ -84,9 +84,11 @@ export async function createReservation(
     throw new Error("Invalid DATA");
   }
 
+  const date = `${data.date.getFullYear()}-${data.date.getMonth() + 1}-${data.date.getDate()}`;
+
   const checkExistingBookings = await prisma.reservations.findFirst({
     where: {
-      date: data.date,
+      date,
       room: data.room,
       timeSlot: data.timeSlot,
       paymentStatus: true,
@@ -110,7 +112,7 @@ export async function createReservation(
         nameToDisplay: data.nameToDisplay,
         writingOnCake: data.writingOnCake,
         specialRequests: data.specialRequests,
-        date: data.date as Date,
+        date: date,
         email: data.email as string,
         findUs: data.findus as string,
         name: data.name as string,
@@ -142,15 +144,18 @@ export async function CreateManualBooking(data: Data) {
   }
 
   const { advanceAmount, discount = 0, ...rest } = data;
-
+const date = `${data.date.getFullYear()}-${data.date.getMonth() + 1}-${data.date.getDate()}`;
+console.log(date)
   const checkExistingBookings = await prisma.reservations.findFirst({
     where: {
-      date: data.date,
+      date,
       room: data.room,
       timeSlot: data.timeSlot,
       paymentStatus: true,
     },
   });
+
+  console.log(checkExistingBookings); 
 
   if (checkExistingBookings) {
     throw new Error(
@@ -205,6 +210,7 @@ export async function CreateManualBooking(data: Data) {
   const booking = await prisma.reservations.create({
     data: {
       ...rest,
+      date,
       discount,
       balanceAmount,
       advanceAmount,

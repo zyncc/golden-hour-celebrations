@@ -20,23 +20,10 @@ async function Page() {
   if (session?.user.role !== "admin") {
     return redirect("/dashboard/signin");
   }
-  const nowUtc = new Date();
-  const nowIst = new Date(nowUtc.getTime() + 5.5 * 60 * 60 * 1000);
-
-  const istStart = new Date(
-    nowIst.getFullYear(),
-    nowIst.getMonth(),
-    nowIst.getDate()
-  );
-
-  const utcStart = new Date(istStart.getTime() - 5.5 * 60 * 60 * 1000);
 
   const reservations = await prisma.reservations.findMany({
     where: {
       paymentStatus: true,
-      date: {
-        gte: utcStart,
-      },
     },
     orderBy: {
       date: "asc",
@@ -85,7 +72,7 @@ async function Page() {
                   </span>
                 </TableCell>
                 <TableCell className={"whitespace-nowrap"}>
-                  {reservation.date.toLocaleDateString("en-GB", {
+                  {new Date(reservation.date).toLocaleDateString("en-GB", {
                     timeZone: "Asia/Kolkata",
                     weekday: "short",
                     month: "short",

@@ -87,7 +87,7 @@ export default function StepTwo() {
     refetchOnWindowFocus: true,
     queryFn: async () => {
       const res = await fetch(
-        `/api/fetchReservations?date=${reservation?.date?.toISOString()}`
+        `/api/fetchReservations?date=${reservation?.date?.getFullYear()}-${reservation?.date?.getMonth()! + 1}-${reservation?.date?.getDate()}`
       );
       return res.json();
     },

@@ -11,9 +11,11 @@ export default async function SlotsPage() {
   if (session?.user.role !== "admin") {
     return redirect("/dashboard/signin");
   }
+  const currentDate = new Date();
+
   const reservations = await prisma.reservations.findMany({
     where: {
-      date: new Date(),
+      date: `${currentDate.getFullYear()}-${currentDate.getMonth() + 1}-${currentDate.getDate()}`,
       paymentStatus: true,
     },
     select: {

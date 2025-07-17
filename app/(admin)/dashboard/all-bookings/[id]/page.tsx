@@ -86,10 +86,14 @@ export default async function Page({ params }: { params: { id: string } }) {
               <Calendar className="h-4 w-4 text-gray-500" />
               <div>
                 <p className="text-sm text-gray-500">Date</p>
-                <p className="font-medium">{formatDate(reservation.date)}</p>
+                <p className="font-medium">{new Date(reservation.date).toLocaleDateString("en-GB", {
+                  timeZone: "Asia/Kolkata",
+                  weekday: "short",
+                  month: "short",
+                  day: "2-digit",
+                })}</p>
               </div>
             </div>
-
             <div className="flex items-center gap-3">
               <Clock className="h-4 w-4 text-gray-500" />
               <div>
@@ -97,7 +101,6 @@ export default async function Page({ params }: { params: { id: string } }) {
                 <p className="font-medium">{reservation.timeSlot}</p>
               </div>
             </div>
-
             <div className="flex items-center gap-3">
               <Building className="h-4 w-4 text-gray-500" />
               <div>
@@ -213,8 +216,8 @@ export default async function Page({ params }: { params: { id: string } }) {
               <span>
                 {formatCurrency(
                   reservation.advanceAmount +
-                    reservation.balanceAmount -
-                    (reservation.discount ?? 0)
+                  reservation.balanceAmount -
+                  (reservation.discount ?? 0)
                 )}
               </span>
             </div>
