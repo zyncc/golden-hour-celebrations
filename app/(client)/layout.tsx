@@ -21,7 +21,7 @@ export const metadata: Metadata = {
     default: "Golden Hour Celebrations",
   },
   description:
-    "We at Golden Hour Celebrations plan your loved ones special day with personalised decorations exclusively in a private theatre.",
+    "Book intimate private theatre experiences for birthdays, proposals, anniversaries, and more at Golden Hour Celebrations, Jayanagar. Cozy, customizable, and unforgettable.",
   twitter: {
     card: "summary_large_image",
   },

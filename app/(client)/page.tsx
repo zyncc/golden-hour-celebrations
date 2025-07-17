@@ -9,7 +9,6 @@ import v10 from "@/public/v10.jpg";
 import v17 from "@/public/v17.jpg";
 import v11 from "@/public/v11.jpg";
 import v12 from "@/public/v12.jpg";
-import v1 from "@/public/v1.jpg";
 import l1 from "@/public/l1.jpg";
 import l12 from "@/public/l12.jpg";
 import l3 from "@/public/l3.jpg";
@@ -19,7 +18,7 @@ import l15 from "@/public/l15.jpg";
 import Image from "next/image";
 
 export const metadata: Metadata = {
-  title: "The Best Private Theatre in Bangalore - Golden Hour Celebrations",
+  title: "Private Theatre Celebrations in Bangalore",
 };
 
 export default function Page() {
