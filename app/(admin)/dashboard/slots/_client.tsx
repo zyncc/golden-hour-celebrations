@@ -13,23 +13,24 @@ export default function SlotsClient({
 }: {
   reservations: ReservationDetails[];
 }) {
-  const [date, setDate] = useState<Date | undefined>(new Date());
   const currentDate = new Date();
+  const [date, setDate] = useState<Date | undefined>(currentDate);
   const nextMonthDate = new Date(
     currentDate.getFullYear(),
     currentDate.getMonth() + 1,
     1
   );
+  const istDate = date?.toLocaleDateString("en-CA", {
+    timeZone: "Asia/Kolkata",
+  });
   const { data } = useQuery({
-    queryKey: ["getReservation", date?.toISOString()],
+    queryKey: ["getReservation", istDate],
     initialData: reservations,
-    refetchInterval: 1000 * 20,
+    refetchInterval: 1000 * 20, 
     refetchOnWindowFocus: true,
     enabled: !!date,
     queryFn: async () => {
-      const res = await fetch(
-        `/api/fetchReservations?date=${date?.getFullYear()}-${date?.getMonth()! + 1}-${date?.getDate()}`
-      );
+      const res = await fetch(`/api/fetchReservations?date=${istDate}`);
       const data: ReservationDetails[] = await res.json();
       return data;
     },

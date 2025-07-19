@@ -195,7 +195,6 @@ export default function StepOneForm() {
                       <SelectItem value="Proposal Planning">
                         Proposal Planning
                       </SelectItem>
-                      <SelectItem value="Surprise">Surprise</SelectItem>
                       <SelectItem value="Mom to be">Mom to be</SelectItem>
                       <SelectItem value="Other">Others</SelectItem>
                     </SelectContent>
@@ -215,8 +214,11 @@ export default function StepOneForm() {
                     <Input
                       placeholder="Number of People"
                       type="number"
-                      {...field}
-                      onChange={(e) => field.onChange(Number(e.target.value))}
+                      value={field.value || ""}
+                      onChange={(e) => {
+                        const value = Number.parseInt(e.target.value) || 0;
+                        field.onChange(value);
+                      }}
                     />
                   </FormControl>
                   <FormMessage />

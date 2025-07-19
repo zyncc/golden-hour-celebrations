@@ -81,13 +81,17 @@ export default function StepTwo() {
     }
   }
 
+  const date = reservation?.date?.toLocaleDateString("en-CA", {
+    timeZone: "Asia/Kolkata",
+  });
+
   const { data, isLoading } = useQuery({
-    queryKey: ["getReservation"],
+    queryKey: ["getReservation", date],
     refetchInterval: 1000 * 20,
     refetchOnWindowFocus: true,
     queryFn: async () => {
       const res = await fetch(
-        `/api/fetchReservations?date=${reservation?.date?.getFullYear()}-${reservation?.date?.getMonth()! + 1}-${reservation?.date?.getDate()}`
+        `/api/fetchReservations?date=${date}`
       );
       return res.json();
     },

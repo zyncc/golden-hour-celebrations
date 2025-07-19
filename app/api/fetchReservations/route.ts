@@ -7,7 +7,7 @@ export async function GET(req: Request) {
   if (!dateString) {
     return NextResponse.json("Invalid Date", { status: 500 });
   }
-
+  console.log(dateString)
   const response = await prisma.reservations.findMany({
     where: {
       date: dateString,
@@ -21,5 +21,6 @@ export async function GET(req: Request) {
       occasion: true,
     },
   });
+  console.log(response.length)
   return NextResponse.json(response);
 }

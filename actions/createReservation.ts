@@ -83,9 +83,13 @@ export async function createReservation(
     console.log(error.issues);
     throw new Error("Invalid DATA");
   }
-
-  const date = `${data.date.getFullYear()}-${data.date.getMonth() + 1}-${data.date.getDate()}`;
-
+  console.log("BEFORE IST CONVERSION", data.date.toLocaleDateString())
+  const date = data.date.toLocaleDateString("en-CA", {
+    timeZone: "Asia/Kolkata",
+  });
+  console.log("AFTER IST CONVERSION", date)
+  console.log("Time Slot", data.timeSlot)
+  console.log(data)
   const checkExistingBookings = await prisma.reservations.findFirst({
     where: {
       date,
@@ -94,6 +98,7 @@ export async function createReservation(
       paymentStatus: true,
     },
   });
+  console.log("Existing Booking", checkExistingBookings); 
   if (checkExistingBookings) {
     return {
       title: "Error creating Reservation",
@@ -144,8 +149,12 @@ export async function CreateManualBooking(data: Data) {
   }
 
   const { advanceAmount, discount = 0, ...rest } = data;
-const date = `${data.date.getFullYear()}-${data.date.getMonth() + 1}-${data.date.getDate()}`;
-console.log(date)
+  console.log("BEFORE IST CONVERSION", data.date.toLocaleDateString())
+  const date = data.date.toLocaleDateString("en-CA", {
+    timeZone: "Asia/Kolkata",
+  });
+  console.log("AFTER IST CONVERSION", date)
+  console.log(data.timeSlot)
   const checkExistingBookings = await prisma.reservations.findFirst({
     where: {
       date,
@@ -155,7 +164,7 @@ console.log(date)
     },
   });
 
-  console.log(checkExistingBookings); 
+  console.log("Existing Booking", checkExistingBookings); 
 
   if (checkExistingBookings) {
     throw new Error(

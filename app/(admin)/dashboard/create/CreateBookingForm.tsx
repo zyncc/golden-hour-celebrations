@@ -44,7 +44,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import type { z } from "zod";
 import { toast } from "sonner";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 
 export default function CreateBookingForm() {
   const currentDate = new Date();
@@ -56,6 +55,7 @@ export default function CreateBookingForm() {
     nextMonth = 0;
     nextYear++;
   }
+
 
   const nextMonthDate = new Date(nextYear, nextMonth, 1);
 
@@ -94,34 +94,34 @@ export default function CreateBookingForm() {
     },
   });
 
-  // Fetch reservations query
-  const { data, isLoading, refetch } = useQuery({
-    queryKey: ["getReservation", selectedDate?.toISOString(), selectedRoom],
+  const date = selectedDate?.toLocaleDateString("en-CA", {
+    timeZone: "Asia/Kolkata",
+  });
+
+  const { data, isLoading } = useQuery({
+    queryKey: ["getReservation", date],
     refetchInterval: 1000 * 20,
     refetchOnWindowFocus: true,
     enabled: !!selectedDate,
     queryFn: async () => {
       if (!selectedDate) return [];
       const res = await fetch(
-        `/api/fetchReservations?date=${selectedDate.getFullYear()}-${selectedDate.getMonth()! + 1}-${selectedDate.getDate()}`
+        `/api/fetchReservations?date=${date}`
       );
       return res.json();
     },
   });
 
-  // Calculate total cost and balance amount
   const calculatedAmounts = useMemo(() => {
     let totalCost = 0;
     let midnightCharge = 0;
 
-    // Base room cost
     if (selectedRoom === "Dreamscape Theatre") {
       totalCost += 1499;
     } else if (selectedRoom === "Majestic Theatre") {
       totalCost += 1899;
     }
 
-    // Additional people cost
     if (selectedRoom === "Dreamscape Theatre" && noOfPeople > 2) {
       totalCost += (noOfPeople - 2) * 200;
     } else if (selectedRoom === "Majestic Theatre" && noOfPeople > 4) {
