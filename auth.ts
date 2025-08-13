@@ -5,6 +5,7 @@ import { prismaAdapter } from "better-auth/adapters/prisma";
 import { admin } from "better-auth/plugins/admin";
 import prisma from "./lib/prisma";
 import { nextCookies } from "better-auth/next-js";
+import { phoneNumber } from "better-auth/plugins";
 
 export const auth = betterAuth({
   emailAndPassword: {
@@ -20,7 +21,9 @@ export const auth = betterAuth({
     level: "error",
   },
   advanced: {
-    generateId: false,
+    database: {
+      generateId: false,
+    },
   },
   session: {
     expiresIn: 3600 * 24 * 31,
@@ -38,6 +41,7 @@ export const auth = betterAuth({
     admin({
       defaultRole: "user",
     }),
+    phoneNumber(),
     nextCookies(),
   ],
 });

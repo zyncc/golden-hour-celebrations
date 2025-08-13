@@ -1,7 +1,7 @@
 import { createAuthClient } from "better-auth/react";
 import { adminClient, emailOTPClient } from "better-auth/client/plugins";
-import { nextCookies } from "better-auth/next-js";
+import { phoneNumberClient } from "better-auth/client/plugins";
 
 export const authClient = createAuthClient({
-  plugins: [emailOTPClient(), adminClient(), nextCookies()],
+  plugins: [emailOTPClient(), phoneNumberClient(), adminClient()],
 });

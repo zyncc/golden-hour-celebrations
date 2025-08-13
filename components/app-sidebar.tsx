@@ -76,6 +76,11 @@ const data = [
         url: "/dashboard/users",
         icon: Users,
       },
+      {
+        title: "Register User",
+        url: "/dashboard/users/create",
+        icon: Users,
+      },
     ],
   },
 ];
