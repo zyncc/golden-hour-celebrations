@@ -48,7 +48,7 @@ export const payReservationSchema = z.object({
   }),
   nameToDisplay: z
     .string({ message: "Name is required" })
-    .max(6, { message: "Maximum 6 letters allowed" })
+    .max(8, { message: "Maximum 8 letters allowed" })
     .optional(),
   writingOnCake: z.string().max(15, "Maximum 15 characters allowed").optional(),
   specialRequests: z
