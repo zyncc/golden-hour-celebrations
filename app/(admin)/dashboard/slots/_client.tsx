@@ -26,7 +26,7 @@ export default function SlotsClient({
   const { data } = useQuery({
     queryKey: ["getReservation", istDate],
     initialData: reservations,
-    refetchInterval: 1000 * 20, 
+    refetchInterval: 1000 * 20,
     refetchOnWindowFocus: true,
     enabled: !!date,
     queryFn: async () => {

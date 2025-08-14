@@ -9,11 +9,13 @@ import l12 from "@/public/l12.jpg";
 import l6 from "@/public/l6.jpg";
 import l4 from "@/public/l4.jpg";
 import l1 from "@/public/l4.jpg";
-
 import _ from "lodash";
 
 export const advanceAmount = 1000;
 export const cakePrice = 550;
+export const candleLightRosePath = 349;
+export const ledLetterLightAge = 49;
+export const ledLetterLightName = 149;
 
 export const selectFindUs = [
   {

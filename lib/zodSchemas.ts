@@ -56,6 +56,14 @@ export const payReservationSchema = z.object({
     .max(200, "Maximum 200 characters allowed")
     .optional(),
   noOfPeople: z.coerce.number().min(2, "Minimum 2 people are required!"),
+  ledLetterName: z
+    .string()
+    .max(7, { message: "Maximum 7 letters allowed" })
+    .optional(),
+  ledLetterAge: z
+    .string()
+    .max(2, { message: "Maximum 2 digits allowed" })
+    .optional(),
   email: z
     .string({ message: "Email is required" })
     .email("Enter a valid email address"),
@@ -88,7 +96,7 @@ export const ManualBookingSchema = z.object({
   noOfPeople: z.coerce.number().min(2, "Minimum 2 people are required!"),
   nameToDisplay: z
     .string({ message: "Name is required" })
-    .max(6, { message: "Maximum 6 letters allowed" })
+    .max(8, { message: "Maximum 8 letters allowed" })
     .optional(),
   email: z
     .string({ message: "Email is required" })
@@ -96,6 +104,14 @@ export const ManualBookingSchema = z.object({
   occasion: z.string({
     message: "Please select one",
   }),
+  ledLetterName: z
+    .string()
+    .max(7, { message: "Maximum 7 letters allowed" })
+    .optional(),
+  ledLetterAge: z
+    .string()
+    .max(2, { message: "Maximum 2 digits allowed" })
+    .optional(),
   date: z.date({ message: "Date is required" }),
   room: z.string(),
   timeSlot: z.string(),

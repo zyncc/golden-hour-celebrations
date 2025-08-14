@@ -12,7 +12,14 @@ import { Check, CreditCard, LoaderCircle } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import formatCurrency from "@/lib/formatCurrency";
-import { advanceAmount, cakePrice, items } from "@/lib/constants";
+import {
+  advanceAmount,
+  cakePrice,
+  candleLightRosePath,
+  items,
+  ledLetterLightAge,
+  ledLetterLightName,
+} from "@/lib/constants";
 import Link from "next/link";
 import { Switch } from "@/components/ui/switch";
 
@@ -97,7 +104,14 @@ export default function StepThree() {
     advanceAmountPrice += 400;
   }
   if (reservation?.rosePath) {
-    price += 400;
+    price += candleLightRosePath;
+  }
+  if (reservation?.ledLetterName) {
+    price += ledLetterLightName;
+  }
+
+  if (reservation?.ledLetterAge) {
+    price += ledLetterLightAge;
   }
   if (
     reservation?.timeSlot === "10PM - 12AM" ||
@@ -172,6 +186,22 @@ export default function StepThree() {
                       <span className="font-medium">Name to Display</span>
                       <span className="text-muted-foreground">
                         {reservation.nameToDisplay}
+                      </span>
+                    </div>
+                  )}
+                  {reservation.ledLetterName && (
+                    <div className="flex justify-between items-center">
+                      <span className="font-medium">LED Letter Name</span>
+                      <span className="text-muted-foreground">
+                        {reservation.ledLetterName}
+                      </span>
+                    </div>
+                  )}
+                  {reservation.ledLetterAge && (
+                    <div className="flex justify-between items-center">
+                      <span className="font-medium">LED Letter Age</span>
+                      <span className="text-muted-foreground">
+                        {reservation.ledLetterAge}
                       </span>
                     </div>
                   )}
@@ -320,7 +350,27 @@ export default function StepThree() {
                       Candle Light Rose Path
                     </span>
                     <span className="text-green-600 font-semibold whitespace-nowrap">
-                      + {formatCurrency(400)}
+                      + {formatCurrency(candleLightRosePath)}
+                    </span>
+                  </div>
+                )}
+                {reservation.ledLetterName && (
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">
+                      LED Letter Name
+                    </span>
+                    <span className="text-green-600 font-semibold whitespace-nowrap">
+                      + {formatCurrency(ledLetterLightName)}
+                    </span>
+                  </div>
+                )}
+                {reservation.ledLetterAge && (
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">
+                      LED Letter Age
+                    </span>
+                    <span className="text-green-600 font-semibold whitespace-nowrap">
+                      + {formatCurrency(ledLetterLightAge)}
                     </span>
                   </div>
                 )}

@@ -21,18 +21,26 @@ async function Page() {
     return redirect("/dashboard/signin");
   }
 
+  const now = new Date();
+  const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+  const startOfNextMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1);
+
   const reservations = await prisma.reservations.findMany({
     where: {
       paymentStatus: true,
+      createdAt: {
+        gte: startOfMonth,
+        lte: startOfNextMonth,
+      },
     },
     orderBy: {
-      date: "asc",
+      date: "desc",
     },
   });
 
   return (
     <div className={"mt-10 container"}>
-      <h1 className={"text-2xl font-medium mb-5"}>Reservations</h1>
+      <h1 className={"text-2xl font-medium mb-5"}>Recent Reservations</h1>
       <div className="rounded-md border">
         <Table>
           <TableHeader>

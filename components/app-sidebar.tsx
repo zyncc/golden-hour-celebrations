@@ -10,6 +10,7 @@ import {
   Clock9,
   Grid3x3,
   BetweenVerticalEnd,
+  UserRoundPlus,
 } from "lucide-react";
 import { NavUser } from "@/components/nav-user";
 import {
@@ -79,7 +80,7 @@ const data = [
       {
         title: "Register User",
         url: "/dashboard/users/create",
-        icon: Users,
+        icon: UserRoundPlus,
       },
     ],
   },

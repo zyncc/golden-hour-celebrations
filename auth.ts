@@ -1,5 +1,3 @@
-import "server-only";
-
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { admin } from "better-auth/plugins/admin";
@@ -21,9 +19,7 @@ export const auth = betterAuth({
     level: "error",
   },
   advanced: {
-    database: {
-      generateId: false,
-    },
+    generateId: false,
   },
   session: {
     expiresIn: 3600 * 24 * 31,

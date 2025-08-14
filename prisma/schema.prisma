@@ -33,7 +33,7 @@ model User {
 }
 
 model Reservations {
-  id              String   @id @default(auto()) @map("_id") @db.ObjectId
+  id              String  @id @default(auto()) @map("_id") @db.ObjectId
   balanceAmount   Int
   advanceAmount   Int
   room            String
@@ -48,14 +48,16 @@ model Reservations {
   email           String
   findUs          String?
   date            String
-  orderID         String?  @unique
+  orderID         String? @unique
   paymentID       String?
-  paymentStatus   Boolean  @default(false)
+  paymentStatus   Boolean @default(false)
 
-  cake        String?
-  photography String?
-  fogEntry    Boolean?
-  rosePath    Boolean?
+  cake          String?
+  photography   String?
+  fogEntry      Boolean?
+  rosePath      Boolean?
+  ledLetterName String?
+  ledLetterAge  String?
 
   manualBooking Boolean?
   discount      Int?

@@ -2,7 +2,13 @@
 
 import { Reservation } from "@/context/ReservationStore";
 import Razorpay from "razorpay";
-import { advanceAmount, cakePrice } from "@/lib/constants";
+import {
+  advanceAmount,
+  cakePrice,
+  candleLightRosePath,
+  ledLetterLightAge,
+  ledLetterLightName,
+} from "@/lib/constants";
 
 export async function createOrder(
   payFull: boolean,
@@ -27,12 +33,20 @@ export async function createOrder(
     }
   }
 
+  if (reservation?.ledLetterName) {
+    price += ledLetterLightName;
+  }
+
+  if (reservation?.ledLetterAge) {
+    price += ledLetterLightAge;
+  }
+
   if (reservation?.fogEntry) {
     price += 400;
     advanceAmountPrice += 400;
   }
 
-  if (reservation?.rosePath) price += 400;
+  if (reservation?.rosePath) price += candleLightRosePath;
 
   if (
     reservation?.timeSlot === "10PM - 12AM" ||
@@ -64,10 +78,6 @@ export async function createOrder(
     amount: payFull ? price * 100 : advanceAmountPrice * 100,
     currency: "INR",
     receipt: "receipt#1",
-    notes: {
-      key1: "value3",
-      key2: "value2",
-    },
   });
 
   return response.id;

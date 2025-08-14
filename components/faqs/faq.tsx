@@ -25,7 +25,6 @@ export const FAQSection = () => {
                 Is there parking facility?
               </AccordionTrigger>
               <AccordionContent className="text-gray-300 space-y-3">
-                <p>Also, a quick note on parking for your visit.</p>
                 <p>
                   There is no designated two-wheeler parking directly in front
                   of our building in Jayanagar 4th Block.

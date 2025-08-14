@@ -17,6 +17,8 @@ export type Reservation = {
   photography?: string | undefined;
   fogEntry?: boolean | undefined;
   rosePath?: boolean | undefined;
+  ledLetterName?: string | undefined;
+  ledLetterAge?: string | undefined;
   specialRequests?: string | undefined;
 };
 

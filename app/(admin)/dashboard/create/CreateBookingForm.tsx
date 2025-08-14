@@ -27,7 +27,10 @@ import { CreateManualBooking } from "@/actions/createReservation";
 import {
   cakePrice,
   cakes,
+  candleLightRosePath,
   dreamscapeTimeSlots,
+  ledLetterLightAge,
+  ledLetterLightName,
   majesticTimeSlots,
 } from "@/lib/constants";
 import { Switch } from "@/components/ui/switch";
@@ -56,7 +59,6 @@ export default function CreateBookingForm() {
     nextYear++;
   }
 
-
   const nextMonthDate = new Date(nextYear, nextMonth, 1);
 
   // Local state
@@ -72,6 +74,8 @@ export default function CreateBookingForm() {
   const [fogEntry, setFogEntry] = useState(false);
   const [rosePath, setRosePath] = useState(false);
   const [selectedTimeSlot, setSelectedTimeSlot] = useState<string>("");
+  const [wantsLedName, setWantsLedName] = useState(false);
+  const [wantsLedAge, setWantsLedAge] = useState(false);
 
   const form = useForm<z.infer<typeof ManualBookingSchema>>({
     resolver: zodResolver(ManualBookingSchema),
@@ -85,6 +89,9 @@ export default function CreateBookingForm() {
       room: undefined,
       cake: undefined,
       photography: undefined,
+      ledLetterAge: undefined,
+      ledLetterName: undefined,
+      nameToDisplay: "",
       fogEntry: false,
       rosePath: false,
       balanceAmount: undefined,
@@ -105,48 +112,58 @@ export default function CreateBookingForm() {
     enabled: !!selectedDate,
     queryFn: async () => {
       if (!selectedDate) return [];
-      const res = await fetch(
-        `/api/fetchReservations?date=${date}`
-      );
+      const res = await fetch(`/api/fetchReservations?date=${date}`);
       return res.json();
     },
   });
 
   const calculatedAmounts = useMemo(() => {
-    let totalCost = 0;
+    let basePrice = 0;
+    let extraPeopleCharge = 0;
+    let cakeCost = 0;
+    let photographyCost = 0;
+    let fogEntryCost = 0;
+    let rosePathCost = 0;
+    let ledLetterCost = 0;
     let midnightCharge = 0;
 
+    // Base room price
     if (selectedRoom === "Dreamscape Theatre") {
-      totalCost += 1499;
+      basePrice = 1499;
     } else if (selectedRoom === "Majestic Theatre") {
-      totalCost += 1899;
+      basePrice = 1899;
     }
 
+    // Extra people charges
     if (selectedRoom === "Dreamscape Theatre" && noOfPeople > 2) {
-      totalCost += (noOfPeople - 2) * 200;
+      extraPeopleCharge = (noOfPeople - 2) * 200;
     } else if (selectedRoom === "Majestic Theatre" && noOfPeople > 4) {
-      totalCost += (noOfPeople - 4) * 200;
+      extraPeopleCharge = (noOfPeople - 4) * 200;
     }
 
-    // Cake cost
+    // Cake cost (separate from base price)
     if (selectedCake) {
       if (selectedCake === "Red velvet" || selectedCake === "Rasmalai") {
-        totalCost += 620;
+        cakeCost = 620;
       } else {
-        totalCost += cakePrice;
+        cakeCost = cakePrice;
       }
     }
 
-    // Add-ons
-    if (fogEntry) totalCost += 400;
-    if (rosePath) totalCost += 400;
-
-    // Photography
+    // Photography cost (separate from base price)
     if (photography === "photoshoot") {
-      totalCost += 700;
+      photographyCost = 700;
     } else if (photography === "video") {
-      totalCost += 1500;
+      photographyCost = 1500;
     }
+
+    // Add-on costs (separate from base price)
+    if (fogEntry) fogEntryCost = 400;
+    if (rosePath) rosePathCost = candleLightRosePath;
+
+    // LED letter costs (separate from base price)
+    if (wantsLedName) ledLetterCost += ledLetterLightName;
+    if (wantsLedAge) ledLetterCost += ledLetterLightAge;
 
     // Midnight charges
     if (
@@ -154,14 +171,29 @@ export default function CreateBookingForm() {
       selectedTimeSlot === "10:30PM - 12:30AM"
     ) {
       midnightCharge = 500;
-      totalCost += midnightCharge;
     }
 
+    const totalCost =
+      basePrice +
+      extraPeopleCharge +
+      cakeCost +
+      photographyCost +
+      fogEntryCost +
+      rosePathCost +
+      ledLetterCost +
+      midnightCharge;
     const balanceAmount = totalCost - advanceAmount - discount;
 
     return {
-      totalCost,
+      basePrice,
+      extraPeopleCharge,
+      cakeCost,
+      photographyCost,
+      fogEntryCost,
+      rosePathCost,
+      ledLetterCost,
       midnightCharge,
+      totalCost,
       balanceAmount: Math.max(0, balanceAmount),
     };
   }, [
@@ -172,6 +204,8 @@ export default function CreateBookingForm() {
     rosePath,
     photography,
     selectedTimeSlot,
+    wantsLedName,
+    wantsLedAge,
     advanceAmount,
     discount,
   ]);
@@ -209,9 +243,20 @@ export default function CreateBookingForm() {
   // Handle form submission
   async function handleFormSubmit(values: z.infer<typeof ManualBookingSchema>) {
     setPending(true);
-
     try {
       const validation = ManualBookingSchema.safeParse(values);
+      if (wantsLedName && !form.getValues("ledLetterName")) {
+        form.setError("ledLetterName", {
+          message: "Led Letter Name is required",
+        });
+        return;
+      }
+      if (wantsLedAge && !form.getValues("ledLetterAge")) {
+        form.setError("ledLetterAge", {
+          message: "Led Letter Age is required",
+        });
+        return;
+      }
       if (validation.success) {
         const res = CreateManualBooking(validation.data);
         toast.promise(res, {
@@ -291,7 +336,7 @@ export default function CreateBookingForm() {
                         </SelectTrigger>
                         <SelectContent>
                           <SelectItem value="Dreamscape Theatre">
-                           Dreamscape Theatre
+                            Dreamscape Theatre
                           </SelectItem>
                           <SelectItem value="Majestic Theatre">
                             Majestic Theatre
@@ -347,7 +392,6 @@ export default function CreateBookingForm() {
                   </FormItem>
                 )}
               />
-
               <FormField
                 control={form.control}
                 name="occasion"
@@ -574,7 +618,10 @@ export default function CreateBookingForm() {
                         >
                           <SelectTrigger
                             value={field.value || ""}
-                            onReset={() => form.resetField("cake")}
+                            onReset={() => {
+                              form.resetField("cake");
+                              setSelectedCake("");
+                            }}
                             className="h-11"
                           >
                             <SelectValue placeholder="Select a cake (optional)" />
@@ -612,7 +659,10 @@ export default function CreateBookingForm() {
                           <SelectTrigger
                             className="h-11"
                             value={field.value || ""}
-                            onReset={() => form.resetField("photography")}
+                            onReset={() => {
+                              form.resetField("photography");
+                              setPhotography("");
+                            }}
                           >
                             <SelectValue placeholder="Select photography (optional)" />
                           </SelectTrigger>
@@ -644,9 +694,6 @@ export default function CreateBookingForm() {
                           <FormLabel className="text-sm font-medium cursor-pointer">
                             Fog Entry
                           </FormLabel>
-                          <p className="text-xs text-muted-foreground">
-                            Dramatic fog entrance effect
-                          </p>
                         </div>
                         <FormControl>
                           <Switch
@@ -672,9 +719,6 @@ export default function CreateBookingForm() {
                           <FormLabel className="text-sm font-medium cursor-pointer">
                             Rose Path
                           </FormLabel>
-                          <p className="text-xs text-muted-foreground">
-                            Beautiful rose petal pathway
-                          </p>
                         </div>
                         <FormControl>
                           <Switch
@@ -690,6 +734,78 @@ export default function CreateBookingForm() {
                     </FormItem>
                   )}
                 />
+                <div className="flex items-start justify-between flex-col p-4 h-fit border rounded-lg bg-card">
+                  <div className="flex items-center justify-between w-full">
+                    <div className="space-y-1">
+                      <FormLabel className="text-sm font-medium cursor-pointer">
+                        LED Letter Name
+                      </FormLabel>
+                    </div>
+                    <Switch
+                      checked={wantsLedName}
+                      onCheckedChange={(checked) => {
+                        setWantsLedName(checked);
+                        form.resetField("ledLetterName", {
+                          defaultValue: undefined,
+                        });
+                      }}
+                    />
+                  </div>
+                  {wantsLedName && (
+                    <FormField
+                      control={form.control}
+                      name="ledLetterName"
+                      render={({ field }) => (
+                        <FormItem className="mt-4 w-full">
+                          <FormControl>
+                            <Input
+                              placeholder="LED Letter Name"
+                              defaultValue={field.value}
+                              onChange={field.onChange}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  )}
+                </div>
+                <div className="flex items-start justify-between flex-col p-4 h-fit border rounded-lg bg-card">
+                  <div className="flex items-center justify-between w-full">
+                    <div className="space-y-1">
+                      <FormLabel className="text-sm font-medium cursor-pointer">
+                        LED Letter Age
+                      </FormLabel>
+                    </div>
+                    <Switch
+                      checked={wantsLedAge}
+                      onCheckedChange={(checked) => {
+                        form.resetField("ledLetterAge", {
+                          defaultValue: undefined,
+                        });
+                        setWantsLedAge(checked);
+                      }}
+                    />
+                  </div>
+                  {wantsLedAge && (
+                    <FormField
+                      control={form.control}
+                      name="ledLetterAge"
+                      render={({ field }) => (
+                        <FormItem className="mt-4 w-full">
+                          <FormControl>
+                            <Input
+                              placeholder="LED Letter Age"
+                              defaultValue={field.value}
+                              onChange={field.onChange}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  )}
+                </div>
               </div>
             </CardContent>
           </Card>
@@ -762,14 +878,66 @@ export default function CreateBookingForm() {
                   </CardHeader>
                   <CardContent className="space-y-3">
                     <div className="flex justify-between text-sm">
-                      <span>Base Cost:</span>
+                      <span>{selectedRoom} Base Price:</span>
                       <span className="font-medium">
-                        {formatCurrency(
-                          calculatedAmounts.totalCost -
-                            calculatedAmounts.midnightCharge
-                        )}
+                        {formatCurrency(calculatedAmounts.basePrice)}
                       </span>
                     </div>
+
+                    {calculatedAmounts.extraPeopleCharge > 0 && (
+                      <div className="flex justify-between text-sm">
+                        <span>Extra People Charge:</span>
+                        <span className="font-medium">
+                          +{formatCurrency(calculatedAmounts.extraPeopleCharge)}
+                        </span>
+                      </div>
+                    )}
+
+                    {calculatedAmounts.cakeCost > 0 && (
+                      <div className="flex justify-between text-sm">
+                        <span>Cake ({selectedCake}):</span>
+                        <span className="font-medium">
+                          +{formatCurrency(calculatedAmounts.cakeCost)}
+                        </span>
+                      </div>
+                    )}
+
+                    {calculatedAmounts.photographyCost > 0 && (
+                      <div className="flex justify-between text-sm">
+                        <span>Photography ({photography}):</span>
+                        <span className="font-medium">
+                          +{formatCurrency(calculatedAmounts.photographyCost)}
+                        </span>
+                      </div>
+                    )}
+
+                    {calculatedAmounts.fogEntryCost > 0 && (
+                      <div className="flex justify-between text-sm">
+                        <span>Fog Entry:</span>
+                        <span className="font-medium">
+                          +{formatCurrency(calculatedAmounts.fogEntryCost)}
+                        </span>
+                      </div>
+                    )}
+
+                    {calculatedAmounts.rosePathCost > 0 && (
+                      <div className="flex justify-between text-sm">
+                        <span>Rose Path:</span>
+                        <span className="font-medium">
+                          +{formatCurrency(calculatedAmounts.rosePathCost)}
+                        </span>
+                      </div>
+                    )}
+
+                    {calculatedAmounts.ledLetterCost > 0 && (
+                      <div className="flex justify-between text-sm">
+                        <span>LED Letters:</span>
+                        <span className="font-medium">
+                          +{formatCurrency(calculatedAmounts.ledLetterCost)}
+                        </span>
+                      </div>
+                    )}
+
                     {calculatedAmounts.midnightCharge > 0 && (
                       <div className="flex justify-between text-sm">
                         <span>Midnight Charges:</span>
@@ -778,16 +946,19 @@ export default function CreateBookingForm() {
                         </span>
                       </div>
                     )}
+
                     <div className="flex justify-between text-sm font-medium border-t pt-3">
                       <span>Total Cost:</span>
                       <span>{formatCurrency(calculatedAmounts.totalCost)}</span>
                     </div>
+
                     <div className="flex justify-between text-sm">
                       <span>Advance Paid:</span>
                       <span className="font-medium text-green-600">
                         -{formatCurrency(advanceAmount)}
                       </span>
                     </div>
+
                     {discount > 0 && (
                       <div className="flex justify-between text-sm">
                         <span>Discount:</span>
@@ -796,6 +967,7 @@ export default function CreateBookingForm() {
                         </span>
                       </div>
                     )}
+
                     <div className="border-t pt-3">
                       <div className="flex justify-between text-lg font-bold">
                         <span>Balance Remaining:</span>

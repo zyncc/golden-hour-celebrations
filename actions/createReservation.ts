@@ -3,7 +3,13 @@
 import { auth } from "@/auth";
 import { Reservation } from "@/context/ReservationStore";
 import NikeReceiptEmail from "@/emails/receipt";
-import { advanceAmount, cakePrice } from "@/lib/constants";
+import {
+  advanceAmount,
+  cakePrice,
+  candleLightRosePath,
+  ledLetterLightAge,
+  ledLetterLightName,
+} from "@/lib/constants";
 import prisma from "@/lib/prisma";
 import { ManualBookingSchema, payReservationSchema } from "@/lib/zodSchemas";
 import { randomUUID } from "crypto";
@@ -42,7 +48,7 @@ export async function createReservation(
   }
 
   if (reservation.rosePath) {
-    total += 400;
+    total += candleLightRosePath;
   }
 
   if (
@@ -56,6 +62,13 @@ export async function createReservation(
     total += 700;
   } else if (reservation.photography === "video") {
     total += 1500;
+  }
+
+  if (reservation.ledLetterName) {
+    total += ledLetterLightName;
+  }
+  if (reservation.ledLetterAge) {
+    total += ledLetterLightAge;
   }
 
   if (
@@ -83,13 +96,13 @@ export async function createReservation(
     console.log(error.issues);
     throw new Error("Invalid DATA");
   }
-  console.log("BEFORE IST CONVERSION", data.date.toLocaleDateString())
+  console.log("BEFORE IST CONVERSION", data.date.toLocaleDateString());
   const date = data.date.toLocaleDateString("en-CA", {
     timeZone: "Asia/Kolkata",
   });
-  console.log("AFTER IST CONVERSION", date)
-  console.log("Time Slot", data.timeSlot)
-  console.log(data)
+  console.log("AFTER IST CONVERSION", date);
+  console.log("Time Slot", data.timeSlot);
+  console.log(data);
   const checkExistingBookings = await prisma.reservations.findFirst({
     where: {
       date,
@@ -98,7 +111,7 @@ export async function createReservation(
       paymentStatus: true,
     },
   });
-  console.log("Existing Booking", checkExistingBookings); 
+  console.log("Existing Booking", checkExistingBookings);
   if (checkExistingBookings) {
     return {
       title: "Error creating Reservation",
@@ -118,13 +131,15 @@ export async function createReservation(
         writingOnCake: data.writingOnCake,
         specialRequests: data.specialRequests,
         date: date,
-        email: data.email as string,
-        findUs: data.findus as string,
-        name: data.name as string,
-        occasion: data.occasion as string,
-        phone: data.phone as string,
-        room: data.room as string,
-        timeSlot: data.timeSlot as string,
+        email: data.email,
+        findUs: data.findus,
+        name: data.name,
+        ledLetterName: data.ledLetterName,
+        ledLetterAge: data.ledLetterAge,
+        occasion: data.occasion,
+        phone: data.phone,
+        room: data.room,
+        timeSlot: data.timeSlot,
         discount: 0,
         cake: data.cake,
         photography: data.photography,
@@ -149,12 +164,12 @@ export async function CreateManualBooking(data: Data) {
   }
 
   const { advanceAmount, discount = 0, ...rest } = data;
-  console.log("BEFORE IST CONVERSION", data.date.toLocaleDateString())
+  console.log("BEFORE IST CONVERSION", data.date.toLocaleDateString());
   const date = data.date.toLocaleDateString("en-CA", {
     timeZone: "Asia/Kolkata",
   });
-  console.log("AFTER IST CONVERSION", date)
-  console.log(data.timeSlot)
+  console.log("AFTER IST CONVERSION", date);
+  console.log(data.timeSlot);
   const checkExistingBookings = await prisma.reservations.findFirst({
     where: {
       date,
@@ -164,7 +179,7 @@ export async function CreateManualBooking(data: Data) {
     },
   });
 
-  console.log("Existing Booking", checkExistingBookings); 
+  console.log("Existing Booking", checkExistingBookings);
 
   if (checkExistingBookings) {
     throw new Error(
@@ -188,7 +203,7 @@ export async function CreateManualBooking(data: Data) {
     }
   }
   if (data.fogEntry) total += 400;
-  if (data.rosePath) total += 400;
+  if (data.rosePath) total += candleLightRosePath;
 
   if (data.photography === "photoshoot") total += 700;
   else if (data.photography === "video") total += 1500;
@@ -198,6 +213,14 @@ export async function CreateManualBooking(data: Data) {
     data.timeSlot === "10:30PM - 12:30AM"
   ) {
     total += 500;
+  }
+
+  if (data.ledLetterName) {
+    total += ledLetterLightName;
+  }
+
+  if (data.ledLetterAge) {
+    total += ledLetterLightAge;
   }
 
   if (
@@ -232,11 +255,7 @@ export async function CreateManualBooking(data: Data) {
   const resend = new Resend(process.env.RESEND_API_KEY);
   const emailSent = await resend.emails.send({
     from: "Golden Hour Celebrations <info@goldenhourcelebrations.in>",
-    to: [
-      booking.email.toLowerCase(),
-      "goldenhourcelebrationsblr@gmail.com",
-      "chandankrishna288@gmail.com",
-    ],
+    to: [booking.email.toLowerCase(), "goldenhourcelebrationsblr@gmail.com"],
     subject: "Receipt for your Reservation",
     react: NikeReceiptEmail({ getReservationDetails: booking }),
   });

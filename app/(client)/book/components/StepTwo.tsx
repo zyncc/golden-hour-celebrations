@@ -90,9 +90,7 @@ export default function StepTwo() {
     refetchInterval: 1000 * 20,
     refetchOnWindowFocus: true,
     queryFn: async () => {
-      const res = await fetch(
-        `/api/fetchReservations?date=${date}`
-      );
+      const res = await fetch(`/api/fetchReservations?date=${date}`);
       return res.json();
     },
   });
@@ -796,28 +794,31 @@ export default function StepTwo() {
               </Card>
             ))}
           </div>
-          <div className="sticky bottom-0 bg-background pt-4 pb-4 z-10">
-            <div className="flex gap-4">
-              <Button
-                type={"submit"}
-                className={"flex-1"}
-                variant={"outline"}
-                onClick={() => {
-                  router.push("?step=1", {
-                    scroll: true,
-                  });
-                }}
-              >
-                Back
-              </Button>
-              <Button
-                type={"submit"}
-                className={"flex-1 bg-highlight hover:bg-highlight-foreground"}
-                variant={"default"}
-                onClick={handleNextButton}
-              >
-                Select Addons <ArrowRight />
-              </Button>
+          <div className="sticky bottom-6 z-10">
+            <div className="bg-background/80 backdrop-blur-lg border rounded-2xl p-4 shadow-lg">
+              <div className="flex gap-4 max-w-md mx-auto">
+                <Button
+                  variant="outline"
+                  className="flex-1 h-12 bg-transparent"
+                  onClick={() => {
+                    router.push("?step=1", {
+                      scroll: true,
+                    });
+                  }}
+                >
+                  Back
+                </Button>
+                <Button
+                  type={"submit"}
+                  className={
+                    "flex-1 bg-highlight hover:bg-highlight-foreground"
+                  }
+                  variant={"default"}
+                  onClick={handleNextButton}
+                >
+                  Select Addons <ArrowRight />
+                </Button>
+              </div>
             </div>
           </div>
         </div>

@@ -187,16 +187,23 @@ export default function StepOneForm() {
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value="Movie Time">Movie Time</SelectItem>
-                      <SelectItem value="Birthday">Birthday</SelectItem>
-                      <SelectItem value="Anniversary">Anniversary</SelectItem>
-                      <SelectItem value="Bride to be">Bride to be</SelectItem>
-                      <SelectItem value="Groom to be">Groom to be</SelectItem>
-                      <SelectItem value="Proposal Planning">
-                        Proposal Planning
+                      <SelectItem value="Birthday">🎂 Birthday</SelectItem>
+                      <SelectItem value="Anniversary">
+                        💕 Anniversary
                       </SelectItem>
-                      <SelectItem value="Mom to be">Mom to be</SelectItem>
-                      <SelectItem value="Other">Others</SelectItem>
+                      <SelectItem value="Bride to be">
+                        👰 Bride to be
+                      </SelectItem>
+                      <SelectItem value="Groom to be">
+                        🤵 Groom to be
+                      </SelectItem>
+                      <SelectItem value="Movie Date">🎬 Movie Date</SelectItem>
+                      <SelectItem value="Graduation Party">
+                        🎓 Graduation Party
+                      </SelectItem>
+                      <SelectItem value="Proposal">💍 Proposal</SelectItem>
+                      <SelectItem value="Mom to be">🤱 Mom to be</SelectItem>
+                      <SelectItem value="Other">🎉 Other</SelectItem>
                     </SelectContent>
                   </Select>
                   <FormMessage />

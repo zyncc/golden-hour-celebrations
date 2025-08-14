@@ -16,6 +16,7 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://goldenthourcelebrations.in"),
   title: {
     template: "%s - Golden Hour Celebrations",
     default: "Golden Hour Celebrations",
