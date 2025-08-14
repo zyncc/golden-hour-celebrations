@@ -86,12 +86,14 @@ export default async function Page({ params }: { params: { id: string } }) {
               <Calendar className="h-4 w-4 text-gray-500" />
               <div>
                 <p className="text-sm text-gray-500">Date</p>
-                <p className="font-medium">{new Date(reservation.date).toLocaleDateString("en-GB", {
-                  timeZone: "Asia/Kolkata",
-                  weekday: "short",
-                  month: "short",
-                  day: "2-digit",
-                })}</p>
+                <p className="font-medium">
+                  {new Date(reservation.date).toLocaleDateString("en-GB", {
+                    timeZone: "Asia/Kolkata",
+                    weekday: "short",
+                    month: "short",
+                    day: "2-digit",
+                  })}
+                </p>
               </div>
             </div>
             <div className="flex items-center gap-3">
@@ -216,8 +218,8 @@ export default async function Page({ params }: { params: { id: string } }) {
               <span>
                 {formatCurrency(
                   reservation.advanceAmount +
-                  reservation.balanceAmount -
-                  (reservation.discount ?? 0)
+                    reservation.balanceAmount -
+                    (reservation.discount ?? 0)
                 )}
               </span>
             </div>
@@ -275,6 +277,24 @@ export default async function Page({ params }: { params: { id: string } }) {
                 </div>
               </div>
             )}
+            {reservation.ledLetterName && (
+              <div className="flex items-center gap-3">
+                <Monitor className="h-4 w-4 text-gray-500" />
+                <div>
+                  <p className="text-sm text-gray-500">LED Letter Name</p>
+                  <p className="font-medium">{reservation.ledLetterName}</p>
+                </div>
+              </div>
+            )}
+            {reservation.ledLetterAge && (
+              <div className="flex items-center gap-3">
+                <Monitor className="h-4 w-4 text-gray-500" />
+                <div>
+                  <p className="text-sm text-gray-500">LED Letter Age</p>
+                  <p className="font-medium">{reservation.ledLetterAge}</p>
+                </div>
+              </div>
+            )}
             {reservation.writingOnCake && (
               <div className="flex items-center gap-3">
                 <Cake className="h-4 w-4 text-gray-500" />
@@ -284,7 +304,6 @@ export default async function Page({ params }: { params: { id: string } }) {
                 </div>
               </div>
             )}
-
             {reservation.photography && (
               <div className="flex items-center gap-3">
                 <Camera className="h-4 w-4 text-gray-500" />
