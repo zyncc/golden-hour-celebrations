@@ -119,7 +119,7 @@ export default function RefundPolicy() {
               >
                 goldenhourcelebrationsblr@gmail.com
               </Link>
-              <p className="text-muted-foreground">Phone: 9739204918</p>
+              <p className="text-muted-foreground">Phone: 7829773610</p>
             </div>
           </CardContent>
         </Card>

@@ -297,7 +297,7 @@ export default function StepOneForm() {
               <p>4th Block, Jayanagar, 560041</p>
               <Separator className="my-2" />
 
-              <Link href={"tel:9739204918"}>Call us - 9739204918</Link>
+              <Link href={"tel:7829773610"}>Call us - 7829773610</Link>
             </div>
           </div>
         </div>
