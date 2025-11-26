@@ -19,6 +19,7 @@ import {
   Building,
   NotebookPen,
   Monitor,
+  Notebook,
 } from "lucide-react";
 import formatCurrency from "@/lib/formatCurrency";
 import Link from "next/link";
@@ -126,13 +127,21 @@ export default async function Page({ params }: { params: { id: string } }) {
                 <p className="font-medium">{reservation.occasion}</p>
               </div>
             </div>
-
             {reservation.nameToDisplay && (
               <div className="flex items-center gap-3">
                 <User className="h-4 w-4 text-gray-500" />
                 <div>
                   <p className="text-sm text-gray-500">Display Name</p>
                   <p className="font-medium">{reservation.nameToDisplay}</p>
+                </div>
+              </div>
+            )}
+            {reservation.nameToDisplay && (
+              <div className="flex items-center gap-3 overflow-hidden">
+                <NotebookPen className="h-4 w-4 text-gray-500" />
+                <div>
+                  <p className="text-sm text-red-500">Notes</p>
+                  <p className="font-medium">{reservation.notes}</p>
                 </div>
               </div>
             )}

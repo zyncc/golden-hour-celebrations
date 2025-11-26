@@ -47,6 +47,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import type { z } from "zod";
 import { toast } from "sonner";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Textarea } from "@/components/ui/textarea";
 
 export default function CreateBookingForm() {
   const currentDate = new Date();
@@ -88,8 +89,10 @@ export default function CreateBookingForm() {
       occasion: undefined,
       room: undefined,
       cake: undefined,
+      writingOnCake: undefined,
       photography: undefined,
       ledLetterAge: undefined,
+      notes: undefined,
       ledLetterName: undefined,
       nameToDisplay: "",
       fogEntry: false,
@@ -639,7 +642,27 @@ export default function CreateBookingForm() {
                     </FormItem>
                   )}
                 />
-
+                {selectedCake.length > 0 && (
+                  <FormField
+                    control={form.control}
+                    name="writingOnCake"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-sm font-medium">
+                          Writing on Cake
+                        </FormLabel>
+                        <FormControl>
+                          <Input
+                            placeholder="Writing on Cake"
+                            defaultValue={field.value}
+                            onChange={field.onChange}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                )}
                 <FormField
                   control={form.control}
                   name="photography"
@@ -807,6 +830,19 @@ export default function CreateBookingForm() {
                   )}
                 </div>
               </div>
+              <FormField
+                control={form.control}
+                name="notes"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-sm font-medium">Notes</FormLabel>
+                    <FormControl>
+                      <Textarea value={field.value} onChange={field.onChange} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
             </CardContent>
           </Card>
 

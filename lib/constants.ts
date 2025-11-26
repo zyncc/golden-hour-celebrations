@@ -213,10 +213,10 @@ export const faqData = [
 ];
 
 export const cakes = [
-  "Chocolate",
-  "Black forest",
-  "Red velvet",
-  "Butter scotch",
-  "Rasmalai",
-  "Blueberry",
+  "Choco Chip Truffle Cake (Eggless)",
+  "Black forest (Eggless)",
+  "Red velvet (Eggless)",
+  "Butter scotch (Eggless)",
+  "Rasmalai (Eggless)",
+  "Blueberry (Eggless)",
 ];

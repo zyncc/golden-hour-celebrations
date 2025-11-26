@@ -96,7 +96,7 @@ export const ManualBookingSchema = z.object({
   noOfPeople: z.coerce.number().min(2, "Minimum 2 people are required!"),
   nameToDisplay: z
     .string({ message: "Name is required" })
-    .max(8, { message: "Maximum 8 letters allowed" })
+    .max(25, { message: "Maximum 25 letters allowed" })
     .optional(),
   email: z
     .string({ message: "Email is required" })
@@ -104,9 +104,10 @@ export const ManualBookingSchema = z.object({
   occasion: z.string({
     message: "Please select one",
   }),
+  notes: z.string().optional(),
   ledLetterName: z
     .string()
-    .max(7, { message: "Maximum 7 letters allowed" })
+    .max(8, { message: "Maximum 8 letters allowed" })
     .optional(),
   ledLetterAge: z
     .string()
@@ -116,6 +117,7 @@ export const ManualBookingSchema = z.object({
   room: z.string(),
   timeSlot: z.string(),
   cake: z.string().optional(),
+  writingOnCake: z.string().optional(),
   photography: z.string().optional(),
   fogEntry: z.boolean().optional(),
   rosePath: z.boolean().optional(),
