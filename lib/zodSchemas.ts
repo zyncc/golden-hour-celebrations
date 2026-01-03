@@ -6,7 +6,7 @@ export const emailValidator = z.object({
     .email("Enter a valid email address"),
 });
 
-export const StepOneFormSchema = z.object({
+export const StepThreeFormSchema = z.object({
   name: z
     .string({ message: "Name is required" })
     .min(3, { message: "Name must be atleast 3 characters" })
@@ -34,7 +34,6 @@ export const StepOneFormSchema = z.object({
     .number()
     .min(2, "Minimum 2 people are required!")
     .max(15, "Maximum 15 people are allowed"),
-  date: z.date({ message: "Date is required" }),
 });
 
 export const payReservationSchema = z.object({

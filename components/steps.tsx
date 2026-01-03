@@ -10,19 +10,19 @@ export function Steps({ currentStep }: StepperProps) {
       <div className="flex-col sm:grid-cols-4 hidden sm:grid gap-4">
         <StepItem
           number={1}
-          label="Choose Date"
+          label="Select Package"
           isActive={currentStep === 1}
           isCompleted={currentStep > 1}
         />
         <StepItem
           number={2}
-          label="Select Package"
+          label="Addons"
           isActive={currentStep === 2}
           isCompleted={currentStep > 2}
         />
         <StepItem
           number={3}
-          label="Addons"
+          label="Information"
           isActive={currentStep === 3}
           isCompleted={currentStep > 3}
         />

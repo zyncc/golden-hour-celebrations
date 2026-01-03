@@ -65,6 +65,36 @@ export default function TermsAndConditions() {
             </AccordionContent>
           </AccordionItem>
 
+          <AccordionItem
+            value="damage-cleanliness"
+            className="border rounded-lg px-6"
+          >
+            <AccordionTrigger className="flex gap-2 hover:no-underline">
+              <AlertTriangle className="h-5 w-5 text-primary" />
+              <span>Damage & Cleanliness Policy</span>
+            </AccordionTrigger>
+            <AccordionContent className="pt-4 space-y-3">
+              <p>Thank you for your booking and advance payment.</p>
+              <p>
+                Customers are fully responsible for handing over the theatre in
+                the same condition in which it was provided. Any damage or
+                staining to the premises, including but not limited to floor
+                carpets, recliner sofas, or any other property, will result in a
+                minimum penalty of ₹1,000. The penalty amount may increase
+                depending on the extent of the damage.
+              </p>
+              <p>
+                Spilling food, cake, or drinks on sofas or carpets is strictly
+                prohibited. Any negligence leading to stains or damage will
+                incur charges without exception.
+              </p>
+              <p>
+                We appreciate your cooperation in helping us maintain a clean
+                and safe environment for all guests.
+              </p>
+            </AccordionContent>
+          </AccordionItem>
+
           <AccordionItem value="payments" className="border rounded-lg px-6">
             <AccordionTrigger className="flex gap-2 hover:no-underline">
               <CreditCard className="h-5 w-5 text-primary" />

@@ -104,18 +104,16 @@ export default function CreateBookingForm() {
     },
   });
 
-  const date = selectedDate?.toLocaleDateString("en-CA", {
-    timeZone: "Asia/Kolkata",
-  });
-
   const { data, isLoading } = useQuery({
-    queryKey: ["getReservation", date],
+    queryKey: ["getReservation", selectedDate],
     refetchInterval: 1000 * 20,
     refetchOnWindowFocus: true,
     enabled: !!selectedDate,
     queryFn: async () => {
       if (!selectedDate) return [];
-      const res = await fetch(`/api/fetchReservations?date=${date}`);
+      const res = await fetch(
+        `/api/fetchReservations?date=${selectedDate.toISOString()}`
+      );
       return res.json();
     },
   });

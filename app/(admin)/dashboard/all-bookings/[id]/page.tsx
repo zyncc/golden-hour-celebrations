@@ -44,16 +44,6 @@ export default async function Page({ params }: { params: { id: string } }) {
     return notFound();
   }
 
-  const formatDate = (date: Date) => {
-    return new Intl.DateTimeFormat("en-US", {
-      weekday: "long",
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-      timeZone: "Asia/Kolkata",
-    }).format(new Date(date));
-  };
-
   const formatDateTime = (date: Date) => {
     return new Intl.DateTimeFormat("en-US", {
       year: "numeric",
@@ -136,7 +126,7 @@ export default async function Page({ params }: { params: { id: string } }) {
                 </div>
               </div>
             )}
-            {reservation.nameToDisplay && (
+            {reservation.notes && (
               <div className="flex items-center gap-3 overflow-hidden">
                 <NotebookPen className="h-4 w-4 text-gray-500" />
                 <div>

@@ -1,10 +1,13 @@
 import { Footer } from "@/components/footer/footer";
 import React from "react";
 import { reviews } from "@/lib/constants";
-import { FAQSection } from "@/components/faqs/faq";
 import { Metadata } from "next";
 import { BackgroundGradientAnimation } from "@/components/ui/background-gradient-animation";
 import { InfiniteMovingCards } from "@/components/ui/infinite-moving-cards";
+import HomePageForm from "@/components/home-page-form";
+import { Gallery } from "@/components/home-gallery";
+import { AboutUs } from "@/components/home-about";
+import { FAQSection } from "@/components/home-faq";
 
 export const metadata: Metadata = {
   title: "The Best Private Theatre in Bangalore - Golden Hour Celebrations",
@@ -25,21 +28,9 @@ export default function Page() {
           </div>
         </BackgroundGradientAnimation>
       </section>
-      <section
-        id="about"
-        className="container mt-10 flex flex-col items-center"
-      >
-        <h1 className="font-semibold bg-clip-text text-transparent bg-gradient-to-b from-neutral-200 to-neutral-500 text-4xl text-center lg:text-7xl">
-          About us
-        </h1>
-        <p className="text-center mt-5 max-w-[900px]">
-          We at Golden Hour Celebrations plan your loved ones special day with
-          personalised decorations exclusively in a private theatre. Celebrate
-          birthdays, anniversaries, bride / groom-to-be, baby showers, valentine
-          day, celebrate your achievements with us.
-        </p>
-      </section>
-      <section className="container my-[200px]">
+      <AboutUs />
+      <Gallery />
+      <section className="container">
         <FAQSection />
       </section>
       <section id="reviews" className="container py-[100px]">

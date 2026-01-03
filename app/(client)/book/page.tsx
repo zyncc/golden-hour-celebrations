@@ -1,9 +1,9 @@
 import { notFound } from "next/navigation";
-import StepOneForm from "./components/stepOneForm";
 import StepTwo from "./components/StepTwo";
-import StepThree from "./components/StepThree";
 import { Steps } from "@/components/steps";
 import { Metadata } from "next";
+import StepThree from "./components/StepThree";
+import StepOne from "./components/StepOne";
 import StepFour from "./components/StepFour";
 
 export const metadata: Metadata = {
@@ -19,14 +19,14 @@ export default function Book({
   if (!step) {
     step = 1;
   }
-  if (![1, 2, 3, 4, 5].includes(step)) {
+  if (![1, 2, 3, 4].includes(step)) {
     return notFound();
   }
   return (
     <div className={"mt-[100px] container mx-auto"}>
       <Steps currentStep={step} />
       {step == 1 ? (
-        <StepOneForm />
+        <StepOne />
       ) : step == 2 ? (
         <StepTwo />
       ) : step == 3 ? (

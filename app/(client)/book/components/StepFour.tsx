@@ -23,7 +23,7 @@ import {
 import Link from "next/link";
 import { Switch } from "@/components/ui/switch";
 
-export default function StepThree() {
+export default function StepFour() {
   const { reservation } = useReservation();
   const { Razorpay } = useRazorpay();
   const [pending, setPending] = useState(false);
@@ -458,7 +458,14 @@ export default function StepThree() {
                   )}
                 </Button>
                 <p className="text-sm text-muted-foreground text-center mt-4">
-                  Secure payment powered by Razorpay
+                  By creating a Reservation you are agreeing to our{" "}
+                  <Link href={"/terms"} className="underline text-blue-600">
+                    terms
+                  </Link>{" "}
+                  &{" "}
+                  <Link href={"/privacy"} className="underline text-blue-600">
+                    privacy policy
+                  </Link>
                 </p>
               </CardContent>
             </Card>

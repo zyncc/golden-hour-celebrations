@@ -2,7 +2,7 @@
 
 import { auth } from "@/auth";
 import { Reservation } from "@/context/ReservationStore";
-import NikeReceiptEmail from "@/emails/receipt";
+import ReservationConfirmationEmail from "@/emails/receipt";
 import {
   advanceAmount,
   cakePrice,
@@ -96,16 +96,10 @@ export async function createReservation(
     console.log(error.issues);
     throw new Error("Invalid DATA");
   }
-  console.log("BEFORE IST CONVERSION", data.date.toLocaleDateString());
-  const date = data.date.toLocaleDateString("en-CA", {
-    timeZone: "Asia/Kolkata",
-  });
-  console.log("AFTER IST CONVERSION", date);
-  console.log("Time Slot", data.timeSlot);
-  console.log(data);
+
   const checkExistingBookings = await prisma.reservations.findFirst({
     where: {
-      date,
+      date: data.date,
       room: data.room,
       timeSlot: data.timeSlot,
       paymentStatus: true,
@@ -130,7 +124,7 @@ export async function createReservation(
         nameToDisplay: data.nameToDisplay,
         writingOnCake: data.writingOnCake,
         specialRequests: data.specialRequests,
-        date: date,
+        date: data.date,
         email: data.email,
         findUs: data.findus,
         name: data.name,
@@ -164,15 +158,9 @@ export async function CreateManualBooking(data: Data) {
   }
 
   const { advanceAmount, discount = 0, ...rest } = data;
-  console.log("BEFORE IST CONVERSION", data.date.toLocaleDateString());
-  const date = data.date.toLocaleDateString("en-CA", {
-    timeZone: "Asia/Kolkata",
-  });
-  console.log("AFTER IST CONVERSION", date);
-  console.log(data.timeSlot);
   const checkExistingBookings = await prisma.reservations.findFirst({
     where: {
-      date,
+      date: data.date,
       room: data.room,
       timeSlot: data.timeSlot,
       paymentStatus: true,
@@ -242,7 +230,7 @@ export async function CreateManualBooking(data: Data) {
   const booking = await prisma.reservations.create({
     data: {
       ...rest,
-      date,
+      date: data.date,
       discount,
       balanceAmount,
       advanceAmount,
@@ -257,7 +245,7 @@ export async function CreateManualBooking(data: Data) {
     from: "Golden Hour Celebrations <info@goldenhourcelebrations.in>",
     to: [booking.email.toLowerCase(), "goldenhourcelebrationsblr@gmail.com"],
     subject: "Receipt for your Reservation",
-    react: NikeReceiptEmail({ getReservationDetails: booking }),
+    react: ReservationConfirmationEmail({ getReservationDetails: booking }),
   });
 
   console.log(emailSent);

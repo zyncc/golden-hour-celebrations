@@ -1,4 +1,4 @@
-import NikeReceiptEmail from "@/emails/receipt";
+import ReservationConfirmationEmail from "@/emails/receipt";
 import prisma from "@/lib/prisma";
 import { Resend } from "resend";
 import { revalidatePath } from "next/cache";
@@ -44,7 +44,7 @@ export async function POST(req: Request) {
           "goldenhourcelebrationsblr@gmail.com",
         ],
         subject: "Receipt for your Reservation",
-        react: NikeReceiptEmail({
+        react: ReservationConfirmationEmail({
           getReservationDetails: updatedReservation,
         }),
       });

@@ -22,13 +22,29 @@ async function Page() {
   }
 
   const now = new Date();
-  const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
-  const startOfNextMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1);
+  const startOfMonth = new Date(
+    now.getFullYear(),
+    now.getMonth(),
+    1,
+    0,
+    0,
+    0,
+    0
+  );
+  const startOfNextMonth = new Date(
+    now.getFullYear(),
+    now.getMonth() + 1,
+    0,
+    23,
+    59,
+    59,
+    999
+  );
 
   const reservations = await prisma.reservations.findMany({
     where: {
       paymentStatus: true,
-      createdAt: {
+      date: {
         gte: startOfMonth,
         lte: startOfNextMonth,
       },
@@ -45,6 +61,7 @@ async function Page() {
         <Table>
           <TableHeader>
             <TableRow>
+              <TableHead>Date</TableHead>
               <TableHead>Name</TableHead>
               <TableHead>Time</TableHead>
               <TableHead>Package</TableHead>
@@ -52,12 +69,19 @@ async function Page() {
               <TableHead>Advance Amount</TableHead>
               <TableHead>No of People</TableHead>
               <TableHead>Event Type</TableHead>
-              <TableHead>Date</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {reservations.map((reservation) => (
               <TableRow key={reservation.id}>
+                <TableCell className={"whitespace-nowrap"}>
+                  {new Date(reservation.date).toLocaleDateString("en-GB", {
+                    timeZone: "Asia/Kolkata",
+                    weekday: "short",
+                    month: "short",
+                    day: "2-digit",
+                  })}
+                </TableCell>
                 <TableCell className="font-medium whitespace-nowrap">
                   <Link href={`/dashboard/all-bookings/${reservation.id}`}>
                     {reservation.name}
@@ -78,14 +102,6 @@ async function Page() {
                   <span className="inline-flex items-center rounded-md bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10 dark:bg-blue-400/10 dark:text-blue-400 dark:ring-blue-400/30">
                     {reservation.occasion}
                   </span>
-                </TableCell>
-                <TableCell className={"whitespace-nowrap"}>
-                  {new Date(reservation.date).toLocaleDateString("en-GB", {
-                    timeZone: "Asia/Kolkata",
-                    weekday: "short",
-                    month: "short",
-                    day: "2-digit",
-                  })}
                 </TableCell>
               </TableRow>
             ))}

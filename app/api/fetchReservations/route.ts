@@ -3,14 +3,14 @@ import prisma from "@/lib/prisma";
 
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
-  const dateString = searchParams.get("date") as string;
-  if (!dateString) {
+  const isoDateString = searchParams.get("date") as string;
+  if (!isoDateString) {
     return NextResponse.json("Invalid Date", { status: 500 });
   }
-  console.log(dateString)
+  const date = new Date(isoDateString);
   const response = await prisma.reservations.findMany({
     where: {
-      date: dateString,
+      date,
       paymentStatus: true,
     },
     select: {
@@ -21,6 +21,6 @@ export async function GET(req: Request) {
       occasion: true,
     },
   });
-  console.log(response.length)
+  console.log(response.length);
   return NextResponse.json(response);
 }

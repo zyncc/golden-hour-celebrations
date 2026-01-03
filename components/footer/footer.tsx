@@ -1,5 +1,3 @@
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
 export function Footer() {
@@ -82,21 +80,13 @@ export function Footer() {
                   Instagram
                 </Link>
               </li>
-              <li>
-                <Link
-                  href="https://youtube.com/"
-                  target="_blank"
-                  className="hover:text-white transition-colors flex items-center gap-x-2"
-                >
-                  YouTube
-                </Link>
-              </li>
             </ul>
           </div>
         </div>
         <div className="mt-8 pt-8 border-t text-center">
           <p className="text-sm">
-            &copy; 2025 Golden Hour Celebrations. All rights reserved.
+            &copy; {new Date().getFullYear()} Golden Hour Celebrations. All
+            rights reserved.
           </p>
         </div>
       </div>

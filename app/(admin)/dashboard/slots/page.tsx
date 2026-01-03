@@ -12,12 +12,9 @@ export default async function SlotsPage() {
     return redirect("/dashboard/signin");
   }
   const currentDate = new Date();
-  const istDate = currentDate.toLocaleDateString("en-CA", {
-    timeZone: "Asia/Kolkata",
-  });
   const reservations = await prisma.reservations.findMany({
     where: {
-      date: istDate,
+      date: currentDate,
       paymentStatus: true,
     },
     select: {

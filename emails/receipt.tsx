@@ -1,5 +1,4 @@
-import formatCurrency from "@/lib/formatCurrency";
-import { Reservations } from "@prisma/client";
+import * as React from "react";
 import {
   Body,
   Container,
@@ -8,217 +7,230 @@ import {
   Heading,
   Hr,
   Html,
-  Link,
   Preview,
   Row,
   Section,
   Text,
+  Tailwind,
+  Link,
 } from "@react-email/components";
-import * as React from "react";
+import { Reservations } from "@prisma/client";
+import _ from "lodash";
 
-export const NikeReceiptEmail = ({
+const ReservationConfirmationEmail = ({
   getReservationDetails,
 }: {
   getReservationDetails: Reservations;
-}) => (
-  <Html>
-    <Head />
-    <Preview>
-      This is your Receipt for your Booking at Golden Hour Celebrations
-    </Preview>
-    <Body style={main}>
-      <Container style={container}>
-        <Section style={track.container}>
-          <Row>
-            <Column>
-              <Text style={global.paragraphWithBold}>Transaction Number</Text>
-              <Text style={track.number}>{getReservationDetails.orderID}</Text>
-            </Column>
-            <Column align="right">
-              <Link
-                href="https://goldenhourcelebrations.in/contact"
-                style={global.button}
-              >
-                Contact us
-              </Link>
-            </Column>
-          </Row>
-        </Section>
-        <Hr style={global.hr} />
-        <Section style={message}>
-          <Heading style={global.heading}>
-            Your Reservation has been Booked!
-          </Heading>
-          <Text style={{ ...global.text, marginTop: 24, textAlign: "left" }}>
-            Dear {getReservationDetails.name},
-            <br />
-            We are thrilled to confirm your reservation with us! 🎉
-            <br />
-            Theatre - {getReservationDetails.room}
-            <br />
-            No of people - {getReservationDetails.noOfPeople}
-            <br />
-            Name to Display - {getReservationDetails.nameToDisplay}
-            <br />
-            Time - {getReservationDetails.timeSlot}
-            <br />
-            {getReservationDetails.cake &&
-              "Cake - " + getReservationDetails.cake}
-            {getReservationDetails.cake && <br />}
-            {getReservationDetails.photography &&
-              "Photography - " +
-                (getReservationDetails.photography == "60"
-                  ? "60 min"
-                  : "30 min")}
-            {getReservationDetails.photography && <br />}
-            Ocassion - {getReservationDetails.occasion}
-            <br />
-            {getReservationDetails.fogEntry && "Fog Entry Added"}
-            {getReservationDetails.fogEntry && <br />}
-            {getReservationDetails.rosePath && "Candle Light Rose Path Added"}
-            {getReservationDetails.rosePath && <br />}
-            Date -{" "}
-            {new Date(getReservationDetails.date).toLocaleDateString("en-GB", {
-              timeZone: "Asia/Kolkata",
-              weekday: "short",
-              month: "short",
-              day: "2-digit",
-            })}
-            <br />
-            {getReservationDetails.paymentID &&
-              "Payment ID - " + getReservationDetails.paymentID}
-            {getReservationDetails.paymentID && <br />}
-            Phone - {getReservationDetails.phone}
-            <br />
-            Balance Amount Payable -{" "}
-            {formatCurrency(getReservationDetails.balanceAmount).split(".")[0]}
-            <br />
-            Advance Amount Paid -{" "}
-            {formatCurrency(getReservationDetails.advanceAmount).split(".")[0]}
-            <br />
-            <br />
-            If you have any special requests or need further assistance, please
-            dont hesitate to reach out.
-          </Text>
-        </Section>
-        <Section style={paddingY}>
-          <Row>
-            <Text style={global.heading}>Golden Hour Celebrations ✨</Text>
-          </Row>
-        </Section>
-        <Hr style={{ ...global.hr, marginTop: "12px" }} />
-        <Section style={paddingY}>
-          <Row>
-            <Text style={{ ...footer.text, paddingTop: 30, paddingBottom: 30 }}>
-              Please contact us if you have any questions. (If you reply to this
-              email, we wont be able to see it.)
-            </Text>
-          </Row>
-          <Row>
-            <Text style={footer.text}>
-              © 2024 Golden Hour Celebrations, Inc. All Rights Reserved.
-            </Text>
-          </Row>
-        </Section>
-      </Container>
-    </Body>
-  </Html>
-);
+}) => {
+  const {
+    name,
+    date,
+    timeSlot,
+    room,
+    noOfPeople,
+    occasion,
+    orderID,
+    advanceAmount,
+    balanceAmount,
+    nameToDisplay,
+    writingOnCake,
+    specialRequests,
+    cake,
+    photography,
+    fogEntry,
+    rosePath,
+    ledLetterName,
+    ledLetterAge,
+  } = getReservationDetails;
 
-export default NikeReceiptEmail;
+  const formattedDate = new Intl.DateTimeFormat("en-IN", {
+    dateStyle: "full",
+  }).format(new Date(date));
 
-const paddingX = {
-  paddingLeft: "40px",
-  paddingRight: "40px",
+  return (
+    <Html>
+      <Tailwind>
+        <Head />
+        <Preview>Your reservation at {room} is confirmed! 🎉</Preview>
+        <Body className="bg-gray-100 font-sans py-[40px]">
+          <Container className="mx-auto max-w-[600px] bg-white rounded-[12px] overflow-hidden shadow-lg">
+            <Section className="bg-[#1A1A2E] px-[32px] py-[40px] text-center">
+              <Heading className="text-white text-[28px] font-bold m-0 leading-tight">
+                🎉 Reservation Confirmed 🎉
+              </Heading>
+              <Text className="text-gray-300 text-[16px] mt-[8px] mb-0">
+                Hi {name}, we&apos;re excited to host your {occasion}{" "}
+                celebration!
+              </Text>
+            </Section>
+            <Section className="px-[32px] py-[32px]">
+              <Row className="mb-[24px]">
+                <Column className="w-1/2 pr-[16px]">
+                  <Text className="text-gray-500 text-[12px] font-semibold uppercase tracking-wide m-0 mb-[4px]">
+                    DATE
+                  </Text>
+                  <Text className="text-gray-900 text-[16px] font-medium m-0">
+                    {formattedDate}
+                  </Text>
+                </Column>
+                <Column className="w-1/2 pl-[16px]">
+                  <Text className="text-gray-500 text-[12px] font-semibold uppercase tracking-wide m-0 mb-[4px]">
+                    TIME SLOT
+                  </Text>
+                  <Text className="text-gray-900 text-[16px] font-medium m-0">
+                    {timeSlot}
+                  </Text>
+                </Column>
+              </Row>
+              <Row className="mb-[24px]">
+                <Column className="w-1/2 pr-[16px]">
+                  <Text className="text-gray-500 text-[12px] font-semibold uppercase tracking-wide m-0 mb-[4px]">
+                    THEATRE
+                  </Text>
+                  <Text className="text-gray-900 text-[16px] font-medium m-0">
+                    {room}
+                  </Text>
+                </Column>
+                <Column className="w-1/2 pl-[16px]">
+                  <Text className="text-gray-500 text-[12px] font-semibold uppercase tracking-wide m-0 mb-[4px]">
+                    GUESTS
+                  </Text>
+                  <Text className="text-gray-900 text-[16px] font-medium m-0">
+                    {noOfPeople} People
+                  </Text>
+                </Column>
+              </Row>
+              <Hr className="border-gray-200 my-[24px]" />
+              <Heading className="text-gray-900 text-[18px] font-semibold mb-[16px] mt-0">
+                Reservation Details
+              </Heading>
+              <Text className="text-gray-700 text-[15px] leading-[24px] my-[4px]">
+                <strong>Order ID:</strong> {orderID}
+              </Text>
+              <Text className="text-gray-700 text-[15px] leading-[24px] my-[4px]">
+                <strong>Occasion:</strong> {occasion}
+              </Text>
+              {nameToDisplay && (
+                <Text className="text-gray-700 text-[15px] leading-[24px] my-[4px]">
+                  <strong>Name to Display:</strong> {nameToDisplay}
+                </Text>
+              )}
+              {writingOnCake && (
+                <Text className="text-gray-700 text-[15px] leading-[24px] my-[4px]">
+                  <strong>Cake Message:</strong> &quot;{writingOnCake}&quot;
+                </Text>
+              )}
+              {(cake ||
+                photography ||
+                fogEntry ||
+                rosePath ||
+                ledLetterName ||
+                ledLetterAge) && (
+                <>
+                  <Hr className="border-gray-200 my-[24px]" />
+                  <Heading className="text-gray-900 text-[18px] font-semibold mb-[16px] mt-0">
+                    Add-ons & Services
+                  </Heading>
+                  {cake && (
+                    <Text className="text-gray-700 text-[15px] leading-[24px] my-[4px]">
+                      • {cake}
+                    </Text>
+                  )}
+                  {photography && (
+                    <Text className="text-gray-700 text-[15px] leading-[24px] my-[4px]">
+                      • {_.capitalize(photography)} Photography
+                    </Text>
+                  )}
+                  {fogEntry && (
+                    <Text className="text-gray-700 text-[15px] leading-[24px] my-[4px]">
+                      • Magical Fog Entry Added
+                    </Text>
+                  )}
+                  {rosePath && (
+                    <Text className="text-gray-700 text-[15px] leading-[24px] my-[4px]">
+                      • Rose Petal Path Added
+                    </Text>
+                  )}
+                  {ledLetterName && (
+                    <Text className="text-gray-700 text-[15px] leading-[24px] my-[4px]">
+                      • LED Letters: {ledLetterName}
+                    </Text>
+                  )}
+                  {ledLetterAge && (
+                    <Text className="text-gray-700 text-[15px] leading-[24px] my-[4px]">
+                      • LED Age Display: {ledLetterAge}
+                    </Text>
+                  )}
+                </>
+              )}
+              {specialRequests && (
+                <>
+                  <Hr className="border-gray-200 my-[24px]" />
+                  <Heading className="text-gray-900 text-[18px] font-semibold mb-[16px] mt-0">
+                    Special Requests
+                  </Heading>
+                  <Text className="text-gray-700 text-[15px] leading-[24px] my-[4px] bg-blue-50 p-[16px] rounded-[8px] border-l-[4px] border-solid border-blue-400">
+                    {specialRequests}
+                  </Text>
+                </>
+              )}
+              <Hr className="border-gray-200 my-[24px]" />
+              <Section className="bg-gray-50 p-[20px] rounded-[8px]">
+                <Row className="mb-[8px]">
+                  <Column className="w-2/3">
+                    <Text className="text-gray-600 text-[14px] m-0">
+                      Advance Paid
+                    </Text>
+                  </Column>
+                  <Column className="w-1/3 text-right">
+                    <Text className="text-gray-900 text-[14px] m-0">
+                      ₹{advanceAmount}
+                    </Text>
+                  </Column>
+                </Row>
+                <Row>
+                  <Column className="w-2/3">
+                    <Text className="text-gray-900 text-[14px] font-bold m-0">
+                      Balance Due
+                    </Text>
+                  </Column>
+                  <Column className="w-1/3 text-right">
+                    <Text className="text-red-600 text-[14px] font-bold m-0">
+                      ₹{balanceAmount}
+                    </Text>
+                  </Column>
+                </Row>
+              </Section>
+              <Section className="mt-[32px] bg-yellow-50 p-[20px] rounded-[8px] border-l-[4px] border-solid border-yellow-400">
+                <Text className="text-yellow-800 text-[14px] font-semibold m-0 mb-[8px]">
+                  📋 Important Information
+                </Text>
+                <Text className="text-yellow-700 text-[13px] leading-[20px] m-0">
+                  Please arrive 15 minutes before your scheduled time. For any
+                  changes or queries, please contact us at least 24 hours in
+                  advance.
+                </Text>
+              </Section>
+            </Section>
+            <Section className="bg-gray-50 px-[32px] py-[24px] text-center border-t border-solid border-gray-200">
+              <Text className="text-gray-600 text-[12px] leading-[18px] my-[8px]">
+                Need to make changes? Call us at
+                <Link href="tel:7829773610">7829773610</Link>
+              </Text>
+              <Text className="text-gray-500 text-[12px] leading-[18px] m-0">
+                1st floor, #66, 29th main, 29th A Cross Rd, Geetha Colony, 4th
+                Block, Jayanagar, 560041
+              </Text>
+              <Text className="text-gray-500 text-[12px] leading-[18px] m-0">
+                © {new Date().getFullYear()} Golden Hour Celebrations. All
+                rights reserved.
+              </Text>
+            </Section>
+          </Container>
+        </Body>
+      </Tailwind>
+    </Html>
+  );
 };
 
-const paddingY = {
-  paddingTop: "22px",
-  paddingBottom: "22px",
-};
-
-const paragraph = {
-  margin: "0",
-  lineHeight: "2",
-};
-
-const global = {
-  paddingX,
-  paddingY,
-  defaultPadding: {
-    ...paddingX,
-    ...paddingY,
-  },
-  paragraphWithBold: { ...paragraph, fontWeight: "bold" },
-  heading: {
-    fontSize: "32px",
-    lineHeight: "1.3",
-    fontWeight: "700",
-    textAlign: "center",
-    letterSpacing: "-1px",
-  } as React.CSSProperties,
-  text: {
-    ...paragraph,
-    color: "#747474",
-    fontWeight: "500",
-  },
-  button: {
-    border: "1px solid #929292",
-    fontSize: "16px",
-    textDecoration: "none",
-    padding: "10px 0px",
-    width: "220px",
-    display: "block",
-    textAlign: "center",
-    fontWeight: 500,
-    color: "#000",
-  } as React.CSSProperties,
-  hr: {
-    borderColor: "#E5E5E5",
-    margin: "0",
-  },
-};
-
-const main = {
-  backgroundColor: "#ffffff",
-  fontFamily:
-    '-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif',
-};
-
-const container = {
-  margin: "10px auto",
-  width: "600px",
-  maxWidth: "100%",
-  border: "1px solid #E5E5E5",
-};
-
-const track = {
-  container: {
-    padding: "22px 40px",
-    backgroundColor: "#F7F7F7",
-  },
-  number: {
-    margin: "12px 0 0 0",
-    fontWeight: 500,
-    lineHeight: "1.4",
-    color: "#6F6F6F",
-  },
-};
-
-const message = {
-  padding: "40px 74px",
-  textAlign: "center",
-} as React.CSSProperties;
-
-const footer = {
-  policy: {
-    width: "166px",
-    margin: "auto",
-  },
-  text: {
-    margin: "0",
-    color: "#AFAFAF",
-    fontSize: "13px",
-    textAlign: "center",
-  } as React.CSSProperties,
-};
+export default ReservationConfirmationEmail;

@@ -49,10 +49,6 @@ export default async function AdminDashboard() {
     "Dreamscape Theatre": 1499,
   };
 
-  const totalEarned = reservations.reduce((total, reservation) => {
-    return total + roomPrices[reservation.room];
-  }, 0);
-
   const money = reservations.reduce((total, reservation) => {
     return (
       total +
