@@ -121,7 +121,7 @@ export default function StepTwo() {
         {/* Main Content Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
           {/* Cake Selection */}
-          <Card className="group hover:shadow-lg transition-all duration-300 border-0">
+          <Card>
             <CardHeader className="pb-4">
               <div className="flex items-center gap-3">
                 <div className="p-2 bg-orange-100 dark:bg-orange-900/20 rounded-lg">
@@ -207,7 +207,7 @@ export default function StepTwo() {
           </Card>
 
           {/* Photography Package */}
-          <Card className="group hover:shadow-lg transition-all duration-300 border-0 shadow-md bg-card/50 backdrop-blur-sm">
+          <Card>
             <CardHeader className="pb-4">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
@@ -511,7 +511,7 @@ export default function StepTwo() {
           </Card>
 
           {/* LED Letter Lights */}
-          <Card className="group hover:shadow-lg transition-all duration-300 border-0 shadow-md bg-card/50 backdrop-blur-sm">
+          <Card>
             <CardHeader className="pb-4">
               <div className="flex items-center gap-3">
                 <div className="p-2 bg-yellow-100 dark:bg-yellow-900/20 rounded-lg">
@@ -623,7 +623,7 @@ export default function StepTwo() {
           </Card>
 
           {/* Display Name */}
-          <Card className="group hover:shadow-lg transition-all duration-300 border-0 shadow-md bg-card/50 backdrop-blur-sm">
+          <Card>
             <CardHeader className="pb-4">
               <div className="flex items-center gap-3">
                 <div className="p-2 bg-purple-100 dark:bg-purple-900/20 rounded-lg">
@@ -667,7 +667,7 @@ export default function StepTwo() {
           </Card>
 
           {/* Fog Entry */}
-          <Card className="group hover:shadow-lg transition-all duration-300 border-0 shadow-md bg-card/50 backdrop-blur-sm">
+          <Card>
             <CardHeader>
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
@@ -708,7 +708,7 @@ export default function StepTwo() {
           </Card>
 
           {/* Rose Path */}
-          <Card className="group hover:shadow-lg transition-all duration-300 border-0 shadow-md bg-card/50 backdrop-blur-sm">
+          <Card>
             <CardHeader>
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
@@ -751,7 +751,7 @@ export default function StepTwo() {
           </Card>
 
           {/* Special Requests */}
-          <Card className="lg:col-span-2 group hover:shadow-lg transition-all duration-300 border-0 shadow-md bg-card/50 backdrop-blur-sm">
+          <Card>
             <CardHeader className="pb-4">
               <div className="flex items-center gap-3">
                 <div className="p-2 bg-green-100 dark:bg-green-900/20 rounded-lg">
