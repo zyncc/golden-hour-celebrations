@@ -25,7 +25,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`dark ${poppins.className}`}>
+      <body className={`${poppins.className}`}>
         <SidebarProvider>
           <Sonner richColors position="top-right" theme="dark" />
           <Button

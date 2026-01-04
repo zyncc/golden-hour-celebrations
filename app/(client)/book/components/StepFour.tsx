@@ -139,11 +139,11 @@ export default function StepFour() {
   }
   price += priceIncreaseForAdditionalPeople;
   return (
-    <div className="min-h-screen bg-background py-4 md:p-8 dark">
+    <div className="min-h-screen py-4 md:p-8">
       <div className="mx-auto max-w-7xl">
         <div className="grid gap-8 md:grid-cols-2">
           <div className="space-y-0">
-            <Card>
+            <Card className="">
               <CardHeader>
                 <CardTitle>Package Details</CardTitle>
               </CardHeader>
@@ -151,58 +151,42 @@ export default function StepFour() {
                 <div className="space-y-3">
                   <div className="flex justify-between items-center">
                     <span className="font-medium">Package Type</span>
-                    <span className="text-muted-foreground">
-                      {reservation.room}
-                    </span>
+                    <span>{reservation.room}</span>
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="font-medium">Occasion</span>
-                    <span className="text-muted-foreground">
-                      {reservation.occasion}
-                    </span>
+                    <span>{reservation.occasion}</span>
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="font-medium">Time</span>
-                    <span className="text-muted-foreground">
-                      {reservation.timeSlot}
-                    </span>
+                    <span>{reservation.timeSlot}</span>
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="font-medium">No of People</span>
-                    <span className="text-muted-foreground">
-                      {reservation.noOfPeople}
-                    </span>
+                    <span>{reservation.noOfPeople}</span>
                   </div>
                   {reservation.cake && reservation.writingOnCake && (
                     <div className="flex justify-between items-center">
                       <span className="font-medium">Writing on Cake</span>
-                      <span className="text-muted-foreground">
-                        {reservation.writingOnCake}
-                      </span>
+                      <span>{reservation.writingOnCake}</span>
                     </div>
                   )}
                   {reservation.nameToDisplay && (
                     <div className="flex justify-between items-center">
                       <span className="font-medium">Name to Display</span>
-                      <span className="text-muted-foreground">
-                        {reservation.nameToDisplay}
-                      </span>
+                      <span>{reservation.nameToDisplay}</span>
                     </div>
                   )}
                   {reservation.ledLetterName && (
                     <div className="flex justify-between items-center">
                       <span className="font-medium">LED Letter Name</span>
-                      <span className="text-muted-foreground">
-                        {reservation.ledLetterName}
-                      </span>
+                      <span>{reservation.ledLetterName}</span>
                     </div>
                   )}
                   {reservation.ledLetterAge && (
                     <div className="flex justify-between items-center">
                       <span className="font-medium">LED Letter Age</span>
-                      <span className="text-muted-foreground">
-                        {reservation.ledLetterAge}
-                      </span>
+                      <span>{reservation.ledLetterAge}</span>
                     </div>
                   )}
                   {reservation.specialRequests && (
@@ -217,40 +201,30 @@ export default function StepFour() {
                   )}
                   <div className="flex justify-between items-center">
                     <span className="font-medium">Date</span>
-                    <span className="text-muted-foreground">
-                      {reservation.date?.toDateString()}
-                    </span>
+                    <span>{reservation.date?.toDateString()}</span>
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="font-medium">Customer Name</span>
-                    <span className="text-muted-foreground">
-                      {reservation.name}
-                    </span>
+                    <span>{reservation.name}</span>
                   </div>
                   <div className="flex justify-between gap-x-3 items-center">
                     <span className="font-medium">Email</span>
-                    <span className="text-muted-foreground">
-                      {reservation.email}
-                    </span>
+                    <span>{reservation.email}</span>
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="font-medium">Phone</span>
-                    <span className="text-muted-foreground">
-                      {reservation.phone}
-                    </span>
+                    <span>{reservation.phone}</span>
                   </div>
                   {reservation.cake && (
                     <div className="flex justify-between items-center">
                       <span className="font-medium">Cake</span>
-                      <span className="text-muted-foreground">
-                        {reservation.cake}
-                      </span>
+                      <span>{reservation.cake}</span>
                     </div>
                   )}
                   {reservation.photography && (
                     <div className="flex justify-between items-center">
                       <span className="font-medium">Photography Package</span>
-                      <span className="text-muted-foreground">
+                      <span>
                         {reservation.photography === "photoshoot"
                           ? "Photoshoot"
                           : "Photography & Video"}
@@ -260,17 +234,17 @@ export default function StepFour() {
                   {reservation.fogEntry && (
                     <div className="flex justify-between items-center">
                       <span className="font-medium">Fog Entry</span>
-                      <span className="text-muted-foreground">Added</span>
+                      <span>Added</span>
                     </div>
                   )}
                   {reservation.rosePath && (
                     <div className="flex justify-between items-center">
                       <span className="font-medium">Rose Path</span>
-                      <span className="text-muted-foreground">Added</span>
+                      <span>Added</span>
                     </div>
                   )}
                 </div>
-                <div className="rounded-lg bg-muted p-4">
+                <div className="rounded-lg p-4">
                   <p className="font-medium mb-2">Package Includes:</p>
                   <div className="space-y-2">
                     {items
@@ -289,9 +263,7 @@ export default function StepFour() {
               </CardContent>
             </Card>
             <Link href={"/book?step=3"} scroll={true}>
-              <Button variant={"outline"} className={"w-full mt-4"}>
-                Back
-              </Button>
+              <Button className={"w-full mt-4"}>Back</Button>
             </Link>
           </div>
           <div>
@@ -301,16 +273,14 @@ export default function StepFour() {
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="flex justify-between">
-                  <span className="text-muted-foreground">Package Price</span>
+                  <span>Package Price</span>
                   <span className={"font-semibold"}>
                     {formatCurrency(reservation.price as number)}
                   </span>
                 </div>
                 {reservation.cake && (
                   <div className="flex justify-between">
-                    <span className="text-muted-foreground">
-                      Cake - {reservation.cake}
-                    </span>
+                    <span>Cake - {reservation.cake}</span>
                     <span className="text-green-600 font-semibold whitespace-nowrap">
                       +{" "}
                       {formatCurrency(
@@ -325,9 +295,7 @@ export default function StepFour() {
                 )}
                 {reservation.photography && (
                   <div className="flex justify-between">
-                    <span className="text-muted-foreground">
-                      Photography Package
-                    </span>
+                    <span>Photography Package</span>
                     <span className="text-green-600 font-semibold whitespace-nowrap">
                       +{" "}
                       {formatCurrency(
@@ -338,7 +306,7 @@ export default function StepFour() {
                 )}
                 {reservation.fogEntry && (
                   <div className="flex justify-between">
-                    <span className="text-muted-foreground">Fog Entry</span>
+                    <span>Fog Entry</span>
                     <span className="text-green-600 font-semibold whitespace-nowrap">
                       + {formatCurrency(400)}
                     </span>
@@ -346,9 +314,7 @@ export default function StepFour() {
                 )}
                 {reservation.rosePath && (
                   <div className="flex justify-between">
-                    <span className="text-muted-foreground">
-                      Candle Light Rose Path
-                    </span>
+                    <span>Candle Light Rose Path</span>
                     <span className="text-green-600 font-semibold whitespace-nowrap">
                       + {formatCurrency(candleLightRosePath)}
                     </span>
@@ -356,9 +322,7 @@ export default function StepFour() {
                 )}
                 {reservation.ledLetterName && (
                   <div className="flex justify-between">
-                    <span className="text-muted-foreground">
-                      LED Letter Name
-                    </span>
+                    <span>LED Letter Name</span>
                     <span className="text-green-600 font-semibold whitespace-nowrap">
                       + {formatCurrency(ledLetterLightName)}
                     </span>
@@ -366,9 +330,7 @@ export default function StepFour() {
                 )}
                 {reservation.ledLetterAge && (
                   <div className="flex justify-between">
-                    <span className="text-muted-foreground">
-                      LED Letter Age
-                    </span>
+                    <span>LED Letter Age</span>
                     <span className="text-green-600 font-semibold whitespace-nowrap">
                       + {formatCurrency(ledLetterLightAge)}
                     </span>
@@ -377,9 +339,7 @@ export default function StepFour() {
                 {(reservation.timeSlot === "10PM - 12AM" ||
                   reservation.timeSlot === "10:30PM - 12:30AM") && (
                   <div className="flex justify-between">
-                    <span className="text-muted-foreground">
-                      Midnight Slot Charges
-                    </span>
+                    <span>Midnight Slot Charges</span>
                     <span className="text-green-600 font-semibold whitespace-nowrap">
                       + {formatCurrency(500)}
                     </span>
@@ -388,9 +348,7 @@ export default function StepFour() {
                 {reservation.room == "Dreamscape Theatre" &&
                   reservation.noOfPeople! > 2 && (
                     <div className="flex justify-between">
-                      <span className="text-muted-foreground">
-                        ₹200 per Additional Person
-                      </span>
+                      <span>₹200 per Additional Person</span>
                       <span className="text-green-600 font-semibold whitespace-nowrap">
                         + {formatCurrency(priceIncreaseForAdditionalPeople)}
                       </span>
@@ -399,9 +357,7 @@ export default function StepFour() {
                 {reservation.room == "Majestic Theatre" &&
                   reservation.noOfPeople! > 4 && (
                     <div className="flex justify-between">
-                      <span className="text-muted-foreground">
-                        ₹200 per Additional Person
-                      </span>
+                      <span>₹200 per Additional Person</span>
                       <span className="text-green-600 font-semibold whitespace-nowrap">
                         + {formatCurrency(priceIncreaseForAdditionalPeople)}
                       </span>
@@ -410,18 +366,15 @@ export default function StepFour() {
                 {!payFull && <Separator />}
                 {!payFull && (
                   <div className="flex justify-between">
-                    <span className="text-muted-foreground">Total</span>
+                    <span>Total</span>
                     <span className="text-green-600 font-semibold whitespace-nowrap">
                       {formatCurrency(price)}
                     </span>
                   </div>
                 )}
-
                 <Separator />
                 <div className="flex justify-between">
-                  <span className="text-muted-foreground">
-                    Pay Full Price (Optional)
-                  </span>
+                  <span>Pay Full Price (Optional)</span>
                   <span className={"font-semibold"}>
                     <Switch checked={payFull} onCheckedChange={setPayFull} />
                   </span>
@@ -443,7 +396,7 @@ export default function StepFour() {
                   </div>
                 )}
                 <Button
-                  className="w-full mt-4 bg-highlight hover:bg-highlight-foreground"
+                  className="w-full mt-4 bg-primary"
                   size="lg"
                   disabled={pending}
                   onClick={() => handlePayButton()}

@@ -43,7 +43,7 @@ export default function RootLayout({
           content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
         />
       </head>
-      <body className={`dark ${poppins.className}`}>
+      <body className={`${poppins.className}`}>
         <Whatsapp />
         <GoogleAnalytics gaId="G-QL5YQVXZ5V" />
         <TanstackProvider>

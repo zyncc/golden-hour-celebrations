@@ -69,7 +69,7 @@ export default function SlotsClient({
                     reservation.room == "Dreamscape Theatre"
                 )
                   ? "bg-destructive hover:bg-destructive/80"
-                  : "bg-transparent hover:bg-transparent text-white border"
+                  : "bg-secondary text-black"
               }`}
             >
               {slot}
@@ -97,7 +97,7 @@ export default function SlotsClient({
                     reservation.room == "Majestic Theatre"
                 )
                   ? "bg-destructive hover:bg-destructive/80"
-                  : "bg-transparent hover:bg-transparent text-white border"
+                  : "bg-secondary text-black"
               }`}
             >
               {slot}

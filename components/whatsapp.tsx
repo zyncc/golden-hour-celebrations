@@ -8,7 +8,7 @@ export default function Whatsapp() {
     <div className="fixed bottom-5 right-5 z-[100]">
       <div className="flex flex-col gap-5">
         <Link target="_blank" href={"tel:7829773610"} className="rounded-full">
-          <div className="bg-white p-2 rounded-full flex items-center justify-center">
+          <div className="shadow-md p-2 rounded-full flex items-center justify-center">
             <Phone color="black" size={35} />
           </div>
         </Link>

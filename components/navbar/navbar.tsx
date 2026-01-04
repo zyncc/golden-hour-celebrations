@@ -31,7 +31,7 @@ export default function Navbar() {
   return (
     <header
       id="header"
-      className="text-white z-[49] fixed top-0 right-0 left-0 bg-transparent backdrop-blur-xl"
+      className="z-[49] fixed top-0 right-0 left-0 bg-background shadow-md"
     >
       <nav className="container flex justify-between items-center py-2.5">
         <Link href={`${process.env.NEXT_PUBLIC_BASE_URL}`}>
@@ -56,12 +56,7 @@ export default function Navbar() {
         <div className="flex gap-2 items-center justify-center">
           <div className="flex gap-x-3">
             <Link href={"/book"}>
-              <Button
-                className="rounded-full bg-highlight hover:bg-highlight-foreground"
-                variant={"default"}
-              >
-                Book now
-              </Button>
+              <Button className="rounded-full">Book now</Button>
             </Link>
           </div>
           <Sheet>

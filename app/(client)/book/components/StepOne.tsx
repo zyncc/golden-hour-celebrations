@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { useReservation } from "@/context/ReservationStore";
 import Image from "next/image";
-import { redirect, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Reservations } from "@prisma/client";
@@ -19,7 +19,6 @@ import "swiper/css/navigation";
 import "swiper/css/effect-fade";
 import {
   ArrowRight,
-  CalendarIcon,
   Film,
   Heart,
   Monitor,
@@ -40,13 +39,6 @@ import {
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { toast } from "sonner";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { cn } from "@/lib/utils";
-import { format } from "date-fns";
 import { Calendar } from "@/components/ui/calendar";
 import { Label } from "@/components/ui/label";
 
@@ -117,49 +109,25 @@ export default function StepOne() {
   });
   return (
     <div className={"mt-10 mb-24 w-full"}>
-      <Label className="font-semibold text-lg">Select a Date</Label> <br />
-      <Popover open={open} onOpenChange={setOpen}>
-        <PopoverTrigger asChild>
-          <Button
-            variant={"outline"}
-            className={cn(
-              "w-fit justify-start text-left font-normal mt-3 mb-7",
-              !reservation?.date && "text-muted-foreground"
-            )}
-          >
-            <CalendarIcon className="mr-2 h-4 w-4" />
-            {reservation?.date ? (
-              format(reservation?.date, "PPP")
-            ) : (
-              <span className="font-normal">Pick a date</span>
-            )}
-          </Button>
-        </PopoverTrigger>
-        <PopoverContent className="p-0">
-          <Calendar
-            mode="single"
-            fromDate={currentDate}
-            toMonth={nextMonthDate}
-            selected={reservation?.date}
-            onSelect={(date) => {
-              console.log(date);
-              setReservationData({
-                ...reservation,
-                date,
-              });
-              setOpen(false);
-            }}
-          />
-        </PopoverContent>
-      </Popover>
+      <Calendar
+        mode="single"
+        className="mb-5 shadow-md w-fit rounded-lg"
+        fromDate={currentDate}
+        toMonth={nextMonthDate}
+        selected={reservation?.date}
+        onSelect={(date) => {
+          setReservationData({
+            ...reservation,
+            date,
+          });
+          setOpen(false);
+        }}
+      />
       <div className="flex w-full">
         <div className="w-full mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-2 pb-6 gap-5">
             {items.map((pkg, index) => (
-              <Card
-                key={index}
-                className="relative overflow-hidden rounded-xl  border-zinc-800"
-              >
+              <Card key={index} className="relative overflow-hidden rounded-xl">
                 <div className="flex flex-col">
                   <div className="relative h-96 overflow-hidden">
                     <Swiper
@@ -188,31 +156,28 @@ export default function StepOne() {
                   <div className="p-3 md:p-6 flex flex-col">
                     <div className="space-y-4 mb-6">
                       <div className="flex justify-between">
-                        <h2 className="text-2xl font-bold w-full text-white">
+                        <h2 className="text-2xl font-bold w-full">
                           {pkg.room}
                         </h2>
                         {pkg.popular && (
-                          <Badge className="bg-rose-500/90 text-nowrap hover:bg-rose-500 text-white border-none font-medium whitespace-nowrap">
+                          <Badge className="bg-destructive hover:bg-destructive text-nowrap border-none font-medium whitespace-nowrap">
                             Most Popular
                           </Badge>
                         )}
                       </div>
 
                       <div className="flex items-baseline gap-1">
-                        <span className="text-3xl font-bold text-white">
+                        <span className="text-3xl font-bold">
                           {formatCurrency(pkg.price)}
                         </span>
                       </div>
                     </div>
                     <ul className="space-y-3 mb-6 flex-grow">
-                      <p className="text-muted-foreground">Includes</p>
+                      <p>Includes</p>
                       {pkg.description.map((feature) => (
-                        <li
-                          key={feature}
-                          className="flex items-center text-zinc-300"
-                        >
+                        <li key={feature} className="flex items-center">
                           <svg
-                            className="w-5 h-5 mr-2 text-rose-500 shrink-0"
+                            className="w-5 h-5 mr-2 text-destructive shrink-0"
                             fill="none"
                             viewBox="0 0 24 24"
                             stroke="currentColor"
@@ -843,7 +808,7 @@ export default function StepOne() {
                     </p>
                     {pkg.room == "Dreamscape Theatre" &&
                       reservation?.noOfPeople! > 5 && (
-                        <h1 className="text-red-800 font-medium mt-4">
+                        <h1 className="text-destructive font-medium mt-4">
                           Only upto 5 People are allowed
                         </h1>
                       )}
@@ -853,13 +818,11 @@ export default function StepOne() {
             ))}
           </div>
           <div className="sticky bottom-6 z-10">
-            <div className="bg-background/80 backdrop-blur-lg border rounded-2xl p-4 shadow-lg">
+            <div className="bg-background border rounded-2xl p-4 shadow-lg">
               <div className="flex gap-4 max-w-md mx-auto">
                 <Button
                   type={"submit"}
-                  className={
-                    "flex-1 bg-highlight hover:bg-highlight-foreground"
-                  }
+                  className={"flex-1 font-medium"}
                   variant={"default"}
                   onClick={handleNextButton}
                 >
