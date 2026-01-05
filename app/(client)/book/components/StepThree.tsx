@@ -120,6 +120,9 @@ export default function StepThreeForm() {
                       className="h-10 text-base"
                     />
                   </FormControl>
+                  <FormDescription>
+                    Booking confirmation will be sent to this email
+                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}

@@ -37,7 +37,6 @@ export function AboutUs() {
               fill
               className="object-cover rounded-2xl transition-transform duration-700 group-hover:scale-105"
             />
-            <div className="absolute inset-0 bg-primary/10 group-hover:bg-transparent transition-colors duration-500" />
           </div>
         </div>
       </div>

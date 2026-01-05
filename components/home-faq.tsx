@@ -9,7 +9,7 @@ import Link from "next/link";
 
 export const FAQSection = () => {
   return (
-    <section className="py-12 bg-secondary/30 rounded-3xl">
+    <section className="py-12 bg-foreground/5 rounded-3xl">
       <div className="container mx-auto px-6">
         <div className="flex flex-col md:flex-row gap-16">
           <div className="md:w-1/3 lg:w-1/4 md:sticky md:top-32 self-start">

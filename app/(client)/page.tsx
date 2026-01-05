@@ -2,9 +2,7 @@ import { Footer } from "@/components/footer/footer";
 import React from "react";
 import { reviews } from "@/lib/constants";
 import { Metadata } from "next";
-import { BackgroundGradientAnimation } from "@/components/ui/background-gradient-animation";
 import { InfiniteMovingCards } from "@/components/ui/infinite-moving-cards";
-import HomePageForm from "@/components/home-page-form";
 import { Gallery } from "@/components/home-gallery";
 import { AboutUs } from "@/components/home-about";
 import { FAQSection } from "@/components/home-faq";
@@ -16,17 +14,16 @@ export const metadata: Metadata = {
 export default function Page() {
   return (
     <>
-      <section className="min-h-screen">
-        <BackgroundGradientAnimation interactive={false}>
-          <div className="absolute z-10 inset-0 flex-col flex items-center justify-center text-white font-bold px-4 pointer-events-none text-5xl text-center md:text-6xl lg:text-7xl">
-            <p className="bg-clip-text whitespace-nowrap text-transparent drop-shadow-2xl bg-gradient-to-b from-white/80 to-white/20">
-              Golden Hour
-            </p>
-            <p className="bg-clip-text whitespace-nowrap text-transparent drop-shadow-2xl bg-gradient-to-b from-white/80 to-white/20">
-              Celebrations
-            </p>
-          </div>
-        </BackgroundGradientAnimation>
+      <section className="relative w-screen h-screen overflow-hidden">
+        <video
+          src="https://ik.imagekit.io/ghc/hero-video.mp4?tr=q-100"
+          autoPlay
+          controls={false}
+          muted
+          loop
+          playsInline
+          className="absolute top-1/2 left-1/2 min-w-full min-h-full -translate-x-1/2 -translate-y-1/2 object-cover"
+        />
       </section>
       <AboutUs />
       <Gallery />

@@ -5,6 +5,7 @@ import {
   CarouselContent,
   CarouselItem,
 } from "@/components/ui/carousel";
+import Autoplay from "embla-carousel-autoplay";
 import { cn } from "@/lib/utils";
 
 const galleryImages = [
@@ -75,7 +76,10 @@ export function Gallery() {
 
         {/* Mobile Carousel Layout */}
         <div className="md:hidden">
-          <Carousel className="w-full">
+          <Carousel
+            className="w-full"
+            plugins={[Autoplay({ playOnInit: true, delay: 2000 })]}
+          >
             <CarouselContent>
               {galleryImages.map((image, index) => (
                 <CarouselItem key={index}>
