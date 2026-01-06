@@ -39,7 +39,9 @@ export default function Navbar() {
       id="header"
       className={clsx(
         "fixed top-0 left-0 right-0 z-[49] transition-all duration-300",
-        scrolled ? "bg-white shadow-md text-black" : "bg-transparent text-white"
+        scrolled
+          ? "bg-white shadow-md text-black"
+          : "bg-transparent text-white",
       )}
     >
       <nav className="container flex justify-between items-center py-2.5">
@@ -65,7 +67,9 @@ export default function Navbar() {
 
         <div className="flex gap-2 items-center">
           <Link href="/book">
-            <Button className={"rounded-full transition-colors"}>
+            <Button
+              className={"rounded-full text-foreground transition-colors"}
+            >
               Book now
             </Button>
           </Link>
@@ -76,7 +80,7 @@ export default function Navbar() {
                 size={33}
                 className={clsx(
                   "lg:hidden",
-                  scrolled ? "text-black" : "text-white"
+                  scrolled ? "text-black" : "text-white",
                 )}
               />
             </SheetTrigger>

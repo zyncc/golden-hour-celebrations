@@ -16,14 +16,31 @@ export default function Page() {
     <>
       <section className="relative w-screen h-screen overflow-hidden">
         <video
-          src="https://ik.imagekit.io/ghc/hero-video.mp4?tr=q-100"
+          src="/hero-video-mobile.webm"
           autoPlay
           controls={false}
           muted
           loop
           playsInline
-          className="absolute top-1/2 left-1/2 min-w-full min-h-full -translate-x-1/2 -translate-y-1/2 object-cover"
+          className="sm:hidden block absolute top-1/2 left-1/2 min-w-full min-h-full -translate-x-1/2 -translate-y-1/2 object-cover"
         />
+        <video
+          src="/hero-video.webm"
+          autoPlay
+          controls={false}
+          muted
+          loop
+          playsInline
+          className="hidden sm:block absolute top-1/2 left-1/2 min-w-full min-h-full -translate-x-1/2 -translate-y-1/2 object-cover"
+        />
+        <div className="hidden sm:flex absolute inset-0 items-center justify-center z-10 pointer-events-none">
+          <div className="text-center text-white">
+            <h1 className="text-5xl font-semibold font-serif uppercase tracking-wider">
+              GOLDEN HOUR <br />
+              CELEBRATIONS
+            </h1>
+          </div>
+        </div>
       </section>
       <AboutUs />
       <Gallery />
