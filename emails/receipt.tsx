@@ -43,10 +43,6 @@ const ReservationConfirmationEmail = ({
     ledLetterAge,
   } = getReservationDetails;
 
-  const formattedDate = new Intl.DateTimeFormat("en-IN", {
-    dateStyle: "full",
-  }).format(new Date(date));
-
   return (
     <Html>
       <Tailwind>
@@ -54,11 +50,11 @@ const ReservationConfirmationEmail = ({
         <Preview>Your reservation at {room} is confirmed! 🎉</Preview>
         <Body className="bg-gray-100 font-sans py-[40px]">
           <Container className="mx-auto max-w-[600px] bg-white rounded-[12px] overflow-hidden shadow-lg">
-            <Section className="bg-[#1A1A2E] px-[32px] py-[40px] text-center">
-              <Heading className="text-white text-[28px] font-bold m-0 leading-tight">
+            <Section className="bg-[#b99a00] px-[32px] py-[40px] text-center">
+              <Heading className="text-black text-[28px] font-bold m-0 leading-tight">
                 🎉 Reservation Confirmed 🎉
               </Heading>
-              <Text className="text-gray-300 text-[16px] mt-[8px] mb-0">
+              <Text className="text-black text-[16px] mt-[8px] mb-0">
                 Hi {name}, we&apos;re excited to host your {occasion}{" "}
                 celebration!
               </Text>
@@ -70,7 +66,12 @@ const ReservationConfirmationEmail = ({
                     DATE
                   </Text>
                   <Text className="text-gray-900 text-[16px] font-medium m-0">
-                    {formattedDate}
+                    {new Date(date).toLocaleDateString("en-GB", {
+                      timeZone: "Asia/Kolkata",
+                      weekday: "short",
+                      month: "short",
+                      day: "2-digit",
+                    })}
                   </Text>
                 </Column>
                 <Column className="w-1/2 pl-[16px]">
@@ -215,7 +216,7 @@ const ReservationConfirmationEmail = ({
             <Section className="bg-gray-50 px-[32px] py-[24px] text-center border-t border-solid border-gray-200">
               <Text className="text-gray-600 text-[12px] leading-[18px] my-[8px]">
                 Need to make changes? Call us at
-                <Link href="tel:7829773610">7829773610</Link>
+                <Link href="tel:7829773610"> 7829773610</Link>
               </Text>
               <Text className="text-gray-500 text-[12px] leading-[18px] m-0">
                 1st floor, #66, 29th main, 29th A Cross Rd, Geetha Colony, 4th

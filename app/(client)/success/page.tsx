@@ -13,9 +13,12 @@ import { notFound } from "next/navigation";
 export default async function SuccessPage({
   searchParams,
 }: {
-  searchParams?: { [key: string]: string | string[] | undefined };
+  searchParams?: { [key: string]: string | undefined };
 }) {
-  const orderID = searchParams?.orderId as string;
+  const orderID = searchParams?.orderId;
+  if (!orderID) {
+    return notFound();
+  }
   const booking = await prisma.reservations.findUnique({
     where: {
       orderID,
@@ -26,7 +29,7 @@ export default async function SuccessPage({
     return notFound();
   }
   return (
-    <div className="min-h-screen dark bg-background p-4 flex items-center justify-center">
+    <div className="min-h-screen bg-background p-4 flex items-center justify-center">
       <Card className="w-full max-w-2xl border-border overflow-hidden">
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-emerald-500">
@@ -124,19 +127,32 @@ export default async function SuccessPage({
           </div>
           <div className="space-y-4">
             <h3 className="text-lg font-semibold text-foreground">
-              Order Details
+              Booking Details
             </h3>
             <div className="grid gap-4 md:grid-cols-2">
               <div className="space-y-1">
                 <p className="text-sm text-muted-foreground">Order ID</p>
-                <p className="font-medium font-mono text-foreground">
+                <p className="font-medium font-mono text-foreground line-clamp-1">
                   {booking.orderID}
                 </p>
               </div>
+              {booking.paymentID && (
+                <div className="space-y-1">
+                  <p className="text-sm text-muted-foreground">Payment ID</p>
+                  <p className="font-medium font-mono text-foreground">
+                    {booking.paymentID}
+                  </p>
+                </div>
+              )}
               <div className="space-y-1">
-                <p className="text-sm text-muted-foreground">Payment ID</p>
+                <p className="text-sm text-muted-foreground">Date</p>
                 <p className="font-medium font-mono text-foreground">
-                  {booking.paymentID}
+                  {new Date(booking.date).toLocaleDateString("en-GB", {
+                    timeZone: "Asia/Kolkata",
+                    weekday: "short",
+                    month: "long",
+                    day: "2-digit",
+                  })}
                 </p>
               </div>
             </div>
