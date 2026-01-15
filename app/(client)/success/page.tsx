@@ -139,14 +139,14 @@ export default async function SuccessPage({
               {booking.paymentID && (
                 <div className="space-y-1">
                   <p className="text-sm text-muted-foreground">Payment ID</p>
-                  <p className="font-medium font-mono text-foreground">
+                  <p className="font-medium text-foreground">
                     {booking.paymentID}
                   </p>
                 </div>
               )}
               <div className="space-y-1">
                 <p className="text-sm text-muted-foreground">Date</p>
-                <p className="font-medium font-mono text-foreground">
+                <p className="font-medium text-foreground">
                   {new Date(booking.date).toLocaleDateString("en-GB", {
                     timeZone: "Asia/Kolkata",
                     weekday: "short",
