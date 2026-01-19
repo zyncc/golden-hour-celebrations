@@ -91,9 +91,12 @@ export default function StepFour() {
   let advanceAmountPrice = advanceAmount;
 
   if (reservation?.cake) {
-    if (reservation.cake == "Red velvet" || reservation.cake == "Rasmalai") {
-      price += 620;
-      advanceAmountPrice += 620;
+    if (reservation.cake == "Rasmalai Cake") {
+      price += 800;
+      advanceAmountPrice += 800;
+    } else if (reservation.cake == "Blueberry Cheese Cake") {
+      price += 900;
+      advanceAmountPrice += 900;
     } else {
       price += cakePrice;
       advanceAmountPrice += cakePrice;
@@ -263,7 +266,9 @@ export default function StepFour() {
               </CardContent>
             </Card>
             <Link href={"/book?step=3"} scroll={true}>
-              <Button className={"w-full mt-4"}>Back</Button>
+              <Button variant={"secondary"} className={"w-full mt-4"}>
+                Back
+              </Button>
             </Link>
           </div>
           <div>
@@ -284,10 +289,10 @@ export default function StepFour() {
                     <span className="text-green-600 font-semibold whitespace-nowrap">
                       +{" "}
                       {formatCurrency(
-                        reservation.cake == "Red velvet"
-                          ? 620
-                          : reservation.cake == "Rasmalai"
-                          ? 620
+                        reservation.cake == "Blueberry Cheese Cake"
+                          ? 900
+                          : reservation.cake == "Rasmalai Cake"
+                          ? 800
                           : cakePrice
                       )}
                     </span>

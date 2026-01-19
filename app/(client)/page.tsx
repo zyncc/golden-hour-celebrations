@@ -11,6 +11,33 @@ export const metadata: Metadata = {
   title: "The Best Private Theatre in Bangalore - Golden Hour Celebrations",
 };
 
+const galleryImages = [
+  {
+    src: "/luxury-private-theater-decor.jpg",
+    alt: "Private Theater Decoration 1",
+  },
+  {
+    src: "/candlelight-dinner-setup.jpg",
+    alt: "Candlelight Dinner Setup",
+  },
+  {
+    src: "/romantic-movie-date-night.jpg",
+    alt: "Movie Date Night",
+  },
+  {
+    src: "/balloon-decoration-anniversary.jpg",
+    alt: "Anniversary Decoration",
+  },
+  {
+    src: "/intimate-celebration-lighting.jpg",
+    alt: "Intimate Lighting",
+  },
+  {
+    src: "/premium-cinema-experience.jpg",
+    alt: "Premium Cinema",
+  },
+];
+
 export default function Page() {
   return (
     <>
@@ -43,12 +70,12 @@ export default function Page() {
         </div>
       </section>
       <AboutUs />
-      <Gallery />
+      <Gallery images={galleryImages} />
       <section className="container">
         <FAQSection />
       </section>
       <section id="reviews" className="container py-[100px]">
-        <h1 className="font-semibold bg-clip-text text-transparent bg-gradient-to-b from-neutral-200 to-neutral-500 text-4xl text-center lg:text-7xl">
+        <h1 className="font-semibold bg-clip-text text-transparent bg-linear-to-b from-neutral-200 to-neutral-500 text-4xl text-center lg:text-7xl">
           Reviews
         </h1>
         <div className="relative flex w-full flex-col items-center mt-10 justify-center overflow-hidden">

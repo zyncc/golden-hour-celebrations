@@ -11,7 +11,7 @@ export const FAQSection = () => {
   return (
     <section className="py-12">
       <div className="container mx-auto px-4">
-        <h1 className="font-semibold bg-clip-text text-transparent bg-gradient-to-b from-neutral-200 to-neutral-500 text-4xl text-center lg:text-7xl">
+        <h1 className="font-semibold bg-clip-text text-transparent bg-linear-to-b from-neutral-200 to-neutral-500 text-4xl text-center lg:text-7xl">
           FAQs
         </h1>
         <div className="mx-auto max-w-3xl">

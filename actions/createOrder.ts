@@ -24,9 +24,12 @@ export async function createOrder(
   let advanceAmountPrice = advanceAmount;
 
   if (reservation?.cake) {
-    if (reservation.cake == "Red velvet" || reservation.cake == "Rasmalai") {
-      price += 620;
-      advanceAmountPrice += 620;
+    if (reservation.cake == "Rasmalai Cake") {
+      price += 800;
+      advanceAmountPrice += 800;
+    } else if (reservation.cake == "Blueberry Cheese Cake") {
+      price += 900;
+      advanceAmountPrice += 900;
     } else {
       price += cakePrice;
       advanceAmountPrice += cakePrice;

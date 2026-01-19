@@ -5,7 +5,7 @@ import { MdWhatsapp } from "react-icons/md";
 
 export default function Whatsapp() {
   return (
-    <div className="fixed bottom-5 right-5 z-[100]">
+    <div className="fixed bottom-5 right-5 z-100">
       <div className="flex flex-col gap-5">
         <Link target="_blank" href={"tel:7829773610"} className="rounded-full">
           <div className="shadow-md p-2 bg-background rounded-full flex items-center justify-center">

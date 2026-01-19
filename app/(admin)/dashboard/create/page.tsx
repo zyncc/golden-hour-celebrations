@@ -5,7 +5,7 @@ import { redirect } from "next/navigation";
 
 export default async function CreateBooking() {
   const session = await auth.api.getSession({
-    headers: headers(),
+    headers: await headers(),
   });
   if (session?.user.role !== "admin") {
     return redirect("/dashboard/signin");

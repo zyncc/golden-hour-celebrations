@@ -10,12 +10,13 @@ export const metadata: Metadata = {
   title: "Book a Slot",
 };
 
-export default function Book({
+export default async function Book({
   searchParams,
 }: {
-  searchParams?: { [key: string]: string | string[] | undefined };
+  searchParams?: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
-  let step = Number(searchParams?.step);
+  const params = await searchParams;
+  let step = Number(params?.step);
   if (!step) {
     step = 1;
   }

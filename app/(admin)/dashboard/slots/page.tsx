@@ -6,7 +6,7 @@ import prisma from "@/lib/prisma";
 
 export default async function SlotsPage() {
   const session = await auth.api.getSession({
-    headers: headers(),
+    headers: await headers(),
   });
   if (session?.user.role !== "admin") {
     return redirect("/dashboard/signin");

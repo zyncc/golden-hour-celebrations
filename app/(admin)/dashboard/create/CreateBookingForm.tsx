@@ -144,8 +144,10 @@ export default function CreateBookingForm() {
 
     // Cake cost (separate from base price)
     if (selectedCake) {
-      if (selectedCake === "Red velvet" || selectedCake === "Rasmalai") {
-        cakeCost = 620;
+      if (selectedCake === "Rasmalai Cake") {
+        cakeCost = 800;
+      } else if (selectedCake == "Blueberry Cheese Cake") {
+        cakeCost = 900;
       } else {
         cakeCost = cakePrice;
       }

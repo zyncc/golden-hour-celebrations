@@ -30,7 +30,7 @@ export function AboutUs() {
               </p>
             </div>
           </div>
-          <div className="relative aspect-[4/5] md:aspect-square group overflow-hidden order-1 max-md:hidden rounded-2xl">
+          <div className="relative aspect-4/5 md:aspect-square group overflow-hidden order-1 max-md:hidden rounded-2xl">
             <Image
               src="/candlelight-dinner-setup.jpg"
               alt="About Golden Hour Celebrations"

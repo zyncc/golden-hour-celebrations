@@ -53,7 +53,7 @@ export default function StepThreeForm() {
 
   return (
     <>
-      <Card className="w-full bg-card p-8">
+      <Card className="w-full bg-card p-8 border-none">
         <Form {...form}>
           <form
             id="step3form"
@@ -229,7 +229,7 @@ export default function StepThreeForm() {
         </Form>
       </Card>
       <div className="mt-5 z-10">
-        <div className="bg-background/80 backdrop-blur-lg border rounded-2xl p-4 shadow-lg">
+        <div className="bg-background/80 backdrop-blur-lg rounded-2xl p-4 shadow-lg">
           <div className="flex gap-4 max-w-md mx-auto">
             <Button
               variant="outline"
@@ -242,7 +242,7 @@ export default function StepThreeForm() {
             </Button>
             <Button
               type="submit"
-              className="flex-1 h-12 bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70"
+              className="flex-1 h-12 bg-linear-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70"
               form="step3form"
             >
               Checkout

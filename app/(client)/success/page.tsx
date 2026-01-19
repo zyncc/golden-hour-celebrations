@@ -13,9 +13,10 @@ import { notFound } from "next/navigation";
 export default async function SuccessPage({
   searchParams,
 }: {
-  searchParams?: { [key: string]: string | string[] | undefined };
+  searchParams?: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
-  const orderID = searchParams?.orderId as string;
+  const params = await searchParams;
+  const orderID = params?.orderId as string;
   const booking = await prisma.reservations.findUnique({
     where: {
       orderID,

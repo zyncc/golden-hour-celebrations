@@ -169,7 +169,7 @@ const ReservationConfirmationEmail = ({
                   <Heading className="text-gray-900 text-[18px] font-semibold mb-[16px] mt-0">
                     Special Requests
                   </Heading>
-                  <Text className="text-gray-700 text-[15px] leading-[24px] my-[4px] bg-blue-50 p-[16px] rounded-[8px] border-l-[4px] border-solid border-blue-400">
+                  <Text className="text-gray-700 text-[15px] leading-[24px] my-[4px] bg-blue-50 p-[16px] rounded-[8px] border-l-4 border-solid border-blue-400">
                     {specialRequests}
                   </Text>
                 </>
@@ -201,7 +201,7 @@ const ReservationConfirmationEmail = ({
                   </Column>
                 </Row>
               </Section>
-              <Section className="mt-[32px] bg-yellow-50 p-[20px] rounded-[8px] border-l-[4px] border-solid border-yellow-400">
+              <Section className="mt-[32px] bg-yellow-50 p-[20px] rounded-[8px] border-l-4 border-solid border-yellow-400">
                 <Text className="text-yellow-800 text-[14px] font-semibold m-0 mb-[8px]">
                   📋 Important Information
                 </Text>

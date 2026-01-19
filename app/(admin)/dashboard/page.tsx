@@ -12,7 +12,7 @@ import { startOfYear, endOfYear } from "date-fns";
 
 export default async function AdminDashboard() {
   const session = await auth.api.getSession({
-    headers: headers(),
+    headers: await headers(),
   });
   if (session?.user.role !== "admin") {
     return redirect("/dashboard/signin");

@@ -28,7 +28,7 @@ import { auth } from "@/auth";
 
 export default async function Page({ params }: { params: { id: string } }) {
   const session = await auth.api.getSession({
-    headers: headers(),
+    headers: await headers(),
   });
   if (session?.user.role !== "admin") {
     return redirect("/dashboard/signin");

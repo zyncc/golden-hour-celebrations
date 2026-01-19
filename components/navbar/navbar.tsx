@@ -38,7 +38,7 @@ export default function Navbar() {
     <header
       id="header"
       className={clsx(
-        "fixed top-0 left-0 right-0 z-[49] transition-all duration-300",
+        "fixed top-0 left-0 right-0 z-49 transition-all duration-300",
         scrolled
           ? "bg-white shadow-md text-black"
           : "bg-transparent text-white",

@@ -6,7 +6,7 @@ interface StepperProps {
 
 export function Steps({ currentStep }: StepperProps) {
   return (
-    <div className="w-full max-w-4xl mx-auto mb-8 px-4">
+    <div className="w-full max-w-4xl mx-auto mb-8 px-4 shadow-2xl p-6 rounded-xl">
       <div className="flex-col sm:grid-cols-4 hidden sm:grid gap-4">
         <StepItem
           number={1}

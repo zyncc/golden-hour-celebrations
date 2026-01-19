@@ -6,7 +6,7 @@ import { ReservationsTable } from "@/components/all-bookings-table";
 
 async function AllBookings() {
   const session = await auth.api.getSession({
-    headers: headers(),
+    headers: await headers(),
   });
   if (session?.user.role !== "admin") {
     return redirect("/dashboard/signin");

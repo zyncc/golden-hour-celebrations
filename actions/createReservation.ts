@@ -33,9 +33,12 @@ export async function createReservation(
   }
 
   if (reservation?.cake) {
-    if (reservation.cake == "Red velvet" || reservation.cake == "Rasmalai") {
-      total += 620;
-      advanceAmountPrice += 620;
+    if (reservation.cake == "Rasmalai Cake") {
+      total += 800;
+      advanceAmountPrice += 800;
+    } else if (reservation.cake == "Blueberry Cheese Cake") {
+      total += 900;
+      advanceAmountPrice += 900;
     } else {
       total += cakePrice;
       advanceAmountPrice += cakePrice;
@@ -150,7 +153,7 @@ type Data = z.infer<typeof ManualBookingSchema>;
 
 export async function CreateManualBooking(data: Data) {
   const session = await auth.api.getSession({
-    headers: headers(),
+    headers: await headers(),
   });
 
   if (session?.user.role !== "admin") {
@@ -184,8 +187,10 @@ export async function CreateManualBooking(data: Data) {
   }
 
   if (data.cake) {
-    if (data.cake == "Red velvet" || data.cake == "Rasmalai") {
-      total += 620;
+    if (data.cake == "Rasmalai Cake") {
+      total += 800;
+    } else if (data.cake == "Blueberry Cheese Cake") {
+      total += 900;
     } else {
       total += cakePrice;
     }

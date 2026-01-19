@@ -213,10 +213,10 @@ export const faqData = [
 ];
 
 export const cakes = [
-  "Choco Chip Truffle Cake",
-  "Black forest",
-  "Red velvet",
-  "Butter scotch",
-  "Rasmalai",
-  "Blueberry",
+  "Vancho Cake",
+  "Blueberry Cheese Cake",
+  "Choco Truffle Cake",
+  "Rasmalai Cake",
+  "Butter Scotch Crunch",
+  "Black Forest Cake",
 ];
