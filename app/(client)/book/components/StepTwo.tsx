@@ -37,8 +37,10 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -104,6 +106,15 @@ export default function StepTwo() {
     });
   }
 
+  const CAKE_DATA: Record<string, string> = {
+    "Vancho Cake": "/vancho_cake.jpeg",
+    "Blueberry Cheese Cake": "/blueberry_cake.jpeg",
+    "Choco Truffle Cake": "/choco_cake.jpeg",
+    "Rasmalai Cake": "/rasmalai_cake.jpeg",
+    "Butter Scotch Crunch": "/butterscotch_cake.jpeg",
+    "Black Forest Cake": "/blackforest_cake.jpeg",
+  };
+
   return (
     <div className="min-h-screen">
       <div className="py-12">
@@ -136,16 +147,68 @@ export default function StepTwo() {
               </div>
             </CardHeader>
             <CardContent className="space-y-4">
-              <Dialog>
-                <DialogTrigger
-                  render={<Button className="w-full">Select Cake</Button>}
-                />
-                <DialogContent>
-                  {cakes.map((cake) => (
-                    <div key={cake}>{cake}</div>
-                  ))}
-                </DialogContent>
-              </Dialog>
+              {reservation.cake && CAKE_DATA[reservation.cake] && (
+                <>
+                  <h3 className="text-lg font-medium">
+                    {reservation.cake}
+                  </h3>
+
+                  <Image
+                    src={CAKE_DATA[reservation.cake]}
+                    width={200}
+                    height={200}
+                    alt={reservation.cake}
+                    className="object-cover aspect-square rounded-lg"
+                  />
+                </>
+              )}
+              <div className="flex gap-x-4">
+                {reservation.cake && <Button onClick={() => {
+                  setReservationData({
+                    ...reservation,
+                    cake: undefined,
+                    writingOnCake: undefined
+                  })
+                }} variant={'secondary'}>Remove Cake</Button>}
+                <Dialog>
+                  <DialogTrigger
+                    render={<Button className="w-full">{reservation.cake ? "Change Cake" : "Select Cake"}</Button>}
+                  />
+                  <DialogContent className="p-6">
+                    <div className="grid grid-cols-2 gap-4">
+                      {cakes.map((cake) => {
+                        const imageSrc = CAKE_DATA[cake];
+                        if (!imageSrc) return null;
+
+                        return (
+                          <DialogClose key={cake} render={<button
+                            onClick={() => {
+                              setReservationData({
+                                ...reservation,
+                                cake
+                              })
+                            }}
+                            className="flex cursor-pointer flex-col items-center gap-2"
+                          >
+                            <Image
+                              src={imageSrc}
+                              width={200}
+                              height={200}
+                              alt={cake}
+                              className="rounded-lg"
+                            />
+                            <span className="text-sm font-medium text-center">
+                              {cake}
+                            </span>
+                          </button>} />
+                        );
+                      })}
+                    </div>
+                    <DialogClose render={<Button className="mt-5" variant={'secondary'}>Cancel</Button>}></DialogClose>
+                  </DialogContent>
+                </Dialog>
+              </div>
+
               <div className="space-y-2">
                 <Label className="text-sm font-medium">
                   Custom Message (Optional)
@@ -426,11 +489,10 @@ export default function StepTwo() {
                 className="space-y-3"
               >
                 <Label
-                  className={`flex items-center justify-between p-4 border-2 rounded-xl cursor-pointer transition-all hover:shadow-md ${
-                    photographyPackage === "photoshoot"
-                      ? "border-primary bg-primary/5 shadow-xs"
-                      : "border-border hover:border-primary/30"
-                  }`}
+                  className={`flex items-center justify-between p-4 border-2 rounded-xl cursor-pointer transition-all hover:shadow-md ${photographyPackage === "photoshoot"
+                    ? "border-primary bg-primary/5 shadow-xs"
+                    : "border-border hover:border-primary/30"
+                    }`}
                 >
                   <div className="flex items-center space-x-3">
                     <RadioGroupItem value="photoshoot" id="photoshoot" />
@@ -449,11 +511,10 @@ export default function StepTwo() {
                 </Label>
 
                 <Label
-                  className={`flex items-center justify-between p-4 border-2 rounded-xl cursor-pointer transition-all hover:shadow-md ${
-                    photographyPackage === "video"
-                      ? "border-primary bg-primary/5 shadow-xs"
-                      : "border-border hover:border-primary/30"
-                  }`}
+                  className={`flex items-center justify-between p-4 border-2 rounded-xl cursor-pointer transition-all hover:shadow-md ${photographyPackage === "video"
+                    ? "border-primary bg-primary/5 shadow-xs"
+                    : "border-border hover:border-primary/30"
+                    }`}
                 >
                   <div className="flex items-center space-x-3">
                     <RadioGroupItem value="video" id="video" />
