@@ -27,16 +27,14 @@ export default function SlotsClient({
     refetchOnWindowFocus: true,
     enabled: !!date,
     queryFn: async () => {
-      const res = await fetch(
-        `/api/fetchReservations?date=${date?.toISOString()}`,
-      );
+      const res = await fetch(`/api/fetchReservations?date=${date?.toISOString()}`);
       const data: ReservationDetails[] = await res.json();
       return data;
     },
   });
   return (
-    <div className="flex flex-col lg:flex-row gap-5">
-      <Card className="w-fit h-fit">
+    <div className="flex flex-col gap-5 lg:flex-row">
+      <Card className="h-fit w-fit">
         <CardContent>
           <Calendar
             mode="single"
@@ -63,15 +61,16 @@ export default function SlotsClient({
                     reservation.room === "Dreamscape Theatre",
                 )
               }
-              className={`flex-1 whitespace-nowrap ${
-                data?.find(
+              variant={
+                data?.some(
                   (reservation) =>
                     reservation.timeSlot === slot &&
                     reservation.room === "Dreamscape Theatre",
                 )
-                  ? "bg-destructive hover:bg-destructive/80"
-                  : "bg-secondary text-black"
-              }`}
+                  ? "destructive"
+                  : "secondary"
+              }
+              className={"whitespace-nowra flex-1"}
             >
               {slot}
             </Button>
@@ -87,15 +86,13 @@ export default function SlotsClient({
               disabled={
                 !!data?.find(
                   (reservation) =>
-                    reservation.timeSlot === slot &&
-                    reservation.room === "Elite Theatre",
+                    reservation.timeSlot === slot && reservation.room === "Elite Theatre",
                 )
               }
               className={`flex-1 whitespace-nowrap ${
                 data?.find(
                   (reservation) =>
-                    reservation.timeSlot === slot &&
-                    reservation.room === "Elite Theatre",
+                    reservation.timeSlot === slot && reservation.room === "Elite Theatre",
                 )
                   ? "bg-destructive hover:bg-destructive/80"
                   : "bg-secondary text-black"

@@ -154,7 +154,10 @@ export default function StepOne() {
                       <div className="flex justify-between">
                         <h2 className="w-full text-2xl font-bold">{pkg.room}</h2>
                         {pkg.popular && (
-                          <Badge className="bg-destructive hover:bg-destructive border-none font-medium text-nowrap whitespace-nowrap">
+                          <Badge
+                            variant={"destructive"}
+                            className="border-none font-medium text-nowrap whitespace-nowrap"
+                          >
                             Most Popular
                           </Badge>
                         )}
