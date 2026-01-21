@@ -100,7 +100,7 @@ export function ChartBarInteractive({
         <CardHeader>
           <CardTitle>Total Revenue</CardTitle>
           <CardDescription>
-            <span>Last 3 months</span>
+            <span>Last 12 months</span>
           </CardDescription>
         </CardHeader>
         <CardContent className="px-2 sm:px-6">
