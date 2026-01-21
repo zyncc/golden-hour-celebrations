@@ -40,13 +40,13 @@ export default async function Page() {
       prisma.reservations.findMany({
         where: {
           paymentStatus: true,
-          createdAt: {
+          date: {
             gte: startOfThisYear,
             lt: endOfThisYear,
           },
         },
         orderBy: {
-          createdAt: "asc",
+          date: "desc",
         },
       }),
       prisma.reservations.findMany({
@@ -54,7 +54,7 @@ export default async function Page() {
           paymentStatus: true,
         },
         orderBy: {
-          date: "desc",
+          date: "asc",
         },
       }),
     ]);

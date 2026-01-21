@@ -11,7 +11,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { useReservation } from "@/context/ReservationStore";
 import { dreamscapeTimeSlots, EliteTimeSlots, items } from "@/lib/constants";
@@ -54,7 +53,6 @@ export default function StepOne() {
   });
   const [showEliteDetails, setShowEliteDetails] = useState(false);
   const [showDreamscapeDetails, setShowDreamscapeDetails] = useState(false);
-  const [open, setOpen] = useState(false);
 
   const currentDate = new Date();
   const currentMonth = currentDate.getMonth();
@@ -116,7 +114,6 @@ export default function StepOne() {
             ...reservation,
             date,
           });
-          setOpen(false);
         }}
       />
       <div className="flex w-full">
@@ -202,237 +199,233 @@ export default function StepOne() {
                             }
                           />
                           <DialogContent className="flex flex-col gap-0 p-0 sm:max-h-[min(640px,80vh)] sm:max-w-2xl [&>button:last-child]:top-3.5">
-                            <ScrollArea className="flex max-h-full flex-col overflow-hidden">
-                              <DialogHeader className="contents space-y-0 text-left"></DialogHeader>
-                              <DialogTitle className="flex items-center gap-2 px-6 pt-6">
+                            <DialogHeader className="contents space-y-0 text-left">
+                              <DialogTitle className="flex items-center gap-2 px-6 py-6">
                                 Dreamscape Theatre
                               </DialogTitle>
-                              <div className="flex-1 overflow-y-auto">
-                                <div className="p-6">
-                                  <div className="space-y-6">
-                                    {/* Introduction */}
-                                    <div className="bg-secondary rounded-lg p-4 text-center">
-                                      <p className="text-muted-foreground text-sm leading-relaxed">
-                                        <strong>
-                                          🎬 Theatre Specifications for the Ultimate Movie
-                                          and celebration Experience
-                                        </strong>
-                                        <br />
-                                        At Golden Hour Celebrations, we offer a luxurious,
-                                        private theatre experience where every element —
-                                        from sound to seating — is designed for comfort,
-                                        connection, and celebration.
-                                      </p>
+                            </DialogHeader>
+                            <div className="max-h-[80vh] flex-1 overflow-y-auto">
+                              <div className="px-6 pb-6">
+                                <div className="space-y-6">
+                                  {/* Introduction */}
+                                  <div className="bg-secondary rounded-lg p-4 text-center">
+                                    <p className="text-muted-foreground text-sm leading-relaxed">
+                                      <strong>
+                                        🎬 Theatre Specifications for the Ultimate Movie
+                                        and celebration Experience
+                                      </strong>
+                                      <br />
+                                      At Golden Hour Celebrations, we offer a luxurious,
+                                      private theatre experience where every element —
+                                      from sound to seating — is designed for comfort,
+                                      connection, and celebration.
+                                    </p>
+                                  </div>
+
+                                  {/* Visual Experience */}
+                                  <div className="space-y-3">
+                                    <div className="flex items-center gap-2">
+                                      <Monitor className="h-5 w-5 text-blue-600" />
+                                      <h3 className="text-lg font-semibold">
+                                        📽️ Visual Experience
+                                      </h3>
                                     </div>
-
-                                    {/* Visual Experience */}
-                                    <div className="space-y-3">
-                                      <div className="flex items-center gap-2">
-                                        <Monitor className="h-5 w-5 text-blue-600" />
-                                        <h3 className="text-lg font-semibold">
-                                          📽️ Visual Experience
-                                        </h3>
-                                      </div>
-                                      <div className="space-y-2 pl-7 text-sm">
-                                        <div className="rounded-md p-3">
-                                          <p>
-                                            <strong>
-                                              120-Inch Fixed Frame Projector Screen
-                                            </strong>{" "}
-                                            (16:9, Diagonal Active 3D, 4K Ready)
-                                          </p>
-                                          <p className="text-muted-foreground">
-                                            A giant screen that brings movies to life in
-                                            brilliant detail.
-                                          </p>
-                                        </div>
-                                        <div className="rounded-md p-3">
-                                          <p>
-                                            <strong>
-                                              Epson EH-TW750 Full HD Home Cinema Projector
-                                            </strong>
-                                          </p>
-                                          <p className="text-muted-foreground">
-                                            Crisp visuals even in bright spaces — perfect
-                                            for both movie marathons and intimate moments.
-                                          </p>
-                                        </div>
-                                      </div>
-                                    </div>
-
-                                    <Separator />
-
-                                    {/* Audio Experience */}
-                                    <div className="space-y-3">
-                                      <div className="flex items-center gap-2">
-                                        <Volume2 className="h-5 w-5 text-green-600" />
-                                        <h3 className="text-lg font-semibold">
-                                          🔊 Immersive Sound
-                                        </h3>
-                                      </div>
-                                      <div className="space-y-2 pl-7 text-sm">
-                                        <div className="rounded-md p-3">
-                                          <p>
-                                            <strong>
-                                              ZEBRONICS PRO Dolby 5.1 Soundbar System
-                                            </strong>
-                                          </p>
-                                          <ul className="text-muted-foreground mt-1 space-y-1">
-                                            <li>
-                                              • Surround sound with 525 Watts output for a
-                                              theatre-like audio experience
-                                            </li>
-                                            <li>
-                                              • Wireless satellites & deep subwoofer for
-                                              immersive sound
-                                            </li>
-                                            <li>
-                                              • Multiple connectivity options — HDMI ARC,
-                                              Optical, Bluetooth v5.0, AUX
-                                            </li>
-                                            <li>
-                                              • Sleek LED display and wall-mount setup
-                                            </li>
-                                          </ul>
-                                        </div>
-                                      </div>
-                                    </div>
-
-                                    <Separator />
-
-                                    {/* Comfort */}
-                                    <div className="space-y-3">
-                                      <div className="flex items-center gap-2">
-                                        <Sofa className="h-5 w-5 text-orange-600" />
-                                        <h3 className="text-lg font-semibold">
-                                          🛋️ Comfort & Ambience
-                                        </h3>
-                                      </div>
-                                      <div className="space-y-2 pl-7 text-sm">
-                                        <div className="grid gap-2">
-                                          <div className="flex items-start gap-2">
-                                            <Star className="mt-0.5 h-4 w-4 shrink-0 text-yellow-500" />
-                                            <div>
-                                              <p>
-                                                <strong>Recliner Sofas:</strong> Cozy,
-                                                spacious, and luxurious — perfect for
-                                                curling up with your partner.
-                                              </p>
-                                            </div>
-                                          </div>
-                                          <div className="flex items-start gap-2">
-                                            <Speaker className="mt-0.5 h-4 w-4 shrink-0 text-purple-500" />
-                                            <div>
-                                              <p>
-                                                <strong>
-                                                  Acoustically Treated Walls:
-                                                </strong>{" "}
-                                                Crystal-clear audio with no distractions,
-                                                so every whisper and laugh feels personal.
-                                              </p>
-                                            </div>
-                                          </div>
-                                          <div className="flex items-start gap-2">
-                                            <Snowflake className="mt-0.5 h-4 w-4 shrink-0 text-blue-500" />
-                                            <div>
-                                              <p>
-                                                <strong>Air-Conditioned Comfort:</strong>{" "}
-                                                Fully AC theatre that keeps the space
-                                                cool, fresh, and pleasant.
-                                              </p>
-                                            </div>
-                                          </div>
-                                        </div>
-                                      </div>
-                                    </div>
-
-                                    <Separator />
-
-                                    {/* Couples Section */}
-                                    <div className="space-y-3">
-                                      <div className="flex items-center gap-2">
-                                        <Heart className="h-5 w-5 text-pink-600" />
-                                        <h3 className="text-lg font-semibold">
-                                          💑 For Couples: Celebrate Love in Your Own
-                                          Private Theatre
-                                        </h3>
-                                      </div>
-                                      <div className="pl-7 text-sm">
-                                        <p className="text-muted-foreground mb-3">
-                                          Whether it&apos;s a birthday surprise,
-                                          anniversary date, proposal, or just quality time
-                                          away from the world — our couple theatre is
-                                          crafted for closeness and connection.
+                                    <div className="space-y-2 pl-7 text-sm">
+                                      <div className="rounded-md p-3">
+                                        <p>
+                                          <strong>
+                                            120-Inch Fixed Frame Projector Screen
+                                          </strong>{" "}
+                                          (16:9, Diagonal Active 3D, 4K Ready)
                                         </p>
-                                        <div className="grid gap-2">
-                                          <div className="flex items-start gap-2">
-                                            <Heart className="mt-0.5 h-4 w-4 shrink-0 text-pink-500" />
-                                            <div>
-                                              <p>
-                                                <strong>Private, Cozy Atmosphere:</strong>{" "}
-                                                Just the two of you, with no
-                                                interruptions.
-                                              </p>
-                                            </div>
+                                        <p className="text-muted-foreground">
+                                          A giant screen that brings movies to life in
+                                          brilliant detail.
+                                        </p>
+                                      </div>
+                                      <div className="rounded-md p-3">
+                                        <p>
+                                          <strong>
+                                            Epson EH-TW750 Full HD Home Cinema Projector
+                                          </strong>
+                                        </p>
+                                        <p className="text-muted-foreground">
+                                          Crisp visuals even in bright spaces — perfect
+                                          for both movie marathons and intimate moments.
+                                        </p>
+                                      </div>
+                                    </div>
+                                  </div>
+
+                                  <Separator />
+
+                                  {/* Audio Experience */}
+                                  <div className="space-y-3">
+                                    <div className="flex items-center gap-2">
+                                      <Volume2 className="h-5 w-5 text-green-600" />
+                                      <h3 className="text-lg font-semibold">
+                                        🔊 Immersive Sound
+                                      </h3>
+                                    </div>
+                                    <div className="space-y-2 pl-7 text-sm">
+                                      <div className="rounded-md p-3">
+                                        <p>
+                                          <strong>
+                                            ZEBRONICS PRO Dolby 5.1 Soundbar System
+                                          </strong>
+                                        </p>
+                                        <ul className="text-muted-foreground mt-1 space-y-1">
+                                          <li>
+                                            • Surround sound with 525 Watts output for a
+                                            theatre-like audio experience
+                                          </li>
+                                          <li>
+                                            • Wireless satellites & deep subwoofer for
+                                            immersive sound
+                                          </li>
+                                          <li>
+                                            • Multiple connectivity options — HDMI ARC,
+                                            Optical, Bluetooth v5.0, AUX
+                                          </li>
+                                          <li>
+                                            • Sleek LED display and wall-mount setup
+                                          </li>
+                                        </ul>
+                                      </div>
+                                    </div>
+                                  </div>
+
+                                  <Separator />
+
+                                  {/* Comfort */}
+                                  <div className="space-y-3">
+                                    <div className="flex items-center gap-2">
+                                      <Sofa className="h-5 w-5 text-orange-600" />
+                                      <h3 className="text-lg font-semibold">
+                                        🛋️ Comfort & Ambience
+                                      </h3>
+                                    </div>
+                                    <div className="space-y-2 pl-7 text-sm">
+                                      <div className="grid gap-2">
+                                        <div className="flex items-start gap-2">
+                                          <Star className="mt-0.5 h-4 w-4 shrink-0 text-yellow-500" />
+                                          <div>
+                                            <p>
+                                              <strong>Recliner Sofas:</strong> Cozy,
+                                              spacious, and luxurious — perfect for
+                                              curling up with your partner.
+                                            </p>
                                           </div>
-                                          <div className="flex items-start gap-2">
-                                            <Star className="mt-0.5 h-4 w-4 shrink-0 text-yellow-500" />
-                                            <div>
-                                              <p>
-                                                <strong>Custom Decor Options:</strong>{" "}
-                                                Romantic setups with fairy lights,
-                                                balloons, rose petals, and more — tailored
-                                                for your moment.
-                                              </p>
-                                            </div>
+                                        </div>
+                                        <div className="flex items-start gap-2">
+                                          <Speaker className="mt-0.5 h-4 w-4 shrink-0 text-purple-500" />
+                                          <div>
+                                            <p>
+                                              <strong>Acoustically Treated Walls:</strong>{" "}
+                                              Crystal-clear audio with no distractions, so
+                                              every whisper and laugh feels personal.
+                                            </p>
                                           </div>
-                                          <div className="flex items-start gap-2">
-                                            <Film className="mt-0.5 h-4 w-4 shrink-0 text-blue-500" />
-                                            <div>
-                                              <p>
-                                                <strong>
-                                                  Personalised Playlist & Movie Choice:
-                                                </strong>{" "}
-                                                Watch your favorite film or a special
-                                                video that means something to you both.
-                                              </p>
-                                            </div>
-                                          </div>
-                                          <div className="flex items-start gap-2">
-                                            <Star className="mt-0.5 h-4 w-4 shrink-0 text-purple-500" />
-                                            <div>
-                                              <p>
-                                                <strong>Add-Ons Available:</strong> Cakes,
-                                                messages on screen, gifts, curated themes
-                                                — we help you plan every detail.
-                                              </p>
-                                            </div>
-                                          </div>
-                                          <div className="flex items-start gap-2">
-                                            <Heart className="mt-0.5 h-4 w-4 shrink-0 text-red-500" />
-                                            <div>
-                                              <p>
-                                                <strong>Memory-Making Space:</strong> The
-                                                perfect setting to relax, reconnect, and
-                                                create beautiful moments — all in complete
-                                                privacy.
-                                              </p>
-                                            </div>
+                                        </div>
+                                        <div className="flex items-start gap-2">
+                                          <Snowflake className="mt-0.5 h-4 w-4 shrink-0 text-blue-500" />
+                                          <div>
+                                            <p>
+                                              <strong>Air-Conditioned Comfort:</strong>{" "}
+                                              Fully AC theatre that keeps the space cool,
+                                              fresh, and pleasant.
+                                            </p>
                                           </div>
                                         </div>
                                       </div>
                                     </div>
+                                  </div>
 
-                                    <div className="bg-secondary rounded-lg p-3 text-center">
-                                      <p className="text-sm font-medium">
-                                        Create unforgettable moments in your own private
-                                        cinema, designed for love and connection.
-                                      </p>
+                                  <Separator />
+
+                                  {/* Couples Section */}
+                                  <div className="space-y-3">
+                                    <div className="flex items-center gap-2">
+                                      <Heart className="h-5 w-5 text-pink-600" />
+                                      <h3 className="text-lg font-semibold">
+                                        💑 For Couples: Celebrate Love in Your Own Private
+                                        Theatre
+                                      </h3>
                                     </div>
+                                    <div className="pl-7 text-sm">
+                                      <p className="text-muted-foreground mb-3">
+                                        Whether it&apos;s a birthday surprise, anniversary
+                                        date, proposal, or just quality time away from the
+                                        world — our couple theatre is crafted for
+                                        closeness and connection.
+                                      </p>
+                                      <div className="grid gap-2">
+                                        <div className="flex items-start gap-2">
+                                          <Heart className="mt-0.5 h-4 w-4 shrink-0 text-pink-500" />
+                                          <div>
+                                            <p>
+                                              <strong>Private, Cozy Atmosphere:</strong>{" "}
+                                              Just the two of you, with no interruptions.
+                                            </p>
+                                          </div>
+                                        </div>
+                                        <div className="flex items-start gap-2">
+                                          <Star className="mt-0.5 h-4 w-4 shrink-0 text-yellow-500" />
+                                          <div>
+                                            <p>
+                                              <strong>Custom Decor Options:</strong>{" "}
+                                              Romantic setups with fairy lights, balloons,
+                                              rose petals, and more — tailored for your
+                                              moment.
+                                            </p>
+                                          </div>
+                                        </div>
+                                        <div className="flex items-start gap-2">
+                                          <Film className="mt-0.5 h-4 w-4 shrink-0 text-blue-500" />
+                                          <div>
+                                            <p>
+                                              <strong>
+                                                Personalised Playlist & Movie Choice:
+                                              </strong>{" "}
+                                              Watch your favorite film or a special video
+                                              that means something to you both.
+                                            </p>
+                                          </div>
+                                        </div>
+                                        <div className="flex items-start gap-2">
+                                          <Star className="mt-0.5 h-4 w-4 shrink-0 text-purple-500" />
+                                          <div>
+                                            <p>
+                                              <strong>Add-Ons Available:</strong> Cakes,
+                                              messages on screen, gifts, curated themes —
+                                              we help you plan every detail.
+                                            </p>
+                                          </div>
+                                        </div>
+                                        <div className="flex items-start gap-2">
+                                          <Heart className="mt-0.5 h-4 w-4 shrink-0 text-red-500" />
+                                          <div>
+                                            <p>
+                                              <strong>Memory-Making Space:</strong> The
+                                              perfect setting to relax, reconnect, and
+                                              create beautiful moments — all in complete
+                                              privacy.
+                                            </p>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+
+                                  <div className="bg-secondary rounded-lg p-3 text-center">
+                                    <p className="text-sm font-medium">
+                                      Create unforgettable moments in your own private
+                                      cinema, designed for love and connection.
+                                    </p>
                                   </div>
                                 </div>
                               </div>
-                            </ScrollArea>
+                            </div>
                           </DialogContent>
                         </Dialog>
                       ) : (
@@ -448,205 +441,196 @@ export default function StepOne() {
                             }
                           />
                           <DialogContent className="flex flex-col gap-0 p-0 sm:max-h-[min(640px,80vh)] sm:max-w-2xl [&>button:last-child]:top-3.5">
-                            <ScrollArea className="flex max-h-full flex-col overflow-hidden">
-                              <DialogHeader className="contents space-y-0 text-left">
-                                <DialogTitle className="flex items-center gap-2 px-6 pt-6">
-                                  Elite Theatre
-                                </DialogTitle>
+                            <DialogHeader className="contents space-y-0 text-left">
+                              <DialogTitle className="flex items-center gap-2 px-6 py-6">
+                                Elite Theatre
+                              </DialogTitle>
+                            </DialogHeader>
 
-                                <div className="p-6">
-                                  <div className="space-y-6">
-                                    {/* Introduction */}
-                                    <div className="bg-secondary rounded-lg border p-4 text-center">
-                                      <p className="text-muted-foreground text-sm leading-relaxed">
-                                        Step into our <strong>Elite Theatre</strong>,
-                                        designed for unforgettable group celebrations and
-                                        immersive cinematic experiences. Whether it&apos;s
-                                        a birthday, bachelorette, anniversary, or a chill
-                                        movie night — this space offers the perfect blend
-                                        of high-performance technology and luxurious
-                                        comfort.
+                            <div className="max-h-[80vh] overflow-y-auto px-6 pb-6">
+                              <div className="space-y-6">
+                                {/* Introduction */}
+                                <div className="bg-secondary rounded-lg border p-4 text-center">
+                                  <p className="text-muted-foreground text-sm leading-relaxed">
+                                    Step into our <strong>Elite Theatre</strong>, designed
+                                    for unforgettable group celebrations and immersive
+                                    cinematic experiences. Whether it&apos;s a birthday,
+                                    bachelorette, anniversary, or a chill movie night —
+                                    this space offers the perfect blend of
+                                    high-performance technology and luxurious comfort.
+                                  </p>
+                                </div>
+
+                                {/* Visual Experience */}
+                                <div className="space-y-3">
+                                  <div className="flex items-center gap-2">
+                                    <Monitor className="h-5 w-5 text-blue-600" />
+                                    <h3 className="text-lg font-semibold">
+                                      📽️ Stunning Visuals
+                                    </h3>
+                                  </div>
+                                  <div className="space-y-2 pl-7 text-sm">
+                                    <div className="rounded-md p-3">
+                                      <p>
+                                        <strong>
+                                          120-Inch Fixed Frame Projector Screen
+                                        </strong>{" "}
+                                        (16:9, Diagonal Active 3D, 4K Ready)
+                                      </p>
+                                      <p className="text-muted-foreground">
+                                        Large-format viewing with sharp, vibrant,
+                                        cinema-like visuals.
                                       </p>
                                     </div>
-
-                                    {/* Visual Experience */}
-                                    <div className="space-y-3">
-                                      <div className="flex items-center gap-2">
-                                        <Monitor className="h-5 w-5 text-blue-600" />
-                                        <h3 className="text-lg font-semibold">
-                                          📽️ Stunning Visuals
-                                        </h3>
-                                      </div>
-                                      <div className="space-y-2 pl-7 text-sm">
-                                        <div className="rounded-md p-3">
-                                          <p>
-                                            <strong>
-                                              120-Inch Fixed Frame Projector Screen
-                                            </strong>{" "}
-                                            (16:9, Diagonal Active 3D, 4K Ready)
-                                          </p>
-                                          <p className="text-muted-foreground">
-                                            Large-format viewing with sharp, vibrant,
-                                            cinema-like visuals.
-                                          </p>
-                                        </div>
-                                        <div className="rounded-md p-3">
-                                          <p>
-                                            <strong>
-                                              Epson EH-TW750 Full HD Cinema Projector
-                                            </strong>
-                                          </p>
-                                          <p className="text-muted-foreground">
-                                            Bright, crisp picture quality — perfect for
-                                            both daytime and nighttime screenings.
-                                          </p>
-                                        </div>
-                                      </div>
-                                    </div>
-
-                                    <Separator />
-
-                                    {/* Audio Experience */}
-                                    <div className="space-y-3">
-                                      <div className="flex items-center gap-2">
-                                        <Volume2 className="h-5 w-5 text-green-600" />
-                                        <h3 className="text-lg font-semibold">
-                                          🔊 Premium Surround Sound
-                                        </h3>
-                                      </div>
-                                      <div className="space-y-2 pl-7 text-sm">
-                                        <div className="rounded-md p-3">
-                                          <p>
-                                            <strong>
-                                              Denon AVR-X250BT 5.1 Ch. 4K Ultra HD AV
-                                              Receiver with Bluetooth
-                                            </strong>
-                                          </p>
-                                          <ul className="text-muted-foreground mt-1 space-y-1">
-                                            <li>
-                                              • Delivers dynamic, immersive surround sound
-                                              with support for 4K Ultra HD
-                                            </li>
-                                            <li>
-                                              • Bluetooth-enabled for seamless wireless
-                                              audio playback
-                                            </li>
-                                            <li>
-                                              • Optimized for detailed, room-filling sound
-                                              with rich cinematic quality
-                                            </li>
-                                          </ul>
-                                        </div>
-                                        <div className="rounded-md p-3">
-                                          <p>
-                                            <strong>
-                                              Yamaha NS-P41 5.1 Speaker System
-                                            </strong>
-                                          </p>
-                                          <ul className="text-muted-foreground mt-1 space-y-1">
-                                            <li>
-                                              • <strong>Powerful, Balanced Sound:</strong>{" "}
-                                              Engineered to deliver clean, natural audio
-                                              across all frequencies
-                                            </li>
-                                            <li>
-                                              •{" "}
-                                              <strong>Advanced YST II Subwoofer:</strong>{" "}
-                                              Features Yamaha&apos;s proprietary Advanced
-                                              YST II technology for deep, tight bass with
-                                              low distortion
-                                            </li>
-                                            <li>
-                                              •{" "}
-                                              <strong>
-                                                Wall-Mountable Satellite Speakers:
-                                              </strong>{" "}
-                                              Flexible placement options for optimal
-                                              surround effect
-                                            </li>
-                                            <li>
-                                              • Perfect Match with Denon AVR: Offers a
-                                              complete and cohesive theatre-grade audio
-                                              experience with crystal-clear dialogue and
-                                              dramatic soundscapes
-                                            </li>
-                                          </ul>
-                                        </div>
-                                      </div>
-                                    </div>
-
-                                    <Separator />
-
-                                    {/* Comfort */}
-                                    <div className="space-y-3">
-                                      <div className="flex items-center gap-2">
-                                        <Sofa className="h-5 w-5 text-orange-600" />
-                                        <h3 className="text-lg font-semibold">
-                                          🛋️ Theatre-Style Comfort
-                                        </h3>
-                                      </div>
-                                      <div className="space-y-2 pl-7 text-sm">
-                                        <div className="grid gap-2">
-                                          <div className="flex items-start gap-2">
-                                            <Star className="mt-0.5 h-4 w-4 shrink-0 text-yellow-500" />
-                                            <div>
-                                              <p>
-                                                <strong>Recliner Sofas:</strong> Plush and
-                                                spacious, ideal for laid-back celebrations
-                                                or binge-worthy movie sessions.
-                                              </p>
-                                            </div>
-                                          </div>
-                                          <div className="flex items-start gap-2">
-                                            <Speaker className="mt-0.5 h-4 w-4 shrink-0 text-purple-500" />
-                                            <div>
-                                              <p>
-                                                <strong>
-                                                  Acoustically Treated Walls:
-                                                </strong>{" "}
-                                                Professional soundproofing for an
-                                                immersive, echo-free experience.
-                                              </p>
-                                            </div>
-                                          </div>
-                                          <div className="flex items-start gap-2">
-                                            <Snowflake className="mt-0.5 h-4 w-4 shrink-0 text-blue-500" />
-                                            <div>
-                                              <p>
-                                                <strong>Air-Conditioned Ambience:</strong>{" "}
-                                                Stay cool and comfortable in a fully AC
-                                                environment, no matter the season.
-                                              </p>
-                                            </div>
-                                          </div>
-                                        </div>
-                                      </div>
-                                    </div>
-
-                                    <Separator />
-
-                                    {/* Add-ons */}
-                                    <div className="bg-secondary rounded-lg p-4">
-                                      <p className="text-sm">
-                                        <strong>🎉 Optional add-ons available:</strong>{" "}
-                                        Customized décor, screen messages, cakes, photo
-                                        corners, and curated playlists — tailored to your
-                                        celebration.
+                                    <div className="rounded-md p-3">
+                                      <p>
+                                        <strong>
+                                          Epson EH-TW750 Full HD Cinema Projector
+                                        </strong>
                                       </p>
-                                    </div>
-
-                                    <div className="bg-secondary rounded-lg p-3 text-center">
-                                      <p className="text-sm font-medium">
-                                        From high-end tech to soft, cinematic vibes —
-                                        Elite Theatre gives you everything you need for a
-                                        private theatre night that feels grand, yet
-                                        personal.
+                                      <p className="text-muted-foreground">
+                                        Bright, crisp picture quality — perfect for both
+                                        daytime and nighttime screenings.
                                       </p>
                                     </div>
                                   </div>
                                 </div>
-                              </DialogHeader>
-                            </ScrollArea>
+
+                                <Separator />
+
+                                {/* Audio Experience */}
+                                <div className="space-y-3">
+                                  <div className="flex items-center gap-2">
+                                    <Volume2 className="h-5 w-5 text-green-600" />
+                                    <h3 className="text-lg font-semibold">
+                                      🔊 Premium Surround Sound
+                                    </h3>
+                                  </div>
+                                  <div className="space-y-2 pl-7 text-sm">
+                                    <div className="rounded-md p-3">
+                                      <p>
+                                        <strong>
+                                          Denon AVR-X250BT 5.1 Ch. 4K Ultra HD AV Receiver
+                                          with Bluetooth
+                                        </strong>
+                                      </p>
+                                      <ul className="text-muted-foreground mt-1 space-y-1">
+                                        <li>
+                                          • Delivers dynamic, immersive surround sound
+                                          with support for 4K Ultra HD
+                                        </li>
+                                        <li>
+                                          • Bluetooth-enabled for seamless wireless audio
+                                          playback
+                                        </li>
+                                        <li>
+                                          • Optimized for detailed, room-filling sound
+                                          with rich cinematic quality
+                                        </li>
+                                      </ul>
+                                    </div>
+                                    <div className="rounded-md p-3">
+                                      <p>
+                                        <strong>Yamaha NS-P41 5.1 Speaker System</strong>
+                                      </p>
+                                      <ul className="text-muted-foreground mt-1 space-y-1">
+                                        <li>
+                                          • <strong>Powerful, Balanced Sound:</strong>{" "}
+                                          Engineered to deliver clean, natural audio
+                                          across all frequencies
+                                        </li>
+                                        <li>
+                                          • <strong>Advanced YST II Subwoofer:</strong>{" "}
+                                          Features Yamaha&apos;s proprietary Advanced YST
+                                          II technology for deep, tight bass with low
+                                          distortion
+                                        </li>
+                                        <li>
+                                          •{" "}
+                                          <strong>
+                                            Wall-Mountable Satellite Speakers:
+                                          </strong>{" "}
+                                          Flexible placement options for optimal surround
+                                          effect
+                                        </li>
+                                        <li>
+                                          • Perfect Match with Denon AVR: Offers a
+                                          complete and cohesive theatre-grade audio
+                                          experience with crystal-clear dialogue and
+                                          dramatic soundscapes
+                                        </li>
+                                      </ul>
+                                    </div>
+                                  </div>
+                                </div>
+
+                                <Separator />
+
+                                {/* Comfort */}
+                                <div className="space-y-3">
+                                  <div className="flex items-center gap-2">
+                                    <Sofa className="h-5 w-5 text-orange-600" />
+                                    <h3 className="text-lg font-semibold">
+                                      🛋️ Theatre-Style Comfort
+                                    </h3>
+                                  </div>
+                                  <div className="space-y-2 pl-7 text-sm">
+                                    <div className="grid gap-2">
+                                      <div className="flex items-start gap-2">
+                                        <Star className="mt-0.5 h-4 w-4 shrink-0 text-yellow-500" />
+                                        <div>
+                                          <p>
+                                            <strong>Recliner Sofas:</strong> Plush and
+                                            spacious, ideal for laid-back celebrations or
+                                            binge-worthy movie sessions.
+                                          </p>
+                                        </div>
+                                      </div>
+                                      <div className="flex items-start gap-2">
+                                        <Speaker className="mt-0.5 h-4 w-4 shrink-0 text-purple-500" />
+                                        <div>
+                                          <p>
+                                            <strong>Acoustically Treated Walls:</strong>{" "}
+                                            Professional soundproofing for an immersive,
+                                            echo-free experience.
+                                          </p>
+                                        </div>
+                                      </div>
+                                      <div className="flex items-start gap-2">
+                                        <Snowflake className="mt-0.5 h-4 w-4 shrink-0 text-blue-500" />
+                                        <div>
+                                          <p>
+                                            <strong>Air-Conditioned Ambience:</strong>{" "}
+                                            Stay cool and comfortable in a fully AC
+                                            environment, no matter the season.
+                                          </p>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+
+                                <Separator />
+
+                                {/* Add-ons */}
+                                <div className="bg-secondary rounded-lg p-4">
+                                  <p className="text-sm">
+                                    <strong>🎉 Optional add-ons available:</strong>{" "}
+                                    Customized décor, screen messages, cakes, photo
+                                    corners, and curated playlists — tailored to your
+                                    celebration.
+                                  </p>
+                                </div>
+
+                                <div className="bg-secondary rounded-lg p-3 text-center">
+                                  <p className="text-sm font-medium">
+                                    From high-end tech to soft, cinematic vibes — Elite
+                                    Theatre gives you everything you need for a private
+                                    theatre night that feels grand, yet personal.
+                                  </p>
+                                </div>
+                              </div>
+                            </div>
                           </DialogContent>
                         </Dialog>
                       )}

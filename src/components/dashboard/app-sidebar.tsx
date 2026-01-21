@@ -50,9 +50,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       <SidebarContent>
         <NavMain items={data.navMain} />
       </SidebarContent>
-      <SidebarFooter>
-        <NavUser user={userData} />
-      </SidebarFooter>
+      <SidebarFooter>{!session.isPending && <NavUser user={userData} />}</SidebarFooter>
     </Sidebar>
   );
 }

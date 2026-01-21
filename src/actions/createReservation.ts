@@ -13,6 +13,7 @@ import {
 import prisma from "@/lib/prisma";
 import { ManualBookingSchema, payReservationSchema } from "@/lib/zodSchemas";
 import { randomUUID } from "crypto";
+import { revalidatePath } from "next/cache";
 import { headers } from "next/headers";
 import { Resend } from "resend";
 import { z } from "zod";
@@ -112,8 +113,7 @@ export async function createReservation(
   if (checkExistingBookings) {
     return {
       title: "Error creating Reservation",
-      description:
-        "Someone has booked another reservation at the same Time Slot!",
+      description: "Someone has booked another reservation at the same Time Slot!",
     };
   }
 
@@ -173,9 +173,7 @@ export async function CreateManualBooking(data: Data) {
   console.log("Existing Booking", checkExistingBookings);
 
   if (checkExistingBookings) {
-    throw new Error(
-      "Someone has booked another reservation at the same Time Slot!",
-    );
+    throw new Error("Someone has booked another reservation at the same Time Slot!");
   }
 
   let total = 0;
@@ -201,10 +199,7 @@ export async function CreateManualBooking(data: Data) {
   if (data.photography === "photoshoot") total += 700;
   else if (data.photography === "video") total += 1500;
 
-  if (
-    data.timeSlot === "10PM - 12AM" ||
-    data.timeSlot === "10:30PM - 12:30AM"
-  ) {
+  if (data.timeSlot === "10PM - 12AM" || data.timeSlot === "10:30PM - 12:30AM") {
     total += 500;
   }
 
@@ -216,17 +211,9 @@ export async function CreateManualBooking(data: Data) {
     total += ledLetterLightAge;
   }
 
-  if (
-    data.room === "Dreamscape Theatre" &&
-    data.noOfPeople &&
-    data.noOfPeople > 2
-  ) {
+  if (data.room === "Dreamscape Theatre" && data.noOfPeople && data.noOfPeople > 2) {
     total += (data.noOfPeople - 2) * 200;
-  } else if (
-    data.room === "Elite Theatre" &&
-    data.noOfPeople &&
-    data.noOfPeople > 4
-  ) {
+  } else if (data.room === "Elite Theatre" && data.noOfPeople && data.noOfPeople > 4) {
     total += (data.noOfPeople - 4) * 200;
   }
 
@@ -254,4 +241,36 @@ export async function CreateManualBooking(data: Data) {
   });
 
   console.log(emailSent);
+}
+
+export async function DeleteReservation(id: string) {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+
+  if (session?.user.role !== "admin") {
+    return { success: false, data: "Unauthorized" };
+  }
+
+  const findReservation = await prisma.reservations.findUnique({
+    where: {
+      id,
+    },
+  });
+
+  if (!findReservation) {
+    return { success: false, data: "Reservation with that id does not exist" };
+  }
+
+  await prisma.reservations.delete({
+    where: {
+      id,
+    },
+  });
+
+  revalidatePath("/dashboard");
+  revalidatePath("/dashboard/recent-bookings");
+  revalidatePath("/dashboard/all-bookings");
+
+  return { success: true, data: "Reservation deleted" };
 }

@@ -1,14 +1,5 @@
 {
   "$schema": "https://ui.shadcn.com/schema.json",
-<<<<<<< HEAD
-  "style": "default",
-  "rsc": true,
-  "tsx": true,
-  "tailwind": {
-    "config": "tailwind.config.ts",
-    "css": "app/globals.css",
-    "baseColor": "slate",
-=======
   "style": "base-vega",
   "rsc": true,
   "tsx": true,
@@ -16,25 +7,16 @@
     "config": "",
     "css": "src/app/globals.css",
     "baseColor": "neutral",
->>>>>>> 77a53e9 (fully migrated to nextjs 16 from scratch)
     "cssVariables": true,
     "prefix": ""
   },
   "iconLibrary": "lucide",
   "aliases": {
     "components": "@/components",
-<<<<<<< HEAD
-    "utils": "@/lib/utils"
-  },
-  "registries": {
-    "@coss": "https://coss.com/ui/r/{name}.json"
-  }
-=======
     "utils": "@/lib/utils",
     "ui": "@/components/ui",
     "lib": "@/lib",
     "hooks": "@/hooks"
   },
   "registries": {}
->>>>>>> 77a53e9 (fully migrated to nextjs 16 from scratch)
 }
