@@ -1,19 +1,6 @@
-import { PrismaClient } from "@/prisma/generated/prisma/client";
+import { PrismaClient } from "@/prisma/generated/prisma";
+import "dotenv/config";
 
-const prismaClientSingleton = () => {
-  return new PrismaClient();
-};
+const prisma = new PrismaClient();
 
-declare global {
-  var prismaGlobal: undefined | ReturnType<typeof prismaClientSingleton>;
-}
-
-const prisma = globalThis.prismaGlobal ?? prismaClientSingleton();
-
-if (process.env.NODE_ENV !== "production") globalThis.prismaGlobal = prisma;
-
-process.on("beforeExit", (): void => {
-  prisma.$disconnect();
-});
-
-export default prisma;
+export { prisma };
