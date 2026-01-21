@@ -29,6 +29,7 @@ export function NavMain({
           <SidebarMenuItem className="flex items-center gap-2">
             <Link href={"/dashboard/create"} className="w-full">
               <SidebarMenuButton
+                onClick={() => sidebar.isMobile && sidebar.toggleSidebar()}
                 tooltip="Create Booking"
                 className="bg-primary text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground active:bg-primary/90 active:text-primary-foreground min-w-8 duration-200 ease-linear"
               >
@@ -43,7 +44,7 @@ export function NavMain({
             <SidebarMenuItem key={item.title}>
               <Link href={item.url}>
                 <SidebarMenuButton
-                  onClick={() => sidebar.toggleSidebar()}
+                  onClick={() => sidebar.isMobile && sidebar.toggleSidebar()}
                   tooltip={item.title}
                 >
                   {item.icon && <item.icon />}
