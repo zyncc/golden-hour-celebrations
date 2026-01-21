@@ -1,21 +1,22 @@
 // Elite Photos
 import l14 from "../../public/l14.jpg";
-import l5 from "../../public/l5.jpg";
-import l3 from "../../public/l3.jpg";
 import l2 from "../../public/l2.jpg";
+import l3 from "../../public/l3.jpg";
+import l5 from "../../public/l5.jpg";
 // DreamScape Photos
-import l15 from "../../public/l15.jpg";
-import l12 from "../../public/l12.jpg";
-import l6 from "../../public/l6.jpg";
-import l4 from "../../public/l4.jpg";
-import l1 from "../../public/l4.jpg";
 import _ from "lodash";
+import l12 from "../../public/l12.jpg";
+import l15 from "../../public/l15.jpg";
+import { default as l1, default as l4 } from "../../public/l4.jpg";
+import l6 from "../../public/l6.jpg";
 
 export const advanceAmount = 1000;
 export const cakePrice = 550;
 export const candleLightRosePath = 349;
 export const ledLetterLightAge = 49;
 export const ledLetterLightName = 149;
+
+export const TIME_ZONE = "Asia/Kolkata";
 
 export const selectFindUs = [
   {
@@ -171,8 +172,7 @@ export const faqData = [
   },
   {
     question: "How can I book an event with Golden Hour Celebrations?",
-    answer:
-      "You can book an event through our website at goldenhourcelebrations.in.",
+    answer: "You can book an event through our website at goldenhourcelebrations.in.",
   },
   {
     question: "What customization options are available for event decorations?",
@@ -205,8 +205,7 @@ export const faqData = [
       "Currently, our services are focused on Bengaluru. For events outside this area, please contact us to discuss potential arrangements.",
   },
   {
-    question:
-      "How can I contact Golden Hour Celebrations for more information?",
+    question: "How can I contact Golden Hour Celebrations for more information?",
     answer:
       "You can reach us through our website's contact page at goldenhourcelebrations.in.",
   },

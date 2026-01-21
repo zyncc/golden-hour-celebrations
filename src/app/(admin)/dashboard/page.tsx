@@ -5,8 +5,10 @@ import DashboardWrapper from "@/components/dashboard/dashboard-wrapper";
 import { RecentReservationsTable } from "@/components/dashboard/recent-bookings-table";
 import { SectionCards } from "@/components/dashboard/section-cards";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { TIME_ZONE } from "@/lib/constants";
 import prisma from "@/lib/prisma";
 import { endOfMonth, startOfDay } from "date-fns";
+import { toZonedTime } from "date-fns-tz";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 
@@ -18,7 +20,7 @@ export default async function Page() {
     return redirect(`${process.env.NEXT_PUBLIC_BASE_URL}/signin`);
   }
 
-  const now = new Date();
+  const now = toZonedTime(new Date(), TIME_ZONE);
   const startToday = startOfDay(now);
   const endOfThisMonth = endOfMonth(now);
 
