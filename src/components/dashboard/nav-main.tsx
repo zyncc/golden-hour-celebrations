@@ -1,13 +1,14 @@
 "use client";
 
-import { IconCirclePlusFilled, type Icon } from "@tabler/icons-react";
 import {
   SidebarGroup,
   SidebarGroupContent,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  useSidebar,
 } from "@/components/ui/sidebar";
+import { IconCirclePlusFilled, type Icon } from "@tabler/icons-react";
 import Link from "next/link";
 
 export function NavMain({
@@ -19,6 +20,8 @@ export function NavMain({
     icon?: Icon;
   }[];
 }) {
+  const sidebar = useSidebar();
+
   return (
     <SidebarGroup>
       <SidebarGroupContent className="flex flex-col gap-2">
@@ -39,7 +42,10 @@ export function NavMain({
           {items.map((item) => (
             <SidebarMenuItem key={item.title}>
               <Link href={item.url}>
-                <SidebarMenuButton tooltip={item.title}>
+                <SidebarMenuButton
+                  onClick={() => sidebar.toggleSidebar()}
+                  tooltip={item.title}
+                >
                   {item.icon && <item.icon />}
                   <span>{item.title}</span>
                 </SidebarMenuButton>

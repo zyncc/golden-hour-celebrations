@@ -1,27 +1,18 @@
 "use client";
 
-import type * as React from "react";
-import {
-  IconHome,
-  IconListDetails,
-  IconGridDots,
-  IconClockHour4,
-} from "@tabler/icons-react";
 import { NavMain } from "@/components/dashboard/nav-main";
 import { NavUser } from "@/components/dashboard/nav-user";
-import {
-  Sidebar,
-  SidebarContent,
-  SidebarFooter,
-} from "@/components/ui/sidebar";
+import { Sidebar, SidebarContent, SidebarFooter } from "@/components/ui/sidebar";
 import { authClient } from "@/lib/authClient";
+import {
+  IconClockHour4,
+  IconGridDots,
+  IconHome,
+  IconListDetails,
+} from "@tabler/icons-react";
+import type * as React from "react";
 
 const data = {
-  user: {
-    name: "Chandan",
-    email: "chandankrishna288@gmail.com",
-    avatar: "/avatars/shadcn.jpg",
-  },
   navMain: [
     {
       title: "Dashboard",
@@ -53,6 +44,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     name: session.data?.user.name,
     email: session.data?.user.email,
   };
+
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarContent>

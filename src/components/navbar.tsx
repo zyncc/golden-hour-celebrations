@@ -139,7 +139,7 @@ export default function Navbar() {
                     <li>
                       <DrawerClose asChild>
                         <Link
-                          href={`admin.${process.env.NODE_ENV == "development" ? "http://admin.localhost:3000/dashboard" : "https://goldenhourcelebrations.in/dashboard"}`}
+                          href={`${process.env.NODE_ENV == "development" ? "http://admin.localhost:3000/dashboard" : "https://admin.goldenhourcelebrations.in/dashboard"}`}
                           className="text-foreground/90 hover:text-foreground hover:bg-muted/60 block rounded-lg px-4 py-3 text-base font-medium transition-all duration-200"
                         >
                           Admin
