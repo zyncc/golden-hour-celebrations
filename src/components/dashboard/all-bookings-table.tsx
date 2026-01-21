@@ -68,7 +68,7 @@ export const columns: ColumnDef<Reservations>[] = [
     },
     cell: ({ row }) => (
       <div className="capitalize">
-        <Link href={`/dashboard/all-bookings/${row.original.id}`}>
+        <Link href={`/dashboard/all-bookings/${row.original.orderID}`}>
           {row.getValue("name")}
         </Link>
       </div>

@@ -1,4 +1,4 @@
-import { Badge } from "@/components/ui/badge";
+import DashboardWrapper from "@/components/dashboard/dashboard-wrapper";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import prisma from "@/lib/prisma";
 import { format } from "date-fns";
@@ -53,28 +53,8 @@ export default async function ReservationDetails({
   const isConfirmed = reservationData.paymentStatus;
 
   return (
-    <main className="bg-background min-h-screen">
-      <div className="container mx-auto px-4 py-8">
-        {/* Header */}
-        <div className="mb-8">
-          <div className="mb-4 flex items-center justify-between">
-            <h1 className="text-foreground text-3xl font-bold">Reservation Details</h1>
-            <Badge
-              variant={isConfirmed ? "default" : "secondary"}
-              className="px-3 py-1 text-base"
-            >
-              {isConfirmed ? "Confirmed" : "Pending"}
-            </Badge>
-          </div>
-          <p className="text-muted-foreground">
-            Reservation ID:{" "}
-            <span className="text-foreground font-mono font-semibold">
-              {reservationData.id}
-            </span>
-          </p>
-        </div>
-
-        {/* Main Grid */}
+    <DashboardWrapper title="Reservation Details">
+      <main>
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
           {/* Left Column - Main Info */}
           <div className="space-y-6 lg:col-span-2">
@@ -291,7 +271,7 @@ export default async function ReservationDetails({
             </Card>
           </div>
         </div>
-      </div>
-    </main>
+      </main>
+    </DashboardWrapper>
   );
 }
