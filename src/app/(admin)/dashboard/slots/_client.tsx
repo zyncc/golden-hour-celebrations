@@ -70,7 +70,7 @@ export default function SlotsClient({
                   ? "destructive"
                   : "secondary"
               }
-              className={"whitespace-nowra flex-1"}
+              className={"flex-1 whitespace-nowrap"}
             >
               {slot}
             </Button>
@@ -89,14 +89,16 @@ export default function SlotsClient({
                     reservation.timeSlot === slot && reservation.room === "Elite Theatre",
                 )
               }
-              className={`flex-1 whitespace-nowrap ${
-                data?.find(
+              variant={
+                data?.some(
                   (reservation) =>
-                    reservation.timeSlot === slot && reservation.room === "Elite Theatre",
+                    reservation.timeSlot === slot &&
+                    reservation.room === "Dreamscape Theatre",
                 )
-                  ? "bg-destructive hover:bg-destructive/80"
-                  : "bg-secondary text-black"
-              }`}
+                  ? "destructive"
+                  : "secondary"
+              }
+              className={"flex-1 whitespace-nowrap"}
             >
               {slot}
             </Button>
