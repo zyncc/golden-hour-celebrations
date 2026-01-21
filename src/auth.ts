@@ -10,6 +10,10 @@ export const auth = betterAuth({
     enabled: true,
     minPasswordLength: 8,
     autoSignIn: true,
+    disableSignUp: true,
+  },
+  onAPIError: {
+    throw: true,
   },
   database: prismaAdapter(prisma, {
     provider: "mongodb",
@@ -34,6 +38,8 @@ export const auth = betterAuth({
   },
   socialProviders: {
     google: {
+      disableImplicitSignUp: true,
+      disableSignUp: true,
       enabled: true,
       prompt: "select_account",
       clientId: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!,

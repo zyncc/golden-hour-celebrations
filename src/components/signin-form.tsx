@@ -111,6 +111,12 @@ export function LoginFormClient({ className, ...props }: React.ComponentProps<"d
           onClick={() => {
             authClient.signIn.social({
               provider: "google",
+              fetchOptions: {
+                onError: (ctx) => {
+                  toast.error(ctx.error.message);
+                  setLoading(false);
+                },
+              },
             });
           }}
         >
