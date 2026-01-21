@@ -1,0 +1,121 @@
+generator client {
+  provider      = "prisma-client-js"
+  output        = "./generated/prisma"
+  binaryTargets = ["native", "rhel-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                  String   @id @default(auto()) @map("_id") @db.ObjectId
+  name                String
+  email               String
+  emailVerified       Boolean  @default(false)
+  image               String?
+  phoneNumber         String
+  phoneNumberVerified Boolean?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  sessions Session[]
+  accounts Account[]
+
+  role       String?
+  banned     Boolean?
+  banReason  String?
+  banExpires DateTime?
+
+  @@unique([email])
+  @@unique([phoneNumber])
+  @@map("users")
+}
+
+model Reservations {
+  id            String @id @default(auto()) @map("_id") @db.ObjectId
+  balanceAmount Int
+
+  advanceAmount   Int
+  room            String
+  noOfPeople      Int
+  nameToDisplay   String?
+  writingOnCake   String?
+  specialRequests String?
+  timeSlot        String
+  occasion        String
+  name            String
+  phone           String
+  email           String
+  findUs          String?
+  date            DateTime
+  orderID         String?  @unique
+  paymentID       String?
+  paymentStatus   Boolean  @default(false)
+
+  notes String?
+
+  cake          String?
+  photography   String?
+  fogEntry      Boolean?
+  rosePath      Boolean?
+  ledLetterName String?
+  ledLetterAge  String?
+
+  manualBooking Boolean?
+  discount      Int?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("reservations")
+}
+
+model Session {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  expiresAt DateTime
+  token     String
+  createdAt DateTime
+  updatedAt DateTime
+  ipAddress String?
+  userAgent String?
+  userId    String   @db.ObjectId
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  impersonatedBy String?
+
+  @@unique([token])
+  @@map("session")
+}
+
+model Account {
+  id                    String    @id @default(auto()) @map("_id") @db.ObjectId
+  accountId             String
+  providerId            String
+  userId                String    @db.ObjectId
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime
+  updatedAt             DateTime
+
+  @@map("account")
+}
+
+model Verification {
+  id         String    @id @default(auto()) @map("_id") @db.ObjectId
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime?
+  updatedAt  DateTime?
+
+  @@map("verification")
+}
