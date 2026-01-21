@@ -23,10 +23,11 @@ const config: runtime.GetPrismaClientConfig = {
       "value": "prisma-client"
     },
     "output": {
-      "value": "/home/zync/dev/websites/golden-hour-celebrations-nextjs16-port/src/prisma/generated/prisma",
+      "value": "/home/zync/dev/websites/golden-hour-celebrations/src/prisma/generated/prisma",
       "fromEnvVar": null
     },
     "config": {
+      "runtime": "nodejs",
       "engineType": "library"
     },
     "binaryTargets": [
@@ -37,7 +38,7 @@ const config: runtime.GetPrismaClientConfig = {
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "/home/zync/dev/websites/golden-hour-celebrations-nextjs16-port/src/prisma/schema.prisma",
+    "sourceFilePath": "/home/zync/dev/websites/golden-hour-celebrations/src/prisma/schema.prisma",
     "isCustomOutput": true
   },
   "relativePath": "../..",
@@ -47,7 +48,7 @@ const config: runtime.GetPrismaClientConfig = {
     "db"
   ],
   "activeProvider": "mongodb",
-  "postinstall": true,
+  "postinstall": false,
   "inlineDatasources": {
     "db": {
       "url": {
@@ -56,8 +57,8 @@ const config: runtime.GetPrismaClientConfig = {
       }
     }
   },
-  "inlineSchema": "generator client {\n  provider = \"prisma-client\"\n  output   = \"./generated/prisma\"\n}\n\ndatasource db {\n  provider = \"mongodb\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel User {\n  id                  String   @id @default(auto()) @map(\"_id\") @db.ObjectId\n  name                String\n  email               String\n  emailVerified       Boolean  @default(false)\n  image               String?\n  phoneNumber         String\n  phoneNumberVerified Boolean?\n\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n\n  sessions Session[]\n  accounts Account[]\n\n  role       String?\n  banned     Boolean?\n  banReason  String?\n  banExpires DateTime?\n\n  @@unique([email])\n  @@unique([phoneNumber])\n  @@map(\"users\")\n}\n\nmodel Reservations {\n  id            String @id @default(auto()) @map(\"_id\") @db.ObjectId\n  balanceAmount Int\n\n  advanceAmount   Int\n  room            String\n  noOfPeople      Int\n  nameToDisplay   String?\n  writingOnCake   String?\n  specialRequests String?\n  timeSlot        String\n  occasion        String\n  name            String\n  phone           String\n  email           String\n  findUs          String?\n  date            DateTime\n  orderID         String?  @unique\n  paymentID       String?\n  paymentStatus   Boolean  @default(false)\n\n  notes String?\n\n  cake          String?\n  photography   String?\n  fogEntry      Boolean?\n  rosePath      Boolean?\n  ledLetterName String?\n  ledLetterAge  String?\n\n  manualBooking Boolean?\n  discount      Int?\n\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n\n  @@map(\"reservations\")\n}\n\nmodel Session {\n  id        String   @id @default(auto()) @map(\"_id\") @db.ObjectId\n  expiresAt DateTime\n  token     String\n  createdAt DateTime\n  updatedAt DateTime\n  ipAddress String?\n  userAgent String?\n  userId    String   @db.ObjectId\n  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)\n\n  impersonatedBy String?\n\n  @@unique([token])\n  @@map(\"session\")\n}\n\nmodel Account {\n  id                    String    @id @default(auto()) @map(\"_id\") @db.ObjectId\n  accountId             String\n  providerId            String\n  userId                String    @db.ObjectId\n  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)\n  accessToken           String?\n  refreshToken          String?\n  idToken               String?\n  accessTokenExpiresAt  DateTime?\n  refreshTokenExpiresAt DateTime?\n  scope                 String?\n  password              String?\n  createdAt             DateTime\n  updatedAt             DateTime\n\n  @@map(\"account\")\n}\n\nmodel Verification {\n  id         String    @id @default(auto()) @map(\"_id\") @db.ObjectId\n  identifier String\n  value      String\n  expiresAt  DateTime\n  createdAt  DateTime?\n  updatedAt  DateTime?\n\n  @@map(\"verification\")\n}\n",
-  "inlineSchemaHash": "e9101f2f31d6884d2310bbb2ef521afa2bb97423dc3491661007129ca5db3c24",
+  "inlineSchema": "generator client {\n  provider = \"prisma-client\"\n  output   = \"./generated/prisma\"\n  runtime  = \"nodejs\"\n}\n\ndatasource db {\n  provider = \"mongodb\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel User {\n  id                  String   @id @default(auto()) @map(\"_id\") @db.ObjectId\n  name                String\n  email               String\n  emailVerified       Boolean  @default(false)\n  image               String?\n  phoneNumber         String\n  phoneNumberVerified Boolean?\n\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n\n  sessions Session[]\n  accounts Account[]\n\n  role       String?\n  banned     Boolean?\n  banReason  String?\n  banExpires DateTime?\n\n  @@unique([email])\n  @@unique([phoneNumber])\n  @@map(\"users\")\n}\n\nmodel Reservations {\n  id            String @id @default(auto()) @map(\"_id\") @db.ObjectId\n  balanceAmount Int\n\n  advanceAmount   Int\n  room            String\n  noOfPeople      Int\n  nameToDisplay   String?\n  writingOnCake   String?\n  specialRequests String?\n  timeSlot        String\n  occasion        String\n  name            String\n  phone           String\n  email           String\n  findUs          String?\n  date            DateTime\n  orderID         String?  @unique\n  paymentID       String?\n  paymentStatus   Boolean  @default(false)\n\n  notes String?\n\n  cake          String?\n  photography   String?\n  fogEntry      Boolean?\n  rosePath      Boolean?\n  ledLetterName String?\n  ledLetterAge  String?\n\n  manualBooking Boolean?\n  discount      Int?\n\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n\n  @@map(\"reservations\")\n}\n\nmodel Session {\n  id        String   @id @default(auto()) @map(\"_id\") @db.ObjectId\n  expiresAt DateTime\n  token     String\n  createdAt DateTime\n  updatedAt DateTime\n  ipAddress String?\n  userAgent String?\n  userId    String   @db.ObjectId\n  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)\n\n  impersonatedBy String?\n\n  @@unique([token])\n  @@map(\"session\")\n}\n\nmodel Account {\n  id                    String    @id @default(auto()) @map(\"_id\") @db.ObjectId\n  accountId             String\n  providerId            String\n  userId                String    @db.ObjectId\n  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)\n  accessToken           String?\n  refreshToken          String?\n  idToken               String?\n  accessTokenExpiresAt  DateTime?\n  refreshTokenExpiresAt DateTime?\n  scope                 String?\n  password              String?\n  createdAt             DateTime\n  updatedAt             DateTime\n\n  @@map(\"account\")\n}\n\nmodel Verification {\n  id         String    @id @default(auto()) @map(\"_id\") @db.ObjectId\n  identifier String\n  value      String\n  expiresAt  DateTime\n  createdAt  DateTime?\n  updatedAt  DateTime?\n\n  @@map(\"verification\")\n}\n",
+  "inlineSchemaHash": "9b11042431349889b24480796f9ffaa2bfd68d5158d5b004f92cc33b86309fc3",
   "copyEngine": true,
   "runtimeDataModel": {
     "models": {},
