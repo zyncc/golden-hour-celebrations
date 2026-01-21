@@ -6,7 +6,7 @@ import { RecentReservationsTable } from "@/components/dashboard/recent-bookings-
 import { SectionCards } from "@/components/dashboard/section-cards";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import prisma from "@/lib/prisma";
-import { endOfYear, startOfYear } from "date-fns";
+import { endOfMonth, startOfDay } from "date-fns";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 
@@ -19,19 +19,8 @@ export default async function Page() {
   }
 
   const now = new Date();
-  const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1, 0, 0, 0, 0);
-  const startOfNextMonth = new Date(
-    now.getFullYear(),
-    now.getMonth() + 1,
-    0,
-    23,
-    59,
-    59,
-    999,
-  );
-
-  const startOfThisYear = startOfYear(now);
-  const endOfThisYear = endOfYear(now);
+  const startToday = startOfDay(now);
+  const endOfThisMonth = endOfMonth(now);
 
   const [bookingCount, userCount, recentReservations, allReservations] =
     await Promise.all([
@@ -41,8 +30,8 @@ export default async function Page() {
         where: {
           paymentStatus: true,
           date: {
-            gte: startOfThisYear,
-            lt: endOfThisYear,
+            gte: startToday,
+            lt: endOfThisMonth,
           },
         },
         orderBy: {
