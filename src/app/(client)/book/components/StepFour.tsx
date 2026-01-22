@@ -134,7 +134,7 @@ export default function StepFour() {
   }
   price += priceIncreaseForAdditionalPeople;
   return (
-    <div className="min-h-screen py-4 md:p-8">
+    <div className="min-h-screen">
       <div className="mx-auto max-w-7xl">
         <div className="grid gap-8 md:grid-cols-2">
           <div className="space-y-0">
@@ -239,7 +239,8 @@ export default function StepFour() {
                     </div>
                   )}
                 </div>
-                <div className="rounded-lg p-4">
+                <Separator />
+                <div className="rounded-lg">
                   <p className="mb-2 font-medium">Package Includes:</p>
                   <div className="space-y-2">
                     {items

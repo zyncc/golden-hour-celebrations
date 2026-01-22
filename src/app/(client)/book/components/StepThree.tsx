@@ -19,7 +19,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useReservation } from "@/context/ReservationStore";
-import { StepThreeFormSchema } from "@/lib/zodSchemas";
+import { getStepThreeFormSchema } from "@/lib/zodSchemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { redirect, useRouter } from "next/navigation";
 import { Controller, useForm } from "react-hook-form";
@@ -33,6 +33,8 @@ export default function StepThreeForm() {
   if (!reservation) {
     redirect("/book");
   }
+
+  const StepThreeFormSchema = getStepThreeFormSchema(reservation.room!);
 
   const {
     control,
@@ -191,22 +193,41 @@ export default function StepThreeForm() {
             </Field>
 
             {/* Number of People */}
-            <Field>
-              <FieldLabel>Number of People</FieldLabel>
-              <FieldContent>
-                <Input
-                  type="number"
-                  placeholder="Enter number of people"
-                  {...register("noOfPeople", { valueAsNumber: true })}
-                  className="text-base"
-                  data-invalid={!!errors.noOfPeople}
-                />
-                <FieldDescription>Minimum 2, maximum 15 people</FieldDescription>
-                <FieldError
-                  errors={errors.noOfPeople ? [errors.noOfPeople] : undefined}
-                />
-              </FieldContent>
-            </Field>
+            {reservation.room === "Elite Theatre" ? (
+              <Field>
+                <FieldLabel>Number of People</FieldLabel>
+                <FieldContent>
+                  <Input
+                    type="number"
+                    placeholder="Enter number of people"
+                    {...register("noOfPeople", { valueAsNumber: true })}
+                    className="text-base"
+                    data-invalid={!!errors.noOfPeople}
+                  />
+                  <FieldDescription>Minimum 2, maximum 15 people</FieldDescription>
+                  <FieldError
+                    errors={errors.noOfPeople ? [errors.noOfPeople] : undefined}
+                  />
+                </FieldContent>
+              </Field>
+            ) : (
+              <Field>
+                <FieldLabel>Number of People</FieldLabel>
+                <FieldContent>
+                  <Input
+                    type="number"
+                    placeholder="Enter number of people"
+                    {...register("noOfPeople", { valueAsNumber: true })}
+                    className="text-base"
+                    data-invalid={!!errors.noOfPeople}
+                  />
+                  <FieldDescription>Minimum 2, maximum 4 people</FieldDescription>
+                  <FieldError
+                    errors={errors.noOfPeople ? [errors.noOfPeople] : undefined}
+                  />
+                </FieldContent>
+              </Field>
+            )}
           </FieldGroup>
         </form>
       </Card>

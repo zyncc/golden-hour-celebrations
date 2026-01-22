@@ -21,9 +21,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
-import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 import { useReservation } from "@/context/ReservationStore";
 import {
@@ -104,7 +102,7 @@ export default function StepTwo() {
 
   return (
     <div className="min-h-screen">
-      <div className="py-12">
+      <div className="py-6">
         {/* Header Section */}
         <div className="mb-12 text-center">
           <h1 className="from-foreground to-foreground/70 mb-4 bg-linear-to-r bg-clip-text text-4xl font-bold text-transparent">
@@ -117,9 +115,9 @@ export default function StepTwo() {
         </div>
 
         {/* Main Content Grid */}
-        <div className="mb-12 grid grid-cols-1 gap-8 lg:grid-cols-2">
+        <div className="mb-12 grid grid-flow-dense grid-cols-1 items-start gap-8 lg:grid-cols-2">
           {/* Cake Selection */}
-          <Card className="border-none">
+          <Card className="h-fit">
             <CardHeader className="pb-4">
               <div className="flex items-center gap-3">
                 <div className="rounded-lg bg-orange-100 p-2 dark:bg-orange-900/20">
@@ -133,126 +131,165 @@ export default function StepTwo() {
                 </div>
               </div>
             </CardHeader>
-            <CardContent className="space-y-4">
+            <CardContent className="space-y-5">
+              {/* Selected Cake Preview */}
               {reservation.cake && CAKE_DATA[reservation.cake] && (
-                <>
-                  <h3 className="text-lg font-medium">{reservation.cake}</h3>
-
-                  <Image
-                    src={CAKE_DATA[reservation.cake]}
-                    width={200}
-                    height={200}
-                    alt={reservation.cake}
-                    className="aspect-square rounded-lg object-cover"
-                  />
-                </>
-              )}
-              <div className="flex gap-x-4">
-                {reservation.cake && (
-                  <Button
-                    onClick={() => {
-                      setReservationData({
-                        ...reservation,
-                        cake: undefined,
-                        writingOnCake: undefined,
-                      });
-                    }}
-                    variant={"secondary"}
-                  >
-                    Remove Cake
-                  </Button>
-                )}
-                <Dialog>
-                  <DialogTrigger
-                    render={
-                      <Button className="w-fit">
-                        {reservation.cake ? "Change Cake" : "Select Cake"}
-                      </Button>
-                    }
-                  />
-                  <DialogContent className="flex flex-col gap-0 sm:max-h-[min(640px,80vh)] [&>button:last-child]:top-3.5">
-                    <div className="grid max-h-[80vh] grid-cols-2 gap-4 overflow-y-auto">
-                      {cakes.map((cake) => {
-                        const imageSrc = CAKE_DATA[cake];
-                        if (!imageSrc) return null;
-                        return (
-                          <DialogClose
-                            key={cake}
-                            render={
-                              <button
-                                onClick={() => {
-                                  setReservationData({
-                                    ...reservation,
-                                    cake,
-                                  });
-                                }}
-                                className="flex cursor-pointer flex-col items-center gap-2"
-                              >
-                                <div className="relative">
-                                  {cake === "Vancho Cake" && (
-                                    <Badge
-                                      variant={"default"}
-                                      className="absolute top-2 right-2 z-10 font-semibold shadow-2xl"
-                                    >
-                                      Best Seller
-                                    </Badge>
-                                  )}
-
-                                  <Image
-                                    src={imageSrc}
-                                    width={200}
-                                    height={200}
-                                    alt={cake}
-                                    className="rounded-lg"
-                                  />
-                                </div>
-
-                                <span className="text-center text-sm font-medium">
-                                  {cake}{" "}
-                                  <span className="text-green-500">
-                                    ₹
-                                    {cake === "Rasmalai Cake"
-                                      ? "800"
-                                      : cake === "Blueberry Cheese Cake"
-                                        ? "900"
-                                        : "550"}
-                                  </span>
-                                </span>
-                              </button>
-                            }
-                          />
-                        );
-                      })}
+                <div className="border-primary/20 from-primary/5 rounded-2xl border-2 bg-gradient-to-br to-transparent p-4">
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between">
+                      <h3 className="text-lg font-semibold">{reservation.cake}</h3>
+                      <Badge
+                        variant="secondary"
+                        className="bg-emerald-100 text-emerald-700"
+                      >
+                        Selected
+                      </Badge>
                     </div>
+                    <Image
+                      src={CAKE_DATA[reservation.cake]}
+                      width={200}
+                      height={200}
+                      alt={reservation.cake}
+                      className="aspect-square rounded-xl object-cover shadow-sm"
+                    />
+                  </div>
+                </div>
+              )}
+
+              {/* Cake Selection Button */}
+              <Dialog>
+                <DialogTrigger
+                  render={
+                    <Button
+                      className="w-full py-6 text-base font-semibold"
+                      variant={reservation.cake ? "outline" : "default"}
+                    >
+                      {reservation.cake ? "Change Cake" : "🍰 Select a Cake"}
+                    </Button>
+                  }
+                />
+                <DialogContent className="flex flex-col gap-0 sm:max-h-[min(640px,80vh)] [&>button:last-child]:top-3.5">
+                  <div className="space-y-4 px-6 py-6">
+                    <div>
+                      <h2 className="text-2xl font-bold">Choose Your Cake</h2>
+                      <p className="text-muted-foreground mt-1">
+                        All cakes are 500g • Starting from ₹{cakePrice}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="grid max-h-[calc(80vh-200px)] grid-cols-2 gap-4 overflow-y-auto px-6 pb-6 sm:grid-cols-3">
+                    {cakes.map((cake) => {
+                      const imageSrc = CAKE_DATA[cake];
+                      if (!imageSrc) return null;
+                      return (
+                        <DialogClose
+                          key={cake}
+                          render={
+                            <button
+                              onClick={() => {
+                                setReservationData({
+                                  ...reservation,
+                                  cake,
+                                });
+                              }}
+                              className="group flex flex-col gap-3 rounded-xl transition-all hover:shadow-lg"
+                            >
+                              <div className="relative overflow-hidden rounded-xl shadow-sm">
+                                {cake === "Vancho Cake" && (
+                                  <Badge
+                                    variant={"default"}
+                                    className="absolute top-2 right-2 z-10 bg-amber-500 font-semibold shadow-lg"
+                                  >
+                                    Best Seller
+                                  </Badge>
+                                )}
+
+                                <Image
+                                  src={imageSrc || "/placeholder.svg"}
+                                  width={200}
+                                  height={200}
+                                  alt={cake}
+                                  className="aspect-square w-full object-cover transition-transform group-hover:scale-105"
+                                />
+                              </div>
+
+                              <div className="space-y-1 text-center">
+                                <p className="text-sm leading-tight font-semibold">
+                                  {cake}
+                                </p>
+                                <p className="text-xs font-medium text-emerald-600">
+                                  ₹
+                                  {cake === "Rasmalai Cake"
+                                    ? "800"
+                                    : cake === "Blueberry Cheese Cake"
+                                      ? "900"
+                                      : "550"}
+                                </p>
+                              </div>
+                            </button>
+                          }
+                        />
+                      );
+                    })}
+                  </div>
+                  <div className="border-t px-6 py-4">
                     <DialogClose
                       render={
-                        <Button className="mt-5" variant={"secondary"}>
+                        <Button className="w-full" variant={"secondary"}>
                           Cancel
                         </Button>
                       }
                     />
-                  </DialogContent>
-                </Dialog>
-              </div>
+                  </div>
+                </DialogContent>
+              </Dialog>
 
-              <div className="space-y-2">
-                <Label className="text-sm font-medium">Custom Message (Optional)</Label>
-                <Input
-                  placeholder="e.g., Happy Birthday Sarah!"
-                  disabled={!reservation.cake}
-                  defaultValue={reservation?.writingOnCake || undefined}
-                  type="text"
-                  maxLength={15}
-                  className="h-11"
-                  onChange={(e) => {
+              {/* Remove Cake Option */}
+              {reservation.cake && (
+                <Button
+                  onClick={() => {
                     setReservationData({
                       ...reservation,
-                      writingOnCake: e.target.value,
+                      cake: undefined,
+                      writingOnCake: undefined,
                     });
                   }}
-                />
-                <p className="text-muted-foreground text-xs">Maximum 15 characters</p>
-              </div>
+                  variant="ghost"
+                  className="w-full text-red-600 hover:bg-red-50 hover:text-red-700"
+                >
+                  ✕ Remove Cake Selection
+                </Button>
+              )}
+
+              {/* Custom Message */}
+              {reservation.cake && (
+                <div className="space-y-3 rounded-xl p-4">
+                  <div>
+                    <Label className="text-sm font-semibold">
+                      Writing on Cake (Optional)
+                    </Label>
+                    <p className="text-muted-foreground mt-1 text-xs">
+                      Add a personalized message on the cake
+                    </p>
+                  </div>
+                  <Input
+                    placeholder="e.g., Happy Birthday Sarah!"
+                    defaultValue={reservation?.writingOnCake || undefined}
+                    type="text"
+                    maxLength={15}
+                    className="h-10"
+                    onChange={(e) => {
+                      setReservationData({
+                        ...reservation,
+                        writingOnCake: e.target.value,
+                      });
+                    }}
+                  />
+                  <p className="text-muted-foreground text-xs">
+                    {reservation?.writingOnCake?.length || 0}/15 characters
+                  </p>
+                </div>
+              )}
             </CardContent>
             <CardFooter>
               <p className="text-muted-foreground text-sm">
@@ -262,7 +299,7 @@ export default function StepTwo() {
           </Card>
 
           {/* Photography Package */}
-          <Card className="border-none">
+          <Card className="h-fit">
             <CardHeader className="pb-4">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
@@ -285,198 +322,192 @@ export default function StepTwo() {
                     }
                   />
                   <DialogContent className="flex flex-col gap-0 p-0 sm:max-h-[min(640px,80vh)] sm:max-w-2xl [&>button:last-child]:top-3.5">
-                    <ScrollArea className="flex max-h-full flex-col overflow-hidden">
-                      <DialogHeader className="contents space-y-0 text-left">
-                        <DialogTitle className="flex items-center gap-2 px-6 pt-6">
-                          <Camera className="h-5 w-5" />
-                          Photoshoot + Video Coverage
-                        </DialogTitle>
-                        <div className="p-6">
-                          <div className="space-y-6">
-                            <div className="bg-background rounded-lg p-4 text-center">
-                              <p className="text-muted-foreground text-sm leading-relaxed">
-                                <strong>📸 Photoshoot + Video Coverage</strong>
-                                <br />
-                                At Golden Hour Celebrations, we&apos;re not just capturing
-                                visuals — we&apos;re preserving emotions, expressions, and
-                                the magic of your moment. Our setup is designed to offer
-                                cinematic quality and aesthetic beauty, without
-                                compromising on clarity.
-                              </p>
-                            </div>
+                    <DialogHeader className="contents space-y-0 text-left">
+                      <DialogTitle className="flex items-center gap-2 px-6 py-6">
+                        <Camera className="h-5 w-5" />
+                        Photoshoot + Video Coverage
+                      </DialogTitle>
+                    </DialogHeader>
+                    <div className="overflow-y-auto px-6 pb-6">
+                      <div className="space-y-6">
+                        <div className="bg-background rounded-lg p-4 text-center">
+                          <p className="text-muted-foreground text-sm leading-relaxed">
+                            <strong>📸 Photoshoot + Video Coverage</strong>
+                            <br />
+                            At Golden Hour Celebrations, we&apos;re not just capturing
+                            visuals — we&apos;re preserving emotions, expressions, and the
+                            magic of your moment. Our setup is designed to offer cinematic
+                            quality and aesthetic beauty, without compromising on clarity.
+                          </p>
+                        </div>
 
-                            {/* Equipment Section */}
-                            <div className="space-y-3">
-                              <div className="flex items-center gap-2">
-                                <h3 className="text-lg font-semibold">
-                                  Professional Equipment
-                                </h3>
-                              </div>
-                              <div className="space-y-2 text-sm">
-                                <div className="rounded-md">
-                                  <p className="text-muted-foreground mb-2">
-                                    We use the <strong>Samsung Galaxy S24 Ultra</strong>,
-                                    paired with the <strong>DJI Osmo Gimbal</strong>,
-                                    which together offer results comparable to
-                                    professional DSLR setups. Whether it&apos;s a surprise
-                                    entry or a heartfelt celebration, our equipment
-                                    ensures every frame looks beautiful, vibrant, and true
-                                    to the moment.
-                                  </p>
-                                </div>
-                              </div>
-                            </div>
-
-                            <Separator />
-
-                            {/* Quality Features */}
-                            <div className="space-y-3">
-                              <div className="flex items-center gap-2">
-                                <h3 className="text-lg font-semibold">
-                                  🌟 What Makes Our Capture Quality Stand Out
-                                </h3>
-                              </div>
-                              <div className="space-y-2 pl-7 text-sm">
-                                <div className="grid gap-2">
-                                  <div className="flex items-start gap-2">
-                                    <Camera className="mt-0.5 h-4 w-4 shrink-0 text-blue-500" />
-                                    <div>
-                                      <p>
-                                        <strong>
-                                          200MP Ultra High-Resolution Camera
-                                        </strong>
-                                      </p>
-                                    </div>
-                                  </div>
-                                  <div className="flex items-start gap-2">
-                                    <Video className="mt-0.5 h-4 w-4 shrink-0 text-red-500" />
-                                    <div>
-                                      <p>
-                                        <strong>8K Video Recording</strong>
-                                      </p>
-                                    </div>
-                                  </div>
-                                  <div className="flex items-start gap-2">
-                                    <Moon className="mt-0.5 h-4 w-4 shrink-0 text-indigo-500" />
-                                    <div>
-                                      <p>
-                                        <strong>Night Mode</strong> for dreamy, low-light
-                                        settings
-                                      </p>
-                                    </div>
-                                  </div>
-                                  <div className="flex items-start gap-2">
-                                    <Zap className="mt-0.5 h-4 w-4 shrink-0 text-green-500" />
-                                    <div>
-                                      <p>
-                                        <strong>AI-Enhanced Image Processing</strong>
-                                      </p>
-                                    </div>
-                                  </div>
-                                  <div className="flex items-start gap-2">
-                                    <Move3D className="mt-0.5 h-4 w-4 shrink-0 text-purple-500" />
-                                    <div>
-                                      <p>
-                                        <strong>DJI Osmo Gimbal</strong> for smooth,
-                                        cinematic movement
-                                      </p>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-
-                            <Separator />
-
-                            {/* Package Details */}
-                            <div className="space-y-3">
-                              <div className="flex items-center gap-2">
-                                <h3 className="text-lg font-semibold">
-                                  🎥 ₹1500 Photoshoot + Video Coverage Package
-                                </h3>
-                              </div>
-                              <div className="space-y-2 pl-7 text-sm">
-                                <p className="text-muted-foreground mb-3">
-                                  Package Includes:
-                                </p>
-                                <div className="grid gap-2">
-                                  <div className="flex items-start gap-2">
-                                    <Camera className="mt-0.5 h-4 w-4 shrink-0 text-blue-500" />
-                                    <div>
-                                      <p>
-                                        <strong>📸 Photoshoot + video shoot</strong> for
-                                        up to 1 hour
-                                      </p>
-                                    </div>
-                                  </div>
-                                  <div className="flex items-start gap-2">
-                                    <Video className="mt-0.5 h-4 w-4 shrink-0 text-red-500" />
-                                    <div>
-                                      <p>
-                                        <strong>🎥 Full coverage</strong> of your entry
-                                        and celebration moments
-                                      </p>
-                                    </div>
-                                  </div>
-                                  <div className="flex items-start gap-2">
-                                    <Scissors className="mt-0.5 h-4 w-4 shrink-0 text-purple-500" />
-                                    <div>
-                                      <p>
-                                        <strong>✂ One edited highlight video clip</strong>{" "}
-                                        of upto 1 min (with transitions and music)
-                                      </p>
-                                    </div>
-                                  </div>
-                                  <div className="flex items-start gap-2">
-                                    <Heart className="mt-0.5 h-4 w-4 shrink-0 text-pink-500" />
-                                    <div>
-                                      <p>
-                                        <strong>
-                                          💌 A selection of candid, aesthetic photos
-                                        </strong>{" "}
-                                        from your event
-                                      </p>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-
-                            <Separator />
-
-                            {/* Sample Viewing */}
-                            <div className="space-y-3">
-                              <div className="flex items-center gap-2">
-                                <h3 className="text-lg font-semibold">
-                                  💬 See Before You Decide
-                                </h3>
-                              </div>
-                              <div className="pl-7 text-sm">
-                                <p className="text-muted-foreground mb-3">
-                                  We understand how personal and important this decision
-                                  is. That&apos;s why we&apos;re happy to share real
-                                  samples of past celebrations — so you can view the photo
-                                  and video output before choosing to go ahead.
-                                </p>
-                                <p className="text-muted-foreground">
-                                  Our aim is to make this experience accessible and
-                                  meaningful, without ever compromising on quality. If
-                                  you&apos;d like to preview our work, just let us know —
-                                  we&apos;d love to share the magic 💛
-                                </p>
-                              </div>
-                            </div>
-
-                            <div className="bg-card rounded-lg p-3 text-center">
-                              <p className="text-sm font-medium">
-                                Preserving your precious moments with cinematic quality
-                                and heartfelt care.
+                        {/* Equipment Section */}
+                        <div className="space-y-3">
+                          <div className="flex items-center gap-2">
+                            <h3 className="text-lg font-semibold">
+                              Professional Equipment
+                            </h3>
+                          </div>
+                          <div className="space-y-2 text-sm">
+                            <div className="rounded-md">
+                              <p className="text-muted-foreground mb-2">
+                                We use the <strong>Samsung Galaxy S24 Ultra</strong>,
+                                paired with the <strong>DJI Osmo Gimbal</strong>, which
+                                together offer results comparable to professional DSLR
+                                setups. Whether it&apos;s a surprise entry or a heartfelt
+                                celebration, our equipment ensures every frame looks
+                                beautiful, vibrant, and true to the moment.
                               </p>
                             </div>
                           </div>
                         </div>
-                      </DialogHeader>
-                    </ScrollArea>
+
+                        <Separator />
+
+                        {/* Quality Features */}
+                        <div className="space-y-3">
+                          <div className="flex items-center gap-2">
+                            <h3 className="text-lg font-semibold">
+                              🌟 What Makes Our Capture Quality Stand Out
+                            </h3>
+                          </div>
+                          <div className="space-y-2 pl-7 text-sm">
+                            <div className="grid gap-2">
+                              <div className="flex items-start gap-2">
+                                <Camera className="mt-0.5 h-4 w-4 shrink-0 text-blue-500" />
+                                <div>
+                                  <p>
+                                    <strong>200MP Ultra High-Resolution Camera</strong>
+                                  </p>
+                                </div>
+                              </div>
+                              <div className="flex items-start gap-2">
+                                <Video className="mt-0.5 h-4 w-4 shrink-0 text-red-500" />
+                                <div>
+                                  <p>
+                                    <strong>8K Video Recording</strong>
+                                  </p>
+                                </div>
+                              </div>
+                              <div className="flex items-start gap-2">
+                                <Moon className="mt-0.5 h-4 w-4 shrink-0 text-indigo-500" />
+                                <div>
+                                  <p>
+                                    <strong>Night Mode</strong> for dreamy, low-light
+                                    settings
+                                  </p>
+                                </div>
+                              </div>
+                              <div className="flex items-start gap-2">
+                                <Zap className="mt-0.5 h-4 w-4 shrink-0 text-green-500" />
+                                <div>
+                                  <p>
+                                    <strong>AI-Enhanced Image Processing</strong>
+                                  </p>
+                                </div>
+                              </div>
+                              <div className="flex items-start gap-2">
+                                <Move3D className="mt-0.5 h-4 w-4 shrink-0 text-purple-500" />
+                                <div>
+                                  <p>
+                                    <strong>DJI Osmo Gimbal</strong> for smooth, cinematic
+                                    movement
+                                  </p>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        <Separator />
+
+                        {/* Package Details */}
+                        <div className="space-y-3">
+                          <div className="flex items-center gap-2">
+                            <h3 className="text-lg font-semibold">
+                              🎥 ₹1500 Photoshoot + Video Coverage Package
+                            </h3>
+                          </div>
+                          <div className="space-y-2 pl-7 text-sm">
+                            <p className="text-muted-foreground mb-3">
+                              Package Includes:
+                            </p>
+                            <div className="grid gap-2">
+                              <div className="flex items-start gap-2">
+                                <Camera className="mt-0.5 h-4 w-4 shrink-0 text-blue-500" />
+                                <div>
+                                  <p>
+                                    <strong>📸 Photoshoot + video shoot</strong> for up to
+                                    1 hour
+                                  </p>
+                                </div>
+                              </div>
+                              <div className="flex items-start gap-2">
+                                <Video className="mt-0.5 h-4 w-4 shrink-0 text-red-500" />
+                                <div>
+                                  <p>
+                                    <strong>🎥 Full coverage</strong> of your entry and
+                                    celebration moments
+                                  </p>
+                                </div>
+                              </div>
+                              <div className="flex items-start gap-2">
+                                <Scissors className="mt-0.5 h-4 w-4 shrink-0 text-purple-500" />
+                                <div>
+                                  <p>
+                                    <strong>✂ One edited highlight video clip</strong> of
+                                    upto 1 min (with transitions and music)
+                                  </p>
+                                </div>
+                              </div>
+                              <div className="flex items-start gap-2">
+                                <Heart className="mt-0.5 h-4 w-4 shrink-0 text-pink-500" />
+                                <div>
+                                  <p>
+                                    <strong>
+                                      💌 A selection of candid, aesthetic photos
+                                    </strong>{" "}
+                                    from your event
+                                  </p>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        <Separator />
+
+                        {/* Sample Viewing */}
+                        <div className="space-y-3">
+                          <div className="flex items-center gap-2">
+                            <h3 className="text-lg font-semibold">
+                              💬 See Before You Decide
+                            </h3>
+                          </div>
+                          <div className="pl-7 text-sm">
+                            <p className="text-muted-foreground mb-3">
+                              We understand how personal and important this decision is.
+                              That&apos;s why we&apos;re happy to share real samples of
+                              past celebrations — so you can view the photo and video
+                              output before choosing to go ahead.
+                            </p>
+                            <p className="text-muted-foreground">
+                              Our aim is to make this experience accessible and
+                              meaningful, without ever compromising on quality. If
+                              you&apos;d like to preview our work, just let us know —
+                              we&apos;d love to share the magic 💛
+                            </p>
+                          </div>
+                        </div>
+
+                        <div className="bg-card rounded-lg p-3 text-center">
+                          <p className="text-sm font-medium">
+                            Preserving your precious moments with cinematic quality and
+                            heartfelt care.
+                          </p>
+                        </div>
+                      </div>
+                    </div>
                   </DialogContent>
                 </Dialog>
               </div>
@@ -484,18 +515,27 @@ export default function StepTwo() {
             <CardContent>
               <RadioGroup
                 onValueChange={(value: string) => {
+                  if (value === "none") {
+                    setPhotographyPackage(null);
+                    setReservationData({
+                      ...reservation,
+                      photography: undefined,
+                    });
+                    return;
+                  }
                   setPhotographyPackage(value);
                   setReservationData({
                     ...reservation,
                     photography: value,
                   });
                 }}
-                defaultValue={reservation.photography || photographyPackage || undefined}
+                defaultValue={reservation.photography || photographyPackage || "none"}
                 className="space-y-3"
               >
                 <Label
                   className={`flex cursor-pointer items-center justify-between rounded-xl border-2 p-4 transition-all hover:shadow-md ${
-                    photographyPackage === "photoshoot"
+                    photographyPackage === "photoshoot" ||
+                    reservation.photography === "photoshoot"
                       ? "border-primary bg-primary/5 shadow-xs"
                       : "border-border hover:border-primary/30"
                   }`}
@@ -516,7 +556,7 @@ export default function StepTwo() {
 
                 <Label
                   className={`flex cursor-pointer items-center justify-between rounded-xl border-2 p-4 transition-all hover:shadow-md ${
-                    photographyPackage === "video"
+                    photographyPackage === "video" || reservation.photography === "video"
                       ? "border-primary bg-primary/5 shadow-xs"
                       : "border-border hover:border-primary/30"
                   }`}
@@ -535,6 +575,24 @@ export default function StepTwo() {
                     <div className="text-muted-foreground text-xs">Most popular</div>
                   </div>
                 </Label>
+
+                <Label
+                  className={`flex cursor-pointer items-center justify-between rounded-xl border-2 p-4 transition-all hover:shadow-md ${
+                    photographyPackage === "none" || reservation.photography === undefined
+                      ? "border-primary bg-primary/5 shadow-xs"
+                      : "border-border hover:border-primary/30"
+                  }`}
+                >
+                  <div className="flex items-center space-x-3">
+                    <RadioGroupItem value="none" id="none" />
+                    <div>
+                      <div className="font-medium">Skip Photography</div>
+                      <div className="text-muted-foreground text-sm">
+                        No photography or video coverage
+                      </div>
+                    </div>
+                  </div>
+                </Label>
               </RadioGroup>
             </CardContent>
           </Card>
@@ -549,88 +607,160 @@ export default function StepTwo() {
                 <div>
                   <CardTitle className="text-xl">LED Letter Lights</CardTitle>
                   <CardDescription className="text-sm">
-                    Illuminated name and age displays
+                    Illuminated displays (optional)
                   </CardDescription>
                 </div>
               </div>
             </CardHeader>
             <CardContent className="space-y-6">
-              {/* Name Section */}
-              <div className="space-y-3">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <Label className="text-sm font-medium">Name Display</Label>
-                    <p className="text-muted-foreground text-xs">
-                      Up to 7 letters •{" "}
-                      <span className="text-green-500">
-                        {formatCurrency(ledLetterLightName)}
-                      </span>
-                    </p>
-                  </div>
-                  <Switch
-                    checked={!!reservation.ledLetterName || wantsLedLetterLightName}
-                    onCheckedChange={(e) => {
-                      setWantsLedLetterLightName(e);
-                      setLedLetterName(undefined);
-                      setReservationData({
-                        ...reservation,
-                        ledLetterName: undefined,
-                      });
-                    }}
-                  />
-                </div>
-                <Input
-                  value={ledLetterName || reservation.ledLetterName}
-                  onChange={(e) => {
-                    setLedLetterName(e.target.value);
+              <RadioGroup
+                value={
+                  wantsLedLetterLightName || reservation.ledLetterName
+                    ? "name"
+                    : wantsLedLetterLightAge || reservation.ledLetterAge
+                      ? "age"
+                      : "none"
+                }
+                onValueChange={(value) => {
+                  if (value === "name") {
+                    setWantsLedLetterLightName(true);
+                    setWantsLedLetterLightAge(false);
+                    setLedLetterAge(undefined);
                     setReservationData({
                       ...reservation,
-                      ledLetterName: e.target.value,
+                      ledLetterAge: undefined,
                     });
-                  }}
-                  placeholder="Enter name"
-                  maxLength={7}
-                  className="h-11"
-                  disabled={!wantsLedLetterLightName && !reservation.ledLetterName}
-                />
-              </div>
-              <Separator />
-              {/* Age Section */}
-              <div className="space-y-3">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <Label className="text-sm font-medium">Age Display</Label>
-                    <p className="text-xs text-green-500">
-                      {formatCurrency(ledLetterLightAge)}
-                    </p>
-                  </div>
-                  <Switch
-                    checked={wantsLedLetterLightAge || !!reservation.ledLetterAge}
-                    onCheckedChange={(e) => {
-                      setWantsLedLetterLightAge(e);
-                      setLedLetterAge(undefined);
-                      setReservationData({
-                        ...reservation,
-                        ledLetterAge: undefined,
-                      });
-                    }}
-                  />
-                </div>
-                <Input
-                  value={reservation.ledLetterAge || ledLetterAge}
-                  onChange={(e) => {
-                    setLedLetterAge(e.target.value);
+                  } else if (value === "age") {
+                    setWantsLedLetterLightName(false);
+                    setWantsLedLetterLightAge(true);
+                    setLedLetterName(undefined);
                     setReservationData({
                       ...reservation,
-                      ledLetterAge: e.target.value,
+                      ledLetterName: undefined,
                     });
-                  }}
-                  placeholder="Enter age"
-                  maxLength={2}
-                  className="h-11"
-                  disabled={!wantsLedLetterLightAge && !reservation.ledLetterAge}
-                />
-              </div>
+                  } else {
+                    setWantsLedLetterLightName(false);
+                    setWantsLedLetterLightAge(false);
+                    setLedLetterName(undefined);
+                    setLedLetterAge(undefined);
+                    setReservationData({
+                      ...reservation,
+                      ledLetterName: undefined,
+                      ledLetterAge: undefined,
+                    });
+                  }
+                }}
+                className="space-y-3"
+              >
+                <Label
+                  className={`flex cursor-pointer items-center justify-between rounded-xl border-2 p-4 transition-all hover:shadow-md ${
+                    wantsLedLetterLightName || reservation.ledLetterName
+                      ? "border-primary bg-primary/5 shadow-xs"
+                      : "border-border hover:border-primary/30"
+                  }`}
+                >
+                  <div className="flex items-center space-x-3">
+                    <RadioGroupItem value="name" id="led-name" />
+                    <div>
+                      <div className="font-medium">Name Display</div>
+                      <div className="text-muted-foreground text-sm">Up to 7 letters</div>
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <div className="text-lg font-medium text-emerald-600">
+                      +{formatCurrency(ledLetterLightName)}
+                    </div>
+                  </div>
+                </Label>
+
+                <Label
+                  className={`flex cursor-pointer items-center justify-between rounded-xl border-2 p-4 transition-all hover:shadow-md ${
+                    wantsLedLetterLightAge || reservation.ledLetterAge
+                      ? "border-primary bg-primary/5 shadow-xs"
+                      : "border-border hover:border-primary/30"
+                  }`}
+                >
+                  <div className="flex items-center space-x-3">
+                    <RadioGroupItem value="age" id="led-age" />
+                    <div>
+                      <div className="font-medium">Age Display</div>
+                      <div className="text-muted-foreground text-sm">Up to 2 digits</div>
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <div className="text-lg font-medium text-emerald-600">
+                      +{formatCurrency(ledLetterLightAge)}
+                    </div>
+                  </div>
+                </Label>
+
+                <Label
+                  className={`flex cursor-pointer items-center justify-between rounded-xl border-2 p-4 transition-all hover:shadow-md ${
+                    !wantsLedLetterLightName &&
+                    !wantsLedLetterLightAge &&
+                    !reservation.ledLetterName &&
+                    !reservation.ledLetterAge
+                      ? "border-primary bg-primary/5 shadow-xs"
+                      : "border-border hover:border-primary/30"
+                  }`}
+                >
+                  <div className="flex items-center space-x-3">
+                    <RadioGroupItem value="none" id="led-none" />
+                    <div>
+                      <div className="font-medium">None</div>
+                      <div className="text-muted-foreground text-sm">
+                        Skip LED displays
+                      </div>
+                    </div>
+                  </div>
+                </Label>
+              </RadioGroup>
+
+              {/* Name Input */}
+              {(wantsLedLetterLightName || reservation.ledLetterName) && (
+                <div className="bg-primary/5 space-y-2 rounded-lg p-4">
+                  <Label htmlFor="name-input" className="text-sm font-medium">
+                    Enter Name
+                  </Label>
+                  <Input
+                    id="name-input"
+                    value={ledLetterName || reservation.ledLetterName || ""}
+                    onChange={(e) => {
+                      setLedLetterName(e.target.value);
+                      setReservationData({
+                        ...reservation,
+                        ledLetterName: e.target.value,
+                      });
+                    }}
+                    placeholder="Enter name (max 7 letters)"
+                    maxLength={7}
+                    className="h-11"
+                  />
+                </div>
+              )}
+
+              {/* Age Input */}
+              {(wantsLedLetterLightAge || reservation.ledLetterAge) && (
+                <div className="bg-primary/5 space-y-2 rounded-lg p-4">
+                  <Label htmlFor="age-input" className="text-sm font-medium">
+                    Enter Age
+                  </Label>
+                  <Input
+                    id="age-input"
+                    value={ledLetterAge || reservation.ledLetterAge || ""}
+                    onChange={(e) => {
+                      setLedLetterAge(e.target.value);
+                      setReservationData({
+                        ...reservation,
+                        ledLetterAge: e.target.value,
+                      });
+                    }}
+                    placeholder="Enter age (max 2 digits)"
+                    maxLength={2}
+                    className="h-11"
+                  />
+                </div>
+              )}
             </CardContent>
             <CardFooter>
               <Image
@@ -687,32 +817,72 @@ export default function StepTwo() {
 
           {/* Fog Entry */}
           <Card className="border-none">
-            <CardHeader>
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <div className="rounded-lg bg-gray-100 p-2 dark:bg-gray-900/20">
-                    <Cloud className="h-5 w-5 text-gray-600 dark:text-gray-400" />
-                  </div>
-                  <div>
-                    <CardTitle className="text-xl">Fog Entry Effect</CardTitle>
-                    <CardDescription className="text-sm">
-                      Mesmerizing fog for your grand entrance •{" "}
-                      <span className="font-semibold text-emerald-600">₹400</span>
-                    </CardDescription>
-                  </div>
+            <CardHeader className="pb-4">
+              <div className="flex items-center gap-3">
+                <div className="rounded-lg bg-gray-100 p-2 dark:bg-gray-900/20">
+                  <Cloud className="h-5 w-5 text-gray-600 dark:text-gray-400" />
                 </div>
-                <Switch
-                  checked={reservation.fogEntry || wantsFogEntry}
-                  onCheckedChange={(value) => {
-                    setWantsFogEntry(value);
-                    setReservationData({
-                      ...reservation,
-                      fogEntry: value,
-                    });
-                  }}
-                />
+                <div>
+                  <CardTitle className="text-xl">Fog Entry Effect</CardTitle>
+                  <CardDescription className="text-sm">
+                    Grand entrance enhancement (optional)
+                  </CardDescription>
+                </div>
               </div>
             </CardHeader>
+            <CardContent>
+              <RadioGroup
+                value={reservation.fogEntry || wantsFogEntry ? "yes" : "no"}
+                onValueChange={(value) => {
+                  const isSelected = value === "yes";
+                  setWantsFogEntry(isSelected);
+                  setReservationData({
+                    ...reservation,
+                    fogEntry: isSelected,
+                  });
+                }}
+                className="space-y-3"
+              >
+                <Label
+                  className={`flex cursor-pointer items-center justify-between rounded-xl border-2 p-4 transition-all hover:shadow-md ${
+                    reservation.fogEntry || wantsFogEntry
+                      ? "border-primary bg-primary/5 shadow-xs"
+                      : "border-border hover:border-primary/30"
+                  }`}
+                >
+                  <div className="flex items-center space-x-3">
+                    <RadioGroupItem value="yes" id="fog-yes" />
+                    <div>
+                      <div className="font-medium">Add Fog Effect</div>
+                      <div className="text-muted-foreground text-sm">
+                        Mesmerizing fog for your grand entrance
+                      </div>
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <div className="text-lg font-medium text-emerald-600">+₹400</div>
+                  </div>
+                </Label>
+
+                <Label
+                  className={`flex cursor-pointer items-center justify-between rounded-xl border-2 p-4 transition-all hover:shadow-md ${
+                    !reservation.fogEntry && !wantsFogEntry
+                      ? "border-primary bg-primary/5 shadow-xs"
+                      : "border-border hover:border-primary/30"
+                  }`}
+                >
+                  <div className="flex items-center space-x-3">
+                    <RadioGroupItem value="no" id="fog-no" />
+                    <div>
+                      <div className="font-medium">Skip Fog Effect</div>
+                      <div className="text-muted-foreground text-sm">
+                        Continue without fog
+                      </div>
+                    </div>
+                  </div>
+                </Label>
+              </RadioGroup>
+            </CardContent>
             <CardFooter>
               <Image
                 src={"/FOG ENTRY.jpg"}
@@ -726,34 +896,74 @@ export default function StepTwo() {
 
           {/* Rose Path */}
           <Card className="border-none">
-            <CardHeader>
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <div className="rounded-lg bg-rose-100 p-2 dark:bg-rose-900/20">
-                    <Flame className="h-5 w-5 text-rose-600 dark:text-rose-400" />
-                  </div>
-                  <div>
-                    <CardTitle className="text-xl">Candlelight Rose Path</CardTitle>
-                    <CardDescription className="text-sm">
-                      Elegant candlelit pathway •{" "}
-                      <span className="font-semibold text-emerald-600">
-                        {formatCurrency(candleLightRosePath)}
-                      </span>
-                    </CardDescription>
-                  </div>
+            <CardHeader className="pb-4">
+              <div className="flex items-center gap-3">
+                <div className="rounded-lg bg-rose-100 p-2 dark:bg-rose-900/20">
+                  <Flame className="h-5 w-5 text-rose-600 dark:text-rose-400" />
                 </div>
-                <Switch
-                  checked={reservation.rosePath || wantsRosePath}
-                  onCheckedChange={(value) => {
-                    setWantsRosePath(value);
-                    setReservationData({
-                      ...reservation,
-                      rosePath: value,
-                    });
-                  }}
-                />
+                <div>
+                  <CardTitle className="text-xl">Candlelight Rose Path</CardTitle>
+                  <CardDescription className="text-sm">
+                    Elegant pathway enhancement (optional)
+                  </CardDescription>
+                </div>
               </div>
             </CardHeader>
+            <CardContent>
+              <RadioGroup
+                value={reservation.rosePath || wantsRosePath ? "yes" : "no"}
+                onValueChange={(value) => {
+                  const isSelected = value === "yes";
+                  setWantsRosePath(isSelected);
+                  setReservationData({
+                    ...reservation,
+                    rosePath: isSelected,
+                  });
+                }}
+                className="space-y-3"
+              >
+                <Label
+                  className={`flex cursor-pointer items-center justify-between rounded-xl border-2 p-4 transition-all hover:shadow-md ${
+                    reservation.rosePath || wantsRosePath
+                      ? "border-primary bg-primary/5 shadow-xs"
+                      : "border-border hover:border-primary/30"
+                  }`}
+                >
+                  <div className="flex items-center space-x-3">
+                    <RadioGroupItem value="yes" id="rose-yes" />
+                    <div>
+                      <div className="font-medium">Add Rose Path</div>
+                      <div className="text-muted-foreground text-sm">
+                        Elegant candlelit pathway
+                      </div>
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <div className="text-lg font-medium text-emerald-600">
+                      +{formatCurrency(candleLightRosePath)}
+                    </div>
+                  </div>
+                </Label>
+
+                <Label
+                  className={`flex cursor-pointer items-center justify-between rounded-xl border-2 p-4 transition-all hover:shadow-md ${
+                    !reservation.rosePath && !wantsRosePath
+                      ? "border-primary bg-primary/5 shadow-xs"
+                      : "border-border hover:border-primary/30"
+                  }`}
+                >
+                  <div className="flex items-center space-x-3">
+                    <RadioGroupItem value="no" id="rose-no" />
+                    <div>
+                      <div className="font-medium">Skip Rose Path</div>
+                      <div className="text-muted-foreground text-sm">
+                        Continue without pathway
+                      </div>
+                    </div>
+                  </div>
+                </Label>
+              </RadioGroup>
+            </CardContent>
             <CardFooter>
               <Image
                 src={"/ROSE PATH.jpg"}
