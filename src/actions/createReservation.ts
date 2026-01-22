@@ -131,7 +131,7 @@ export async function createReservation(
 
   const checkExistingBookings = await prisma.reservations.findFirst({
     where: {
-      date: data.date,
+      date: new Date(data.date),
       room: data.room,
       timeSlot: data.timeSlot,
       paymentStatus: true,

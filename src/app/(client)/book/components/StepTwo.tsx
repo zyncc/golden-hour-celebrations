@@ -164,7 +164,7 @@ export default function StepTwo() {
                       className="w-full py-6 text-base font-semibold"
                       variant={reservation.cake ? "outline" : "default"}
                     >
-                      {reservation.cake ? "Change Cake" : "🍰 Select a Cake"}
+                      {reservation.cake ? "Change Cake" : "Select Cake"}
                     </Button>
                   }
                 />

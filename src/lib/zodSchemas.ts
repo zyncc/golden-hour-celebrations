@@ -58,7 +58,7 @@ export const payReservationSchema = z.object({
   occasion: z.string({
     message: "Please select one",
   }),
-  date: z.date({ message: "Date is required" }),
+  date: z.string({ message: "Date is required" }),
   room: z.string(),
   timeSlot: z.string(),
   cake: z.string().optional(),
