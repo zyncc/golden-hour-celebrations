@@ -44,19 +44,10 @@ export const payReservationSchema = z.object({
     .max(8, { message: "Maximum 8 letters allowed" })
     .optional(),
   writingOnCake: z.string().max(15, "Maximum 15 characters allowed").optional(),
-  specialRequests: z
-    .string()
-    .max(200, "Maximum 200 characters allowed")
-    .optional(),
+  specialRequests: z.string().max(200, "Maximum 200 characters allowed").optional(),
   noOfPeople: z.coerce.number().min(2, "Minimum 2 people are required!"),
-  ledLetterName: z
-    .string()
-    .max(7, { message: "Maximum 7 letters allowed" })
-    .optional(),
-  ledLetterAge: z
-    .string()
-    .max(2, { message: "Maximum 2 digits allowed" })
-    .optional(),
+  ledLetterName: z.string().max(7, { message: "Maximum 7 letters allowed" }).optional(),
+  ledLetterAge: z.string().max(2, { message: "Maximum 2 digits allowed" }).optional(),
   email: z.string().email("Enter a valid email address"),
   findus: z.string({
     message: "Please select one",
@@ -94,15 +85,9 @@ export const ManualBookingSchema = z.object({
     message: "Please select one",
   }),
   notes: z.string().optional(),
-  ledLetterName: z
-    .string()
-    .max(8, { message: "Maximum 8 letters allowed" })
-    .optional(),
-  ledLetterAge: z
-    .string()
-    .max(2, { message: "Maximum 2 digits allowed" })
-    .optional(),
-  date: z.date({ message: "Date is required" }),
+  ledLetterName: z.string().max(8, { message: "Maximum 8 letters allowed" }).optional(),
+  ledLetterAge: z.string().max(2, { message: "Maximum 2 digits allowed" }).optional(),
+  date: z.string({ message: "Date is required" }),
   room: z.string(),
   timeSlot: z.string(),
   cake: z.string().optional(),

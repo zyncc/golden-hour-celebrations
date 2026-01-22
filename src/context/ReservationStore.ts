@@ -9,7 +9,7 @@ export type Reservation = {
   nameToDisplay?: string | undefined;
   writingOnCake?: string | undefined;
   noOfPeople?: number | undefined;
-  date?: Date | undefined;
+  date?: string | undefined;
   room?: string | undefined;
   timeSlot?: string | undefined;
   price?: number | undefined;

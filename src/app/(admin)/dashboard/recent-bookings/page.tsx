@@ -1,8 +1,9 @@
 import { auth } from "@/auth";
 import DashboardWrapper from "@/components/dashboard/dashboard-wrapper";
 import { RecentReservationsTable } from "@/components/dashboard/recent-bookings-table";
+import { TIME_ZONE } from "@/lib/constants";
 import prisma from "@/lib/prisma";
-import { endOfMonth, startOfDay } from "date-fns";
+import { Temporal } from "@js-temporal/polyfill";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 
@@ -14,16 +15,28 @@ async function Page() {
     return redirect(`${process.env.NEXT_PUBLIC_BASE_URL}/signin`);
   }
 
-  const now = new Date();
-  const startToday = startOfDay(now);
-  const endOfThisMonth = endOfMonth(now);
+  const now = Temporal.Now.zonedDateTimeISO(TIME_ZONE);
+
+  // today IST at 00:00
+  const startTodayInstant = now
+    .toPlainDate()
+    .toZonedDateTime({ timeZone: TIME_ZONE })
+    .toInstant();
+
+  // end of month IST (exclusive)
+  const endOfMonthInstant = now
+    .toPlainDate()
+    .with({ day: 1 })
+    .add({ months: 1 })
+    .toZonedDateTime({ timeZone: TIME_ZONE })
+    .toInstant();
 
   const reservations = await prisma.reservations.findMany({
     where: {
       paymentStatus: true,
       date: {
-        gte: startToday,
-        lte: endOfThisMonth,
+        gte: new Date(startTodayInstant.epochMilliseconds),
+        lt: new Date(endOfMonthInstant.epochMilliseconds),
       },
     },
     orderBy: {

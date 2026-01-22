@@ -1,5 +1,7 @@
+import { Temporal } from "@js-temporal/polyfill";
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
+import { ReservationDetails } from "./types";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -50,4 +52,74 @@ export function getEventTimeRange(baseDateStr: string, timeSlot: string) {
     startDateTime: startDateTime.toISOString(),
     endDateTime: endDateTime.toISOString(),
   };
+}
+
+export function parseSlotStart(slot: string): Temporal.PlainTime {
+  const [start] = slot.split(" - ");
+
+  const match = start.match(/(\d{1,2})(?::(\d{2}))?(AM|PM)/);
+  if (!match) throw new Error("Invalid slot");
+
+  let hour = Number(match[1]);
+  const minute = match[2] ? Number(match[2]) : 0;
+  const period = match[3];
+
+  if (period === "PM" && hour !== 12) hour += 12;
+  if (period === "AM" && hour === 12) hour = 0;
+
+  return Temporal.PlainTime.from({ hour, minute });
+}
+
+export function toISTZoned(dateISO: string) {
+  return Temporal.Instant.from(dateISO).toZonedDateTimeISO("Asia/Kolkata");
+}
+
+export function isSlotUnavailable(
+  slot: string,
+  room: string,
+  reservations: ReservationDetails[] | undefined,
+  selectedDate: string, // yyyy-mm-dd
+) {
+  const slotStartTime = parseSlotStart(slot);
+  const todayIST = Temporal.Now.plainDateISO("Asia/Kolkata");
+  const selectedPlainDate = Temporal.PlainDate.from(selectedDate);
+
+  // Rule 1: past slot on today
+  if (selectedPlainDate.equals(todayIST)) {
+    const nowIST = Temporal.Now.zonedDateTimeISO("Asia/Kolkata");
+
+    const slotZoned = selectedPlainDate.toZonedDateTime({
+      plainTime: slotStartTime,
+      timeZone: "Asia/Kolkata",
+    });
+
+    if (Temporal.ZonedDateTime.compare(slotZoned, nowIST) < 0) {
+      return true;
+    }
+  }
+  if (!reservations) return false;
+
+  // Rule 2: already booked for THIS room
+  const isBooked = reservations?.some((reservation) => {
+    if (reservation.room !== room) return false;
+
+    const zoned = toISTZoned(
+      typeof reservation.date === "string"
+        ? reservation.date
+        : reservation.date.toISOString(),
+    );
+
+    return zoned.toPlainTime().equals(slotStartTime);
+  });
+
+  if (isBooked) return true;
+
+  return false;
+}
+
+export function FormatDate(date: Date) {
+  return Temporal.Instant.fromEpochMilliseconds(date.getTime())
+    .toZonedDateTimeISO("Asia/Kolkata")
+    .toPlainDate()
+    .toString();
 }

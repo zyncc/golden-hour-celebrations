@@ -196,7 +196,7 @@ export default function StepFour() {
                   )}
                   <div className="flex items-center justify-between">
                     <span className="font-medium">Date</span>
-                    <span>{reservation.date?.toDateString()}</span>
+                    <span>{new Date(reservation.date!).toDateString()}</span>
                   </div>
                   <div className="flex items-center justify-between">
                     <span className="font-medium">Customer Name</span>
