@@ -2,6 +2,7 @@
 
 import { auth } from "@/auth";
 import { Reservation } from "@/context/ReservationStore";
+import ReservationConfirmationEmail from "@/emails/receipt";
 import {
   advanceAmount,
   cakePrice,
@@ -17,6 +18,7 @@ import { Temporal } from "@js-temporal/polyfill";
 import { randomUUID } from "crypto";
 import { revalidatePath } from "next/cache";
 import { headers } from "next/headers";
+import { Resend } from "resend";
 import { z } from "zod";
 
 export async function createReservation(
@@ -282,15 +284,15 @@ export async function CreateManualBooking(data: Data) {
     },
   });
 
-  // const resend = new Resend(process.env.RESEND_API_KEY);
-  // const emailSent = await resend.emails.send({
-  //   from: "Golden Hour Celebrations <info@goldenhourcelebrations.in>",
-  //   to: [booking.email.toLowerCase(), "goldenhourcelebrationsblr@gmail.com"],
-  //   subject: "Receipt for your Reservation",
-  //   react: ReservationConfirmationEmail({ getReservationDetails: booking }),
-  // });
+  const resend = new Resend(process.env.RESEND_API_KEY);
+  const emailSent = await resend.emails.send({
+    from: "Golden Hour Celebrations <info@goldenhourcelebrations.in>",
+    to: [booking.email.toLowerCase(), "goldenhourcelebrationsblr@gmail.com"],
+    subject: "Receipt for your Reservation",
+    react: ReservationConfirmationEmail({ getReservationDetails: booking }),
+  });
 
-  // console.log(emailSent);
+  console.log(emailSent);
 }
 
 export async function DeleteReservation(id: string) {
