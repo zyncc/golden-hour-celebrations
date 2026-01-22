@@ -204,7 +204,7 @@ export default function StepThreeForm() {
                     className="text-base"
                     data-invalid={!!errors.noOfPeople}
                   />
-                  <FieldDescription>Minimum 2, maximum 15 people</FieldDescription>
+                  <FieldDescription>Minimum 2, maximum 10 people</FieldDescription>
                   <FieldError
                     errors={errors.noOfPeople ? [errors.noOfPeople] : undefined}
                   />

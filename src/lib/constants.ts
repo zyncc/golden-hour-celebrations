@@ -81,7 +81,7 @@ export const items = [
       "Private Movie Time Experience",
       "LED Letter Name",
       "Access to OTT Platforms",
-      "Upto 4 people (Max 15 people, additional ₹200 per person)",
+      "Upto 4 people (Max 10 people, additional ₹200 per person)",
     ],
     popular: true,
     price: 1899,

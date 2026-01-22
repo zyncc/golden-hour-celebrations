@@ -158,16 +158,33 @@ export default function StepTwo() {
 
               {/* Cake Selection Button */}
               <Dialog>
-                <DialogTrigger
-                  render={
+                <div className="flex gap-x-4">
+                  {reservation.cake && (
                     <Button
-                      className="w-full py-6 text-base font-semibold"
-                      variant={reservation.cake ? "outline" : "default"}
+                      onClick={() => {
+                        setReservationData({
+                          ...reservation,
+                          cake: undefined,
+                          writingOnCake: undefined,
+                        });
+                      }}
+                      variant="destructive"
+                      className="flex-1"
                     >
-                      {reservation.cake ? "Change Cake" : "Select Cake"}
+                      Remove Cake Selection
                     </Button>
-                  }
-                />
+                  )}
+                  <DialogTrigger
+                    render={
+                      <Button
+                        className={"flex-1"}
+                        variant={reservation.cake ? "outline" : "default"}
+                      >
+                        {reservation.cake ? "Change Cake" : "Select Cake"}
+                      </Button>
+                    }
+                  />
+                </div>
                 <DialogContent className="flex flex-col gap-0 sm:max-h-[min(640px,80vh)] [&>button:last-child]:top-3.5">
                   <div className="space-y-4 px-6 py-6">
                     <div>
@@ -205,7 +222,7 @@ export default function StepTwo() {
                                 )}
 
                                 <Image
-                                  src={imageSrc || "/placeholder.svg"}
+                                  src={imageSrc}
                                   width={200}
                                   height={200}
                                   alt={cake}
@@ -243,23 +260,6 @@ export default function StepTwo() {
                   </div>
                 </DialogContent>
               </Dialog>
-
-              {/* Remove Cake Option */}
-              {reservation.cake && (
-                <Button
-                  onClick={() => {
-                    setReservationData({
-                      ...reservation,
-                      cake: undefined,
-                      writingOnCake: undefined,
-                    });
-                  }}
-                  variant="ghost"
-                  className="w-full text-red-600 hover:bg-red-50 hover:text-red-700"
-                >
-                  ✕ Remove Cake Selection
-                </Button>
-              )}
 
               {/* Custom Message */}
               {reservation.cake && (

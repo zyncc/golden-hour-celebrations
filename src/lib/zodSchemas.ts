@@ -26,10 +26,10 @@ export const getStepThreeFormSchema = (room: string) =>
       .number()
       .min(2, "Minimum 2 people are required!")
       .max(
-        room === "Dreamscape Theatre" ? 4 : 15,
+        room === "Dreamscape Theatre" ? 4 : 10,
         room === "Dreamscape Theatre"
           ? "Maximum 4 people are allowed"
-          : "Maximum 15 people are allowed",
+          : "Maximum 10 people are allowed",
       ),
   });
 
