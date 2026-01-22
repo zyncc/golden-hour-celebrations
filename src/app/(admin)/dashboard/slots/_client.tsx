@@ -5,6 +5,7 @@ import { Calendar } from "@/components/ui/calendar";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { dreamscapeTimeSlots, EliteTimeSlots } from "@/lib/constants";
 import type { ReservationDetails } from "@/lib/types";
+import { FormatDate, isSlotUnavailable } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 
@@ -14,12 +15,13 @@ export default function SlotsClient({
   reservations: ReservationDetails[];
 }) {
   const currentDate = new Date();
-  const [date, setDate] = useState<Date | undefined>(currentDate);
+  const [date, setDate] = useState<string | undefined>(FormatDate(currentDate));
   const nextMonthDate = new Date(
     currentDate.getFullYear(),
     currentDate.getMonth() + 1,
     1,
   );
+
   const { data } = useQuery({
     queryKey: ["getReservation", date],
     initialData: reservations,
@@ -27,7 +29,7 @@ export default function SlotsClient({
     refetchOnWindowFocus: true,
     enabled: !!date,
     queryFn: async () => {
-      const res = await fetch(`/api/fetchReservations?date=${date?.toISOString()}`);
+      const res = await fetch(`/api/fetchReservations?date=${date}`);
       const data: ReservationDetails[] = await res.json();
       return data;
     },
@@ -41,9 +43,9 @@ export default function SlotsClient({
             disabled={{ before: currentDate }}
             startMonth={currentDate}
             endMonth={nextMonthDate}
-            selected={date}
+            selected={new Date(date!)}
             onSelect={(date) => {
-              setDate(date);
+              setDate(FormatDate(date!));
             }}
           />
         </CardContent>
@@ -51,58 +53,42 @@ export default function SlotsClient({
       <Card className="flex-1">
         <CardHeader>DreamScape Theatre</CardHeader>
         <CardContent className="grid grid-cols-1 gap-5">
-          {dreamscapeTimeSlots.map((slot) => (
-            <Button
-              key={slot}
-              disabled={
-                !!data?.find(
-                  (reservation) =>
-                    reservation.timeSlot === slot &&
-                    reservation.room === "Dreamscape Theatre",
-                )
-              }
-              variant={
-                data?.some(
-                  (reservation) =>
-                    reservation.timeSlot === slot &&
-                    reservation.room === "Dreamscape Theatre",
-                )
-                  ? "destructive"
-                  : "secondary"
-              }
-              className={"flex-1 whitespace-nowrap"}
-            >
-              {slot}
-            </Button>
-          ))}
+          {dreamscapeTimeSlots.map((slot) => {
+            const unavailable = isSlotUnavailable(
+              slot,
+              "Dreamscape Theatre",
+              data,
+              date!,
+            );
+            return (
+              <Button
+                key={slot}
+                disabled={unavailable}
+                variant={unavailable ? "destructive" : "secondary"}
+                className="flex-1 whitespace-nowrap"
+              >
+                {slot}
+              </Button>
+            );
+          })}
         </CardContent>
       </Card>
       <Card className="flex-1">
         <CardHeader>Elite Theatre</CardHeader>
         <CardContent className="grid grid-cols-1 gap-5">
-          {EliteTimeSlots.map((slot) => (
-            <Button
-              key={slot}
-              disabled={
-                !!data?.find(
-                  (reservation) =>
-                    reservation.timeSlot === slot && reservation.room === "Elite Theatre",
-                )
-              }
-              variant={
-                data?.some(
-                  (reservation) =>
-                    reservation.timeSlot === slot &&
-                    reservation.room === "Dreamscape Theatre",
-                )
-                  ? "destructive"
-                  : "secondary"
-              }
-              className={"flex-1 whitespace-nowrap"}
-            >
-              {slot}
-            </Button>
-          ))}
+          {EliteTimeSlots.map((slot) => {
+            const unavailable = isSlotUnavailable(slot, "Elite Theatre", data, date!);
+            return (
+              <Button
+                key={slot}
+                disabled={unavailable}
+                variant={unavailable ? "destructive" : "secondary"}
+                className="flex-1 whitespace-nowrap"
+              >
+                {slot}
+              </Button>
+            );
+          })}
         </CardContent>
       </Card>
     </div>

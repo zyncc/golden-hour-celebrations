@@ -9,9 +9,12 @@ import {
   candleLightRosePath,
   ledLetterLightAge,
   ledLetterLightName,
+  TIME_ZONE,
 } from "@/lib/constants";
 import prisma from "@/lib/prisma";
+import { parseSlotStart } from "@/lib/utils";
 import { ManualBookingSchema, payReservationSchema } from "@/lib/zodSchemas";
+import { Temporal } from "@js-temporal/polyfill";
 import { randomUUID } from "crypto";
 import { revalidatePath } from "next/cache";
 import { headers } from "next/headers";
@@ -26,6 +29,31 @@ export async function createReservation(
   let total = 0;
 
   let advanceAmountPrice = advanceAmount;
+
+  const plainDate = Temporal.PlainDate.from(reservation.date!);
+  const plainTime = parseSlotStart(reservation.timeSlot!);
+
+  console.log(plainDate.toString());
+  console.log(plainTime.toString());
+
+  const zonedDateTime = plainDate.toZonedDateTime({
+    plainTime,
+    timeZone: TIME_ZONE,
+  });
+
+  console.log(zonedDateTime.toString());
+  console.log(zonedDateTime.toInstant().toString());
+
+  // Selected booking instant (absolute UTC)
+  const selectedInstant = zonedDateTime.toInstant();
+
+  // Current instant (absolute UTC, server trusted)
+  const nowInstant = Temporal.Now.instant();
+
+  // Check if selected date time is greater than current time
+  if (Temporal.Instant.compare(selectedInstant, nowInstant) <= 0) {
+    throw new Error("Cannot book a past date or time slot");
+  }
 
   if (reservation.room === "Elite Theatre") {
     total += 1899;
@@ -127,7 +155,7 @@ export async function createReservation(
         nameToDisplay: data.nameToDisplay,
         writingOnCake: data.writingOnCake,
         specialRequests: data.specialRequests,
-        date: data.date,
+        date: new Date(zonedDateTime.epochMilliseconds),
         email: data.email,
         findUs: data.findus,
         name: data.name,
@@ -160,12 +188,36 @@ export async function CreateManualBooking(data: Data) {
     throw new Error("Unauthorized");
   }
 
+  const plainDate = Temporal.PlainDate.from(data.date);
+  const plainTime = parseSlotStart(data.timeSlot);
+
+  console.log(plainDate.toString());
+  console.log(plainTime.toString());
+
+  const zonedDateTime = plainDate.toZonedDateTime({
+    plainTime,
+    timeZone: TIME_ZONE,
+  });
+
+  console.log(zonedDateTime.toString());
+  console.log(zonedDateTime.toInstant().toString());
+
+  // Selected booking instant (absolute UTC)
+  const selectedInstant = zonedDateTime.toInstant();
+
+  // Current instant (absolute UTC, server trusted)
+  const nowInstant = Temporal.Now.instant();
+
+  // Check if selected date time is greater than current time
+  if (Temporal.Instant.compare(selectedInstant, nowInstant) <= 0) {
+    throw new Error("Cannot book a past date or time slot");
+  }
+
   const { advanceAmount, discount = 0, ...rest } = data;
   const checkExistingBookings = await prisma.reservations.findFirst({
     where: {
-      date: data.date,
+      date: new Date(zonedDateTime.epochMilliseconds),
       room: data.room,
-      timeSlot: data.timeSlot,
       paymentStatus: true,
     },
   });
@@ -222,7 +274,7 @@ export async function CreateManualBooking(data: Data) {
   const booking = await prisma.reservations.create({
     data: {
       ...rest,
-      date: data.date,
+      date: new Date(zonedDateTime.epochMilliseconds),
       discount,
       balanceAmount,
       advanceAmount,

@@ -59,6 +59,8 @@ export const auth = betterAuth({
     "http://localhost:3000",
     "https://goldenhourcelebrations.in",
     "https://admin.goldenhourcelebrations.in",
+    "https://preview.goldenhourcelebrations.in",
+    "https://admin.preview.goldenhourcelebrations.in",
   ],
   plugins: [
     admin({

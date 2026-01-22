@@ -33,7 +33,7 @@ import {
   ledLetterLightName,
 } from "@/lib/constants";
 import formatCurrency from "@/lib/formatCurrency";
-import { cn } from "@/lib/utils";
+import { cn, FormatDate, isSlotUnavailable } from "@/lib/utils";
 import { ManualBookingSchema } from "@/lib/zodSchemas";
 import type { Reservations } from "@/prisma/generated/prisma/client";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -45,23 +45,16 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import type { z } from "zod";
 
-export default function CreateBookingForm() {
-  const currentDate = new Date();
-  const currentMonth = currentDate.getMonth();
-  let nextMonth = currentMonth + 1;
-  let nextYear = currentDate.getFullYear();
-
-  if (nextMonth > 11) {
-    nextMonth = 0;
-    nextYear++;
-  }
-
-  const nextMonthDate = new Date(nextYear, nextMonth, 1);
+export default function CreateBookingForm({ currentDate }: { currentDate: string }) {
+  const today = useMemo(() => {
+    // Safe: only for UI disabling
+    return new Date(`${currentDate}T00:00:00`);
+  }, [currentDate]);
 
   // Local state
   const [open, setOpen] = useState(false);
   const [pending, setPending] = useState(false);
-  const [selectedDate, setSelectedDate] = useState<Date | undefined>();
+  const [selectedDate, setSelectedDate] = useState<string | undefined>();
   const [selectedRoom, setSelectedRoom] = useState<string>("");
   const [noOfPeople, setNoOfPeople] = useState<number>(0);
   const [advanceAmount, setAdvanceAmount] = useState<number>(0);
@@ -107,9 +100,7 @@ export default function CreateBookingForm() {
     enabled: !!selectedDate,
     queryFn: async () => {
       if (!selectedDate) return [];
-      const res = await fetch(
-        `/api/fetchReservations?date=${selectedDate.toISOString()}`,
-      );
+      const res = await fetch(`/api/fetchReservations?date=${selectedDate}`);
       return res.json();
     },
   });
@@ -237,7 +228,6 @@ export default function CreateBookingForm() {
   // Handle form submission
   async function handleFormSubmit(values: z.infer<typeof ManualBookingSchema>) {
     setPending(true);
-    console.log(values);
     try {
       const validation = ManualBookingSchema.safeParse(values);
       if (wantsLedName && !form.getValues("ledLetterName")) {
@@ -365,12 +355,12 @@ export default function CreateBookingForm() {
                         <PopoverContent className="w-auto p-0" align="start">
                           <Calendar
                             mode="single"
-                            disabled={{ before: currentDate }}
-                            startMonth={currentDate}
-                            selected={field.value}
+                            disabled={{ before: today }}
+                            startMonth={today}
+                            selected={new Date(field.value)}
                             onSelect={(date) => {
-                              field.onChange(date);
-                              setSelectedDate(date);
+                              field.onChange(FormatDate(date!));
+                              setSelectedDate(FormatDate(date!));
                               setOpen(false);
                             }}
                           />
@@ -435,9 +425,16 @@ export default function CreateBookingForm() {
                       {availableTimeSlots.map((slot) => {
                         const isBooked = isTimeSlotBooked(slot);
                         const isSelected = field.value === slot;
+
+                        const unavailable =
+                          !!selectedDate &&
+                          !!selectedRoom &&
+                          isSlotUnavailable(slot, selectedRoom, data, selectedDate);
+
                         const isDisabled =
                           (selectedRoom === "Dreamscape Theatre" && noOfPeople > 5) ||
                           isBooked ||
+                          unavailable ||
                           isLoading ||
                           !selectedDate ||
                           !selectedRoom ||
@@ -446,19 +443,19 @@ export default function CreateBookingForm() {
                         return (
                           <Button
                             key={slot}
+                            type="button"
+                            disabled={isDisabled}
                             variant={
                               isSelected
                                 ? "default"
-                                : isBooked
+                                : isBooked || unavailable
                                   ? "destructive"
                                   : "outline"
                             }
-                            type="button"
                             onClick={() => {
                               field.onChange(slot);
                               setSelectedTimeSlot(slot);
                             }}
-                            disabled={isDisabled}
                             className="h-12 text-sm font-medium"
                           >
                             {slot}
@@ -638,7 +635,7 @@ export default function CreateBookingForm() {
                           }}
                         >
                           <SelectTrigger
-                            className="h-11"
+                            className="w-full"
                             value={field.value || ""}
                             onReset={() => {
                               form.resetField("photography");
