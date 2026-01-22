@@ -4,31 +4,34 @@ export const emailValidator = z.object({
   email: z.string().email("Enter a valid email address"),
 });
 
-export const StepThreeFormSchema = z.object({
-  name: z
-    .string({ message: "Name is required" })
-    .min(3, { message: "Name must be atleast 3 characters" })
-    .max(50, { message: "Name cannot be more than 50 characters" })
-    .trim(),
-  phone: z.string({ message: "Phone is required" }).regex(/^[6-9]\d{9}$/, {
-    message: "Invalid phone number",
-  }),
-  email: z.string().email("Enter a valid email address").trim().toLowerCase(),
-  findus: z
-    .string({
-      message: "Please select one",
-    })
-    .min(1, { message: "Please select one" }),
-  occasion: z
-    .string({
-      message: "Please select one",
-    })
-    .min(1, { message: "Please select one" }),
-  noOfPeople: z.coerce
-    .number()
-    .min(2, "Minimum 2 people are required!")
-    .max(15, "Maximum 15 people are allowed"),
-});
+export const getStepThreeFormSchema = (room: string) =>
+  z.object({
+    name: z
+      .string({ message: "Name is required" })
+      .min(3, { message: "Name must be atleast 3 characters" })
+      .max(50, { message: "Name cannot be more than 50 characters" })
+      .trim(),
+
+    phone: z.string({ message: "Phone is required" }).regex(/^[6-9]\d{9}$/, {
+      message: "Invalid phone number",
+    }),
+
+    email: z.string().email("Enter a valid email address").trim().toLowerCase(),
+
+    findus: z.string().min(1, { message: "Please select one" }),
+
+    occasion: z.string().min(1, { message: "Please select one" }),
+
+    noOfPeople: z.coerce
+      .number()
+      .min(2, "Minimum 2 people are required!")
+      .max(
+        room === "Dreamscape Theatre" ? 4 : 15,
+        room === "Dreamscape Theatre"
+          ? "Maximum 4 people are allowed"
+          : "Maximum 15 people are allowed",
+      ),
+  });
 
 export const payReservationSchema = z.object({
   balanceAmount: z.number(),
