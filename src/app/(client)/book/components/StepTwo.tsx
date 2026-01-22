@@ -170,7 +170,7 @@ export default function StepTwo() {
                       </Button>
                     }
                   />
-                  <DialogContent className="flex flex-col gap-0 sm:max-h-[min(640px,80vh)] sm:max-w-2xl [&>button:last-child]:top-3.5">
+                  <DialogContent className="flex flex-col gap-0 sm:max-h-[min(640px,80vh)] [&>button:last-child]:top-3.5">
                     <div className="grid max-h-[80vh] grid-cols-2 gap-4 overflow-y-auto">
                       {cakes.map((cake) => {
                         const imageSrc = CAKE_DATA[cake];
