@@ -15,10 +15,17 @@ import {
 import {
   Select,
   SelectContent,
+  SelectGroup,
   SelectItem,
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
+
+const items = [
+  { label: "Bookings", value: "bookings" },
+  { label: "Revenue", value: "revenue" },
+  { label: "Customers", value: "customers" },
+];
 
 function transformReservationsToChartData(
   reservations: ReservationsWithTotalPrice[],
@@ -51,7 +58,7 @@ function transformReservationsToChartData(
 const chartConfig = {
   revenue: {
     label: "Revenue",
-    color: "var(--chart-1)",
+    color: "var(--chart-2)",
   },
 } satisfies ChartConfig;
 
@@ -60,9 +67,10 @@ export function ChartBarInteractive({
 }: {
   reservations: ReservationsWithTotalPrice[];
 }) {
-  const baseYear = 2025;
+  const baseYear = 2026;
   const currentYear = new Date().getFullYear();
   const [selectedYear, setSelectedYear] = useState(currentYear.toString());
+  const [selectedChart, setSelectedChart] = useState("bookings");
 
   const yearOptions = Array.from({ length: currentYear - baseYear + 1 }, (_, i) =>
     (baseYear + i).toString(),
@@ -83,25 +91,46 @@ export function ChartBarInteractive({
 
   return (
     <div className="flex flex-col">
-      <Select onValueChange={(e) => setSelectedYear(e!)} value={selectedYear}>
-        <SelectTrigger className="mb-5 w-[100px] self-end">
-          <SelectValue />
-        </SelectTrigger>
-        <SelectContent>
-          {yearOptions.map((y) => (
-            <SelectItem key={y} value={y}>
-              {y}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
-
       <Card className="@container/card">
-        <CardHeader>
-          <CardTitle>Total Revenue</CardTitle>
-          <CardDescription>
-            <span>Last 12 months</span>
-          </CardDescription>
+        <CardHeader className="flex items-center justify-between">
+          <div>
+            <CardTitle>Total Revenue</CardTitle>
+            <CardDescription>
+              <span>Last 12 months</span>
+            </CardDescription>
+          </div>
+          <div className="flex gap-x-4">
+            <Select
+              items={items}
+              value={selectedChart}
+              onValueChange={(e) => setSelectedChart(e!)}
+            >
+              <SelectTrigger>
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent alignItemWithTrigger>
+                <SelectGroup>
+                  {items.map((item) => (
+                    <SelectItem key={item.value} value={item.value}>
+                      {item.label}
+                    </SelectItem>
+                  ))}
+                </SelectGroup>
+              </SelectContent>
+            </Select>
+            <Select onValueChange={(e) => setSelectedYear(e!)} value={selectedYear}>
+              <SelectTrigger className="mb-5 w-[100px] self-end">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {yearOptions.map((y) => (
+                  <SelectItem key={y} value={y}>
+                    {y}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
         </CardHeader>
         <CardContent className="px-2 sm:px-6">
           <ChartContainer className="aspect-auto h-[350px] w-full" config={chartConfig}>

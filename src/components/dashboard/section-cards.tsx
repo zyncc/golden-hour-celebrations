@@ -1,10 +1,4 @@
-import {
-  Card,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import formatCurrency from "@/lib/formatCurrency";
 
 export function SectionCards({
@@ -25,9 +19,6 @@ export function SectionCards({
             {formatCurrency(revenue)}
           </CardTitle>
         </CardHeader>
-        <CardFooter className="flex-col items-start gap-1.5 text-sm">
-          <div className="text-muted-foreground">Total Lifetime Revenue</div>
-        </CardFooter>
       </Card>
       <Card className="@container/card">
         <CardHeader>
@@ -36,9 +27,6 @@ export function SectionCards({
             {userCount}
           </CardTitle>
         </CardHeader>
-        <CardFooter className="flex-col items-start gap-1.5 text-sm">
-          <div className="text-muted-foreground">Acquisition needs attention</div>
-        </CardFooter>
       </Card>
       <Card className="@container/card">
         <CardHeader>
@@ -47,9 +35,6 @@ export function SectionCards({
             {bookingCount}
           </CardTitle>
         </CardHeader>
-        <CardFooter className="flex-col items-start gap-1.5 text-sm">
-          <div className="text-muted-foreground">Meets growth projections</div>
-        </CardFooter>
       </Card>
     </div>
   );

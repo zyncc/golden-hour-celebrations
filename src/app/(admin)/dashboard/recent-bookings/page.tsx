@@ -40,7 +40,7 @@ async function Page() {
       },
     },
     orderBy: {
-      date: "desc",
+      date: "asc",
     },
   });
 

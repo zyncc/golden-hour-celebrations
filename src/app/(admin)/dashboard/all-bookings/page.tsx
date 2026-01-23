@@ -18,7 +18,7 @@ async function AllBookings() {
       paymentStatus: true,
     },
     orderBy: {
-      date: "asc",
+      date: "desc",
     },
   });
 

@@ -48,7 +48,7 @@ export default async function Page() {
           },
         },
         orderBy: {
-          date: "desc",
+          date: "asc",
         },
       }),
       prisma.reservations.findMany({
@@ -56,7 +56,7 @@ export default async function Page() {
           paymentStatus: true,
         },
         orderBy: {
-          date: "asc",
+          date: "desc",
         },
       }),
     ]);
@@ -72,7 +72,7 @@ export default async function Page() {
   return (
     <DashboardWrapper title="Dashboard">
       <SectionCards revenue={money} bookingCount={bookingCount} userCount={userCount} />
-      <ChartBarInteractive reservations={recentReservations} />
+      <ChartBarInteractive reservations={allReservations} />
       <Tabs defaultValue="recent">
         <TabsList>
           <TabsTrigger value="recent">Recent Bookings</TabsTrigger>
