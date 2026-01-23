@@ -5,7 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 import { format } from "date-fns";
 import { useState } from "react";
 import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import {
   ChartConfig,
   ChartContainer,
@@ -92,14 +92,11 @@ export function ChartBarInteractive({
   return (
     <div className="flex flex-col">
       <Card className="@container/card">
-        <CardHeader className="flex items-center justify-between">
+        <CardHeader className="flex items-start justify-between">
           <div>
             <CardTitle>Total Revenue</CardTitle>
-            <CardDescription>
-              <span>Last 12 months</span>
-            </CardDescription>
           </div>
-          <div className="flex gap-x-4">
+          <div className="flex flex-col gap-2 md:flex-row">
             <Select
               items={items}
               value={selectedChart}

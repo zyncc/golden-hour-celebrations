@@ -288,7 +288,6 @@ export default function CreateBookingForm({ currentDate }: { currentDate: string
                           field.onChange(value);
                           setNoOfPeople(value);
                         }}
-                        className="h-11"
                       />
                     </FormControl>
                     <FormMessage />
@@ -339,7 +338,7 @@ export default function CreateBookingForm({ currentDate }: { currentDate: string
                             <Button
                               variant="outline"
                               className={cn(
-                                "h-11 w-full justify-start text-left font-normal",
+                                "w-full justify-start text-left font-normal",
                                 !field.value && "text-muted-foreground",
                               )}
                             >
@@ -483,7 +482,7 @@ export default function CreateBookingForm({ currentDate }: { currentDate: string
                   <FormItem>
                     <FormLabel className="text-sm font-medium">Full Name</FormLabel>
                     <FormControl>
-                      <Input placeholder="Enter full name" {...field} className="h-11" />
+                      <Input placeholder="Enter full name" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -497,11 +496,7 @@ export default function CreateBookingForm({ currentDate }: { currentDate: string
                   <FormItem>
                     <FormLabel className="text-sm font-medium">Email Address</FormLabel>
                     <FormControl>
-                      <Input
-                        placeholder="Enter email address"
-                        {...field}
-                        className="h-11"
-                      />
+                      <Input placeholder="Enter email address" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -515,12 +510,7 @@ export default function CreateBookingForm({ currentDate }: { currentDate: string
                   <FormItem>
                     <FormLabel className="text-sm font-medium">WhatsApp Number</FormLabel>
                     <FormControl>
-                      <Input
-                        placeholder="Enter WhatsApp number"
-                        type="text"
-                        {...field}
-                        className="h-11"
-                      />
+                      <Input placeholder="Enter WhatsApp number" type="text" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -534,12 +524,7 @@ export default function CreateBookingForm({ currentDate }: { currentDate: string
                   <FormItem>
                     <FormLabel className="text-sm font-medium">Name to Display</FormLabel>
                     <FormControl>
-                      <Input
-                        placeholder="Name for display"
-                        type="text"
-                        {...field}
-                        className="h-11"
-                      />
+                      <Input placeholder="Name for display" type="text" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -822,7 +807,6 @@ export default function CreateBookingForm({ currentDate }: { currentDate: string
                             field.onChange(value);
                             setAdvanceAmount(value);
                           }}
-                          className="h-11"
                         />
                       </FormControl>
                       <FormMessage />
@@ -846,7 +830,6 @@ export default function CreateBookingForm({ currentDate }: { currentDate: string
                             field.onChange(value);
                             setDiscount(value);
                           }}
-                          className="h-11"
                         />
                       </FormControl>
                       <FormMessage />
