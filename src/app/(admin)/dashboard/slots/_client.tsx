@@ -65,7 +65,7 @@ export default function SlotsClient({
                 key={slot}
                 disabled={unavailable}
                 variant={unavailable ? "destructive" : "secondary"}
-                className="flex-1 whitespace-nowrap"
+                className={`flex-1 whitespace-nowrap ${unavailable && "line-through"}`}
               >
                 {slot}
               </Button>
@@ -83,7 +83,7 @@ export default function SlotsClient({
                 key={slot}
                 disabled={unavailable}
                 variant={unavailable ? "destructive" : "secondary"}
-                className="flex-1 whitespace-nowrap"
+                className={`flex-1 whitespace-nowrap ${unavailable && "line-through"}`}
               >
                 {slot}
               </Button>

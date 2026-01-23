@@ -675,7 +675,7 @@ export default function StepOne() {
                                     price: pkg.price,
                                   });
                                 }}
-                                className="flex-1"
+                                className={`flex-1 ${(unavailable || isDisabled) && "line-through"}`}
                               >
                                 {slot}
                               </Button>
@@ -720,7 +720,7 @@ export default function StepOne() {
                                     price: pkg.price,
                                   });
                                 }}
-                                className="flex-1"
+                                className={`flex-1 ${(unavailable || isDisabled) && "line-through"}`}
                               >
                                 {slot}
                               </Button>

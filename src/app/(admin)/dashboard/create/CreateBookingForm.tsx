@@ -456,7 +456,7 @@ export default function CreateBookingForm({ currentDate }: { currentDate: string
                               field.onChange(slot);
                               setSelectedTimeSlot(slot);
                             }}
-                            className="h-12 text-sm font-medium"
+                            className={`h-12 text-sm font-medium ${(unavailable || isDisabled) && "line-through"}`}
                           >
                             {slot}
                           </Button>
