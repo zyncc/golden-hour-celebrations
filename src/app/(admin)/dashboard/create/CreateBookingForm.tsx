@@ -382,17 +382,17 @@ export default function CreateBookingForm({ currentDate }: { currentDate: string
                           <SelectValue placeholder="Select an occasion" />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="Birthday">🎂 Birthday</SelectItem>
-                          <SelectItem value="Anniversary">💕 Anniversary</SelectItem>
-                          <SelectItem value="Bride to be">👰 Bride to be</SelectItem>
-                          <SelectItem value="Groom to be">🤵 Groom to be</SelectItem>
-                          <SelectItem value="Movie Date">🎬 Movie Date</SelectItem>
+                          <SelectItem value="Birthday">Birthday</SelectItem>
+                          <SelectItem value="Anniversary">Anniversary</SelectItem>
+                          <SelectItem value="Bride to be">Bride to be</SelectItem>
+                          <SelectItem value="Groom to be">Groom to be</SelectItem>
+                          <SelectItem value="Movie Date">Movie Date</SelectItem>
                           <SelectItem value="Graduation Party">
-                            🎓 Graduation Party
+                            Graduation Party
                           </SelectItem>
-                          <SelectItem value="Proposal">💍 Proposal</SelectItem>
-                          <SelectItem value="Mom to be">🤱 Mom to be</SelectItem>
-                          <SelectItem value="Other">🎉 Other</SelectItem>
+                          <SelectItem value="Proposal">Proposal</SelectItem>
+                          <SelectItem value="Mom to be">Mom to be</SelectItem>
+                          <SelectItem value="Other">Other</SelectItem>
                         </SelectContent>
                       </Select>
                     </FormControl>
@@ -567,7 +567,7 @@ export default function CreateBookingForm({ currentDate }: { currentDate: string
                             }}
                             className="w-full"
                           >
-                            <SelectValue placeholder="Select a cake (optional)" />
+                            <SelectValue placeholder="Select a cake" />
                           </SelectTrigger>
                           <SelectContent>
                             {cakes.map((cake) => (
@@ -627,7 +627,7 @@ export default function CreateBookingForm({ currentDate }: { currentDate: string
                               setPhotography("");
                             }}
                           >
-                            <SelectValue placeholder="Select photography (optional)" />
+                            <SelectValue placeholder="Select photography" />
                           </SelectTrigger>
                           <SelectContent>
                             <SelectItem value="photoshoot">Photoshoot</SelectItem>

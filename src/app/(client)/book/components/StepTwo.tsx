@@ -59,7 +59,6 @@ export default function StepTwo() {
     redirect("/book");
   }
 
-  const [selectedCake, setSelectedCake] = useState<string>("");
   const [photographyPackage, setPhotographyPackage] = useState<string | null>(null);
   const [wantsLedLetterLightName, setWantsLedLetterLightName] = useState<boolean>(false);
   const [wantsLedLetterLightAge, setWantsLedLetterLightAge] = useState<boolean>(false);
@@ -1005,7 +1004,7 @@ export default function StepTwo() {
 
         {/* Navigation */}
         <div className="sticky bottom-6 z-10">
-          <div className="bg-background/80 rounded-2xl p-4 shadow-lg backdrop-blur-lg">
+          <div className="bg-background/10 rounded-2xl p-4 shadow-lg backdrop-blur-lg">
             <div className="mx-auto flex max-w-md gap-4">
               <Button
                 variant="outline"

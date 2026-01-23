@@ -47,7 +47,7 @@ export default function RootLayout({
         <GoogleAnalytics gaId="G-QL5YQVXZ5V" />
         <TanstackProvider>
           <Navbar />
-          <Toaster richColors position="top-center" theme="light" />
+          <Toaster richColors position="top-right" theme="light" />
           {children}
         </TanstackProvider>
       </body>

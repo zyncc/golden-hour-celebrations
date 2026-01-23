@@ -1,5 +1,3 @@
-// Elite Photos
-// DreamScape Photos
 import _ from "lodash";
 
 export const advanceAmount = 1000;
@@ -9,18 +7,6 @@ export const ledLetterLightAge = 49;
 export const ledLetterLightName = 149;
 
 export const TIME_ZONE = "Asia/Kolkata";
-
-export const selectFindUs = [
-  {
-    title: "Instagram / Facebook",
-  },
-  {
-    title: "Google",
-  },
-  {
-    title: "Word of mouth",
-  },
-];
 
 export const dreamscapeTimeSlots = [
   "9:30AM - 11:30AM",
@@ -38,30 +24,6 @@ export const EliteTimeSlots = [
   "5:30PM - 7:30PM",
   "8PM - 10PM",
   "10:30PM - 12:30AM",
-];
-
-export const selectOccasion = [
-  {
-    title: "Birthday",
-  },
-  {
-    title: "Anniversary",
-  },
-  {
-    title: "Bride / Groom to be",
-  },
-  {
-    title: "Graduation Party",
-  },
-  {
-    title: "Proposal",
-  },
-  {
-    title: "Mom to be",
-  },
-  {
-    title: "Other Surprises",
-  },
 ];
 
 export const items = [

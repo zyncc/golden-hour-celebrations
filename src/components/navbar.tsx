@@ -31,7 +31,6 @@ export default function Navbar() {
 
   const session = authClient.useSession();
 
-  const isLoggedIn = !!session.data?.session;
   const isAdmin = session.data?.user.role === "admin";
 
   useEffect(() => {
@@ -74,11 +73,6 @@ export default function Navbar() {
                 <li className="text-[15px] font-medium">{link.Label}</li>
               </Link>
             ))}
-            {!isLoggedIn && (
-              <Link href={"/signin"}>
-                <li className="text-[15px] font-medium">Login</li>
-              </Link>
-            )}
             {isAdmin && (
               <Link
                 href={
@@ -123,18 +117,6 @@ export default function Navbar() {
                       </DrawerClose>
                     </li>
                   ))}
-                  {!isLoggedIn && (
-                    <li>
-                      <DrawerClose asChild>
-                        <Link
-                          href={"/signin"}
-                          className="text-foreground/90 hover:text-foreground hover:bg-muted/60 block rounded-lg px-4 py-3 text-base font-medium transition-all duration-200"
-                        >
-                          Signin
-                        </Link>
-                      </DrawerClose>
-                    </li>
-                  )}
                   {isAdmin && (
                     <li>
                       <DrawerClose asChild>

@@ -5,6 +5,7 @@ import { createReservation } from "@/actions/createReservation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import { Spinner } from "@/components/ui/spinner";
 import { Switch } from "@/components/ui/switch";
 import { useReservation } from "@/context/ReservationStore";
 import {
@@ -16,7 +17,7 @@ import {
   ledLetterLightName,
 } from "@/lib/constants";
 import formatCurrency from "@/lib/formatCurrency";
-import { Check, CreditCard, LoaderCircle } from "lucide-react";
+import { Check, CreditCard } from "lucide-react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { useState } from "react";
@@ -246,10 +247,7 @@ export default function StepFour() {
                     {items
                       .find((item) => item.room == reservation.room)
                       ?.description.map((desc, i) => (
-                        <div
-                          key={i}
-                          className="text-muted-foreground flex items-center text-sm"
-                        >
+                        <div key={i} className="flex items-center text-sm">
                           <Check className="text-primary mr-2 h-4 w-4" />
                           {desc}
                         </div>
@@ -376,14 +374,14 @@ export default function StepFour() {
                     <Switch checked={payFull} onCheckedChange={setPayFull} />
                   </span>
                 </div>
-                <div className="flex justify-between text-lg font-medium">
+                <div className="flex justify-between font-semibold">
                   <span>{payFull ? "Total" : "Advance Amount"}</span>
                   <span className={"font-semibold"}>
                     {payFull ? formatCurrency(price) : formatCurrency(advanceAmountPrice)}
                   </span>
                 </div>
                 {!payFull && (
-                  <div className="flex justify-between text-lg font-medium">
+                  <div className="flex justify-between font-semibold">
                     <span>Balance Amount (Pay after event)</span>
                     <span className={"font-semibold"}>
                       {formatCurrency(price - advanceAmountPrice)}
@@ -397,7 +395,7 @@ export default function StepFour() {
                   onClick={() => handlePayButton()}
                 >
                   {pending ? (
-                    <LoaderCircle className="animate-spin" />
+                    <Spinner />
                   ) : (
                     <div className="flex items-center">
                       <CreditCard className="mr-2 h-4 w-4" />

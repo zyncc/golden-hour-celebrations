@@ -4,12 +4,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuGroup,
   DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuSub,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import {
@@ -19,13 +14,7 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import { authClient } from "@/lib/authClient";
-import {
-  IconDevices,
-  IconDotsVertical,
-  IconLogout,
-  IconMoon,
-  IconSun,
-} from "@tabler/icons-react";
+import { IconDotsVertical, IconLogout } from "@tabler/icons-react";
 import { UserMinus } from "lucide-react";
 import { useTheme } from "next-themes";
 import Link from "next/link";
@@ -74,52 +63,27 @@ export function NavUser({
             align="end"
             sideOffset={4}
           >
-            <DropdownMenuGroup>
-              <DropdownMenuSub>
-                <DropdownMenuSubTrigger>
-                  <IconSun className="size-4" />
-                  Switch Theme
-                </DropdownMenuSubTrigger>
-                <DropdownMenuSubContent>
-                  <DropdownMenuItem onClick={() => setTheme("light")}>
-                    <IconSun className="size-4" />
-                    Light
-                    {theme === "light" && <span className="ml-auto">✓</span>}
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => setTheme("dark")}>
-                    <IconMoon className="size-4" />
-                    Dark
-                    {theme === "dark" && <span className="ml-auto">✓</span>}
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => setTheme("system")}>
-                    <IconDevices className="size-4" />
-                    System
-                    {theme === "system" && <span className="ml-auto">✓</span>}
-                  </DropdownMenuItem>
-                </DropdownMenuSubContent>
-              </DropdownMenuSub>
-              <DropdownMenuSeparator />
-              <Link href={process.env.NEXT_PUBLIC_BASE_URL || "/"}>
-                <DropdownMenuItem>
-                  <IconLogout />
-                  Exit
-                </DropdownMenuItem>
-              </Link>
-              <DropdownMenuItem
-                onClick={() =>
-                  authClient.signOut({
-                    fetchOptions: {
-                      onSuccess: () => {
-                        router.refresh();
-                      },
-                    },
-                  })
-                }
-              >
-                <UserMinus />
-                Log out
+            <Link href={process.env.NEXT_PUBLIC_BASE_URL || "/"}>
+              <DropdownMenuItem>
+                <IconLogout />
+                Exit
               </DropdownMenuItem>
-            </DropdownMenuGroup>
+            </Link>
+            <DropdownMenuItem
+              variant="destructive"
+              onClick={() =>
+                authClient.signOut({
+                  fetchOptions: {
+                    onSuccess: () => {
+                      router.refresh();
+                    },
+                  },
+                })
+              }
+            >
+              <UserMinus />
+              Log out
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </SidebarMenuItem>

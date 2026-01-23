@@ -136,13 +136,11 @@ export default function StepThreeForm() {
                           <SelectValue placeholder="Select an option" />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="instagram">
-                            📱 Instagram / Facebook
-                          </SelectItem>
-                          <SelectItem value="google">🔍 Google</SelectItem>
-                          <SelectItem value="word-of-mouth">💬 Word of Mouth</SelectItem>
+                          <SelectItem value="instagram">Instagram / Facebook</SelectItem>
+                          <SelectItem value="google">Google</SelectItem>
+                          <SelectItem value="word-of-mouth">Word of Mouth</SelectItem>
                           <SelectItem value="advertisements">
-                            📢 Other Advertisements
+                            Other Advertisements
                           </SelectItem>
                         </SelectContent>
                       </Select>
@@ -170,17 +168,17 @@ export default function StepThreeForm() {
                           <SelectValue placeholder="Select an occasion" />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="Birthday">🎂 Birthday</SelectItem>
-                          <SelectItem value="Anniversary">💕 Anniversary</SelectItem>
-                          <SelectItem value="Bride to be">👰 Bride to be</SelectItem>
-                          <SelectItem value="Groom to be">🤵 Groom to be</SelectItem>
-                          <SelectItem value="Movie Date">🎬 Movie Date</SelectItem>
+                          <SelectItem value="Birthday">Birthday</SelectItem>
+                          <SelectItem value="Anniversary">Anniversary</SelectItem>
+                          <SelectItem value="Bride to be">Bride to be</SelectItem>
+                          <SelectItem value="Groom to be">Groom to be</SelectItem>
+                          <SelectItem value="Movie Date">Movie Date</SelectItem>
                           <SelectItem value="Graduation Party">
-                            🎓 Graduation Party
+                            Graduation Party
                           </SelectItem>
-                          <SelectItem value="Proposal">💍 Proposal</SelectItem>
-                          <SelectItem value="Mom to be">🤱 Mom to be</SelectItem>
-                          <SelectItem value="Other">🎉 Other</SelectItem>
+                          <SelectItem value="Proposal">Proposal</SelectItem>
+                          <SelectItem value="Mom to be">Mom to be</SelectItem>
+                          <SelectItem value="Other">Other</SelectItem>
                         </SelectContent>
                       </Select>
                       <FieldError
@@ -232,7 +230,7 @@ export default function StepThreeForm() {
         </form>
       </Card>
       <div className="z-10 mt-5">
-        <div className="bg-background/80 rounded-2xl p-4 shadow-lg backdrop-blur-lg">
+        <div className="bg-background/10 rounded-2xl p-4 shadow-lg backdrop-blur-lg">
           <div className="mx-auto flex max-w-md gap-4">
             <Button
               variant="outline"

@@ -716,7 +716,7 @@ export default function StepOne() {
             ))}
           </div>
           <div className="sticky bottom-6 z-10">
-            <div className="bg-background rounded-2xl p-4 shadow-lg">
+            <div className="bg-background/10 rounded-2xl p-4 shadow-lg backdrop-blur-lg">
               <div className="mx-auto flex max-w-md gap-4">
                 <Button
                   type={"submit"}

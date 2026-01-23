@@ -23,7 +23,7 @@ export const getStepThreeFormSchema = (room: string) =>
     occasion: z.string().min(1, { message: "Please select one" }),
 
     noOfPeople: z.coerce
-      .number()
+      .number({ message: "Please enter a number" })
       .min(2, "Minimum 2 people are required!")
       .max(
         room === "Dreamscape Theatre" ? 4 : 10,

@@ -1,7 +1,4 @@
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { ArrowRight, Mail, MapPin, Phone } from "lucide-react";
+import { Mail, MapPin, Phone } from "lucide-react";
 import Link from "next/link";
 
 export default function Page() {
@@ -13,7 +10,7 @@ export default function Page() {
             <h2 className="text-primary/60 text-xs font-bold tracking-[0.3em] uppercase">
               Get in touch
             </h2>
-            <h1 className="text-6xl leading-[0.9] tracking-tighter text-balance md:text-8xl">
+            <h1 className="text-4xl leading-[0.9] tracking-tighter text-balance md:text-5xl">
               Let&apos;s craft your <br />
               <span className="italic">golden</span> moment.
             </h1>
@@ -61,57 +58,14 @@ export default function Page() {
           </div>
         </div>
 
-        {/* Right Side: Form */}
-        <div className="bg-foreground/5 border-foreground/5 space-y-8 rounded-3xl border p-8 md:p-12">
-          <h3 className="text-2xl">Inquiry Form</h3>
-          <form className="space-y-6">
-            <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-              <div className="space-y-2">
-                <label className="text-xs font-bold tracking-widest uppercase opacity-60">
-                  First Name
-                </label>
-                <Input
-                  placeholder="Jane"
-                  className="border-foreground/20 focus-visible:border-primary rounded-none border-0 border-b bg-transparent px-0 shadow-none transition-colors focus-visible:ring-0 focus-visible:ring-offset-0"
-                />
-              </div>
-              <div className="space-y-2">
-                <label className="text-xs font-bold tracking-widest uppercase opacity-60">
-                  Last Name
-                </label>
-                <Input
-                  placeholder="Doe"
-                  className="border-foreground/20 focus-visible:border-primary rounded-none border-0 border-b bg-transparent px-0 shadow-none transition-colors focus-visible:ring-0 focus-visible:ring-offset-0"
-                />
-              </div>
-            </div>
-            <div className="space-y-2">
-              <label className="text-xs font-bold tracking-widest uppercase opacity-60">
-                Phone number
-              </label>
-              <Input
-                type="phone"
-                placeholder="951275828"
-                className="border-foreground/20 focus-visible:border-primary rounded-none border-0 border-b bg-transparent px-0 shadow-none transition-colors focus-visible:ring-0 focus-visible:ring-offset-0"
-              />
-            </div>
-            <div className="space-y-2">
-              <label className="text-xs font-bold tracking-widest uppercase opacity-60">
-                Tell us about your event
-              </label>
-              <Textarea
-                placeholder="Date, location, and any initial thoughts..."
-                className="border-foreground/20 focus-visible:border-primary min-h-[120px] resize-none rounded-none border-0 border-b bg-transparent px-0 shadow-none transition-colors focus-visible:ring-0 focus-visible:ring-offset-0"
-              />
-            </div>
-            <Button
-              type="submit"
-              className="bg-foreground text-background hover:bg-foreground/90 h-14 w-full rounded-full text-xs font-bold tracking-[0.2em] uppercase transition-all"
-            >
-              Send Inquiry <ArrowRight className="ml-2 h-4 w-4" />
-            </Button>
-          </form>
-        </div>
+        {/* Right Side */}
+        <iframe
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d486.083498454363!2d77.58504368216717!3d12.929047951755233!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bae15ccac350657%3A0xfeeb73c49998e57b!2sGolden%20Hour%20-%20Private%20theatre%20Celebrations%2C%20Jayanagar%204th%20block%2C%20Bangalore!5e0!3m2!1sen!2sin!4v1769200143626!5m2!1sen!2sin"
+          allowFullScreen
+          className="h-full min-h-[400px] w-full rounded-2xl border-0"
+          loading="lazy"
+          referrerPolicy="no-referrer-when-downgrade"
+        />
       </div>
     </main>
   );
