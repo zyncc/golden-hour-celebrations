@@ -22,7 +22,7 @@ export const FAQSection = () => {
             </p>
           </div>
           <div className="md:w-2/3 lg:w-3/4">
-            <Accordion defaultValue={["parking"]} className="w-full space-y-4">
+            <Accordion multiple className="w-full space-y-4 border-none">
               <AccordionItem
                 value="parking"
                 className="border-border/50 bg-background hover:border-primary/30 rounded-lg border px-6"
@@ -30,7 +30,7 @@ export const FAQSection = () => {
                 <AccordionTrigger className="hover:text-primary py-6 text-left text-base font-medium hover:no-underline">
                   Is there parking facility?
                 </AccordionTrigger>
-                <AccordionContent className="text-muted-foreground pb-6 leading-relaxed">
+                <AccordionContent className="pb-6 leading-relaxed">
                   <div className="space-y-4">
                     <p>
                       There is no designated two-wheeler parking directly in front of our

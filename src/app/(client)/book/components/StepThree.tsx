@@ -49,7 +49,7 @@ export default function StepThreeForm() {
       email: reservation.email || "",
       findus: reservation.findus || "",
       occasion: reservation.occasion || "",
-      noOfPeople: reservation.noOfPeople || 2,
+      noOfPeople: reservation.noOfPeople,
     },
   });
 

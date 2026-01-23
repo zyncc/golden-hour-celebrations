@@ -29,7 +29,7 @@ export default function PrivacyPolicy() {
         </Card>
 
         {/* Privacy Policy Sections */}
-        <Accordion className="w-full space-y-4">
+        <Accordion multiple className="w-full space-y-4">
           <AccordionItem value="information-collect" className="rounded-lg border px-6">
             <AccordionTrigger className="flex gap-2 hover:no-underline">
               <Users2 className="text-primary h-5 w-5" />
