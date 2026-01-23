@@ -17,6 +17,9 @@ import { dreamscapeTimeSlots, EliteTimeSlots, items } from "@/lib/constants";
 import formatCurrency from "@/lib/formatCurrency";
 import { FormatDate, isSlotUnavailable } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
+import Autoplay from "embla-carousel-autoplay";
+import Fade from "embla-carousel-fade";
+import useEmblaCarousel from "embla-carousel-react";
 import {
   ArrowRight,
   Film,
@@ -28,16 +31,9 @@ import {
   Star,
   Volume2,
 } from "lucide-react";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import "swiper/css";
-import "swiper/css/effect-fade";
-import "swiper/css/navigation";
-import "swiper/css/pagination";
-import { Autoplay, EffectFade } from "swiper/modules";
-import { Swiper, SwiperSlide } from "swiper/react";
 
 export default function StepOne() {
   const { reservation, setReservationData } = useReservation();
@@ -121,28 +117,7 @@ export default function StepOne() {
               <Card key={index} className="relative overflow-hidden rounded-xl p-0">
                 <div className="flex flex-col">
                   <div className="relative h-96 overflow-hidden">
-                    <Swiper
-                      autoplay={{
-                        delay: 2500,
-                        pauseOnMouseEnter: true,
-                      }}
-                      effect={"fade"}
-                      loop
-                      modules={[Autoplay, EffectFade]}
-                      spaceBetween={0}
-                      slidesPerView={1}
-                    >
-                      {pkg.photo.map((pic, i) => (
-                        <SwiperSlide key={i}>
-                          <Image
-                            src={pic}
-                            alt={`${pkg.room} celebration scene`}
-                            className="object-cover"
-                            placeholder="blur"
-                          />
-                        </SwiperSlide>
-                      ))}
-                    </Swiper>
+                    <EmblaCarousel images={pkg.photo} />
                   </div>
                   <div className="flex flex-col p-3 md:p-6">
                     <div className="mb-6 space-y-4">
@@ -754,6 +729,33 @@ export default function StepOne() {
               </div>
             </div>
           </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function EmblaCarousel({ images }: { images: string[] }) {
+  const [emblaRef] = useEmblaCarousel({ loop: true }, [
+    Fade(),
+    Autoplay({
+      delay: 2000,
+      stopOnFocusIn: false,
+      stopOnInteraction: false,
+      stopOnMouseEnter: false,
+      stopOnLastSnap: false,
+    }),
+  ]);
+
+  return (
+    <div className="embla bg-black">
+      <div className="embla__viewport h-full w-full" ref={emblaRef}>
+        <div className="embla__container">
+          {images.map((src, index) => (
+            <div className="embla__slide" key={index}>
+              <img src={src} alt="" className="object-cover" />
+            </div>
+          ))}
         </div>
       </div>
     </div>

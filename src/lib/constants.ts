@@ -1,14 +1,6 @@
 // Elite Photos
-import l14 from "../../public/l14.jpg";
-import l2 from "../../public/l2.jpg";
-import l3 from "../../public/l3.jpg";
-import l5 from "../../public/l5.jpg";
 // DreamScape Photos
 import _ from "lodash";
-import l12 from "../../public/l12.jpg";
-import l15 from "../../public/l15.jpg";
-import { default as l1, default as l4 } from "../../public/l4.jpg";
-import l6 from "../../public/l6.jpg";
 
 export const advanceAmount = 1000;
 export const cakePrice = 550;
@@ -85,7 +77,7 @@ export const items = [
     ],
     popular: true,
     price: 1899,
-    photo: _.shuffle([l14, l5, l3, l2]),
+    photo: _.shuffle(["/l14.jpg", "l5.jpg", "l3.jpg", "l2.jpg"]),
   },
   {
     id: 1,
@@ -99,7 +91,7 @@ export const items = [
     ],
     noPeople: 4,
     price: 1499,
-    photo: _.shuffle([l15, l12, l6, l4, l1]),
+    photo: _.shuffle(["l15.jpg", "l12.jpg", "l6.jpg", "l4.jpg", "l1.jpg"]),
   },
 ];
 
@@ -218,4 +210,47 @@ export const cakes = [
   "Rasmalai Cake",
   "Butter Scotch Crunch",
   "Black Forest Cake",
+];
+
+export const galleryImages = [
+  { src: "/l1.jpg" },
+  { src: "/l2.jpg" },
+  { src: "/l3.jpg" },
+  { src: "/l4.jpg" },
+  { src: "/l5.jpg" },
+  { src: "/l6.jpg" },
+  { src: "/l7.jpg" },
+  { src: "/l8.jpg" },
+  { src: "/l9.jpg" },
+  { src: "/l10.jpg" },
+  { src: "/l11.jpg" },
+  { src: "/l12.jpg" },
+  { src: "/l13.jpg" },
+  { src: "/l14.jpg" },
+  { src: "/l15.jpg" },
+
+  { src: "/v1.jpg" },
+  { src: "/v2.jpg" },
+  { src: "/v3.jpg" },
+  { src: "/v4.jpg" },
+  { src: "/v5.jpg" },
+  { src: "/v6.jpg" },
+  { src: "/v7.jpg" },
+  { src: "/v8.jpg" },
+  { src: "/v9.jpg" },
+  { src: "/v10.jpg" },
+  { src: "/v11.jpg" },
+  { src: "/v12.jpg" },
+  { src: "/v13.jpg" },
+  { src: "/v14.jpg" },
+  { src: "/v15.jpg" },
+  { src: "/v16.jpg" },
+  { src: "/v17.jpg" },
+  { src: "/v18.jpg" },
+  { src: "/v19.jpg" },
+  { src: "/v20.jpg" },
+  { src: "/v21.jpg" },
+  { src: "/v22.jpg" },
+  { src: "/v23.jpg" },
+  { src: "/v24.jpg" },
 ];

@@ -1,51 +1,47 @@
 "use client";
 
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-} from "@/components/ui/carousel";
-import Autoplay from "embla-carousel-autoplay";
+import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel";
 import { cn } from "@/lib/utils";
+import Autoplay from "embla-carousel-autoplay";
 
 type Images = {
   src: string;
   alt?: string;
 };
 
-export function Gallery({ images }: { images: Images[] }) {
+export function Gallery({ images, numImages }: { images: Images[]; numImages: number }) {
   return (
-    <section id="gallery" className="py-32 bg-background">
+    <section id="gallery" className="bg-background py-32">
       <div className="container mx-auto px-6">
         <div className="mb-16 space-y-4">
           <h2 className="text-4xl md:text-6xl">
             Captured <span className="italic">Moments</span>
           </h2>
-          <p className="text-sm md:text-base opacity-60 max-w-xl">
-            A glimpse into the intimate celebrations we&apos;ve helped craft.
-            Every detail is designed to tell your unique story.
+          <p className="max-w-xl text-sm opacity-60 md:text-base">
+            A glimpse into the intimate celebrations we&apos;ve helped craft. Every detail
+            is designed to tell your unique story.
           </p>
         </div>
 
         {/* Desktop Grid Layout */}
-        <div className="hidden md:grid grid-cols-3 gap-6 auto-rows-[400px]">
-          {images.map((image, index) => (
+        <div className="hidden auto-rows-[400px] grid-cols-3 gap-6 md:grid">
+          {images.slice(0, numImages).map((image, index) => (
             <div
               key={index}
               className={cn(
-                "relative overflow-hidden rounded-xl group cursor-crosshair",
+                "group relative cursor-crosshair overflow-hidden rounded-xl",
                 index === 1 || index === 4 ? "col-span-1" : "col-span-1",
-                index % 3 === 0 ? "row-span-2" : "row-span-1"
+                index % 3 === 0 ? "row-span-2" : "row-span-1",
               )}
             >
               <img
                 src={image.src}
                 alt={image.alt}
-                className="w-full h-full object-cover transition-all duration-700 group-hover:scale-105 rounded-xl"
+                className="h-full w-full rounded-xl object-cover transition-all duration-700 group-hover:scale-105"
               />
               {image.alt && (
-                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-end p-8">
-                  <p className="text-white text-xs uppercase tracking-widest font-medium">
+                <div className="absolute inset-0 flex items-end bg-black/40 p-8 opacity-0 transition-opacity duration-500 group-hover:opacity-100">
+                  <p className="text-xs font-medium tracking-widest text-white uppercase">
                     {image.alt}
                   </p>
                 </div>
@@ -67,11 +63,11 @@ export function Gallery({ images }: { images: Images[] }) {
                     <img
                       src={image.src}
                       alt={image.alt}
-                      className="w-full h-full object-cover rounded-xl"
+                      className="h-full w-full rounded-xl object-cover"
                     />
                   </div>
                   {image.alt && (
-                    <p className="mt-4 text-[10px] uppercase tracking-widest opacity-60">
+                    <p className="mt-4 text-[10px] tracking-widest uppercase opacity-60">
                       {image.alt}
                     </p>
                   )}
