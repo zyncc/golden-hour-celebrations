@@ -52,10 +52,6 @@ import Image from "next/image";
 import { redirect, useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
-import "swiper/css";
-import "swiper/css/effect-fade";
-import "swiper/css/navigation";
-import "swiper/css/pagination";
 
 export default function StepTwo() {
   const { reservation, setReservationData } = useReservation();
