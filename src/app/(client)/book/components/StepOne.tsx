@@ -116,7 +116,7 @@ export default function StepOne() {
             {items.map((pkg, index) => (
               <Card key={index} className="relative overflow-hidden rounded-xl p-0">
                 <div className="flex flex-col">
-                  <div className="relative h-96 overflow-hidden">
+                  <div className="relative">
                     <EmblaCarousel images={pkg.photo} />
                   </div>
                   <div className="flex flex-col p-3 md:p-6">
@@ -749,11 +749,15 @@ function EmblaCarousel({ images }: { images: string[] }) {
 
   return (
     <div className="embla bg-black">
-      <div className="embla__viewport h-full w-full" ref={emblaRef}>
+      <div className="embla__viewport" ref={emblaRef}>
         <div className="embla__container">
           {images.map((src, index) => (
             <div className="embla__slide" key={index}>
-              <img src={src} alt="" className="object-cover" />
+              <img
+                src={src}
+                alt=""
+                className="aspect-video h-full w-full object-cover object-center"
+              />
             </div>
           ))}
         </div>

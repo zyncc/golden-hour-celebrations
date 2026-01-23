@@ -11,9 +11,9 @@ export default function HomeSwiper() {
   return (
     <section className="h-screen w-screen bg-black">
       <EmblaCarousel options={OPTIONS} />
-      <div className="pointer-events-none absolute inset-0 z-10 hidden items-center justify-center sm:flex">
+      <div className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center">
         <div className="text-center text-white">
-          <h1 className="font-serif text-5xl font-semibold tracking-wider uppercase">
+          <h1 className="font-serif text-3xl font-semibold tracking-wider uppercase lg:text-5xl">
             GOLDEN HOUR <br />
             CELEBRATIONS
           </h1>
@@ -51,7 +51,11 @@ function EmblaCarousel(props: PropType) {
               className="embla__slide flex h-full w-full items-center justify-center"
               key={index}
             >
-              <img src={src} className="h-full w-full opacity-70" alt="image" />
+              <img
+                src={src}
+                className="h-full w-full object-cover opacity-70"
+                alt="image"
+              />
             </div>
           ))}
         </div>

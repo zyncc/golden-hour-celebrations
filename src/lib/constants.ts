@@ -77,7 +77,7 @@ export const items = [
     ],
     popular: true,
     price: 1899,
-    photo: _.shuffle(["/l14.jpg", "l5.jpg", "l3.jpg", "l2.jpg"]),
+    photo: _.shuffle(["/l14.jpg", "/l5.jpg", "/l3.jpg", "/l2.jpg"]),
   },
   {
     id: 1,
@@ -91,7 +91,7 @@ export const items = [
     ],
     noPeople: 4,
     price: 1499,
-    photo: _.shuffle(["l15.jpg", "l12.jpg", "l6.jpg", "l4.jpg", "l1.jpg"]),
+    photo: _.shuffle(["/l15.jpg", "/l12.jpg", "/l6.jpg", "/l4.jpg", "/l1.jpg"]),
   },
 ];
 
