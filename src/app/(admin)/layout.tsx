@@ -2,6 +2,7 @@ import { AppSidebar } from "@/components/dashboard/app-sidebar";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { Toaster } from "@/components/ui/sonner";
 import TanstackProvider from "@/providers/TanstackProvider";
+import { ThemeProvider } from "@/providers/theme-provider";
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import "../globals.css";
@@ -25,20 +26,27 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${poppins.className} antialiased`}>
-        <Toaster richColors position="top-center" theme="light" />
-        <SidebarProvider
-          style={
-            {
-              "--sidebar-width": "calc(var(--spacing) * 72)",
-              "--header-height": "calc(var(--spacing) * 12)",
-            } as React.CSSProperties
-          }
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
         >
-          <AppSidebar variant="inset" />
-          <SidebarInset>
-            <TanstackProvider>{children}</TanstackProvider>
-          </SidebarInset>
-        </SidebarProvider>
+          <Toaster richColors position="top-center" theme="light" />
+          <SidebarProvider
+            style={
+              {
+                "--sidebar-width": "calc(var(--spacing) * 72)",
+                "--header-height": "calc(var(--spacing) * 12)",
+              } as React.CSSProperties
+            }
+          >
+            <AppSidebar variant="inset" />
+            <SidebarInset>
+              <TanstackProvider>{children}</TanstackProvider>
+            </SidebarInset>
+          </SidebarProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

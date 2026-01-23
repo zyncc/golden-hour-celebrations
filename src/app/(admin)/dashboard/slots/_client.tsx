@@ -64,7 +64,7 @@ export default function SlotsClient({
               <Button
                 key={slot}
                 disabled={unavailable}
-                variant={unavailable ? "destructive" : "secondary"}
+                variant={unavailable ? "destructive" : "outline"}
                 className={`flex-1 whitespace-nowrap ${unavailable && "line-through"}`}
               >
                 {slot}
@@ -82,7 +82,7 @@ export default function SlotsClient({
               <Button
                 key={slot}
                 disabled={unavailable}
-                variant={unavailable ? "destructive" : "secondary"}
+                variant={unavailable ? "destructive" : "outline"}
                 className={`flex-1 whitespace-nowrap ${unavailable && "line-through"}`}
               >
                 {slot}

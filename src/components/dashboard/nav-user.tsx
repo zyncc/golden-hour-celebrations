@@ -8,6 +8,9 @@ import {
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import {
@@ -17,7 +20,15 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import { authClient } from "@/lib/authClient";
-import { IconDotsVertical, IconLogout } from "@tabler/icons-react";
+import {
+  IconDevices,
+  IconDotsVertical,
+  IconLogout,
+  IconMoon,
+  IconSun,
+} from "@tabler/icons-react";
+import { UserMinus } from "lucide-react";
+import { useTheme } from "next-themes";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
@@ -32,6 +43,7 @@ export function NavUser({
 }) {
   const { isMobile } = useSidebar();
   const router = useRouter();
+  const { theme, setTheme } = useTheme();
 
   return (
     <SidebarMenu>
@@ -43,17 +55,15 @@ export function NavUser({
                 size="lg"
                 className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
               >
-                <Avatar className="h-8 w-8 rounded-lg grayscale">
-                  <AvatarImage src={user.avatar!} alt={user.name} />
+                <Avatar className="h-8 w-8 rounded-lg">
+                  <AvatarImage src={user.avatar! || "/placeholder.svg"} alt={user.name} />
                   <AvatarFallback className="rounded-lg">
                     {user.name?.slice(0, 1).toUpperCase()}
                   </AvatarFallback>
                 </Avatar>
                 <div className="grid flex-1 text-left text-sm leading-tight">
                   <span className="truncate font-medium">{user.name}</span>
-                  <span className="text-muted-foreground truncate text-xs">
-                    {user.email}
-                  </span>
+                  <span className="truncate text-xs">{user.email}</span>
                 </div>
                 <IconDotsVertical className="ml-auto size-4" />
               </SidebarMenuButton>
@@ -69,26 +79,51 @@ export function NavUser({
               <DropdownMenuLabel className="p-0 font-normal">
                 <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                   <Avatar className="h-8 w-8 rounded-lg">
-                    <AvatarImage src={user.avatar!} alt={user.name} />
+                    <AvatarImage
+                      src={user.avatar! || "/placeholder.svg"}
+                      alt={user.name}
+                    />
                     <AvatarFallback className="rounded-lg">
                       {user.name?.slice(0, 1).toUpperCase()}
                     </AvatarFallback>
                   </Avatar>
                   <div className="grid flex-1 text-left text-sm leading-tight">
                     <span className="truncate font-medium">{user.name}</span>
-                    <span className="text-muted-foreground truncate text-xs">
-                      {user.email}
-                    </span>
+                    <span className="truncate text-xs">{user.email}</span>
                   </div>
                 </div>
               </DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuSub>
+                <DropdownMenuSubTrigger>
+                  <IconSun className="size-4" />
+                  Switch Theme
+                </DropdownMenuSubTrigger>
+                <DropdownMenuSubContent>
+                  <DropdownMenuItem onClick={() => setTheme("light")}>
+                    <IconSun className="size-4" />
+                    Light
+                    {theme === "light" && <span className="ml-auto">✓</span>}
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => setTheme("dark")}>
+                    <IconMoon className="size-4" />
+                    Dark
+                    {theme === "dark" && <span className="ml-auto">✓</span>}
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => setTheme("system")}>
+                    <IconDevices className="size-4" />
+                    System
+                    {theme === "system" && <span className="ml-auto">✓</span>}
+                  </DropdownMenuItem>
+                </DropdownMenuSubContent>
+              </DropdownMenuSub>
+              <DropdownMenuSeparator />
               <Link href={process.env.NEXT_PUBLIC_BASE_URL || "/"}>
                 <DropdownMenuItem>
                   <IconLogout />
                   Exit
                 </DropdownMenuItem>
               </Link>
-              <DropdownMenuSeparator />
               <DropdownMenuItem
                 onClick={() =>
                   authClient.signOut({
@@ -100,7 +135,7 @@ export function NavUser({
                   })
                 }
               >
-                <IconLogout />
+                <UserMinus />
                 Log out
               </DropdownMenuItem>
             </DropdownMenuGroup>
