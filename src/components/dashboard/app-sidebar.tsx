@@ -25,7 +25,7 @@ const data = {
       icon: IconListDetails,
     },
     {
-      title: "Recent Bookings",
+      title: "Upcoming Bookings",
       url: "/dashboard/recent-bookings",
       icon: IconClockHour4,
     },

@@ -27,11 +27,10 @@ export default async function Page() {
     .toZonedDateTime({ timeZone: TIME_ZONE })
     .toInstant();
 
-  // end of month IST (exclusive)
-  const endOfMonthInstant = now
+  // 1 week
+  const oneWeek = now
     .toPlainDate()
-    .with({ day: 1 })
-    .add({ months: 1 })
+    .add({ weeks: 1 })
     .toZonedDateTime({ timeZone: TIME_ZONE })
     .toInstant();
 
@@ -44,7 +43,7 @@ export default async function Page() {
           paymentStatus: true,
           date: {
             gte: new Date(startTodayInstant.epochMilliseconds),
-            lt: new Date(endOfMonthInstant.epochMilliseconds),
+            lt: new Date(oneWeek.epochMilliseconds),
           },
         },
         orderBy: {
@@ -75,7 +74,7 @@ export default async function Page() {
       <ChartBarInteractive reservations={allReservations} />
       <Tabs defaultValue="recent">
         <TabsList>
-          <TabsTrigger value="recent">Recent Bookings</TabsTrigger>
+          <TabsTrigger value="recent">Upcoming Bookings</TabsTrigger>
           <TabsTrigger value="all">All Bookings</TabsTrigger>
         </TabsList>
         <TabsContent value={"recent"}>

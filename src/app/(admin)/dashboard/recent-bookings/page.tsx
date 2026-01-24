@@ -23,11 +23,10 @@ async function Page() {
     .toZonedDateTime({ timeZone: TIME_ZONE })
     .toInstant();
 
-  // end of month IST (exclusive)
-  const endOfMonthInstant = now
+  // 1 week
+  const oneWeek = now
     .toPlainDate()
-    .with({ day: 1 })
-    .add({ months: 1 })
+    .add({ weeks: 1 })
     .toZonedDateTime({ timeZone: TIME_ZONE })
     .toInstant();
 
@@ -36,7 +35,7 @@ async function Page() {
       paymentStatus: true,
       date: {
         gte: new Date(startTodayInstant.epochMilliseconds),
-        lt: new Date(endOfMonthInstant.epochMilliseconds),
+        lt: new Date(oneWeek.epochMilliseconds),
       },
     },
     orderBy: {
@@ -45,7 +44,7 @@ async function Page() {
   });
 
   return (
-    <DashboardWrapper title="Recent Reservations">
+    <DashboardWrapper title="Upcoming Reservations">
       <RecentReservationsTable data={reservations} />
     </DashboardWrapper>
   );
