@@ -217,7 +217,7 @@ export default async function ReservationDetails({
                     <div className="flex items-start justify-between">
                       <span className="text-muted-foreground text-sm">Discount</span>
                       <span className="font-semibold text-green-600">
-                        -{reservationData.discount}%
+                        - ₹{reservationData.discount.toLocaleString("en-IN")}
                       </span>
                     </div>
                   ) : null}
