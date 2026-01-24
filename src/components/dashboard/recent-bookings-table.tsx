@@ -193,7 +193,12 @@ export function RecentReservationsTable({ data }: { data: Reservations[] }) {
                 <DropdownMenuLabel>Actions</DropdownMenuLabel>
                 <DropdownMenuItem
                   className={"whitespace-nowrap"}
-                  onClick={() => navigator.clipboard.writeText(paymentId ?? "")}
+                  onClick={() => {
+                    navigator.clipboard.writeText(
+                      paymentId ?? "paymentId does not exist",
+                    );
+                    toast.success("Copied to Clipboard");
+                  }}
                 >
                   <CopyIcon /> Payment ID
                 </DropdownMenuItem>
@@ -252,7 +257,7 @@ export function RecentReservationsTable({ data }: { data: Reservations[] }) {
     }
     setDeleteLoading(false);
     setDeleteDialogOpen(false);
-    toast.success(res.data);
+    toast.error(res.data);
   }
 
   return (

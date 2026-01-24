@@ -34,7 +34,7 @@ import {
   type SortingState,
   type VisibilityState,
 } from "@tanstack/react-table";
-import { ArrowUpDown, ChevronDown, MoreHorizontal, Trash2 } from "lucide-react";
+import { ArrowUpDown, ChevronDown, CopyIcon, MoreHorizontal, Trash2 } from "lucide-react";
 import Link from "next/link";
 import * as React from "react";
 import { toast } from "sonner";
@@ -177,6 +177,7 @@ export function AllBookingsTable({ data }: { data: Reservations[] }) {
       cell: ({ row }) => {
         const id = row.original.id;
         const name = row.original.name;
+        const paymentId = row.original.paymentID;
         return (
           <DropdownMenu>
             <DropdownMenuTrigger
@@ -192,6 +193,17 @@ export function AllBookingsTable({ data }: { data: Reservations[] }) {
                 <DropdownMenuLabel>Actions</DropdownMenuLabel>
               </DropdownMenuGroup>
               <DropdownMenuGroup>
+                <DropdownMenuItem
+                  className={"whitespace-nowrap"}
+                  onClick={() => {
+                    navigator.clipboard.writeText(
+                      paymentId ?? "paymentId does not exist",
+                    );
+                    toast.success("Copied to Clipboard");
+                  }}
+                >
+                  <CopyIcon /> Payment ID
+                </DropdownMenuItem>
                 <DropdownMenuItem
                   onClick={() => {
                     setSelectedId({ id, name });
@@ -245,7 +257,7 @@ export function AllBookingsTable({ data }: { data: Reservations[] }) {
     }
     setDeleteLoading(false);
     setDeleteDialogOpen(false);
-    toast.success(res.data);
+    toast.error(res.data);
   }
 
   return (

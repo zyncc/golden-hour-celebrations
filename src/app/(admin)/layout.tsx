@@ -25,7 +25,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${poppins.className} dark antialiased`}>
-        <Toaster richColors position="top-right" theme="light" />
+        <Toaster richColors position="top-right" theme="dark" />
         <SidebarProvider
           style={
             {
