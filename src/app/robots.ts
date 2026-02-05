@@ -14,6 +14,7 @@ export default function robots(): MetadataRoute.Robots {
         "/success",
         "/account",
         "/signin",
+        "/dashboard",
       ],
     },
     sitemap: "https://goldenhourcelebrations.in/sitemap.xml",
