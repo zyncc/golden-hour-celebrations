@@ -2,7 +2,7 @@ import Navbar from "@/components/navbar";
 import { Toaster } from "@/components/ui/sonner";
 import Whatsapp from "@/components/whatsapp";
 import TanstackProvider from "@/providers/TanstackProvider";
-import { GoogleAnalytics, GoogleTagManager } from "@next/third-parties/google";
+import { GoogleAnalytics } from "@next/third-parties/google";
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import "../globals.css";
@@ -35,6 +35,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
+        <GoogleAnalytics gaId="GTM-MHK9L5HR" />
+        <GoogleAnalytics gaId="AW-17081168224" />
         <meta
           name="viewport"
           content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
@@ -43,7 +45,6 @@ export default function RootLayout({
       <body className={`${poppins.className} antialiased`}>
         <Whatsapp />
         <GoogleAnalytics gaId="G-QL5YQVXZ5V" />
-        <GoogleTagManager gtmId="GTM-MHK9L5HR" />
         <TanstackProvider>
           <Navbar />
           <Toaster richColors position="top-right" theme="light" />
