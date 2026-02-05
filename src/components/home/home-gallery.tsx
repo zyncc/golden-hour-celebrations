@@ -3,9 +3,10 @@
 import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel";
 import { cn } from "@/lib/utils";
 import Autoplay from "embla-carousel-autoplay";
+import Image, { StaticImageData } from "next/image";
 
 type Images = {
-  src: string;
+  src: StaticImageData;
   alt?: string;
 };
 
@@ -34,9 +35,11 @@ export function Gallery({ images, numImages }: { images: Images[]; numImages: nu
                 index % 3 === 0 ? "row-span-2" : "row-span-1",
               )}
             >
-              <img
+              <Image
                 src={image.src}
-                alt={image.alt}
+                alt={"home gallery image"}
+                fill
+                placeholder="blur"
                 className="h-full w-full rounded-xl object-cover transition-all duration-700 group-hover:scale-105"
               />
               {image.alt && (
@@ -60,9 +63,11 @@ export function Gallery({ images, numImages }: { images: Images[]; numImages: nu
               {images.map((image, index) => (
                 <CarouselItem key={index}>
                   <div className="aspect-4/5 overflow-hidden">
-                    <img
+                    <Image
                       src={image.src}
-                      alt={image.alt}
+                      alt={"home gallery image"}
+                      fill
+                      placeholder="blur"
                       className="h-full w-full rounded-xl object-cover"
                     />
                   </div>

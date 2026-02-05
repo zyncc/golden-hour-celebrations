@@ -4,6 +4,12 @@ import { EmblaOptionsType } from "embla-carousel";
 import Autoplay from "embla-carousel-autoplay";
 import Fade from "embla-carousel-fade";
 import useEmblaCarousel from "embla-carousel-react";
+import Image from "next/image";
+import l1 from "../../../public/l1.jpg";
+import l2 from "../../../public/l2.jpg";
+import l3 from "../../../public/l3.jpg";
+import l4 from "../../../public/l4.jpg";
+import l5 from "../../../public/l5.jpg";
 
 export default function HomeSwiper() {
   const OPTIONS: EmblaOptionsType = { loop: true };
@@ -27,7 +33,7 @@ type PropType = {
   options?: EmblaOptionsType;
 };
 
-const slides = ["/l1.jpg", "/l2.jpg", "/l3.jpg", "/l4.jpg", "/l5.jpg"];
+const slides = [l1, l2, l3, l4, l5];
 
 function EmblaCarousel(props: PropType) {
   const { options } = props;
@@ -51,8 +57,10 @@ function EmblaCarousel(props: PropType) {
               className="embla__slide flex h-full w-full items-center justify-center"
               key={index}
             >
-              <img
+              <Image
+                placeholder="blur"
                 src={src}
+                fill
                 className="h-full w-full object-cover opacity-70"
                 alt="image"
               />
