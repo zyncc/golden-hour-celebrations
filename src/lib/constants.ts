@@ -1,4 +1,44 @@
 import _ from "lodash";
+import l1 from "../../public/l1.jpg";
+import l10 from "../../public/l10.jpg";
+import l11 from "../../public/l11.jpg";
+import l12 from "../../public/l12.jpg";
+import l13 from "../../public/l13.jpg";
+import l14 from "../../public/l14.jpg";
+import l15 from "../../public/l15.jpg";
+import l2 from "../../public/l2.jpg";
+import l3 from "../../public/l3.jpg";
+import l4 from "../../public/l4.jpg";
+import l5 from "../../public/l5.jpg";
+import l6 from "../../public/l6.jpg";
+import l7 from "../../public/l7.jpg";
+import l8 from "../../public/l8.jpg";
+import l9 from "../../public/l9.jpg";
+
+import v1 from "../../public/v1.jpg";
+import v10 from "../../public/v10.jpg";
+import v11 from "../../public/v11.jpg";
+import v12 from "../../public/v12.jpg";
+import v13 from "../../public/v13.jpg";
+import v14 from "../../public/v14.jpg";
+import v15 from "../../public/v15.jpg";
+import v16 from "../../public/v16.jpg";
+import v17 from "../../public/v17.jpg";
+import v18 from "../../public/v18.jpg";
+import v19 from "../../public/v19.jpg";
+import v2 from "../../public/v2.jpg";
+import v20 from "../../public/v20.jpg";
+import v21 from "../../public/v21.jpg";
+import v22 from "../../public/v22.jpg";
+import v23 from "../../public/v23.jpg";
+import v24 from "../../public/v24.jpg";
+import v3 from "../../public/v3.jpg";
+import v4 from "../../public/v4.jpg";
+import v5 from "../../public/v5.jpg";
+import v6 from "../../public/v6.jpg";
+import v7 from "../../public/v7.jpg";
+import v8 from "../../public/v8.jpg";
+import v9 from "../../public/v9.jpg";
 
 export const advanceAmount = 1000;
 export const cakePrice = 550;
@@ -175,43 +215,44 @@ export const cakes = [
 ];
 
 export const galleryImages = [
-  { src: "/l1.jpg" },
-  { src: "/l2.jpg" },
-  { src: "/l3.jpg" },
-  { src: "/l4.jpg" },
-  { src: "/l5.jpg" },
-  { src: "/l6.jpg" },
-  { src: "/l7.jpg" },
-  { src: "/l8.jpg" },
-  { src: "/l9.jpg" },
-  { src: "/l10.jpg" },
-  { src: "/l11.jpg" },
-  { src: "/l12.jpg" },
-  { src: "/l13.jpg" },
-  { src: "/l14.jpg" },
-  { src: "/l15.jpg" },
-  { src: "/v1.jpg" },
-  { src: "/v2.jpg" },
-  { src: "/v3.jpg" },
-  { src: "/v4.jpg" },
-  { src: "/v5.jpg" },
-  { src: "/v6.jpg" },
-  { src: "/v7.jpg" },
-  { src: "/v8.jpg" },
-  { src: "/v9.jpg" },
-  { src: "/v10.jpg" },
-  { src: "/v11.jpg" },
-  { src: "/v12.jpg" },
-  { src: "/v13.jpg" },
-  { src: "/v14.jpg" },
-  { src: "/v15.jpg" },
-  { src: "/v16.jpg" },
-  { src: "/v17.jpg" },
-  { src: "/v18.jpg" },
-  { src: "/v19.jpg" },
-  { src: "/v20.jpg" },
-  { src: "/v21.jpg" },
-  { src: "/v22.jpg" },
-  { src: "/v23.jpg" },
-  { src: "/v24.jpg" },
+  { src: "/l1.jpg", optimisedSource: l1 },
+  { src: "/l2.jpg", optimisedSource: l2 },
+  { src: "/l3.jpg", optimisedSource: l3 },
+  { src: "/l4.jpg", optimisedSource: l4 },
+  { src: "/l5.jpg", optimisedSource: l5 },
+  { src: "/l6.jpg", optimisedSource: l6 },
+  { src: "/l7.jpg", optimisedSource: l7 },
+  { src: "/l8.jpg", optimisedSource: l8 },
+  { src: "/l9.jpg", optimisedSource: l9 },
+  { src: "/l10.jpg", optimisedSource: l10 },
+  { src: "/l11.jpg", optimisedSource: l11 },
+  { src: "/l12.jpg", optimisedSource: l12 },
+  { src: "/l13.jpg", optimisedSource: l13 },
+  { src: "/l14.jpg", optimisedSource: l14 },
+  { src: "/l15.jpg", optimisedSource: l15 },
+
+  { src: "/v1.jpg", optimisedSource: v1 },
+  { src: "/v2.jpg", optimisedSource: v2 },
+  { src: "/v3.jpg", optimisedSource: v3 },
+  { src: "/v4.jpg", optimisedSource: v4 },
+  { src: "/v5.jpg", optimisedSource: v5 },
+  { src: "/v6.jpg", optimisedSource: v6 },
+  { src: "/v7.jpg", optimisedSource: v7 },
+  { src: "/v8.jpg", optimisedSource: v8 },
+  { src: "/v9.jpg", optimisedSource: v9 },
+  { src: "/v10.jpg", optimisedSource: v10 },
+  { src: "/v11.jpg", optimisedSource: v11 },
+  { src: "/v12.jpg", optimisedSource: v12 },
+  { src: "/v13.jpg", optimisedSource: v13 },
+  { src: "/v14.jpg", optimisedSource: v14 },
+  { src: "/v15.jpg", optimisedSource: v15 },
+  { src: "/v16.jpg", optimisedSource: v16 },
+  { src: "/v17.jpg", optimisedSource: v17 },
+  { src: "/v18.jpg", optimisedSource: v18 },
+  { src: "/v19.jpg", optimisedSource: v19 },
+  { src: "/v20.jpg", optimisedSource: v20 },
+  { src: "/v21.jpg", optimisedSource: v21 },
+  { src: "/v22.jpg", optimisedSource: v22 },
+  { src: "/v23.jpg", optimisedSource: v23 },
+  { src: "/v24.jpg", optimisedSource: v24 },
 ];

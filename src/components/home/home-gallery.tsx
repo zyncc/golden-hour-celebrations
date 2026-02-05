@@ -3,9 +3,11 @@
 import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel";
 import { cn } from "@/lib/utils";
 import Autoplay from "embla-carousel-autoplay";
+import Image, { StaticImageData } from "next/image";
 
 type Images = {
   src: string;
+  optimisedSource: StaticImageData;
   alt?: string;
 };
 
@@ -34,8 +36,10 @@ export function Gallery({ images, numImages }: { images: Images[]; numImages: nu
                 index % 3 === 0 ? "row-span-2" : "row-span-1",
               )}
             >
-              <img
-                src={image.src}
+              <Image
+                src={image.optimisedSource}
+                fill
+                placeholder="blur"
                 alt={"home gallery image"}
                 className="h-full w-full rounded-xl object-cover transition-all duration-700 group-hover:scale-105"
               />
