@@ -199,7 +199,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "/home/zync/dev/websites/golden-hour-celebrations/src/prisma/generated/prisma",
+      "value": "/Users/zync/dev/websites/golden-hour-celebrations/src/prisma/generated/prisma",
       "fromEnvVar": null
     },
     "config": {
@@ -208,7 +208,7 @@ const config = {
     "binaryTargets": [
       {
         "fromEnvVar": null,
-        "value": "debian-openssl-3.0.x",
+        "value": "darwin-arm64",
         "native": true
       },
       {
@@ -217,7 +217,7 @@ const config = {
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "/home/zync/dev/websites/golden-hour-celebrations/src/prisma/schema.prisma",
+    "sourceFilePath": "/Users/zync/dev/websites/golden-hour-celebrations/src/prisma/schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
