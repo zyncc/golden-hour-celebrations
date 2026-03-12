@@ -1,6 +1,7 @@
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 
+// allow admin route only for admin subdomain
 export function middleware(request: NextRequest) {
   const host = request.headers.get("host") || "";
 
