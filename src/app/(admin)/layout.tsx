@@ -30,7 +30,7 @@ export default async function RootLayout({
   });
 
   if (!session || session.user.role !== "admin") {
-    return redirect(`admin.${process.env.BETTER_AUTH_URL}/signin`);
+    return redirect(`${process.env.BETTER_AUTH_URL}/signin`);
   }
 
   return (
