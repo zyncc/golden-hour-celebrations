@@ -1,9 +1,12 @@
+import { auth } from "@/auth";
 import { AppSidebar } from "@/components/dashboard/app-sidebar";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { Toaster } from "@/components/ui/sonner";
 import TanstackProvider from "@/providers/TanstackProvider";
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
+import { headers } from "next/headers";
+import { redirect } from "next/navigation";
 import "../globals.css";
 
 const poppins = Poppins({
@@ -17,11 +20,19 @@ export const metadata: Metadata = {
   title: "Admin Panel - Golden Hour Celebrations",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+
+  if (!session || session.user.role !== "admin") {
+    return redirect(`admin.${process.env.BETTER_AUTH_URL}/signin`);
+  }
+
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${poppins.className} dark antialiased`}>

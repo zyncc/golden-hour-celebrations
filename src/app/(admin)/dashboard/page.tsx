@@ -1,4 +1,3 @@
-import { auth } from "@/auth";
 import { AllBookingsTable } from "@/components/dashboard/all-bookings-table";
 import { ChartBarInteractive } from "@/components/dashboard/chart-area-interactive";
 import DashboardWrapper from "@/components/dashboard/dashboard-wrapper";
@@ -8,17 +7,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { TIME_ZONE } from "@/lib/constants";
 import prisma from "@/lib/prisma";
 import { Temporal } from "@js-temporal/polyfill";
-import { headers } from "next/headers";
-import { redirect } from "next/navigation";
 
 export default async function Page() {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
-  if (session?.user.role !== "admin") {
-    return redirect(`${process.env.NEXT_PUBLIC_BASE_URL}/signin`);
-  }
-
   const now = Temporal.Now.zonedDateTimeISO(TIME_ZONE);
 
   // today IST at 00:00
