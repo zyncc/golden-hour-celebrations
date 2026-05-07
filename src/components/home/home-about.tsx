@@ -29,7 +29,7 @@ export function AboutUs() {
           </div>
           <div className="group relative order-1 aspect-4/5 overflow-hidden rounded-2xl max-md:hidden md:aspect-square">
             <Image
-              src="/v17.jpg"
+              src="/v11.webp"
               alt="About Golden Hour Celebrations"
               fill
               className="rounded-2xl object-cover transition-transform duration-700 group-hover:scale-105"

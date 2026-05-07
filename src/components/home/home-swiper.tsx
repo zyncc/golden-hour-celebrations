@@ -5,11 +5,10 @@ import Autoplay from "embla-carousel-autoplay";
 import Fade from "embla-carousel-fade";
 import useEmblaCarousel from "embla-carousel-react";
 import Image from "next/image";
-import l1 from "../../../public/l1.jpg";
-import l2 from "../../../public/l2.jpg";
-import l3 from "../../../public/l3.jpg";
-import l4 from "../../../public/l4.jpg";
-import l5 from "../../../public/l5.jpg";
+import l1 from "../../../public/l1.webp";
+import l4 from "../../../public/l4.webp";
+import l5 from "../../../public/l5.webp";
+import l6 from "../../../public/l6.webp";
 
 export default function HomeSwiper() {
   const OPTIONS: EmblaOptionsType = { loop: true };
@@ -33,7 +32,7 @@ type PropType = {
   options?: EmblaOptionsType;
 };
 
-const slides = [l1, l2, l3, l4, l5];
+const slides = [l1, l6, l4, l5];
 
 function EmblaCarousel(props: PropType) {
   const { options } = props;

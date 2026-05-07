@@ -32,7 +32,7 @@ import {
   Volume2,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { toast } from "sonner";
 
 export default function StepOne() {
@@ -76,14 +76,6 @@ export default function StepOne() {
     }
   }
 
-  useEffect(() => {
-    setSelectedPackage({
-      price: undefined,
-      room: undefined,
-      time: undefined,
-    });
-  }, [reservation?.date]);
-
   const { data, isLoading } = useQuery({
     queryKey: ["getReservation", reservation?.date],
     refetchInterval: 1000 * 20,
@@ -107,6 +99,11 @@ export default function StepOne() {
           setReservationData({
             ...reservation,
             date: FormatDate(date!),
+          });
+          setSelectedPackage({
+            price: undefined,
+            room: undefined,
+            time: undefined,
           });
         }}
       />

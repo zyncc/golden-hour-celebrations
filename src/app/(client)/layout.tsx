@@ -3,6 +3,7 @@ import { Toaster } from "@/components/ui/sonner";
 import Whatsapp from "@/components/whatsapp";
 import TanstackProvider from "@/providers/TanstackProvider";
 import { GoogleAnalytics, GoogleTagManager } from "@next/third-parties/google";
+import { Analytics } from "@vercel/analytics/next";
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import "../globals.css";
@@ -42,6 +43,7 @@ export default function RootLayout({
       </head>
       <body className={`${poppins.className} antialiased`}>
         <Whatsapp />
+        <Analytics />
         <GoogleAnalytics gaId="G-QL5YQVXZ5V" />
         <GoogleTagManager gtmId="GTM-MHK9L5HR" />
         <TanstackProvider>

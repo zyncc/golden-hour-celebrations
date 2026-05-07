@@ -1,44 +1,23 @@
 import _ from "lodash";
-import l1 from "../../public/l1.jpg";
-import l10 from "../../public/l10.jpg";
-import l11 from "../../public/l11.jpg";
-import l12 from "../../public/l12.jpg";
-import l13 from "../../public/l13.jpg";
-import l14 from "../../public/l14.jpg";
-import l15 from "../../public/l15.jpg";
-import l2 from "../../public/l2.jpg";
-import l3 from "../../public/l3.jpg";
-import l4 from "../../public/l4.jpg";
-import l5 from "../../public/l5.jpg";
-import l6 from "../../public/l6.jpg";
-import l7 from "../../public/l7.jpg";
-import l8 from "../../public/l8.jpg";
-import l9 from "../../public/l9.jpg";
+import l1 from "../../public/l1.webp";
+import l2 from "../../public/l2.webp";
+import l3 from "../../public/l3.webp";
+import l4 from "../../public/l4.webp";
+import l5 from "../../public/l5.webp";
+import l6 from "../../public/l6.webp";
 
-import v1 from "../../public/v1.jpg";
-import v10 from "../../public/v10.jpg";
-import v11 from "../../public/v11.jpg";
-import v12 from "../../public/v12.jpg";
-import v13 from "../../public/v13.jpg";
-import v14 from "../../public/v14.jpg";
-import v15 from "../../public/v15.jpg";
-import v16 from "../../public/v16.jpg";
-import v17 from "../../public/v17.jpg";
-import v18 from "../../public/v18.jpg";
-import v19 from "../../public/v19.jpg";
-import v2 from "../../public/v2.jpg";
-import v20 from "../../public/v20.jpg";
-import v21 from "../../public/v21.jpg";
-import v22 from "../../public/v22.jpg";
-import v23 from "../../public/v23.jpg";
-import v24 from "../../public/v24.jpg";
-import v3 from "../../public/v3.jpg";
-import v4 from "../../public/v4.jpg";
-import v5 from "../../public/v5.jpg";
-import v6 from "../../public/v6.jpg";
-import v7 from "../../public/v7.jpg";
-import v8 from "../../public/v8.jpg";
-import v9 from "../../public/v9.jpg";
+import v1 from "../../public/v1.webp";
+import v10 from "../../public/v10.webp";
+import v11 from "../../public/v11.webp";
+import v12 from "../../public/v12.webp";
+import v2 from "../../public/v2.webp";
+import v3 from "../../public/v3.webp";
+import v4 from "../../public/v4.webp";
+import v5 from "../../public/v5.webp";
+import v6 from "../../public/v6.webp";
+import v7 from "../../public/v7.webp";
+import v8 from "../../public/v8.webp";
+import v9 from "../../public/v9.webp";
 
 export const advanceAmount = 1000;
 export const cakePrice = 550;
@@ -79,7 +58,7 @@ export const items = [
     ],
     popular: true,
     price: 1899,
-    photo: _.shuffle(["/l14.jpg", "/l5.jpg", "/l3.jpg", "/l2.jpg"]),
+    photo: _.shuffle(["/l6.webp", "/l5.webp", "/l3.webp", "/l4.webp"]),
   },
   {
     id: 1,
@@ -93,7 +72,7 @@ export const items = [
     ],
     noPeople: 4,
     price: 1499,
-    photo: _.shuffle(["/l15.jpg", "/l12.jpg", "/l6.jpg", "/l4.jpg", "/l1.jpg"]),
+    photo: _.shuffle(["/l1.webp", "/l4.webp", "/l5.webp", "/l6.webp"]),
   },
 ];
 
@@ -215,44 +194,23 @@ export const cakes = [
 ];
 
 export const galleryImages = [
-  { src: "/l1.jpg", optimisedSource: l1 },
-  { src: "/l2.jpg", optimisedSource: l2 },
-  { src: "/l3.jpg", optimisedSource: l3 },
-  { src: "/l4.jpg", optimisedSource: l4 },
-  { src: "/l5.jpg", optimisedSource: l5 },
-  { src: "/l6.jpg", optimisedSource: l6 },
-  { src: "/l7.jpg", optimisedSource: l7 },
-  { src: "/l8.jpg", optimisedSource: l8 },
-  { src: "/l9.jpg", optimisedSource: l9 },
-  { src: "/l10.jpg", optimisedSource: l10 },
-  { src: "/l11.jpg", optimisedSource: l11 },
-  { src: "/l12.jpg", optimisedSource: l12 },
-  { src: "/l13.jpg", optimisedSource: l13 },
-  { src: "/l14.jpg", optimisedSource: l14 },
-  { src: "/l15.jpg", optimisedSource: l15 },
+  { src: "/l1.webp", optimisedSource: l1 },
+  { src: "/l2.webp", optimisedSource: l2 },
+  { src: "/l3.webp", optimisedSource: l3 },
+  { src: "/l4.webp", optimisedSource: l4 },
+  { src: "/l5.webp", optimisedSource: l5 },
+  { src: "/l6.webp", optimisedSource: l6 },
 
-  { src: "/v1.jpg", optimisedSource: v1 },
-  { src: "/v2.jpg", optimisedSource: v2 },
-  { src: "/v3.jpg", optimisedSource: v3 },
-  { src: "/v4.jpg", optimisedSource: v4 },
-  { src: "/v5.jpg", optimisedSource: v5 },
-  { src: "/v6.jpg", optimisedSource: v6 },
-  { src: "/v7.jpg", optimisedSource: v7 },
-  { src: "/v8.jpg", optimisedSource: v8 },
-  { src: "/v9.jpg", optimisedSource: v9 },
-  { src: "/v10.jpg", optimisedSource: v10 },
-  { src: "/v11.jpg", optimisedSource: v11 },
-  { src: "/v12.jpg", optimisedSource: v12 },
-  { src: "/v13.jpg", optimisedSource: v13 },
-  { src: "/v14.jpg", optimisedSource: v14 },
-  { src: "/v15.jpg", optimisedSource: v15 },
-  { src: "/v16.jpg", optimisedSource: v16 },
-  { src: "/v17.jpg", optimisedSource: v17 },
-  { src: "/v18.jpg", optimisedSource: v18 },
-  { src: "/v19.jpg", optimisedSource: v19 },
-  { src: "/v20.jpg", optimisedSource: v20 },
-  { src: "/v21.jpg", optimisedSource: v21 },
-  { src: "/v22.jpg", optimisedSource: v22 },
-  { src: "/v23.jpg", optimisedSource: v23 },
-  { src: "/v24.jpg", optimisedSource: v24 },
+  { src: "/v1.webp", optimisedSource: v1 },
+  { src: "/v2.webp", optimisedSource: v2 },
+  { src: "/v3.webp", optimisedSource: v3 },
+  { src: "/v4.webp", optimisedSource: v4 },
+  { src: "/v5.webp", optimisedSource: v5 },
+  { src: "/v6.webp", optimisedSource: v6 },
+  { src: "/v7.webp", optimisedSource: v7 },
+  { src: "/v8.webp", optimisedSource: v8 },
+  { src: "/v9.webp", optimisedSource: v9 },
+  { src: "/v10.webp", optimisedSource: v10 },
+  { src: "/v11.webp", optimisedSource: v11 },
+  { src: "/v12.webp", optimisedSource: v12 },
 ];
