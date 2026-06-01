@@ -9,13 +9,20 @@ import { Spinner } from "@/components/ui/spinner";
 import { Switch } from "@/components/ui/switch";
 import { useReservation } from "@/context/ReservationStore";
 import {
-  advanceAmount,
-  cakePrice,
-  candleLightRosePath,
-  items,
-  ledLetterLightAge,
-  ledLetterLightName,
-  theRoyalTheatreAdvanceAmount,
+  ADDITIONAL_PERSON_PRICE,
+  ADVANCE_AMOUNT,
+  BLUEBERRY_CHEESE_CAKE_PRICE,
+  CAKE_PRICE,
+  CANDLE_LIGHT_ROSE_PATH,
+  FOG_EFFECT_PRICE,
+  LED_LETTER_LIGHT_AGE,
+  LED_LETTER_LIGHT_NAME,
+  MIDNIGHT_CHARGE,
+  PHOTOGRAPHY_AND_VIDEO_PRICE,
+  PHOTOGRAPHY_PRICE,
+  RASMALAI_CAKE_PRICE,
+  THE_ROYAL_THEATRE_ADVANCE_AMOUNT,
+  THEATRES,
 } from "@/lib/constants";
 import formatCurrency from "@/lib/formatCurrency";
 import { Check, CreditCard } from "lucide-react";
@@ -58,8 +65,8 @@ export default function StepFour() {
       amount: payFull
         ? reservation?.price! * 100
         : (reservation?.room == "The Royal"
-            ? theRoyalTheatreAdvanceAmount
-            : advanceAmount) * 100,
+            ? THE_ROYAL_THEATRE_ADVANCE_AMOUNT
+            : ADVANCE_AMOUNT) * 100,
       currency: "INR",
       name: `Booking for ${reservation?.name} `,
       description: `in ${reservation?.room}`,
@@ -101,56 +108,60 @@ export default function StepFour() {
   let price = reservation?.price!;
 
   let advanceAmountPrice =
-    reservation?.room == "The Royal" ? theRoyalTheatreAdvanceAmount : advanceAmount;
+    reservation?.room == "The Royal" ? THE_ROYAL_THEATRE_ADVANCE_AMOUNT : ADVANCE_AMOUNT;
 
   if (reservation?.cake) {
     if (reservation.cake == "Rasmalai Cake") {
-      price += 800;
-      advanceAmountPrice += 800;
+      price += RASMALAI_CAKE_PRICE;
+      advanceAmountPrice += RASMALAI_CAKE_PRICE;
     } else if (reservation.cake == "Blueberry Cheese Cake") {
-      price += 900;
-      advanceAmountPrice += 900;
+      price += BLUEBERRY_CHEESE_CAKE_PRICE;
+      advanceAmountPrice += BLUEBERRY_CHEESE_CAKE_PRICE;
     } else {
-      price += cakePrice;
-      advanceAmountPrice += cakePrice;
+      price += CAKE_PRICE;
+      advanceAmountPrice += CAKE_PRICE;
     }
   }
   if (reservation?.fogEntry) {
-    price += 400;
-    advanceAmountPrice += 400;
+    price += FOG_EFFECT_PRICE;
+    advanceAmountPrice += FOG_EFFECT_PRICE;
   }
   if (reservation?.rosePath) {
-    price += candleLightRosePath;
+    price += CANDLE_LIGHT_ROSE_PATH;
   }
   if (reservation?.ledLetterName) {
-    price += ledLetterLightName;
+    price += LED_LETTER_LIGHT_NAME;
   }
 
   if (reservation?.ledLetterAge) {
-    price += ledLetterLightAge;
+    price += LED_LETTER_LIGHT_AGE;
   }
   if (
     reservation?.timeSlot === "10PM - 12AM" ||
     reservation?.timeSlot === "10:30PM - 12:30AM"
   ) {
-    price += 500;
+    price += MIDNIGHT_CHARGE;
   }
   if (reservation?.photography === "photoshoot") {
-    price += 700;
+    price += PHOTOGRAPHY_PRICE;
   }
   if (reservation?.photography === "video") {
-    price += 1500;
+    price += PHOTOGRAPHY_AND_VIDEO_PRICE;
   }
   let priceIncreaseForAdditionalPeople = 0;
   if (reservation?.room == "Dreamscape Theatre" && reservation.noOfPeople! > 2) {
-    priceIncreaseForAdditionalPeople = (reservation.noOfPeople! - 2) * 200;
+    priceIncreaseForAdditionalPeople =
+      (reservation.noOfPeople! - 2) * ADDITIONAL_PERSON_PRICE;
   } else if (reservation?.room == "Elite Theatre" && reservation.noOfPeople! > 4) {
-    priceIncreaseForAdditionalPeople = (reservation.noOfPeople! - 4) * 200;
+    priceIncreaseForAdditionalPeople =
+      (reservation.noOfPeople! - 4) * ADDITIONAL_PERSON_PRICE;
   } else if (reservation?.room == "The Royal" && reservation.noOfPeople! > 15) {
-    priceIncreaseForAdditionalPeople = (reservation.noOfPeople! - 15) * 200;
+    priceIncreaseForAdditionalPeople =
+      (reservation.noOfPeople! - 15) * ADDITIONAL_PERSON_PRICE;
   }
 
   price += priceIncreaseForAdditionalPeople;
+
   return (
     <div className="min-h-screen">
       <div className="mx-auto max-w-7xl">
@@ -261,14 +272,14 @@ export default function StepFour() {
                 <div className="rounded-lg">
                   <p className="mb-2 font-medium">Package Includes:</p>
                   <div className="space-y-2">
-                    {items
-                      .find((item) => item.room == reservation.room)
-                      ?.description.map((desc, i) => (
-                        <div key={i} className="flex items-center text-sm">
-                          <Check className="text-primary mr-2 h-4 w-4 shrink-0" />
-                          {desc}
-                        </div>
-                      ))}
+                    {THEATRES.find(
+                      (item) => item.room == reservation.room,
+                    )?.description.map((desc, i) => (
+                      <div key={i} className="flex items-center text-sm">
+                        <Check className="text-primary mr-2 h-4 w-4 shrink-0" />
+                        {desc}
+                      </div>
+                    ))}
                   </div>
                 </div>
               </CardContent>
@@ -298,10 +309,10 @@ export default function StepFour() {
                       +{" "}
                       {formatCurrency(
                         reservation.cake == "Blueberry Cheese Cake"
-                          ? 900
+                          ? BLUEBERRY_CHEESE_CAKE_PRICE
                           : reservation.cake == "Rasmalai Cake"
-                            ? 800
-                            : cakePrice,
+                            ? RASMALAI_CAKE_PRICE
+                            : CAKE_PRICE,
                       )}
                     </span>
                   </div>
@@ -312,7 +323,9 @@ export default function StepFour() {
                     <span className="font-semibold whitespace-nowrap text-green-600">
                       +{" "}
                       {formatCurrency(
-                        reservation.photography === "photoshoot" ? 700 : 1500,
+                        reservation.photography === "photoshoot"
+                          ? PHOTOGRAPHY_PRICE
+                          : PHOTOGRAPHY_AND_VIDEO_PRICE,
                       )}
                     </span>
                   </div>
@@ -329,7 +342,7 @@ export default function StepFour() {
                   <div className="flex justify-between">
                     <span>Candle Light Rose Path</span>
                     <span className="font-semibold whitespace-nowrap text-green-600">
-                      + {formatCurrency(candleLightRosePath)}
+                      + {formatCurrency(CANDLE_LIGHT_ROSE_PATH)}
                     </span>
                   </div>
                 )}
@@ -337,7 +350,7 @@ export default function StepFour() {
                   <div className="flex justify-between">
                     <span>LED Letter Name</span>
                     <span className="font-semibold whitespace-nowrap text-green-600">
-                      + {formatCurrency(ledLetterLightName)}
+                      + {formatCurrency(LED_LETTER_LIGHT_NAME)}
                     </span>
                   </div>
                 )}
@@ -345,7 +358,7 @@ export default function StepFour() {
                   <div className="flex justify-between">
                     <span>LED Letter Age</span>
                     <span className="font-semibold whitespace-nowrap text-green-600">
-                      + {formatCurrency(ledLetterLightAge)}
+                      + {formatCurrency(LED_LETTER_LIGHT_AGE)}
                     </span>
                   </div>
                 )}
@@ -354,14 +367,14 @@ export default function StepFour() {
                   <div className="flex justify-between">
                     <span>Midnight Slot Charges</span>
                     <span className="font-semibold whitespace-nowrap text-green-600">
-                      + {formatCurrency(500)}
+                      + {formatCurrency(MIDNIGHT_CHARGE)}
                     </span>
                   </div>
                 )}
                 {reservation.room == "Dreamscape Theatre" &&
                   reservation.noOfPeople! > 2 && (
                     <div className="flex justify-between">
-                      <span>₹200 per Additional Person</span>
+                      <span>₹{ADDITIONAL_PERSON_PRICE} per Additional Person</span>
                       <span className="font-semibold whitespace-nowrap text-green-600">
                         + {formatCurrency(priceIncreaseForAdditionalPeople)}
                       </span>
@@ -369,7 +382,7 @@ export default function StepFour() {
                   )}
                 {reservation.room == "Elite Theatre" && reservation.noOfPeople! > 4 && (
                   <div className="flex justify-between">
-                    <span>₹200 per Additional Person</span>
+                    <span>₹{ADDITIONAL_PERSON_PRICE} per Additional Person</span>
                     <span className="font-semibold whitespace-nowrap text-green-600">
                       + {formatCurrency(priceIncreaseForAdditionalPeople)}
                     </span>

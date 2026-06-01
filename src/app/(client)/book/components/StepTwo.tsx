@@ -25,11 +25,13 @@ import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
 import { useReservation } from "@/context/ReservationStore";
 import {
-  cakePrice,
-  cakes,
-  candleLightRosePath,
-  ledLetterLightAge,
-  ledLetterLightName,
+  CAKE_PRICE,
+  CAKES,
+  CANDLE_LIGHT_ROSE_PATH,
+  LED_LETTER_LIGHT_AGE,
+  LED_LETTER_LIGHT_NAME,
+  PHOTOGRAPHY_AND_VIDEO_PRICE,
+  PHOTOGRAPHY_PRICE,
 } from "@/lib/constants";
 import formatCurrency from "@/lib/formatCurrency";
 import {
@@ -121,7 +123,7 @@ export default function StepTwo() {
                 <div>
                   <CardTitle className="text-xl">Cake Selection</CardTitle>
                   <CardDescription className="text-sm">
-                    All cakes are 500g • Starting from ₹{cakePrice}
+                    All cakes are 500g • Starting from ₹{CAKE_PRICE}
                   </CardDescription>
                 </div>
               </div>
@@ -185,12 +187,12 @@ export default function StepTwo() {
                     <div>
                       <h2 className="text-2xl font-bold">Choose Your Cake</h2>
                       <p className="text-muted-foreground mt-1">
-                        All cakes are 500g • Starting from ₹{cakePrice}
+                        All cakes are 500g • Starting from ₹{CAKE_PRICE}
                       </p>
                     </div>
                   </div>
                   <div className="grid max-h-[calc(80vh-200px)] grid-cols-2 gap-4 overflow-y-auto px-6 pb-6 sm:grid-cols-3">
-                    {cakes.map((cake) => {
+                    {CAKES.map((cake) => {
                       const imageSrc = CAKE_DATA[cake];
                       if (!imageSrc) return null;
                       return (
@@ -420,7 +422,8 @@ export default function StepTwo() {
                         <div className="space-y-3">
                           <div className="flex items-center gap-2">
                             <h3 className="text-lg font-semibold">
-                              🎥 ₹1500 Photoshoot + Video Coverage Package
+                              🎥 ₹{PHOTOGRAPHY_AND_VIDEO_PRICE} Photoshoot + Video
+                              Coverage Package
                             </h3>
                           </div>
                           <div className="space-y-2 pl-7 text-sm">
@@ -545,7 +548,9 @@ export default function StepTwo() {
                     </div>
                   </div>
                   <div className="text-right">
-                    <div className="text-lg font-medium text-emerald-600">+₹700</div>
+                    <div className="text-lg font-medium text-emerald-600">
+                      +₹{PHOTOGRAPHY_PRICE}
+                    </div>
                   </div>
                 </Label>
 
@@ -566,7 +571,9 @@ export default function StepTwo() {
                     </div>
                   </div>
                   <div className="text-right">
-                    <div className="text-lg font-medium text-emerald-600">+₹1500</div>
+                    <div className="text-lg font-medium text-emerald-600">
+                      +{PHOTOGRAPHY_AND_VIDEO_PRICE}
+                    </div>
                     <div className="text-muted-foreground text-xs">Most popular</div>
                   </div>
                 </Label>
@@ -663,7 +670,7 @@ export default function StepTwo() {
                   </div>
                   <div className="text-right">
                     <div className="text-lg font-medium text-emerald-600">
-                      +{formatCurrency(ledLetterLightName)}
+                      +{formatCurrency(LED_LETTER_LIGHT_NAME)}
                     </div>
                   </div>
                 </Label>
@@ -684,7 +691,7 @@ export default function StepTwo() {
                   </div>
                   <div className="text-right">
                     <div className="text-lg font-medium text-emerald-600">
-                      +{formatCurrency(ledLetterLightAge)}
+                      +{formatCurrency(LED_LETTER_LIGHT_AGE)}
                     </div>
                   </div>
                 </Label>
@@ -935,7 +942,7 @@ export default function StepTwo() {
                   </div>
                   <div className="text-right">
                     <div className="text-lg font-medium text-emerald-600">
-                      +{formatCurrency(candleLightRosePath)}
+                      +{formatCurrency(CANDLE_LIGHT_ROSE_PATH)}
                     </div>
                   </div>
                 </Label>

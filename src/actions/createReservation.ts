@@ -4,12 +4,22 @@ import { auth } from "@/auth";
 import { Reservation } from "@/context/ReservationStore";
 import ReservationConfirmationEmail from "@/emails/receipt";
 import {
-  advanceAmount,
-  cakePrice,
-  candleLightRosePath,
-  ledLetterLightAge,
-  ledLetterLightName,
-  theRoyalTheatreAdvanceAmount,
+  ADDITIONAL_PERSON_PRICE,
+  ADVANCE_AMOUNT,
+  BLUEBERRY_CHEESE_CAKE_PRICE,
+  CAKE_PRICE,
+  CANDLE_LIGHT_ROSE_PATH,
+  DREAMSCAPE_THEATRE_PRICE,
+  ELITE_THEATRE_PRICE,
+  FOG_EFFECT_PRICE,
+  LED_LETTER_LIGHT_AGE,
+  LED_LETTER_LIGHT_NAME,
+  MIDNIGHT_CHARGE,
+  PHOTOGRAPHY_AND_VIDEO_PRICE,
+  PHOTOGRAPHY_PRICE,
+  RASMALAI_CAKE_PRICE,
+  THE_ROYAL_THEATRE_ADVANCE_AMOUNT,
+  THE_ROYAL_THEATRE_PRICE,
   TIME_ZONE,
 } from "@/lib/constants";
 import prisma from "@/lib/prisma";
@@ -30,21 +40,15 @@ export async function createReservation(
   let total = 0;
 
   let advanceAmountPrice =
-    reservation?.room == "The Royal" ? theRoyalTheatreAdvanceAmount : advanceAmount;
+    reservation?.room == "The Royal" ? THE_ROYAL_THEATRE_ADVANCE_AMOUNT : ADVANCE_AMOUNT;
 
   const plainDate = Temporal.PlainDate.from(reservation.date!);
   const plainTime = parseSlotStart(reservation.timeSlot!);
-
-  console.log(plainDate.toString());
-  console.log(plainTime.toString());
 
   const zonedDateTime = plainDate.toZonedDateTime({
     plainTime,
     timeZone: TIME_ZONE,
   });
-
-  console.log(zonedDateTime.toString());
-  console.log(zonedDateTime.toInstant().toString());
 
   // Selected booking instant (absolute UTC)
   const selectedInstant = zonedDateTime.toInstant();
@@ -58,21 +62,23 @@ export async function createReservation(
   }
 
   if (reservation.room === "Elite Theatre") {
-    total += 1899;
+    total += ELITE_THEATRE_PRICE;
   } else if (reservation.room === "Dreamscape Theatre") {
-    total += 1499;
+    total += DREAMSCAPE_THEATRE_PRICE;
+  } else if (reservation.room === "The Royal") {
+    total += THE_ROYAL_THEATRE_PRICE;
   }
 
   if (reservation?.cake) {
     if (reservation.cake == "Rasmalai Cake") {
-      total += 800;
+      total += RASMALAI_CAKE_PRICE;
       advanceAmountPrice += 800;
     } else if (reservation.cake == "Blueberry Cheese Cake") {
-      total += 900;
+      total += BLUEBERRY_CHEESE_CAKE_PRICE;
       advanceAmountPrice += 900;
     } else {
-      total += cakePrice;
-      advanceAmountPrice += cakePrice;
+      total += CAKE_PRICE;
+      advanceAmountPrice += CAKE_PRICE;
     }
   }
 
@@ -82,27 +88,27 @@ export async function createReservation(
   }
 
   if (reservation.rosePath) {
-    total += candleLightRosePath;
+    total += CANDLE_LIGHT_ROSE_PATH;
   }
 
   if (
     reservation?.timeSlot === "10PM - 12AM" ||
     reservation?.timeSlot === "10:30PM - 12:30AM"
   ) {
-    total += 500;
+    total += MIDNIGHT_CHARGE;
   }
 
   if (reservation.photography === "photoshoot") {
-    total += 700;
+    total += PHOTOGRAPHY_PRICE;
   } else if (reservation.photography === "video") {
-    total += 1500;
+    total += PHOTOGRAPHY_AND_VIDEO_PRICE;
   }
 
   if (reservation.ledLetterName) {
-    total += ledLetterLightName;
+    total += LED_LETTER_LIGHT_NAME;
   }
   if (reservation.ledLetterAge) {
-    total += ledLetterLightAge;
+    total += LED_LETTER_LIGHT_AGE;
   }
 
   if (
@@ -110,13 +116,19 @@ export async function createReservation(
     reservation.noOfPeople &&
     reservation.noOfPeople > 2
   ) {
-    total += (reservation.noOfPeople - 2) * 200;
+    total += (reservation.noOfPeople - 2) * ADDITIONAL_PERSON_PRICE;
   } else if (
     reservation.room === "Elite Theatre" &&
     reservation.noOfPeople &&
     reservation.noOfPeople > 4
   ) {
-    total += (reservation.noOfPeople - 4) * 200;
+    total += (reservation.noOfPeople - 4) * ADDITIONAL_PERSON_PRICE;
+  } else if (
+    reservation.room === "The Royal" &&
+    reservation.noOfPeople &&
+    reservation.noOfPeople > 15
+  ) {
+    total += (reservation.noOfPeople - 15) * ADDITIONAL_PERSON_PRICE;
   }
 
   let AdvanceAmount = payFull ? total : advanceAmountPrice;
@@ -193,16 +205,10 @@ export async function CreateManualBooking(data: Data) {
   const plainDate = Temporal.PlainDate.from(data.date);
   const plainTime = parseSlotStart(data.timeSlot);
 
-  console.log(plainDate.toString());
-  console.log(plainTime.toString());
-
   const zonedDateTime = plainDate.toZonedDateTime({
     plainTime,
     timeZone: TIME_ZONE,
   });
-
-  console.log(zonedDateTime.toString());
-  console.log(zonedDateTime.toInstant().toString());
 
   // Selected booking instant (absolute UTC)
   const selectedInstant = zonedDateTime.toInstant();
@@ -233,46 +239,46 @@ export async function CreateManualBooking(data: Data) {
   let total = 0;
 
   if (data.room === "Dreamscape Theatre") {
-    total += 1499;
+    total += DREAMSCAPE_THEATRE_PRICE;
   } else if (data.room === "Elite Theatre") {
-    total += 1899;
+    total += ELITE_THEATRE_PRICE;
   } else if (data.room === "The Royal") {
-    total += 7499;
+    total += THE_ROYAL_THEATRE_PRICE;
   }
 
   if (data.cake) {
     if (data.cake == "Rasmalai Cake") {
-      total += 800;
+      total += RASMALAI_CAKE_PRICE;
     } else if (data.cake == "Blueberry Cheese Cake") {
-      total += 900;
+      total += BLUEBERRY_CHEESE_CAKE_PRICE;
     } else {
-      total += cakePrice;
+      total += CAKE_PRICE;
     }
   }
-  if (data.fogEntry) total += 400;
-  if (data.rosePath) total += candleLightRosePath;
+  if (data.fogEntry) total += FOG_EFFECT_PRICE;
+  if (data.rosePath) total += CANDLE_LIGHT_ROSE_PATH;
 
-  if (data.photography === "photoshoot") total += 700;
-  else if (data.photography === "video") total += 1500;
+  if (data.photography === "photoshoot") total += PHOTOGRAPHY_PRICE;
+  else if (data.photography === "video") total += PHOTOGRAPHY_AND_VIDEO_PRICE;
 
   if (data.timeSlot === "10PM - 12AM" || data.timeSlot === "10:30PM - 12:30AM") {
-    total += 500;
+    total += MIDNIGHT_CHARGE;
   }
 
   if (data.ledLetterName) {
-    total += ledLetterLightName;
+    total += LED_LETTER_LIGHT_NAME;
   }
 
   if (data.ledLetterAge) {
-    total += ledLetterLightAge;
+    total += LED_LETTER_LIGHT_AGE;
   }
 
   if (data.room === "Dreamscape Theatre" && data.noOfPeople && data.noOfPeople > 2) {
-    total += (data.noOfPeople - 2) * 200;
+    total += (data.noOfPeople - 2) * ADDITIONAL_PERSON_PRICE;
   } else if (data.room === "Elite Theatre" && data.noOfPeople && data.noOfPeople > 4) {
-    total += (data.noOfPeople - 4) * 200;
+    total += (data.noOfPeople - 4) * ADDITIONAL_PERSON_PRICE;
   } else if (data.room === "The Royal" && data.noOfPeople && data.noOfPeople > 15) {
-    total += (data.noOfPeople - 15) * 200;
+    total += (data.noOfPeople - 15) * ADDITIONAL_PERSON_PRICE;
   }
 
   const balanceAmount = total - discount - advanceAmount;

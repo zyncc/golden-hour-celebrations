@@ -35,9 +35,8 @@ model User {
 }
 
 model Reservations {
-  id            String @id @default(auto()) @map("_id") @db.ObjectId
-  balanceAmount Int
-
+  id              String   @id @default(auto()) @map("_id") @db.ObjectId
+  balanceAmount   Int
   advanceAmount   Int
   room            String
   noOfPeople      Int

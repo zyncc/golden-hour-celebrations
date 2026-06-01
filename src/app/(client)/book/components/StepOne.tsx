@@ -14,10 +14,10 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { useReservation } from "@/context/ReservationStore";
 import {
-  dreamscapeTimeSlots,
-  EliteTimeSlots,
-  items,
-  RoyalTimeSlots,
+  DREAMSCAPE_TIME_SLOTS,
+  ELITE_TIME_SLOTS,
+  ROYAL_TIME_SLOTS,
+  THEATRES,
 } from "@/lib/constants";
 import formatCurrency from "@/lib/formatCurrency";
 import { FormatDate, isSlotUnavailable } from "@/lib/utils";
@@ -116,7 +116,7 @@ export default function StepOne() {
       <div className="flex w-full">
         <div className="mx-auto w-full">
           <div className="grid grid-cols-1 gap-5 pb-6 md:grid-cols-2">
-            {items.map((pkg, index) => (
+            {THEATRES.map((pkg, index) => (
               <Card key={index} className="relative overflow-hidden rounded-xl p-0">
                 <div className="flex flex-col">
                   <div className="relative">
@@ -736,7 +736,7 @@ export default function StepOne() {
                     </ul>
                     <div className="grid w-full grid-cols-2 gap-2">
                       {pkg.room === "Dreamscape Theatre"
-                        ? dreamscapeTimeSlots.map((slot) => {
+                        ? DREAMSCAPE_TIME_SLOTS.map((slot) => {
                             const isSelected =
                               selectedPackage.time === slot &&
                               selectedPackage.room === pkg.room;
@@ -783,7 +783,7 @@ export default function StepOne() {
                             );
                           })
                         : pkg.room === "Elite Theatre"
-                          ? EliteTimeSlots.map((slot) => {
+                          ? ELITE_TIME_SLOTS.map((slot) => {
                               const isSelected =
                                 selectedPackage.time === slot &&
                                 selectedPackage.room === pkg.room;
@@ -828,7 +828,7 @@ export default function StepOne() {
                                 </Button>
                               );
                             })
-                          : RoyalTimeSlots.map((slot) => {
+                          : ROYAL_TIME_SLOTS.map((slot) => {
                               const isSelected =
                                 selectedPackage.time === slot &&
                                 selectedPackage.room === pkg.room;

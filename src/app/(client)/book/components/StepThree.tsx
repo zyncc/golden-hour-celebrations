@@ -20,7 +20,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useReservation } from "@/context/ReservationStore";
-import { Occassions } from "@/lib/constants";
+import { OCCASSIONS } from "@/lib/constants";
 import { getStepThreeFormSchema } from "@/lib/zodSchemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { redirect, useRouter } from "next/navigation";
@@ -168,7 +168,7 @@ export default function StepThreeForm() {
                         onChange={field.onChange}
                       >
                         <NativeSelectOption value="">Select Occassion</NativeSelectOption>
-                        {Occassions.map((item) => (
+                        {OCCASSIONS.map((item) => (
                           <NativeSelectOption key={item} value={item}>
                             {item}
                           </NativeSelectOption>

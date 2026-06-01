@@ -35,16 +35,34 @@ import v15 from "../../public/v15.webp";
 import v16 from "../../public/v16.webp";
 import v17 from "../../public/v17.webp";
 
-export const advanceAmount = 1000;
-export const theRoyalTheatreAdvanceAmount = 4000;
-export const cakePrice = 550;
-export const candleLightRosePath = 349;
-export const ledLetterLightAge = 49;
-export const ledLetterLightName = 149;
+export const CAKE_PRICE = 650;
+export const BLUEBERRY_CHEESE_CAKE_PRICE = 900;
+export const RASMALAI_CAKE_PRICE = 800;
+
+export const ADVANCE_AMOUNT = 1000;
+export const THE_ROYAL_THEATRE_ADVANCE_AMOUNT = 4000;
+export const CANDLE_LIGHT_ROSE_PATH = 349;
+
+export const LED_LETTER_LIGHT_AGE = 49;
+export const LED_LETTER_LIGHT_NAME = 149;
+
+export const PHOTOGRAPHY_PRICE = 700;
+export const PHOTOGRAPHY_AND_VIDEO_PRICE = 1500;
+
+export const FOG_EFFECT_PRICE = 400;
+
+export const ADDITIONAL_PERSON_PRICE = 200;
+export const CLEANING_CHARGES_MIN = 500;
+export const MINIMUM_PENALTY_AMOUNT = 1000;
+export const MIDNIGHT_CHARGE = 500;
+
+export const DREAMSCAPE_THEATRE_PRICE = 1499;
+export const ELITE_THEATRE_PRICE = 1899;
+export const THE_ROYAL_THEATRE_PRICE = 7499;
 
 export const TIME_ZONE = "Asia/Kolkata";
 
-export const dreamscapeTimeSlots = [
+export const DREAMSCAPE_TIME_SLOTS = [
   "9:30AM - 11:30AM",
   "12PM - 2PM",
   "2:30PM - 4:30PM",
@@ -53,7 +71,7 @@ export const dreamscapeTimeSlots = [
   "10PM - 12AM",
 ];
 
-export const EliteTimeSlots = [
+export const ELITE_TIME_SLOTS = [
   "10AM - 12PM",
   "12:30PM - 2:30PM",
   "3PM - 5PM",
@@ -62,7 +80,9 @@ export const EliteTimeSlots = [
   "10:30PM - 12:30AM",
 ];
 
-export const Occassions = [
+export const ROYAL_TIME_SLOTS = ["11AM - 2PM", "3PM - 6PM", "7PM - 10PM"];
+
+export const OCCASSIONS = [
   "Birthday",
   "Anniversary",
   "Bride to be",
@@ -78,15 +98,13 @@ export const Occassions = [
   "Other",
 ];
 
-export const RoyalTimeSlots = ["11AM - 2PM", "3PM - 6PM", "7PM - 10PM"];
-
-export const items = [
+export const THEATRES = [
   {
     id: 3,
     room: "The Royal",
     description: [
       "Beautifully Decorated space with theatre and entertainment access",
-      "Complimentary Entry for 15 Members (Additional members – ₹200 per person)",
+      `Complimentary Entry for 15 Members (Additional members – ₹${ADDITIONAL_PERSON_PRICE} per person)`,
       "Fully Air-Conditioned Space",
       "Luxury sofa seating (15 seater)",
       "3 Hours Private Slot With premium decoration set-up",
@@ -99,11 +117,11 @@ export const items = [
       "No cold fire",
       "Alcohol & smoking strictly not allowed",
       "Pets are not allowed",
-      "Cleaning charges applicable if the theatre is left messy (Minimum ₹500)",
+      `Cleaning charges applicable if the theatre is left messy (Minimum ₹${CLEANING_CHARGES_MIN})`,
     ],
     noPeople: 15,
     hasDiscount: true,
-    discountPrice: 7499,
+    discountPrice: THE_ROYAL_THEATRE_PRICE,
     price: 10000,
     photo: _.shuffle([
       "/l12.webp",
@@ -122,10 +140,10 @@ export const items = [
       "Private Movie Time Experience",
       "LED Letter Name",
       "Access to OTT Platforms",
-      "Upto 4 people (Max 10 people, additional ₹200 per person)",
+      `Upto 4 people (Max 10 people, additional ₹${ADDITIONAL_PERSON_PRICE} per person)`,
     ],
     popular: true,
-    price: 1899,
+    price: ELITE_THEATRE_PRICE,
     photo: _.shuffle(["/l6.webp", "/l5.webp", "/l3.webp", "/l4.webp"]),
   },
   {
@@ -136,10 +154,10 @@ export const items = [
       "Cozy Romantic Date Decor",
       "LED Letter Name",
       "Access to OTT Platforms",
-      "2 people (Max 4 people, additional ₹200 per person)",
+      `2 people (Max 4 people, additional ₹${ADDITIONAL_PERSON_PRICE} per person)`,
     ],
     noPeople: 4,
-    price: 1499,
+    price: DREAMSCAPE_THEATRE_PRICE,
     photo: _.shuffle(["/l1.webp", "/l4.webp", "/l5.webp", "/l6.webp"]),
   },
 ];
@@ -252,7 +270,7 @@ export const faqData = [
   },
 ];
 
-export const cakes = [
+export const CAKES = [
   "Vancho Cake",
   "Blueberry Cheese Cake",
   "Choco Truffle Cake",

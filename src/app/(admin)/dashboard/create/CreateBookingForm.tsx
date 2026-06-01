@@ -24,14 +24,25 @@ import {
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 import {
-  cakePrice,
-  cakes,
-  candleLightRosePath,
-  dreamscapeTimeSlots,
-  EliteTimeSlots,
-  ledLetterLightAge,
-  ledLetterLightName,
-  RoyalTimeSlots,
+  ADDITIONAL_PERSON_PRICE,
+  BLUEBERRY_CHEESE_CAKE_PRICE,
+  CAKE_PRICE,
+  CAKES,
+  CANDLE_LIGHT_ROSE_PATH,
+  DREAMSCAPE_THEATRE_PRICE,
+  DREAMSCAPE_TIME_SLOTS,
+  ELITE_THEATRE_PRICE,
+  ELITE_TIME_SLOTS,
+  FOG_EFFECT_PRICE,
+  LED_LETTER_LIGHT_AGE,
+  LED_LETTER_LIGHT_NAME,
+  MIDNIGHT_CHARGE,
+  OCCASSIONS,
+  PHOTOGRAPHY_AND_VIDEO_PRICE,
+  PHOTOGRAPHY_PRICE,
+  RASMALAI_CAKE_PRICE,
+  ROYAL_TIME_SLOTS,
+  THE_ROYAL_THEATRE_PRICE,
 } from "@/lib/constants";
 import formatCurrency from "@/lib/formatCurrency";
 import { cn, FormatDate, isSlotUnavailable } from "@/lib/utils";
@@ -117,51 +128,51 @@ export default function CreateBookingForm({ currentDate }: { currentDate: string
 
     // Base room price
     if (selectedRoom === "Dreamscape Theatre") {
-      basePrice = 1499;
+      basePrice = DREAMSCAPE_THEATRE_PRICE;
     } else if (selectedRoom === "Elite Theatre") {
-      basePrice = 1899;
+      basePrice = ELITE_THEATRE_PRICE;
     } else if (selectedRoom === "The Royal") {
-      basePrice = 7499;
+      basePrice = THE_ROYAL_THEATRE_PRICE;
     }
 
     // Extra people charges
     if (selectedRoom === "Dreamscape Theatre" && noOfPeople > 2) {
-      extraPeopleCharge = (noOfPeople - 2) * 200;
+      extraPeopleCharge = (noOfPeople - 2) * ADDITIONAL_PERSON_PRICE;
     } else if (selectedRoom === "Elite Theatre" && noOfPeople > 4) {
-      extraPeopleCharge = (noOfPeople - 4) * 200;
+      extraPeopleCharge = (noOfPeople - 4) * ADDITIONAL_PERSON_PRICE;
     } else if (selectedRoom === "The Royal" && noOfPeople > 15) {
-      extraPeopleCharge = (noOfPeople - 15) * 200;
+      extraPeopleCharge = (noOfPeople - 15) * ADDITIONAL_PERSON_PRICE;
     }
 
     // Cake cost (separate from base price)
     if (selectedCake) {
       if (selectedCake === "Rasmalai Cake") {
-        cakeCost = 800;
+        cakeCost = RASMALAI_CAKE_PRICE;
       } else if (selectedCake == "Blueberry Cheese Cake") {
-        cakeCost = 900;
+        cakeCost = BLUEBERRY_CHEESE_CAKE_PRICE;
       } else {
-        cakeCost = cakePrice;
+        cakeCost = CAKE_PRICE;
       }
     }
 
     // Photography cost (separate from base price)
     if (photography === "photoshoot") {
-      photographyCost = 700;
+      photographyCost = PHOTOGRAPHY_PRICE;
     } else if (photography === "video") {
-      photographyCost = 1500;
+      photographyCost = PHOTOGRAPHY_AND_VIDEO_PRICE;
     }
 
     // Add-on costs (separate from base price)
-    if (fogEntry) fogEntryCost = 400;
-    if (rosePath) rosePathCost = candleLightRosePath;
+    if (fogEntry) fogEntryCost = FOG_EFFECT_PRICE;
+    if (rosePath) rosePathCost = CANDLE_LIGHT_ROSE_PATH;
 
     // LED letter costs (separate from base price)
-    if (wantsLedName) ledLetterCost += ledLetterLightName;
-    if (wantsLedAge) ledLetterCost += ledLetterLightAge;
+    if (wantsLedName) ledLetterCost += LED_LETTER_LIGHT_NAME;
+    if (wantsLedAge) ledLetterCost += LED_LETTER_LIGHT_AGE;
 
     // Midnight charges
     if (selectedTimeSlot === "10PM - 12AM" || selectedTimeSlot === "10:30PM - 12:30AM") {
-      midnightCharge = 500;
+      midnightCharge = MIDNIGHT_CHARGE;
     }
 
     const totalCost =
@@ -213,9 +224,9 @@ export default function CreateBookingForm({ currentDate }: { currentDate: string
 
   // Get available time slots based on selected room
   const availableTimeSlots = useMemo(() => {
-    if (selectedRoom === "Dreamscape Theatre") return dreamscapeTimeSlots;
-    if (selectedRoom === "Elite Theatre") return EliteTimeSlots;
-    if (selectedRoom === "The Royal") return RoyalTimeSlots;
+    if (selectedRoom === "Dreamscape Theatre") return DREAMSCAPE_TIME_SLOTS;
+    if (selectedRoom === "Elite Theatre") return ELITE_TIME_SLOTS;
+    if (selectedRoom === "The Royal") return ROYAL_TIME_SLOTS;
     return [];
   }, [selectedRoom]);
 
@@ -389,17 +400,11 @@ export default function CreateBookingForm({ currentDate }: { currentDate: string
                           <SelectValue placeholder="Select an occasion" />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="Birthday">Birthday</SelectItem>
-                          <SelectItem value="Anniversary">Anniversary</SelectItem>
-                          <SelectItem value="Bride to be">Bride to be</SelectItem>
-                          <SelectItem value="Groom to be">Groom to be</SelectItem>
-                          <SelectItem value="Movie Date">Movie Date</SelectItem>
-                          <SelectItem value="Graduation Party">
-                            Graduation Party
-                          </SelectItem>
-                          <SelectItem value="Proposal">Proposal</SelectItem>
-                          <SelectItem value="Mom to be">Mom to be</SelectItem>
-                          <SelectItem value="Other">Other</SelectItem>
+                          {OCCASSIONS.map((item) => (
+                            <SelectItem key={item} value={item}>
+                              {item}
+                            </SelectItem>
+                          ))}
                         </SelectContent>
                       </Select>
                     </FormControl>
@@ -577,7 +582,7 @@ export default function CreateBookingForm({ currentDate }: { currentDate: string
                             <SelectValue placeholder="Select a cake" />
                           </SelectTrigger>
                           <SelectContent>
-                            {cakes.map((cake) => (
+                            {CAKES.map((cake) => (
                               <SelectItem key={cake} value={cake}>
                                 {cake}
                               </SelectItem>

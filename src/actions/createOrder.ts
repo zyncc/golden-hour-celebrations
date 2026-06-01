@@ -2,12 +2,22 @@
 
 import { Reservation } from "@/context/ReservationStore";
 import {
-  advanceAmount,
-  cakePrice,
-  candleLightRosePath,
-  ledLetterLightAge,
-  ledLetterLightName,
-  theRoyalTheatreAdvanceAmount,
+  ADDITIONAL_PERSON_PRICE,
+  ADVANCE_AMOUNT,
+  BLUEBERRY_CHEESE_CAKE_PRICE,
+  CAKE_PRICE,
+  CANDLE_LIGHT_ROSE_PATH,
+  DREAMSCAPE_THEATRE_PRICE,
+  ELITE_THEATRE_PRICE,
+  FOG_EFFECT_PRICE,
+  LED_LETTER_LIGHT_AGE,
+  LED_LETTER_LIGHT_NAME,
+  MIDNIGHT_CHARGE,
+  PHOTOGRAPHY_AND_VIDEO_PRICE,
+  PHOTOGRAPHY_PRICE,
+  RASMALAI_CAKE_PRICE,
+  THE_ROYAL_THEATRE_ADVANCE_AMOUNT,
+  THE_ROYAL_THEATRE_PRICE,
 } from "@/lib/constants";
 import Razorpay from "razorpay";
 
@@ -30,11 +40,11 @@ export async function createOrder(
   let price: number;
 
   if (reservation.room === "Dreamscape Theatre") {
-    price = 1499;
+    price = DREAMSCAPE_THEATRE_PRICE;
   } else if (reservation.room === "Elite Theatre") {
-    price = 1899;
+    price = ELITE_THEATRE_PRICE;
   } else if (reservation.room === "The Royal") {
-    price = 7499;
+    price = THE_ROYAL_THEATRE_PRICE;
   } else {
     return {
       success: false,
@@ -43,53 +53,56 @@ export async function createOrder(
   }
 
   let advanceAmountPrice =
-    reservation?.room == "The Royal" ? theRoyalTheatreAdvanceAmount : advanceAmount;
+    reservation?.room == "The Royal" ? THE_ROYAL_THEATRE_ADVANCE_AMOUNT : ADVANCE_AMOUNT;
 
   if (reservation.cake) {
     if (reservation.cake == "Rasmalai Cake") {
-      price += 800;
-      advanceAmountPrice += 800;
+      price += RASMALAI_CAKE_PRICE;
+      advanceAmountPrice += RASMALAI_CAKE_PRICE;
     } else if (reservation.cake == "Blueberry Cheese Cake") {
-      price += 900;
-      advanceAmountPrice += 900;
+      price += BLUEBERRY_CHEESE_CAKE_PRICE;
+      advanceAmountPrice += BLUEBERRY_CHEESE_CAKE_PRICE;
     } else {
-      price += cakePrice;
-      advanceAmountPrice += cakePrice;
+      price += CAKE_PRICE;
+      advanceAmountPrice += CAKE_PRICE;
     }
   }
 
   if (reservation.ledLetterName) {
-    price += ledLetterLightName;
+    price += LED_LETTER_LIGHT_NAME;
   }
 
   if (reservation.ledLetterAge) {
-    price += ledLetterLightAge;
+    price += LED_LETTER_LIGHT_AGE;
   }
 
   if (reservation.fogEntry) {
-    price += 400;
-    advanceAmountPrice += 400;
+    price += FOG_EFFECT_PRICE;
+    advanceAmountPrice += FOG_EFFECT_PRICE;
   }
 
-  if (reservation.rosePath) price += candleLightRosePath;
+  if (reservation.rosePath) price += CANDLE_LIGHT_ROSE_PATH;
 
   if (
     reservation.timeSlot === "10PM - 12AM" ||
     reservation.timeSlot === "10:30PM - 12:30AM"
   ) {
-    price += 500;
+    price += MIDNIGHT_CHARGE;
   }
 
-  if (reservation.photography === "photoshoot") price += 700;
-  if (reservation.photography === "video") price += 1500;
+  if (reservation.photography === "photoshoot") price += PHOTOGRAPHY_PRICE;
+  if (reservation.photography === "video") price += PHOTOGRAPHY_AND_VIDEO_PRICE;
 
   let priceIncreaseForAdditionalPeople = 0;
   if (reservation.room == "Dreamscape Theatre" && reservation.noOfPeople! > 2) {
-    priceIncreaseForAdditionalPeople = (reservation.noOfPeople! - 2) * 200;
+    priceIncreaseForAdditionalPeople =
+      (reservation.noOfPeople! - 2) * ADDITIONAL_PERSON_PRICE;
   } else if (reservation.room == "Elite Theatre" && reservation.noOfPeople! > 4) {
-    priceIncreaseForAdditionalPeople = (reservation.noOfPeople! - 4) * 200;
+    priceIncreaseForAdditionalPeople =
+      (reservation.noOfPeople! - 4) * ADDITIONAL_PERSON_PRICE;
   } else if (reservation.room == "The Royal" && reservation.noOfPeople! > 15) {
-    priceIncreaseForAdditionalPeople = (reservation.noOfPeople! - 15) * 200;
+    priceIncreaseForAdditionalPeople =
+      (reservation.noOfPeople! - 15) * ADDITIONAL_PERSON_PRICE;
   }
 
   price += priceIncreaseForAdditionalPeople;
