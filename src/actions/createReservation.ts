@@ -234,6 +234,8 @@ export async function CreateManualBooking(data: Data) {
     total += 1499;
   } else if (data.room === "Elite Theatre") {
     total += 1899;
+  } else if (data.room === "The Royal") {
+    total += 7499;
   }
 
   if (data.cake) {
@@ -267,6 +269,8 @@ export async function CreateManualBooking(data: Data) {
     total += (data.noOfPeople - 2) * 200;
   } else if (data.room === "Elite Theatre" && data.noOfPeople && data.noOfPeople > 4) {
     total += (data.noOfPeople - 4) * 200;
+  } else if (data.room === "The Royal" && data.noOfPeople && data.noOfPeople > 15) {
+    total += (data.noOfPeople - 15) * 200;
   }
 
   const balanceAmount = total - discount - advanceAmount;

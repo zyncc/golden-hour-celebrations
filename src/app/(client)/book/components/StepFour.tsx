@@ -35,7 +35,15 @@ export default function StepFour() {
 
   async function handlePayButton() {
     setPending(true);
-    const orderID: string = await createOrder(payFull, reservation);
+    const order = await createOrder(payFull, reservation);
+    if (!order.success || !order.orderId) {
+      toast("Error", {
+        description: order.error,
+        duration: 5000,
+      });
+      return;
+    }
+    const orderID = order.orderId;
     const err = await createReservation(payFull, reservation!, orderID);
     if (err) {
       toast(err.title, {
@@ -132,7 +140,10 @@ export default function StepFour() {
     priceIncreaseForAdditionalPeople = (reservation.noOfPeople! - 2) * 200;
   } else if (reservation?.room == "Elite Theatre" && reservation.noOfPeople! > 4) {
     priceIncreaseForAdditionalPeople = (reservation.noOfPeople! - 4) * 200;
+  } else if (reservation?.room == "The Royal" && reservation.noOfPeople! > 15) {
+    priceIncreaseForAdditionalPeople = (reservation.noOfPeople! - 15) * 200;
   }
+
   price += priceIncreaseForAdditionalPeople;
   return (
     <div className="min-h-screen">
@@ -351,6 +362,14 @@ export default function StepFour() {
                     </div>
                   )}
                 {reservation.room == "Elite Theatre" && reservation.noOfPeople! > 4 && (
+                  <div className="flex justify-between">
+                    <span>₹200 per Additional Person</span>
+                    <span className="font-semibold whitespace-nowrap text-green-600">
+                      + {formatCurrency(priceIncreaseForAdditionalPeople)}
+                    </span>
+                  </div>
+                )}
+                {reservation.room == "The Royal" && reservation.noOfPeople! > 15 && (
                   <div className="flex justify-between">
                     <span>₹200 per Additional Person</span>
                     <span className="font-semibold whitespace-nowrap text-green-600">

@@ -4,34 +4,33 @@ export const emailValidator = z.object({
   email: z.string().email("Enter a valid email address"),
 });
 
-export const getStepThreeFormSchema = (room: string) =>
-  z.object({
+export const getStepThreeFormSchema = (room: string) => {
+  let maxPeopleAllowed;
+  if (room === "Dreamscape Theatre") {
+    maxPeopleAllowed = 4;
+  } else if (room === "The Royal") {
+    maxPeopleAllowed = 40;
+  } else {
+    maxPeopleAllowed = 10;
+  }
+  return z.object({
     name: z
       .string({ message: "Name is required" })
       .min(3, { message: "Name must be atleast 3 characters" })
       .max(50, { message: "Name cannot be more than 50 characters" })
       .trim(),
-
     phone: z.string({ message: "Phone is required" }).regex(/^[6-9]\d{9}$/, {
       message: "Invalid phone number",
     }),
-
     email: z.string().email("Enter a valid email address").trim().toLowerCase(),
-
     findus: z.string().min(1, { message: "Please select one" }),
-
     occasion: z.string().min(1, { message: "Please select one" }),
-
     noOfPeople: z.coerce
       .number({ message: "Please enter a number" })
       .min(2, "Minimum 2 people are required!")
-      .max(
-        room === "Dreamscape Theatre" ? 4 : 10,
-        room === "Dreamscape Theatre"
-          ? "Maximum 4 people are allowed"
-          : "Maximum 10 people are allowed",
-      ),
+      .max(maxPeopleAllowed, `Maximum ${maxPeopleAllowed} people are allowed`),
   });
+};
 
 export const payReservationSchema = z.object({
   balanceAmount: z.number(),

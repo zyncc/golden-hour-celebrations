@@ -31,6 +31,7 @@ import {
   EliteTimeSlots,
   ledLetterLightAge,
   ledLetterLightName,
+  RoyalTimeSlots,
 } from "@/lib/constants";
 import formatCurrency from "@/lib/formatCurrency";
 import { cn, FormatDate, isSlotUnavailable } from "@/lib/utils";
@@ -47,7 +48,6 @@ import type { z } from "zod";
 
 export default function CreateBookingForm({ currentDate }: { currentDate: string }) {
   const today = useMemo(() => {
-    // Safe: only for UI disabling
     return new Date(`${currentDate}T00:00:00`);
   }, [currentDate]);
 
@@ -120,6 +120,8 @@ export default function CreateBookingForm({ currentDate }: { currentDate: string
       basePrice = 1499;
     } else if (selectedRoom === "Elite Theatre") {
       basePrice = 1899;
+    } else if (selectedRoom === "The Royal") {
+      basePrice = 7499;
     }
 
     // Extra people charges
@@ -127,6 +129,8 @@ export default function CreateBookingForm({ currentDate }: { currentDate: string
       extraPeopleCharge = (noOfPeople - 2) * 200;
     } else if (selectedRoom === "Elite Theatre" && noOfPeople > 4) {
       extraPeopleCharge = (noOfPeople - 4) * 200;
+    } else if (selectedRoom === "The Royal" && noOfPeople > 15) {
+      extraPeopleCharge = (noOfPeople - 15) * 200;
     }
 
     // Cake cost (separate from base price)
@@ -209,7 +213,10 @@ export default function CreateBookingForm({ currentDate }: { currentDate: string
 
   // Get available time slots based on selected room
   const availableTimeSlots = useMemo(() => {
-    return selectedRoom === "Dreamscape Theatre" ? dreamscapeTimeSlots : EliteTimeSlots;
+    if (selectedRoom === "Dreamscape Theatre") return dreamscapeTimeSlots;
+    if (selectedRoom === "Elite Theatre") return EliteTimeSlots;
+    if (selectedRoom === "The Royal") return RoyalTimeSlots;
+    return [];
   }, [selectedRoom]);
 
   // Check if a time slot is booked
@@ -264,7 +271,6 @@ export default function CreateBookingForm({ currentDate }: { currentDate: string
     <div className="space-y-8">
       <Form {...form}>
         <form onSubmit={form.handleSubmit(handleFormSubmit)} className="space-y-8">
-          {/* Basic Information */}
           <Card>
             <CardHeader>
               <CardTitle className="text-xl">Basic Information</CardTitle>
@@ -317,6 +323,7 @@ export default function CreateBookingForm({ currentDate }: { currentDate: string
                             Dreamscape Theatre
                           </SelectItem>
                           <SelectItem value="Elite Theatre">Elite Theatre</SelectItem>
+                          <SelectItem value="The Royal">The Royal</SelectItem>
                         </SelectContent>
                       </Select>
                     </FormControl>

@@ -13,7 +13,12 @@ import {
 } from "@/components/ui/dialog";
 import { Separator } from "@/components/ui/separator";
 import { useReservation } from "@/context/ReservationStore";
-import { dreamscapeTimeSlots, EliteTimeSlots, items } from "@/lib/constants";
+import {
+  dreamscapeTimeSlots,
+  EliteTimeSlots,
+  items,
+  RoyalTimeSlots,
+} from "@/lib/constants";
 import formatCurrency from "@/lib/formatCurrency";
 import { FormatDate, isSlotUnavailable } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
@@ -49,6 +54,7 @@ export default function StepOne() {
   });
   const [showEliteDetails, setShowEliteDetails] = useState(false);
   const [showDreamscapeDetails, setShowDreamscapeDetails] = useState(false);
+  const [showRoyalDetails, setShowRoyalDetails] = useState(false);
 
   const currentDate = new Date();
   const currentMonth = currentDate.getMonth();
@@ -130,10 +136,21 @@ export default function StepOne() {
                         )}
                       </div>
 
-                      <div className="flex items-baseline gap-1">
-                        <span className="text-3xl font-bold">
-                          {formatCurrency(pkg.price)}
-                        </span>
+                      <div className="flex items-baseline gap-2">
+                        {pkg.hasDiscount && pkg.discountPrice ? (
+                          <>
+                            <span className="text-3xl font-bold">
+                              {formatCurrency(pkg.discountPrice)}
+                            </span>
+                            <span className="text-muted-foreground text-xl font-medium line-through">
+                              {formatCurrency(pkg.price)}
+                            </span>
+                          </>
+                        ) : (
+                          <span className="text-3xl font-bold">
+                            {formatCurrency(pkg.price)}
+                          </span>
+                        )}
                       </div>
                     </div>
                     <ul className="mb-6 grow space-y-3">
@@ -398,7 +415,7 @@ export default function StepOne() {
                             </div>
                           </DialogContent>
                         </Dialog>
-                      ) : (
+                      ) : pkg.room == "Elite Theatre" ? (
                         <Dialog
                           open={showEliteDetails}
                           onOpenChange={setShowEliteDetails}
@@ -603,7 +620,119 @@ export default function StepOne() {
                             </div>
                           </DialogContent>
                         </Dialog>
-                      )}
+                      ) : pkg.room == "The Royal" ? (
+                        <Dialog
+                          open={showRoyalDetails}
+                          onOpenChange={setShowRoyalDetails}
+                        >
+                          <DialogTrigger
+                            render={
+                              <Button variant="link" className="p-0 underline">
+                                More Details
+                              </Button>
+                            }
+                          />
+                          <DialogContent className="flex flex-col gap-0 p-0 sm:max-h-[min(640px,80vh)] sm:max-w-2xl [&>button:last-child]:top-3.5">
+                            <DialogHeader className="contents space-y-0 text-left">
+                              <DialogTitle className="flex items-center gap-2 px-6 py-6">
+                                The Royal
+                              </DialogTitle>
+                            </DialogHeader>
+
+                            <div className="max-h-[80vh] overflow-y-auto px-6 pb-6">
+                              <div className="space-y-6">
+                                {/* Introduction */}
+                                <div className="bg-secondary rounded-lg border p-4 text-center">
+                                  <p className="text-muted-foreground text-sm leading-relaxed">
+                                    Experience unparalleled luxury in{" "}
+                                    <strong>The Royal</strong>. Perfect for large
+                                    gatherings, our elegantly decorated space ensures
+                                    every moment of your celebration is magnificent.
+                                  </p>
+                                </div>
+
+                                {/* Accommodations */}
+                                <div className="space-y-3">
+                                  <div className="flex items-center gap-2">
+                                    <Star className="h-5 w-5 text-yellow-600" />
+                                    <h3 className="text-lg font-semibold">
+                                      👑 Elite Accommodations
+                                    </h3>
+                                  </div>
+                                  <div className="space-y-2 pl-7 text-sm">
+                                    <div className="rounded-md p-3">
+                                      <p>
+                                        <strong>Luxurious Space:</strong>
+                                      </p>
+                                      <p className="text-muted-foreground">
+                                        Comfortably accommodates up to 40 guests. Seating
+                                        can be arranged for 25 members.
+                                      </p>
+                                    </div>
+                                    <div className="rounded-md p-3">
+                                      <p>
+                                        <strong>Luxury Seating:</strong>
+                                      </p>
+                                      <p className="text-muted-foreground">
+                                        Includes luxury sofa seating designed for comfort
+                                        and elegance.
+                                      </p>
+                                    </div>
+                                  </div>
+                                </div>
+
+                                <Separator />
+
+                                {/* Entertainment */}
+                                <div className="space-y-3">
+                                  <div className="flex items-center gap-2">
+                                    <Film className="h-5 w-5 text-blue-600" />
+                                    <h3 className="text-lg font-semibold">
+                                      🎬 Premium Entertainment
+                                    </h3>
+                                  </div>
+                                  <div className="space-y-2 pl-7 text-sm">
+                                    <ul className="text-muted-foreground space-y-2">
+                                      <li>
+                                        • <strong>Epson Projector Screening:</strong> High
+                                        quality immersive cinematic experience.
+                                      </li>
+                                      <li>
+                                        • <strong>Access to All OTT Platforms:</strong>{" "}
+                                        Stream your favorite movies and shows.
+                                      </li>
+                                      <li>
+                                        • <strong>Customized Neon Board:</strong>{" "}
+                                        Personalized lighting matching your occasion.
+                                      </li>
+                                    </ul>
+                                  </div>
+                                </div>
+
+                                <Separator />
+
+                                {/* Terms & Conditions */}
+                                <div className="space-y-3">
+                                  <div className="flex items-center gap-2">
+                                    <h3 className="text-lg font-semibold">
+                                      🚫 Terms & Conditions
+                                    </h3>
+                                  </div>
+                                  <div className="space-y-2 pl-7 text-sm">
+                                    <ul className="text-muted-foreground space-y-1">
+                                      {(pkg as any).terms?.map(
+                                        (term: string, i: number) => (
+                                          <li key={i}>• {term}</li>
+                                        ),
+                                      )}
+                                    </ul>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </DialogContent>
+                        </Dialog>
+                      ) : null}
                     </ul>
                     <div className="grid w-full grid-cols-2 gap-2">
                       {pkg.room === "Dreamscape Theatre"
@@ -653,54 +782,101 @@ export default function StepOne() {
                               </Button>
                             );
                           })
-                        : EliteTimeSlots.map((slot) => {
-                            const isSelected =
-                              selectedPackage.time === slot &&
-                              selectedPackage.room === pkg.room;
+                        : pkg.room === "Elite Theatre"
+                          ? EliteTimeSlots.map((slot) => {
+                              const isSelected =
+                                selectedPackage.time === slot &&
+                                selectedPackage.room === pkg.room;
 
-                            const unavailable =
-                              !!reservation?.date &&
-                              isSlotUnavailable(slot, pkg.room, data, reservation.date);
+                              const unavailable =
+                                !!reservation?.date &&
+                                isSlotUnavailable(slot, pkg.room, data, reservation.date);
 
-                            const isDisabled = isLoading || unavailable;
+                              const isDisabled = isLoading || unavailable;
 
-                            return (
-                              <Button
-                                key={slot}
-                                disabled={isDisabled}
-                                variant={
-                                  isSelected
-                                    ? "default"
-                                    : unavailable
-                                      ? "destructive"
-                                      : "outline"
-                                }
-                                onClick={() => {
-                                  if (!reservation?.date) {
-                                    toast.error("Please select a date");
-                                    return;
+                              return (
+                                <Button
+                                  key={slot}
+                                  disabled={isDisabled}
+                                  variant={
+                                    isSelected
+                                      ? "default"
+                                      : unavailable
+                                        ? "destructive"
+                                        : "outline"
                                   }
+                                  onClick={() => {
+                                    if (!reservation?.date) {
+                                      toast.error("Please select a date");
+                                      return;
+                                    }
 
-                                  toast.success(pkg.room, {
-                                    description: `Time - ${slot}`,
-                                    duration: 3000,
-                                  });
+                                    toast.success(pkg.room, {
+                                      description: `Time - ${slot}`,
+                                      duration: 3000,
+                                    });
 
-                                  setSelectedPackage({
-                                    room: pkg.room,
-                                    time: slot,
-                                    price: pkg.price,
-                                  });
-                                }}
-                                className={`flex-1 ${(unavailable || isDisabled) && "line-through"}`}
-                              >
-                                {slot}
-                              </Button>
-                            );
-                          })}
+                                    setSelectedPackage({
+                                      room: pkg.room,
+                                      time: slot,
+                                      price: pkg.price,
+                                    });
+                                  }}
+                                  className={`flex-1 ${(unavailable || isDisabled) && "line-through"}`}
+                                >
+                                  {slot}
+                                </Button>
+                              );
+                            })
+                          : RoyalTimeSlots.map((slot) => {
+                              const isSelected =
+                                selectedPackage.time === slot &&
+                                selectedPackage.room === pkg.room;
+
+                              const unavailable =
+                                !!reservation?.date &&
+                                isSlotUnavailable(slot, pkg.room, data, reservation.date);
+
+                              const isDisabled = isLoading || unavailable;
+
+                              return (
+                                <Button
+                                  key={slot}
+                                  disabled={isDisabled}
+                                  variant={
+                                    isSelected
+                                      ? "default"
+                                      : unavailable
+                                        ? "destructive"
+                                        : "outline"
+                                  }
+                                  onClick={() => {
+                                    if (!reservation?.date) {
+                                      toast.error("Please select a date");
+                                      return;
+                                    }
+
+                                    toast.success(pkg.room, {
+                                      description: `Time - ${slot}`,
+                                      duration: 3000,
+                                    });
+
+                                    setSelectedPackage({
+                                      room: pkg.room,
+                                      time: slot,
+                                      price: pkg.price,
+                                    });
+                                  }}
+                                  className={`flex-1 ${(unavailable || isDisabled) && "line-through"}`}
+                                >
+                                  {slot}
+                                </Button>
+                              );
+                            })}
                     </div>
                     <p className="text-muted-foreground mt-5 text-sm">
-                      Note: If requirement is more than 2 hours please contact us.
+                      Note: If requirement is more than {pkg.room == "The Royal" ? 3 : 2}{" "}
+                      hours please contact us.
                     </p>
                     {pkg.room == "Dreamscape Theatre" && reservation?.noOfPeople! > 5 && (
                       <h1 className="text-destructive mt-4 font-medium">

@@ -5,6 +5,16 @@ import l3 from "../../public/l3.webp";
 import l4 from "../../public/l4.webp";
 import l5 from "../../public/l5.webp";
 import l6 from "../../public/l6.webp";
+import l7 from "../../public/l7.webp";
+import l8 from "../../public/l8.webp";
+import l9 from "../../public/l9.webp";
+
+import l10 from "../../public/l10.webp";
+import l11 from "../../public/l11.webp";
+import l12 from "../../public/l12.webp";
+import l13 from "../../public/l13.webp";
+import l14 from "../../public/l14.webp";
+import l15 from "../../public/l15.webp";
 
 import v1 from "../../public/v1.webp";
 import v10 from "../../public/v10.webp";
@@ -18,6 +28,12 @@ import v6 from "../../public/v6.webp";
 import v7 from "../../public/v7.webp";
 import v8 from "../../public/v8.webp";
 import v9 from "../../public/v9.webp";
+
+import v13 from "../../public/v13.webp";
+import v14 from "../../public/v14.webp";
+import v15 from "../../public/v15.webp";
+import v16 from "../../public/v16.webp";
+import v17 from "../../public/v17.webp";
 
 export const advanceAmount = 1000;
 export const cakePrice = 550;
@@ -45,7 +61,42 @@ export const EliteTimeSlots = [
   "10:30PM - 12:30AM",
 ];
 
+export const RoyalTimeSlots = ["11AM - 2PM", "3PM - 6PM", "7PM - 10PM"];
+
 export const items = [
+  {
+    id: 3,
+    room: "The Royal",
+    description: [
+      "Beautifully Decorated space with theatre and entertainment access",
+      "Complimentary Entry for 15 Members (Additional members – ₹200 per person)",
+      "Fully Air-Conditioned Space",
+      "Luxury sofa seating (15 seater)",
+      "3 Hours Private Slot With premium decoration set-up",
+      "Customized Neon board (as per occasion)",
+    ],
+    terms: [
+      "Slots will be confirmed only after advance payment",
+      "No blasters or poppers",
+      "No sprays",
+      "No cold fire",
+      "Alcohol & smoking strictly not allowed",
+      "Pets are not allowed",
+      "Cleaning charges applicable if the theatre is left messy (Minimum ₹500)",
+    ],
+    noPeople: 15,
+    hasDiscount: true,
+    discountPrice: 7499,
+    price: 10000,
+    photo: _.shuffle([
+      "/l12.webp",
+      "/l11.webp",
+      "/l9.webp",
+      "/l15.webp",
+      "/l13.webp",
+      "/l7.webp",
+    ]),
+  },
   {
     id: 2,
     room: "Elite Theatre",
@@ -200,6 +251,15 @@ export const galleryImages = [
   { src: "/l4.webp", optimisedSource: l4 },
   { src: "/l5.webp", optimisedSource: l5 },
   { src: "/l6.webp", optimisedSource: l6 },
+  { src: "/l7.webp", optimisedSource: l7 },
+  { src: "/l8.webp", optimisedSource: l8 },
+  { src: "/l9.webp", optimisedSource: l9 },
+  { src: "/l10.webp", optimisedSource: l10 },
+  { src: "/l11.webp", optimisedSource: l11 },
+  { src: "/l12.webp", optimisedSource: l12 },
+  { src: "/l13.webp", optimisedSource: l13 },
+  { src: "/l14.webp", optimisedSource: l14 },
+  { src: "/l15.webp", optimisedSource: l15 },
 
   { src: "/v1.webp", optimisedSource: v1 },
   { src: "/v2.webp", optimisedSource: v2 },
@@ -213,4 +273,9 @@ export const galleryImages = [
   { src: "/v10.webp", optimisedSource: v10 },
   { src: "/v11.webp", optimisedSource: v11 },
   { src: "/v12.webp", optimisedSource: v12 },
+  { src: "/v13.webp", optimisedSource: v13 },
+  { src: "/v14.webp", optimisedSource: v14 },
+  { src: "/v15.webp", optimisedSource: v15 },
+  { src: "/v16.webp", optimisedSource: v16 },
+  { src: "/v17.webp", optimisedSource: v17 },
 ];
