@@ -265,7 +265,7 @@ export default function StepFour() {
                       .find((item) => item.room == reservation.room)
                       ?.description.map((desc, i) => (
                         <div key={i} className="flex items-center text-sm">
-                          <Check className="text-primary mr-2 h-4 w-4" />
+                          <Check className="text-primary mr-2 h-4 w-4 shrink-0" />
                           {desc}
                         </div>
                       ))}

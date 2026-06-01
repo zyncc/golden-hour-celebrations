@@ -62,6 +62,22 @@ export const EliteTimeSlots = [
   "10:30PM - 12:30AM",
 ];
 
+export const Occassions = [
+  "Birthday",
+  "Anniversary",
+  "Bride to be",
+  "Groom to be",
+  "Movie Date",
+  "Farewell",
+  "Congratulations",
+  "Kitty Party",
+  "Get Together",
+  "Graduation Party",
+  "Marriage Proposal",
+  "Mom to be",
+  "Other",
+];
+
 export const RoyalTimeSlots = ["11AM - 2PM", "3PM - 6PM", "7PM - 10PM"];
 
 export const items = [

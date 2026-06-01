@@ -11,6 +11,7 @@ import {
   FieldLabel,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import { NativeSelect, NativeSelectOption } from "@/components/ui/native-select";
 import {
   Select,
   SelectContent,
@@ -19,6 +20,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useReservation } from "@/context/ReservationStore";
+import { Occassions } from "@/lib/constants";
 import { getStepThreeFormSchema } from "@/lib/zodSchemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { redirect, useRouter } from "next/navigation";
@@ -160,27 +162,18 @@ export default function StepThreeForm() {
                   control={control}
                   render={({ field }) => (
                     <>
-                      <Select value={field.value} onValueChange={field.onChange}>
-                        <SelectTrigger
-                          className="w-full"
-                          data-invalid={!!errors.occasion}
-                        >
-                          <SelectValue placeholder="Select an occasion" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="Birthday">Birthday</SelectItem>
-                          <SelectItem value="Anniversary">Anniversary</SelectItem>
-                          <SelectItem value="Bride to be">Bride to be</SelectItem>
-                          <SelectItem value="Groom to be">Groom to be</SelectItem>
-                          <SelectItem value="Movie Date">Movie Date</SelectItem>
-                          <SelectItem value="Graduation Party">
-                            Graduation Party
-                          </SelectItem>
-                          <SelectItem value="Proposal">Proposal</SelectItem>
-                          <SelectItem value="Mom to be">Mom to be</SelectItem>
-                          <SelectItem value="Other">Other</SelectItem>
-                        </SelectContent>
-                      </Select>
+                      <NativeSelect
+                        className="w-full"
+                        value={field.value}
+                        onChange={field.onChange}
+                      >
+                        <NativeSelectOption value="">Select Occassion</NativeSelectOption>
+                        {Occassions.map((item) => (
+                          <NativeSelectOption key={item} value={item}>
+                            {item}
+                          </NativeSelectOption>
+                        ))}
+                      </NativeSelect>
                       <FieldError
                         errors={errors.occasion ? [errors.occasion] : undefined}
                       />
