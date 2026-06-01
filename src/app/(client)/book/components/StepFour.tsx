@@ -15,6 +15,7 @@ import {
   items,
   ledLetterLightAge,
   ledLetterLightName,
+  theRoyalTheatreAdvanceAmount,
 } from "@/lib/constants";
 import formatCurrency from "@/lib/formatCurrency";
 import { Check, CreditCard } from "lucide-react";
@@ -54,7 +55,11 @@ export default function StepFour() {
     }
     const options: RazorpayOrderOptions = {
       key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID as string,
-      amount: payFull ? reservation?.price! * 100 : advanceAmount * 100,
+      amount: payFull
+        ? reservation?.price! * 100
+        : (reservation?.room == "The Royal"
+            ? theRoyalTheatreAdvanceAmount
+            : advanceAmount) * 100,
       currency: "INR",
       name: `Booking for ${reservation?.name} `,
       description: `in ${reservation?.room}`,
@@ -95,7 +100,8 @@ export default function StepFour() {
   }
   let price = reservation?.price!;
 
-  let advanceAmountPrice = advanceAmount;
+  let advanceAmountPrice =
+    reservation?.room == "The Royal" ? theRoyalTheatreAdvanceAmount : advanceAmount;
 
   if (reservation?.cake) {
     if (reservation.cake == "Rasmalai Cake") {

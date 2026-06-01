@@ -9,6 +9,7 @@ import {
   candleLightRosePath,
   ledLetterLightAge,
   ledLetterLightName,
+  theRoyalTheatreAdvanceAmount,
   TIME_ZONE,
 } from "@/lib/constants";
 import prisma from "@/lib/prisma";
@@ -28,7 +29,8 @@ export async function createReservation(
 ) {
   let total = 0;
 
-  let advanceAmountPrice = advanceAmount;
+  let advanceAmountPrice =
+    reservation?.room == "The Royal" ? theRoyalTheatreAdvanceAmount : advanceAmount;
 
   const plainDate = Temporal.PlainDate.from(reservation.date!);
   const plainTime = parseSlotStart(reservation.timeSlot!);

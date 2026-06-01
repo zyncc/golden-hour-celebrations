@@ -36,6 +36,7 @@ import v16 from "../../public/v16.webp";
 import v17 from "../../public/v17.webp";
 
 export const advanceAmount = 1000;
+export const theRoyalTheatreAdvanceAmount = 4000;
 export const cakePrice = 550;
 export const candleLightRosePath = 349;
 export const ledLetterLightAge = 49;

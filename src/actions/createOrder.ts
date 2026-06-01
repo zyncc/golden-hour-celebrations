@@ -7,6 +7,7 @@ import {
   candleLightRosePath,
   ledLetterLightAge,
   ledLetterLightName,
+  theRoyalTheatreAdvanceAmount,
 } from "@/lib/constants";
 import Razorpay from "razorpay";
 
@@ -41,7 +42,8 @@ export async function createOrder(
     };
   }
 
-  let advanceAmountPrice = advanceAmount;
+  let advanceAmountPrice =
+    reservation?.room == "The Royal" ? theRoyalTheatreAdvanceAmount : advanceAmount;
 
   if (reservation.cake) {
     if (reservation.cake == "Rasmalai Cake") {
