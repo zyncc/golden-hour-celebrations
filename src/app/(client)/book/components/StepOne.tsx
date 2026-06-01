@@ -864,7 +864,7 @@ export default function StepOne() {
                                     setSelectedPackage({
                                       room: pkg.room,
                                       time: slot,
-                                      price: pkg.price,
+                                      price: pkg.discountPrice,
                                     });
                                   }}
                                   className={`flex-1 ${(unavailable || isDisabled) && "line-through"}`}

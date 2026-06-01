@@ -15,6 +15,10 @@ import l12 from "../../public/l12.webp";
 import l13 from "../../public/l13.webp";
 import l14 from "../../public/l14.webp";
 import l15 from "../../public/l15.webp";
+import l16 from "../../public/l16.webp";
+import l17 from "../../public/l17.webp";
+import l18 from "../../public/l18.webp";
+import l19 from "../../public/l19.webp";
 
 import v1 from "../../public/v1.webp";
 import v10 from "../../public/v10.webp";
@@ -34,6 +38,7 @@ import v14 from "../../public/v14.webp";
 import v15 from "../../public/v15.webp";
 import v16 from "../../public/v16.webp";
 import v17 from "../../public/v17.webp";
+import v18 from "../../public/v18.webp";
 
 export const CAKE_PRICE = 650;
 export const BLUEBERRY_CHEESE_CAKE_PRICE = 900;
@@ -158,7 +163,7 @@ export const THEATRES = [
     ],
     noPeople: 4,
     price: DREAMSCAPE_THEATRE_PRICE,
-    photo: _.shuffle(["/l1.webp", "/l4.webp", "/l5.webp", "/l6.webp"]),
+    photo: _.shuffle(["/l16.webp", "/l17.webp", "/l18.webp", "/l19.webp"]),
   },
 ];
 
@@ -295,6 +300,10 @@ export const galleryImages = [
   { src: "/l13.webp", optimisedSource: l13 },
   { src: "/l14.webp", optimisedSource: l14 },
   { src: "/l15.webp", optimisedSource: l15 },
+  { src: "/l16.webp", optimisedSource: l16 },
+  { src: "/l17.webp", optimisedSource: l17 },
+  { src: "/l18.webp", optimisedSource: l18 },
+  { src: "/l19.webp", optimisedSource: l19 },
 
   { src: "/v1.webp", optimisedSource: v1 },
   { src: "/v2.webp", optimisedSource: v2 },
@@ -313,4 +322,5 @@ export const galleryImages = [
   { src: "/v15.webp", optimisedSource: v15 },
   { src: "/v16.webp", optimisedSource: v16 },
   { src: "/v17.webp", optimisedSource: v17 },
+  { src: "/v18.webp", optimisedSource: v18 },
 ];
