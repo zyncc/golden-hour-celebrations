@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 export default function Page() {
   return (
     <div className="container">
-      <Gallery images={_.shuffle(galleryImages)} numImages={39} />
+      <Gallery images={_.shuffle(galleryImages)} numImages={37} />
     </div>
   );
 }

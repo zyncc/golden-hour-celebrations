@@ -17,7 +17,7 @@ export default function Page() {
     <>
       <HomeSwiper />
       <AboutUs />
-      <Gallery images={_.shuffle(galleryImages)} numImages={6} />
+      <Gallery images={_.shuffle(galleryImages)} numImages={9} />
       <section className="container">
         <FAQSection />
       </section>
