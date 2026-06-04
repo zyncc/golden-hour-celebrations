@@ -25,6 +25,7 @@ import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
 import { useReservation } from "@/context/ReservationStore";
 import {
+  BLUEBERRY_CHEESE_CAKE_PRICE,
   CAKE_PRICE,
   CAKES,
   CANDLE_LIGHT_ROSE_PATH,
@@ -32,6 +33,7 @@ import {
   LED_LETTER_LIGHT_NAME,
   PHOTOGRAPHY_AND_VIDEO_PRICE,
   PHOTOGRAPHY_PRICE,
+  RASMALAI_CAKE_PRICE,
 } from "@/lib/constants";
 import formatCurrency from "@/lib/formatCurrency";
 import {
@@ -234,10 +236,10 @@ export default function StepTwo() {
                                 <p className="text-xs font-medium text-emerald-600">
                                   ₹
                                   {cake === "Rasmalai Cake"
-                                    ? "800"
+                                    ? RASMALAI_CAKE_PRICE
                                     : cake === "Blueberry Cheese Cake"
-                                      ? "900"
-                                      : "550"}
+                                      ? BLUEBERRY_CHEESE_CAKE_PRICE
+                                      : CAKE_PRICE}
                                 </p>
                               </div>
                             </button>
