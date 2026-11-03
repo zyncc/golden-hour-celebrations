@@ -11,29 +11,33 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Separator } from "@/components/ui/separator";
 import { useReservation } from "@/context/ReservationStore";
 import {
-  DREAMSCAPE_TIME_SLOTS,
-  ELITE_TIME_SLOTS,
-  ROYAL_TIME_SLOTS,
+  ADDITIONAL_PERSON_PRICE,
+  getTimeSlotsForDuration,
+  getTheatreOriginalPrice,
+  getTheatrePrice,
+  SLOT_HOURS,
   THEATRES,
 } from "@/lib/constants";
 import formatCurrency from "@/lib/formatCurrency";
-import { FormatDate, isSlotUnavailable } from "@/lib/utils";
+import {
+  cn,
+  FormatDate,
+  getAvailableSlotsCount,
+  getSlotInterval,
+  isSlotUnavailable,
+} from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
 import Autoplay from "embla-carousel-autoplay";
 import Fade from "embla-carousel-fade";
 import useEmblaCarousel from "embla-carousel-react";
 import {
-  ArrowRight,
-  Film,
-  Heart,
   Monitor,
-  Snowflake,
   Sofa,
-  Speaker,
-  Star,
+  Users,
+  Utensils,
+  Video,
   Volume2,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -43,15 +47,27 @@ import { toast } from "sonner";
 export default function StepOne() {
   const { reservation, setReservationData } = useReservation();
   const router = useRouter();
-  const [selectedPackage, setSelectedPackage] = useState<{
-    room: string | undefined;
-    time: string | undefined;
-    price: number | undefined;
-  }>({
-    room: undefined,
-    time: undefined,
-    price: undefined,
+
+  // Selected hour per theatre card on the page (default: 1 hour)
+  const [selectedHours, setSelectedHours] = useState<Record<string, number>>({
+    "Dreamscape Theatre": 1,
+    "Elite Theatre": 1,
+    "The Royal": 1,
   });
+
+  // State for the slot selection dialog (opened via Proceed Slot)
+  const [dialogState, setDialogState] = useState<{
+    open: boolean;
+    room?: string;
+    duration: number;
+    selectedSlot?: string;
+  }>({
+    open: false,
+    room: undefined,
+    duration: 1,
+    selectedSlot: undefined,
+  });
+
   const [showEliteDetails, setShowEliteDetails] = useState(false);
   const [showDreamscapeDetails, setShowDreamscapeDetails] = useState(false);
   const [showRoyalDetails, setShowRoyalDetails] = useState(false);
@@ -66,22 +82,6 @@ export default function StepOne() {
   }
   const nextMonthDate = new Date(nextYear, nextMonth, 1);
 
-  function handleNextButton() {
-    if (selectedPackage.room == undefined || selectedPackage.time == undefined) {
-      toast.error("Select a time slot to continue");
-    } else {
-      setReservationData({
-        ...reservation,
-        room: selectedPackage.room,
-        timeSlot: selectedPackage.time,
-        price: selectedPackage.price,
-      });
-      router.push("?step=2", {
-        scroll: true,
-      });
-    }
-  }
-
   const { data, isLoading } = useQuery({
     queryKey: ["getReservation", reservation?.date],
     refetchInterval: 1000 * 20,
@@ -92,6 +92,69 @@ export default function StepOne() {
       return res.json();
     },
   });
+
+  function handleOpenSlotDialog(room: string) {
+    if (!reservation?.date) {
+      toast.error("Please select a date on the calendar first");
+      return;
+    }
+    const currentDuration = selectedHours[room] ?? 1;
+    setDialogState({
+      open: true,
+      room,
+      duration: currentDuration,
+      selectedSlot: undefined,
+    });
+  }
+
+  function handleConfirmSlotAndProceed() {
+    if (!dialogState.room || !dialogState.selectedSlot || !reservation?.date) {
+      toast.error("Please select a time slot to continue");
+      return;
+    }
+
+    try {
+      const interval = getSlotInterval(reservation.date, dialogState.selectedSlot);
+      const calculatedPrice = getTheatrePrice(
+        dialogState.room,
+        dialogState.duration,
+        dialogState.selectedSlot,
+      );
+
+      setReservationData({
+        ...reservation,
+        room: dialogState.room,
+        timeSlot: dialogState.selectedSlot,
+        slotStartTime: interval.startDate.toISOString(),
+        slotEndTime: interval.endDate.toISOString(),
+        duration: dialogState.duration,
+        price: calculatedPrice,
+      });
+
+      toast.success(dialogState.room, {
+        description: `Time - ${dialogState.selectedSlot} (${dialogState.duration} hr)`,
+        duration: 3000,
+      });
+
+      setDialogState((prev) => ({ ...prev, open: false }));
+
+      router.push("?step=2", {
+        scroll: true,
+      });
+    } catch (err) {
+      console.error(err);
+      toast.error("Failed to select slot. Please try again.");
+    }
+  }
+
+  const activeTheatre = THEATRES.find((t) => t.room === dialogState.room);
+  const activeDialogPrice = dialogState.room
+    ? getTheatrePrice(dialogState.room, dialogState.duration, dialogState.selectedSlot)
+    : 0;
+  const activeDialogOriginalPrice = dialogState.room
+    ? getTheatreOriginalPrice(dialogState.room, dialogState.duration)
+    : undefined;
+
   return (
     <div className={"mt-10 mb-24 w-full"}>
       <Calendar
@@ -100,116 +163,147 @@ export default function StepOne() {
         disabled={{ before: currentDate }}
         startMonth={currentDate}
         endMonth={nextMonthDate}
-        selected={new Date(reservation?.date!)}
+        selected={reservation?.date ? new Date(reservation.date) : undefined}
         onSelect={(date) => {
+          if (!date) return;
           setReservationData({
             ...reservation,
-            date: FormatDate(date!),
-          });
-          setSelectedPackage({
+            date: FormatDate(date),
+            timeSlot: undefined,
+            slotStartTime: undefined,
+            slotEndTime: undefined,
             price: undefined,
-            room: undefined,
-            time: undefined,
           });
         }}
       />
+
       <div className="flex w-full">
         <div className="mx-auto w-full">
-          <div className="grid grid-cols-1 gap-5 pb-6 md:grid-cols-2">
-            {THEATRES.map((pkg, index) => (
-              <Card key={index} className="relative overflow-hidden rounded-xl p-0">
-                <div className="flex flex-col">
-                  <div className="relative">
-                    <EmblaCarousel images={pkg.photo} />
-                  </div>
-                  <div className="flex flex-col p-3 md:p-6">
-                    <div className="mb-6 space-y-4">
-                      <div className="flex justify-between">
-                        <h2 className="w-full text-2xl font-bold">{pkg.room}</h2>
-                        {pkg.popular && (
-                          <Badge
-                            variant={"destructive"}
-                            className="border-none font-medium text-nowrap whitespace-nowrap"
-                          >
-                            Most Popular
-                          </Badge>
-                        )}
-                      </div>
+          <div className="grid grid-cols-1 gap-6 pb-6 md:grid-cols-2">
+            {THEATRES.map((pkg, index) => {
+              const currentHour = selectedHours[pkg.room] ?? 1;
+              const currentPrice = getTheatrePrice(pkg.room, currentHour);
+              const originalPrice = getTheatreOriginalPrice(pkg.room, currentHour);
+              const availableSlotsForHour = getAvailableSlotsCount(
+                currentHour,
+                pkg.room,
+                data,
+                reservation?.date,
+              );
 
-                      <div className="flex items-baseline gap-2">
-                        {pkg.hasDiscount && pkg.discountPrice ? (
-                          <>
-                            <span className="text-3xl font-bold">
-                              {formatCurrency(pkg.discountPrice)}
-                            </span>
-                            <span className="text-muted-foreground text-xl font-medium line-through">
-                              {formatCurrency(pkg.price)}
-                            </span>
-                          </>
-                        ) : (
-                          <span className="text-3xl font-bold">
-                            {formatCurrency(pkg.price)}
-                          </span>
-                        )}
-                      </div>
+              return (
+                <Card
+                  key={index}
+                  className="relative overflow-hidden rounded-2xl border border-border/80 p-0 shadow-sm transition-all hover:shadow-md"
+                >
+                  <div className="flex flex-col">
+                    <div className="relative">
+                      <EmblaCarousel images={pkg.photo} />
                     </div>
-                    <ul className="mb-6 grow space-y-3">
-                      <p>Includes</p>
-                      {pkg.description.map((feature) => (
-                        <li key={feature} className="flex items-center">
-                          <svg
-                            className="text-destructive mr-2 h-5 w-5 shrink-0"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
+
+                    <div className="flex flex-col p-4 sm:p-6">
+                      <div className="mb-3 space-y-2">
+                        <div className="flex items-center justify-between">
+                          <h2 className="text-2xl font-bold tracking-tight text-foreground">
+                            {pkg.room}
+                          </h2>
+                          {pkg.popular && (
+                            <Badge
+                              variant={"destructive"}
+                              className="border-none font-medium whitespace-nowrap"
+                            >
+                              Most Popular
+                            </Badge>
+                          )}
+                        </div>
+                      </div>
+                      <div className="mb-4 flex flex-wrap gap-2">
+                        {pkg.specs?.map((spec, i) => (
+                          <Badge
+                            key={i}
+                            variant={'outline'}
                           >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M5 13l4 4L19 7"
+                            {i === 0 && (
+                              <Users className="h-3.5 w-3.5 text-muted-foreground" />
+                            )}
+                            {i === 1 && (
+                              <Video className="h-3.5 w-3.5 text-muted-foreground" />
+                            )}
+                            {i === 2 && (
+                              <Volume2 className="h-3.5 w-3.5 text-muted-foreground" />
+                            )}
+                            {i === 3 && (
+                              <Sofa className="h-3.5 w-3.5 text-muted-foreground" />
+                            )}
+                            {spec}
+                          </Badge>
+                        ))}
+                      </div>
+                      <Badge variant={'secondary'} className="mb-2">
+                        <Utensils className="h-4 w-4 shrink-0 text-amber-600 dark:text-amber-400" />
+                        <span>Add Cake, Decorations, Lights etc in next step</span>
+                      </Badge>
+
+                      
+
+                      <ul className="mb-5 grow space-y-2 text-sm text-muted-foreground">
+                        <p className="font-semibold text-foreground text-xs uppercase tracking-wider">
+                          Includes
+                        </p>
+                        {pkg.description.slice(0, 4).map((feature) => (
+                          <li key={feature} className="flex items-center gap-2">
+                            <svg
+                              className="text-destructive h-4 w-4 shrink-0"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              stroke="currentColor"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M5 13l4 4L19 7"
+                              />
+                            </svg>
+                            <span>{feature}</span>
+                          </li>
+                        ))}
+
+                        {pkg.room === "Dreamscape Theatre" ? (
+                          <Dialog
+                            open={showDreamscapeDetails}
+                            onOpenChange={setShowDreamscapeDetails}
+                          >
+                            <DialogTrigger
+                              render={
+                                <Button
+                                  variant="link"
+                                  className="p-0 text-xs text-primary underline"
+                                >
+                                  More Details
+                                </Button>
+                              }
                             />
-                          </svg>
-                          {feature}
-                        </li>
-                      ))}
-                      {pkg.room == "Dreamscape Theatre" ? (
-                        <Dialog
-                          open={showDreamscapeDetails}
-                          onOpenChange={setShowDreamscapeDetails}
-                        >
-                          <DialogTrigger
-                            render={
-                              <Button variant="link" className="p-0 underline">
-                                More Details
-                              </Button>
-                            }
-                          />
-                          <DialogContent className="flex flex-col gap-0 p-0 sm:max-h-[min(640px,80vh)] sm:max-w-2xl [&>button:last-child]:top-3.5">
-                            <DialogHeader className="contents space-y-0 text-left">
-                              <DialogTitle className="flex items-center gap-2 px-6 py-6">
-                                Dreamscape Theatre
-                              </DialogTitle>
-                            </DialogHeader>
-                            <div className="max-h-[80vh] flex-1 overflow-y-auto">
-                              <div className="px-6 pb-6">
-                                <div className="space-y-6">
-                                  {/* Introduction */}
+                            <DialogContent className="flex flex-col gap-0 p-0 sm:max-h-[min(640px,80vh)] sm:max-w-2xl [&>button:last-child]:top-3.5">
+                              <DialogHeader className="contents space-y-0 text-left">
+                                <DialogTitle className="flex items-center gap-2 px-6 py-6">
+                                  Dreamscape Theatre
+                                </DialogTitle>
+                              </DialogHeader>
+                              <div className="max-h-[80vh] flex-1 overflow-y-auto">
+                                <div className="space-y-6 px-6 pb-6">
                                   <div className="bg-secondary rounded-lg p-4 text-center">
                                     <p className="text-muted-foreground text-sm leading-relaxed">
                                       <strong>
                                         🎬 Theatre Specifications for the Ultimate Movie
-                                        and celebration Experience
+                                        and Celebration Experience
                                       </strong>
                                       <br />
                                       At Golden Hour Celebrations, we offer a luxurious,
-                                      private theatre experience where every element —
-                                      from sound to seating — is designed for comfort,
-                                      connection, and celebration.
+                                      private theatre experience where every element is
+                                      designed for comfort, connection, and celebration.
                                     </p>
                                   </div>
-
-                                  {/* Visual Experience */}
                                   <div className="space-y-3">
                                     <div className="flex items-center gap-2">
                                       <Monitor className="h-5 w-5 text-blue-600" />
@@ -220,690 +314,328 @@ export default function StepOne() {
                                     <div className="space-y-2 pl-7 text-sm">
                                       <div className="rounded-md p-3">
                                         <p>
-                                          <strong>
-                                            120-Inch Fixed Frame Projector Screen
-                                          </strong>{" "}
-                                          (16:9, Diagonal Active 3D, 4K Ready)
+                                          <strong>120-Inch Fixed Frame Projector Screen</strong>
                                         </p>
                                         <p className="text-muted-foreground">
                                           A giant screen that brings movies to life in
                                           brilliant detail.
                                         </p>
                                       </div>
-                                      <div className="rounded-md p-3">
-                                        <p>
-                                          <strong>
-                                            Epson EH-TW750 Full HD Home Cinema Projector
-                                          </strong>
-                                        </p>
-                                        <p className="text-muted-foreground">
-                                          Crisp visuals even in bright spaces — perfect
-                                          for both movie marathons and intimate moments.
-                                        </p>
-                                      </div>
                                     </div>
-                                  </div>
-
-                                  <Separator />
-
-                                  {/* Audio Experience */}
-                                  <div className="space-y-3">
-                                    <div className="flex items-center gap-2">
-                                      <Volume2 className="h-5 w-5 text-green-600" />
-                                      <h3 className="text-lg font-semibold">
-                                        🔊 Immersive Sound
-                                      </h3>
-                                    </div>
-                                    <div className="space-y-2 pl-7 text-sm">
-                                      <div className="rounded-md p-3">
-                                        <p>
-                                          <strong>
-                                            ZEBRONICS PRO Dolby 5.1 Soundbar System
-                                          </strong>
-                                        </p>
-                                        <ul className="text-muted-foreground mt-1 space-y-1">
-                                          <li>
-                                            • Surround sound with 525 Watts output for a
-                                            theatre-like audio experience
-                                          </li>
-                                          <li>
-                                            • Wireless satellites & deep subwoofer for
-                                            immersive sound
-                                          </li>
-                                          <li>
-                                            • Multiple connectivity options — HDMI ARC,
-                                            Optical, Bluetooth v5.0, AUX
-                                          </li>
-                                          <li>
-                                            • Sleek LED display and wall-mount setup
-                                          </li>
-                                        </ul>
-                                      </div>
-                                    </div>
-                                  </div>
-
-                                  <Separator />
-
-                                  {/* Comfort */}
-                                  <div className="space-y-3">
-                                    <div className="flex items-center gap-2">
-                                      <Sofa className="h-5 w-5 text-orange-600" />
-                                      <h3 className="text-lg font-semibold">
-                                        🛋️ Comfort & Ambience
-                                      </h3>
-                                    </div>
-                                    <div className="space-y-2 pl-7 text-sm">
-                                      <div className="grid gap-2">
-                                        <div className="flex items-start gap-2">
-                                          <Star className="mt-0.5 h-4 w-4 shrink-0 text-yellow-500" />
-                                          <div>
-                                            <p>
-                                              <strong>Recliner Sofas:</strong> Cozy,
-                                              spacious, and luxurious — perfect for
-                                              curling up with your partner.
-                                            </p>
-                                          </div>
-                                        </div>
-                                        <div className="flex items-start gap-2">
-                                          <Speaker className="mt-0.5 h-4 w-4 shrink-0 text-purple-500" />
-                                          <div>
-                                            <p>
-                                              <strong>Acoustically Treated Walls:</strong>{" "}
-                                              Crystal-clear audio with no distractions, so
-                                              every whisper and laugh feels personal.
-                                            </p>
-                                          </div>
-                                        </div>
-                                        <div className="flex items-start gap-2">
-                                          <Snowflake className="mt-0.5 h-4 w-4 shrink-0 text-blue-500" />
-                                          <div>
-                                            <p>
-                                              <strong>Air-Conditioned Comfort:</strong>{" "}
-                                              Fully AC theatre that keeps the space cool,
-                                              fresh, and pleasant.
-                                            </p>
-                                          </div>
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </div>
-
-                                  <Separator />
-
-                                  {/* Couples Section */}
-                                  <div className="space-y-3">
-                                    <div className="flex items-center gap-2">
-                                      <Heart className="h-5 w-5 text-pink-600" />
-                                      <h3 className="text-lg font-semibold">
-                                        💑 For Couples: Celebrate Love in Your Own Private
-                                        Theatre
-                                      </h3>
-                                    </div>
-                                    <div className="pl-7 text-sm">
-                                      <p className="text-muted-foreground mb-3">
-                                        Whether it&apos;s a birthday surprise, anniversary
-                                        date, proposal, or just quality time away from the
-                                        world — our couple theatre is crafted for
-                                        closeness and connection.
-                                      </p>
-                                      <div className="grid gap-2">
-                                        <div className="flex items-start gap-2">
-                                          <Heart className="mt-0.5 h-4 w-4 shrink-0 text-pink-500" />
-                                          <div>
-                                            <p>
-                                              <strong>Private, Cozy Atmosphere:</strong>{" "}
-                                              Just the two of you, with no interruptions.
-                                            </p>
-                                          </div>
-                                        </div>
-                                        <div className="flex items-start gap-2">
-                                          <Star className="mt-0.5 h-4 w-4 shrink-0 text-yellow-500" />
-                                          <div>
-                                            <p>
-                                              <strong>Custom Decor Options:</strong>{" "}
-                                              Romantic setups with fairy lights, balloons,
-                                              rose petals, and more — tailored for your
-                                              moment.
-                                            </p>
-                                          </div>
-                                        </div>
-                                        <div className="flex items-start gap-2">
-                                          <Film className="mt-0.5 h-4 w-4 shrink-0 text-blue-500" />
-                                          <div>
-                                            <p>
-                                              <strong>
-                                                Personalised Playlist & Movie Choice:
-                                              </strong>{" "}
-                                              Watch your favorite film or a special video
-                                              that means something to you both.
-                                            </p>
-                                          </div>
-                                        </div>
-                                        <div className="flex items-start gap-2">
-                                          <Star className="mt-0.5 h-4 w-4 shrink-0 text-purple-500" />
-                                          <div>
-                                            <p>
-                                              <strong>Add-Ons Available:</strong> Cakes,
-                                              messages on screen, gifts, curated themes —
-                                              we help you plan every detail.
-                                            </p>
-                                          </div>
-                                        </div>
-                                        <div className="flex items-start gap-2">
-                                          <Heart className="mt-0.5 h-4 w-4 shrink-0 text-red-500" />
-                                          <div>
-                                            <p>
-                                              <strong>Memory-Making Space:</strong> The
-                                              perfect setting to relax, reconnect, and
-                                              create beautiful moments — all in complete
-                                              privacy.
-                                            </p>
-                                          </div>
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </div>
-
-                                  <div className="bg-secondary rounded-lg p-3 text-center">
-                                    <p className="text-sm font-medium">
-                                      Create unforgettable moments in your own private
-                                      cinema, designed for love and connection.
-                                    </p>
                                   </div>
                                 </div>
                               </div>
-                            </div>
-                          </DialogContent>
-                        </Dialog>
-                      ) : pkg.room == "Elite Theatre" ? (
-                        <Dialog
-                          open={showEliteDetails}
-                          onOpenChange={setShowEliteDetails}
-                        >
-                          <DialogTrigger
-                            render={
-                              <Button variant="link" className="p-0 underline">
-                                More Details
-                              </Button>
-                            }
-                          />
-                          <DialogContent className="flex flex-col gap-0 p-0 sm:max-h-[min(640px,80vh)] sm:max-w-2xl [&>button:last-child]:top-3.5">
-                            <DialogHeader className="contents space-y-0 text-left">
-                              <DialogTitle className="flex items-center gap-2 px-6 py-6">
-                                Elite Theatre
-                              </DialogTitle>
-                            </DialogHeader>
-
-                            <div className="max-h-[80vh] overflow-y-auto px-6 pb-6">
-                              <div className="space-y-6">
-                                {/* Introduction */}
-                                <div className="bg-secondary rounded-lg border p-4 text-center">
-                                  <p className="text-muted-foreground text-sm leading-relaxed">
-                                    Step into our <strong>Elite Theatre</strong>, designed
-                                    for unforgettable group celebrations and immersive
-                                    cinematic experiences. Whether it&apos;s a birthday,
-                                    bachelorette, anniversary, or a chill movie night —
-                                    this space offers the perfect blend of
-                                    high-performance technology and luxurious comfort.
-                                  </p>
-                                </div>
-
-                                {/* Visual Experience */}
-                                <div className="space-y-3">
-                                  <div className="flex items-center gap-2">
-                                    <Monitor className="h-5 w-5 text-blue-600" />
-                                    <h3 className="text-lg font-semibold">
-                                      📽️ Stunning Visuals
-                                    </h3>
-                                  </div>
-                                  <div className="space-y-2 pl-7 text-sm">
-                                    <div className="rounded-md p-3">
-                                      <p>
-                                        <strong>
-                                          120-Inch Fixed Frame Projector Screen
-                                        </strong>{" "}
-                                        (16:9, Diagonal Active 3D, 4K Ready)
-                                      </p>
-                                      <p className="text-muted-foreground">
-                                        Large-format viewing with sharp, vibrant,
-                                        cinema-like visuals.
-                                      </p>
-                                    </div>
-                                    <div className="rounded-md p-3">
-                                      <p>
-                                        <strong>
-                                          Epson EH-TW750 Full HD Cinema Projector
-                                        </strong>
-                                      </p>
-                                      <p className="text-muted-foreground">
-                                        Bright, crisp picture quality — perfect for both
-                                        daytime and nighttime screenings.
-                                      </p>
-                                    </div>
-                                  </div>
-                                </div>
-
-                                <Separator />
-
-                                {/* Audio Experience */}
-                                <div className="space-y-3">
-                                  <div className="flex items-center gap-2">
-                                    <Volume2 className="h-5 w-5 text-green-600" />
-                                    <h3 className="text-lg font-semibold">
-                                      🔊 Premium Surround Sound
-                                    </h3>
-                                  </div>
-                                  <div className="space-y-2 pl-7 text-sm">
-                                    <div className="rounded-md p-3">
-                                      <p>
-                                        <strong>
-                                          Denon AVR-X250BT 5.1 Ch. 4K Ultra HD AV Receiver
-                                          with Bluetooth
-                                        </strong>
-                                      </p>
-                                      <ul className="text-muted-foreground mt-1 space-y-1">
-                                        <li>
-                                          • Delivers dynamic, immersive surround sound
-                                          with support for 4K Ultra HD
-                                        </li>
-                                        <li>
-                                          • Bluetooth-enabled for seamless wireless audio
-                                          playback
-                                        </li>
-                                        <li>
-                                          • Optimized for detailed, room-filling sound
-                                          with rich cinematic quality
-                                        </li>
-                                      </ul>
-                                    </div>
-                                    <div className="rounded-md p-3">
-                                      <p>
-                                        <strong>Yamaha NS-P41 5.1 Speaker System</strong>
-                                      </p>
-                                      <ul className="text-muted-foreground mt-1 space-y-1">
-                                        <li>
-                                          • <strong>Powerful, Balanced Sound:</strong>{" "}
-                                          Engineered to deliver clean, natural audio
-                                          across all frequencies
-                                        </li>
-                                        <li>
-                                          • <strong>Advanced YST II Subwoofer:</strong>{" "}
-                                          Features Yamaha&apos;s proprietary Advanced YST
-                                          II technology for deep, tight bass with low
-                                          distortion
-                                        </li>
-                                        <li>
-                                          •{" "}
-                                          <strong>
-                                            Wall-Mountable Satellite Speakers:
-                                          </strong>{" "}
-                                          Flexible placement options for optimal surround
-                                          effect
-                                        </li>
-                                        <li>
-                                          • Perfect Match with Denon AVR: Offers a
-                                          complete and cohesive theatre-grade audio
-                                          experience with crystal-clear dialogue and
-                                          dramatic soundscapes
-                                        </li>
-                                      </ul>
-                                    </div>
-                                  </div>
-                                </div>
-
-                                <Separator />
-
-                                {/* Comfort */}
-                                <div className="space-y-3">
-                                  <div className="flex items-center gap-2">
-                                    <Sofa className="h-5 w-5 text-orange-600" />
-                                    <h3 className="text-lg font-semibold">
-                                      🛋️ Theatre-Style Comfort
-                                    </h3>
-                                  </div>
-                                  <div className="space-y-2 pl-7 text-sm">
-                                    <div className="grid gap-2">
-                                      <div className="flex items-start gap-2">
-                                        <Star className="mt-0.5 h-4 w-4 shrink-0 text-yellow-500" />
-                                        <div>
-                                          <p>
-                                            <strong>Recliner Sofas:</strong> Plush and
-                                            spacious, ideal for laid-back celebrations or
-                                            binge-worthy movie sessions.
-                                          </p>
-                                        </div>
-                                      </div>
-                                      <div className="flex items-start gap-2">
-                                        <Speaker className="mt-0.5 h-4 w-4 shrink-0 text-purple-500" />
-                                        <div>
-                                          <p>
-                                            <strong>Acoustically Treated Walls:</strong>{" "}
-                                            Professional soundproofing for an immersive,
-                                            echo-free experience.
-                                          </p>
-                                        </div>
-                                      </div>
-                                      <div className="flex items-start gap-2">
-                                        <Snowflake className="mt-0.5 h-4 w-4 shrink-0 text-blue-500" />
-                                        <div>
-                                          <p>
-                                            <strong>Air-Conditioned Ambience:</strong>{" "}
-                                            Stay cool and comfortable in a fully AC
-                                            environment, no matter the season.
-                                          </p>
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
-
-                                <Separator />
-
-                                {/* Add-ons */}
-                                <div className="bg-secondary rounded-lg p-4">
-                                  <p className="text-sm">
-                                    <strong>🎉 Optional add-ons available:</strong>{" "}
-                                    Customized décor, screen messages, cakes, photo
-                                    corners, and curated playlists — tailored to your
-                                    celebration.
-                                  </p>
-                                </div>
-
-                                <div className="bg-secondary rounded-lg p-3 text-center">
-                                  <p className="text-sm font-medium">
-                                    From high-end tech to soft, cinematic vibes — Elite
-                                    Theatre gives you everything you need for a private
-                                    theatre night that feels grand, yet personal.
-                                  </p>
-                                </div>
+                            </DialogContent>
+                          </Dialog>
+                        ) : pkg.room === "Elite Theatre" ? (
+                          <Dialog
+                            open={showEliteDetails}
+                            onOpenChange={setShowEliteDetails}
+                          >
+                            <DialogTrigger
+                              render={
+                                <Button
+                                  variant="link"
+                                  className="p-0 text-xs text-primary underline"
+                                >
+                                  More Details
+                                </Button>
+                              }
+                            />
+                            <DialogContent className="flex flex-col gap-0 p-0 sm:max-h-[min(640px,80vh)] sm:max-w-2xl [&>button:last-child]:top-3.5">
+                              <DialogHeader className="contents space-y-0 text-left">
+                                <DialogTitle className="flex items-center gap-2 px-6 py-6">
+                                  Elite Theatre
+                                </DialogTitle>
+                              </DialogHeader>
+                              <div className="max-h-[80vh] flex-1 overflow-y-auto px-6 pb-6">
+                                <p className="text-sm text-muted-foreground">
+                                  From high-end tech to soft, cinematic vibes — Elite
+                                  Theatre gives you everything you need for a private
+                                  theatre night that feels grand, yet personal.
+                                </p>
                               </div>
-                            </div>
-                          </DialogContent>
-                        </Dialog>
-                      ) : pkg.room == "The Royal" ? (
-                        <Dialog
-                          open={showRoyalDetails}
-                          onOpenChange={setShowRoyalDetails}
-                        >
-                          <DialogTrigger
-                            render={
-                              <Button variant="link" className="p-0 underline">
-                                More Details
-                              </Button>
-                            }
-                          />
-                          <DialogContent className="flex flex-col gap-0 p-0 sm:max-h-[min(640px,80vh)] sm:max-w-2xl [&>button:last-child]:top-3.5">
-                            <DialogHeader className="contents space-y-0 text-left">
-                              <DialogTitle className="flex items-center gap-2 px-6 py-6">
-                                The Royal
-                              </DialogTitle>
-                            </DialogHeader>
-
-                            <div className="max-h-[80vh] overflow-y-auto px-6 pb-6">
-                              <div className="space-y-6">
-                                {/* Introduction */}
-                                <div className="bg-secondary rounded-lg border p-4 text-center">
-                                  <p className="text-muted-foreground text-sm leading-relaxed">
-                                    Experience unparalleled luxury in{" "}
-                                    <strong>The Royal</strong>. Perfect for large
-                                    gatherings, our elegantly decorated space ensures
-                                    every moment of your celebration is magnificent.
-                                  </p>
-                                </div>
-
-                                {/* Accommodations */}
-                                <div className="space-y-3">
-                                  <div className="flex items-center gap-2">
-                                    <Star className="h-5 w-5 text-yellow-600" />
-                                    <h3 className="text-lg font-semibold">
-                                      👑 Elite Accommodations
-                                    </h3>
-                                  </div>
-                                  <div className="space-y-2 pl-7 text-sm">
-                                    <div className="rounded-md p-3">
-                                      <p>
-                                        <strong>Luxurious Space:</strong>
-                                      </p>
-                                      <p className="text-muted-foreground">
-                                        Comfortably accommodates up to 40 guests. Seating
-                                        can be arranged for 25 members.
-                                      </p>
-                                    </div>
-                                    <div className="rounded-md p-3">
-                                      <p>
-                                        <strong>Luxury Seating:</strong>
-                                      </p>
-                                      <p className="text-muted-foreground">
-                                        Includes luxury sofa seating designed for comfort
-                                        and elegance.
-                                      </p>
-                                    </div>
-                                  </div>
-                                </div>
-
-                                <Separator />
-
-                                {/* Entertainment */}
-                                <div className="space-y-3">
-                                  <div className="flex items-center gap-2">
-                                    <Film className="h-5 w-5 text-blue-600" />
-                                    <h3 className="text-lg font-semibold">
-                                      🎬 Premium Entertainment
-                                    </h3>
-                                  </div>
-                                  <div className="space-y-2 pl-7 text-sm">
-                                    <ul className="text-muted-foreground space-y-2">
-                                      <li>
-                                        • <strong>Epson Projector Screening:</strong> High
-                                        quality immersive cinematic experience.
-                                      </li>
-                                      <li>
-                                        • <strong>Access to All OTT Platforms:</strong>{" "}
-                                        Stream your favorite movies and shows.
-                                      </li>
-                                      <li>
-                                        • <strong>Customized Neon Board:</strong>{" "}
-                                        Personalized lighting matching your occasion.
-                                      </li>
-                                    </ul>
-                                  </div>
-                                </div>
-
-                                <Separator />
-
-                                {/* Terms & Conditions */}
-                                <div className="space-y-3">
-                                  <div className="flex items-center gap-2">
-                                    <h3 className="text-lg font-semibold">
-                                      🚫 Terms & Conditions
-                                    </h3>
-                                  </div>
-                                  <div className="space-y-2 pl-7 text-sm">
-                                    <ul className="text-muted-foreground space-y-1">
-                                      {(pkg as any).terms?.map(
-                                        (term: string, i: number) => (
-                                          <li key={i}>• {term}</li>
-                                        ),
-                                      )}
-                                    </ul>
-                                  </div>
-                                </div>
+                            </DialogContent>
+                          </Dialog>
+                        ) : pkg.room === "The Royal" ? (
+                          <Dialog
+                            open={showRoyalDetails}
+                            onOpenChange={setShowRoyalDetails}
+                          >
+                            <DialogTrigger
+                              render={
+                                <Button
+                                  variant="link"
+                                  className="p-0 text-xs text-primary underline"
+                                >
+                                  More Details
+                                </Button>
+                              }
+                            />
+                            <DialogContent className="flex flex-col gap-0 p-0 sm:max-h-[min(640px,80vh)] sm:max-w-2xl [&>button:last-child]:top-3.5">
+                              <DialogHeader className="contents space-y-0 text-left">
+                                <DialogTitle className="flex items-center gap-2 px-6 py-6">
+                                  The Royal
+                                </DialogTitle>
+                              </DialogHeader>
+                              <div className="max-h-[80vh] overflow-y-auto px-6 pb-6">
+                                <p className="text-sm text-muted-foreground">
+                                  Experience unparalleled luxury in The Royal. Perfect for
+                                  large gatherings, our space comfortably accommodates up
+                                  to 40 guests.
+                                </p>
                               </div>
-                            </div>
-                          </DialogContent>
-                        </Dialog>
-                      ) : null}
-                    </ul>
-                    <div className="grid w-full grid-cols-2 gap-2">
-                      {pkg.room === "Dreamscape Theatre"
-                        ? DREAMSCAPE_TIME_SLOTS.map((slot) => {
-                            const isSelected =
-                              selectedPackage.time === slot &&
-                              selectedPackage.room === pkg.room;
+                            </DialogContent>
+                          </Dialog>
+                        ) : null}
+                      </ul>
 
-                            const unavailable =
-                              !!reservation?.date &&
-                              isSlotUnavailable(slot, pkg.room, data, reservation.date);
-
-                            const isDisabled =
-                              isLoading || unavailable || reservation?.noOfPeople! > 5;
+                      {/* Slot Hour Selector on card */}
+                      <div className="mb-1">
+                        <p className="text-sm font-semibold text-foreground mb-2">Select slot hour</p>
+                      {/* Title & Badge */}
+                        <div className="flex flex-wrap gap-2">
+                          {SLOT_HOURS.map((hr) => {
+                            const count = getAvailableSlotsCount(
+                              hr,
+                              pkg.room,
+                              data,
+                              reservation?.date,
+                            );
+                            const isSelected = currentHour === hr;
 
                             return (
-                              <Button
-                                key={slot}
-                                disabled={isDisabled}
-                                variant={
-                                  isSelected
-                                    ? "default"
-                                    : unavailable
-                                      ? "destructive"
-                                      : "outline"
-                                }
+                              <button
+                                key={hr}
+                                type="button"
                                 onClick={() => {
-                                  if (!reservation?.date) {
-                                    toast.error("Please select a date");
-                                    return;
-                                  }
-
-                                  toast.success(pkg.room, {
-                                    description: `Time - ${slot}`,
-                                    duration: 3000,
-                                  });
-
-                                  setSelectedPackage({
-                                    room: pkg.room,
-                                    time: slot,
-                                    price: pkg.price,
-                                  });
+                                  setSelectedHours((prev) => ({
+                                    ...prev,
+                                    [pkg.room]: hr,
+                                  }));
                                 }}
-                                className={`flex-1 ${(unavailable || isDisabled) && "line-through"}`}
+                                className={cn(
+                                  "flex items-center gap-2 rounded-full px-4 py-1.5 text-sm font-medium border transition-all cursor-pointer",
+                                  isSelected
+                                    ? "bg-primary text-primary-foreground border-primary"
+                                    : "bg-background text-foreground border-border hover:border-primary/50",
+                                )}
                               >
-                                {slot}
-                              </Button>
+                                <span>{hr} hour</span>
+                                <span
+                                  className={cn(
+                                    "text-xs px-1.5 py-0.5 rounded-full font-medium",
+                                    isSelected
+                                      ? "bg-primary-foreground/20 text-primary-foreground"
+                                      : "bg-muted text-muted-foreground",
+                                  )}
+                                >
+                                  {reservation?.date ? `${count} slots` : "-"}
+                                </span>
+                              </button>
                             );
-                          })
-                        : pkg.room === "Elite Theatre"
-                          ? ELITE_TIME_SLOTS.map((slot) => {
-                              const isSelected =
-                                selectedPackage.time === slot &&
-                                selectedPackage.room === pkg.room;
-
-                              const unavailable =
-                                !!reservation?.date &&
-                                isSlotUnavailable(slot, pkg.room, data, reservation.date);
-
-                              const isDisabled = isLoading || unavailable;
-
-                              return (
-                                <Button
-                                  key={slot}
-                                  disabled={isDisabled}
-                                  variant={
-                                    isSelected
-                                      ? "default"
-                                      : unavailable
-                                        ? "destructive"
-                                        : "outline"
-                                  }
-                                  onClick={() => {
-                                    if (!reservation?.date) {
-                                      toast.error("Please select a date");
-                                      return;
-                                    }
-
-                                    toast.success(pkg.room, {
-                                      description: `Time - ${slot}`,
-                                      duration: 3000,
-                                    });
-
-                                    setSelectedPackage({
-                                      room: pkg.room,
-                                      time: slot,
-                                      price: pkg.price,
-                                    });
-                                  }}
-                                  className={`flex-1 ${(unavailable || isDisabled) && "line-through"}`}
-                                >
-                                  {slot}
-                                </Button>
-                              );
-                            })
-                          : ROYAL_TIME_SLOTS.map((slot) => {
-                              const isSelected =
-                                selectedPackage.time === slot &&
-                                selectedPackage.room === pkg.room;
-
-                              const unavailable =
-                                !!reservation?.date &&
-                                isSlotUnavailable(slot, pkg.room, data, reservation.date);
-
-                              const isDisabled = isLoading || unavailable;
-
-                              return (
-                                <Button
-                                  key={slot}
-                                  disabled={isDisabled}
-                                  variant={
-                                    isSelected
-                                      ? "default"
-                                      : unavailable
-                                        ? "destructive"
-                                        : "outline"
-                                  }
-                                  onClick={() => {
-                                    if (!reservation?.date) {
-                                      toast.error("Please select a date");
-                                      return;
-                                    }
-
-                                    toast.success(pkg.room, {
-                                      description: `Time - ${slot}`,
-                                      duration: 3000,
-                                    });
-
-                                    setSelectedPackage({
-                                      room: pkg.room,
-                                      time: slot,
-                                      price: pkg.discountPrice,
-                                    });
-                                  }}
-                                  className={`flex-1 ${(unavailable || isDisabled) && "line-through"}`}
-                                >
-                                  {slot}
-                                </Button>
-                              );
-                            })}
+                          })}
+                        </div>
+                      </div>
+                      <div className="mt-5 flex flex-wrap items-center justify-between gap-3 border-t pt-4">
+                        <div>
+                          <span className="text-xs text-muted-foreground block">
+                            Starting from
+                          </span>
+                          <div className="flex items-baseline gap-2">
+                            {originalPrice && (
+                              <span className="text-muted-foreground text-base font-medium line-through">
+                                {formatCurrency(originalPrice)}
+                              </span>
+                            )}
+                            <span className="text-2xl sm:text-3xl font-extrabold text-foreground">
+                              {formatCurrency(currentPrice)}
+                            </span>
+                          </div>
+                          <p className="text-xs text-muted-foreground mt-0.5">
+                            + ₹{ADDITIONAL_PERSON_PRICE}/person after {pkg.noPeople} People
+                          </p>
+                        </div>
+                        <Button
+                          type="button"
+                          onClick={() => handleOpenSlotDialog(pkg.room)}
+                          className="rounded-full font-semibold px-6 py-2.5 transition-all border-none cursor-pointer"
+                        >
+                          Select Slot
+                        </Button>
+                      </div>
                     </div>
-                    <p className="text-muted-foreground mt-5 text-sm">
-                      Note: If requirement is more than {pkg.room == "The Royal" ? 3 : 2}{" "}
-                      hours please contact us.
-                    </p>
-                    {pkg.room == "Dreamscape Theatre" && reservation?.noOfPeople! > 5 && (
-                      <h1 className="text-destructive mt-4 font-medium">
-                        Only upto 5 People are allowed
-                      </h1>
-                    )}
                   </div>
-                </div>
-              </Card>
-            ))}
-          </div>
-          <div className="sticky bottom-6 z-10">
-            <div className="bg-background/10 rounded-2xl p-4 shadow-lg backdrop-blur-lg">
-              <div className="mx-auto flex max-w-md gap-4">
-                <Button
-                  type={"submit"}
-                  className={"flex-1 font-medium"}
-                  variant={"default"}
-                  onClick={handleNextButton}
-                >
-                  Select Addons <ArrowRight />
-                </Button>
-              </div>
-            </div>
+                </Card>
+              );
+            })}
           </div>
         </div>
       </div>
+
+      <Dialog
+        open={dialogState.open}
+        onOpenChange={(open) => setDialogState((prev) => ({ ...prev, open }))}
+      >
+        <DialogContent className="sm:max-w-3xl p-0 overflow-hidden rounded-2xl max-h-[90vh] flex flex-col">
+          <DialogHeader className="p-4 sm:p-6 pb-2 border-b">
+            <div className="flex items-center justify-between">
+              <div>
+                <DialogTitle className="text-xl sm:text-2xl font-bold">
+                  Select Time Slot
+                </DialogTitle>
+                <p className="text-xs sm:text-sm text-muted-foreground mt-1">
+                  {dialogState.room} • {reservation?.date || "No date selected"}
+                </p>
+              </div>
+            </div>
+          </DialogHeader>
+
+          <div className="p-4 sm:p-6 overflow-y-auto flex-1">
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
+              <div className="md:col-span-4 space-y-4">
+                <div>
+                  <h3 className="text-sm font-bold text-foreground mb-3">Slot Hour</h3>
+                  <div className="flex flex-col gap-2.5">
+                    {SLOT_HOURS.map((hr) => {
+                      const count = dialogState.room
+                        ? getAvailableSlotsCount(
+                            hr,
+                            dialogState.room,
+                            data,
+                            reservation?.date,
+                          )
+                        : 0;
+                      const isSelected = dialogState.duration === hr;
+
+                      return (
+                        <Button
+                          key={hr}
+                          type="button"
+                          onClick={() => {
+                            setDialogState((prev) => ({
+                              ...prev,
+                              duration: hr,
+                              selectedSlot: undefined,
+                            }));
+                          }}
+                          variant={isSelected ? "default" : "outline"}
+                        >
+                          <span>{hr} hour</span>
+                          <Badge
+                            variant={'outline'}
+                          >
+                            {count} slots
+                          </Badge>
+                        </Button>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                <div className="rounded-xl border border-border/60 bg-muted/20 p-3.5 space-y-1.5">
+                  <span className="text-xs text-muted-foreground block">
+                    Starting from
+                  </span>
+                  <div className="flex items-baseline gap-2">
+                    {activeDialogOriginalPrice && (
+                      <span className="text-muted-foreground text-sm font-medium line-through">
+                        {formatCurrency(activeDialogOriginalPrice)}
+                      </span>
+                    )}
+                    <span className="text-xl font-bold text-foreground">
+                      {formatCurrency(activeDialogPrice)}
+                    </span>
+                  </div>
+                  <p className="text-xs text-muted-foreground">
+                    + ₹{ADDITIONAL_PERSON_PRICE}/person after{" "}
+                    {activeTheatre?.noPeople || 2} People
+                  </p>
+                </div>
+              </div>
+
+              <div className="md:col-span-8 space-y-3">
+                <div className="flex items-center justify-between">
+                  <h3 className="text-sm font-bold text-foreground">Time slots</h3>
+                  {isLoading && (
+                    <span className="text-xs text-muted-foreground">
+                      Checking availability...
+                    </span>
+                  )}
+                </div>
+
+                <div className="grid grid-cols-2 gap-2.5 max-h-[50vh] overflow-y-auto pr-1">
+                  {getTimeSlotsForDuration(dialogState.duration).map((slot) => {
+                    const unavailable =
+                      !reservation?.date ||
+                      (dialogState.room
+                        ? isSlotUnavailable(
+                            slot,
+                            dialogState.room,
+                            data,
+                            reservation.date,
+                          )
+                        : false);
+
+                    const isSelected = dialogState.selectedSlot === slot;
+
+                    if (unavailable) {
+                      return (
+                       <Button
+                        key={slot}
+                        disabled
+                        className="cursor-not-allowed"
+                        variant={"destructive"}
+                      >
+                        {slot}
+                      </Button>
+                      );
+                    }
+                    return (
+                      <Button
+                        key={slot}
+                        onClick={() => {
+                          setDialogState((prev) => ({
+                            ...prev,
+                            selectedSlot: slot,
+                          }));
+                        }}
+                        variant={isSelected ? "default" : "outline"}
+                      >
+                        {slot}
+                      </Button>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="border-t p-4 sm:p-5 bg-muted/10 flex items-center justify-between gap-4">
+            <div className="text-xs sm:text-sm">
+              {dialogState.selectedSlot ? (
+                <p className="font-medium text-foreground">
+                  Selected:{" "}
+                  <span className="font-bold text-emerald-600 dark:text-emerald-400">
+                    {dialogState.selectedSlot}
+                  </span>{" "}
+                  ({dialogState.duration} hr)
+                </p>
+              ) : (
+                <p className="text-muted-foreground">Select an available time slot</p>
+              )}
+            </div>
+
+            <Button
+              type="button"
+              disabled={!dialogState.selectedSlot}
+              onClick={handleConfirmSlotAndProceed}
+            >
+              Continue
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

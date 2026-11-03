@@ -25,6 +25,7 @@ import {
   THEATRES,
 } from "@/lib/constants";
 import formatCurrency from "@/lib/formatCurrency";
+import { hasMidnightCharge } from "@/lib/utils";
 import { Check, CreditCard } from "lucide-react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
@@ -136,10 +137,7 @@ export default function StepFour() {
   if (reservation?.ledLetterAge) {
     price += LED_LETTER_LIGHT_AGE;
   }
-  if (
-    reservation?.timeSlot === "10PM - 12AM" ||
-    reservation?.timeSlot === "10:30PM - 12:30AM"
-  ) {
+  if (hasMidnightCharge(reservation?.timeSlot)) {
     price += MIDNIGHT_CHARGE;
   }
   if (reservation?.photography === "photoshoot") {
@@ -362,8 +360,7 @@ export default function StepFour() {
                     </span>
                   </div>
                 )}
-                {(reservation.timeSlot === "10PM - 12AM" ||
-                  reservation.timeSlot === "10:30PM - 12:30AM") && (
+                {hasMidnightCharge(reservation.timeSlot) && (
                   <div className="flex justify-between">
                     <span>Midnight Slot Charges</span>
                     <span className="font-semibold whitespace-nowrap text-green-600">

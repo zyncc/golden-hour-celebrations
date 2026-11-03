@@ -7,9 +7,8 @@ import {
   BLUEBERRY_CHEESE_CAKE_PRICE,
   CAKE_PRICE,
   CANDLE_LIGHT_ROSE_PATH,
-  DREAMSCAPE_THEATRE_PRICE,
-  ELITE_THEATRE_PRICE,
   FOG_EFFECT_PRICE,
+  getTheatrePrice,
   LED_LETTER_LIGHT_AGE,
   LED_LETTER_LIGHT_NAME,
   MIDNIGHT_CHARGE,
@@ -17,8 +16,8 @@ import {
   PHOTOGRAPHY_PRICE,
   RASMALAI_CAKE_PRICE,
   THE_ROYAL_THEATRE_ADVANCE_AMOUNT,
-  THE_ROYAL_THEATRE_PRICE,
 } from "@/lib/constants";
+import { hasMidnightCharge } from "@/lib/utils";
 import Razorpay from "razorpay";
 
 export async function createOrder(
@@ -37,20 +36,18 @@ export async function createOrder(
     key_secret: process.env.RAZORPAY_KEY_SECRET as string,
   });
 
-  let price: number;
-
-  if (reservation.room === "Dreamscape Theatre") {
-    price = DREAMSCAPE_THEATRE_PRICE;
-  } else if (reservation.room === "Elite Theatre") {
-    price = ELITE_THEATRE_PRICE;
-  } else if (reservation.room === "The Royal") {
-    price = THE_ROYAL_THEATRE_PRICE;
-  } else {
+  if (!reservation.room) {
     return {
       success: false,
       error: `Invalid room: ${reservation.room}`,
     };
   }
+
+  let price = getTheatrePrice(
+    reservation.room,
+    reservation.duration,
+    reservation.timeSlot,
+  );
 
   let advanceAmountPrice =
     reservation?.room == "The Royal" ? THE_ROYAL_THEATRE_ADVANCE_AMOUNT : ADVANCE_AMOUNT;
@@ -83,10 +80,7 @@ export async function createOrder(
 
   if (reservation.rosePath) price += CANDLE_LIGHT_ROSE_PATH;
 
-  if (
-    reservation.timeSlot === "10PM - 12AM" ||
-    reservation.timeSlot === "10:30PM - 12:30AM"
-  ) {
+  if (hasMidnightCharge(reservation.timeSlot)) {
     price += MIDNIGHT_CHARGE;
   }
 

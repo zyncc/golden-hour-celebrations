@@ -45,7 +45,7 @@ export const BLUEBERRY_CHEESE_CAKE_PRICE = 900;
 export const RASMALAI_CAKE_PRICE = 800;
 
 export const ADVANCE_AMOUNT = 1000;
-export const THE_ROYAL_THEATRE_ADVANCE_AMOUNT = 4000;
+export const THE_ROYAL_THEATRE_ADVANCE_AMOUNT = 2000;
 export const CANDLE_LIGHT_ROSE_PATH = 349;
 
 export const LED_LETTER_LIGHT_AGE = 49;
@@ -64,6 +64,99 @@ export const MIDNIGHT_CHARGE = 500;
 export const DREAMSCAPE_THEATRE_PRICE = 1499;
 export const ELITE_THEATRE_PRICE = 1899;
 export const THE_ROYAL_THEATRE_PRICE = 7499;
+
+export const THEATRE_HOURLY_PRICING: Record<
+  string,
+  {
+    prices: Record<number, number>;
+    originalPrices: Record<number, number>;
+  }
+> = {
+  "Dreamscape Theatre": {
+    prices: { 1: 999, 2: 1499, 3: 1999 },
+    originalPrices: { 1: 1199, 2: 1799, 3: 2399 },
+  },
+  "Elite Theatre": {
+    prices: { 1: 1299, 2: 1899, 3: 2499 },
+    originalPrices: { 1: 1599, 2: 2299, 3: 2999 },
+  },
+  "The Royal": {
+    prices: { 1: 3499, 2: 5499, 3: 7499 },
+    originalPrices: { 1: 4500, 2: 7000, 3: 10000 },
+  },
+};
+
+export const SLOT_HOURS = [1, 2, 3] as const;
+export type SlotHour = (typeof SLOT_HOURS)[number];
+
+export function formatHour(hour: number): string {
+  const h = hour % 24;
+  const period = h < 12 ? "am" : "pm";
+  const displayH = h % 12 === 0 ? 12 : h % 12;
+  return `${displayH}:00 ${period}`;
+}
+
+export function getTimeSlotsForDuration(duration: number): string[] {
+  const startHours = [0, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23];
+  return startHours
+    .filter((sh) => {
+      const timelineStart = sh === 0 ? 24 : sh;
+      const timelineEnd = timelineStart + duration;
+      return timelineEnd <= 25; 
+    })
+    .map((sh) => {
+      const eh = sh + duration;
+      return `${formatHour(sh)} - ${formatHour(eh)}`;
+    });
+}
+
+export function getTheatrePrice(room?: string, duration?: number, timeSlot?: string): number {
+  if (!room) return 1499;
+  let dur = duration;
+  if (!dur && timeSlot) {
+    try {
+      const [startStr, endStr] = timeSlot.split(/\s*-\s*/);
+      const clean = (t: string) => {
+        const c = t.trim().toLowerCase();
+        const isPM = c.includes("pm");
+        const isAM = c.includes("am");
+        const parts = c.replace(/(am|pm)/g, "").trim().split(":");
+        let hour = parseInt(parts[0], 10);
+        const minute = parts[1] ? parseInt(parts[1], 10) : 0;
+        if (isPM && hour !== 12) hour += 12;
+        if (isAM && hour === 12) hour = 0;
+        return hour + minute / 60;
+      };
+      const s = clean(startStr);
+      let e = clean(endStr);
+      if (e <= s) e += 24;
+      dur = Math.round(e - s);
+    } catch {
+      dur = 2;
+    }
+  }
+
+  if (!dur || dur < 1 || dur > 3) {
+    dur = room === "The Royal" ? 3 : 2;
+  }
+
+  const roomPricing = THEATRE_HOURLY_PRICING[room];
+  if (roomPricing?.prices[dur]) {
+    return roomPricing.prices[dur];
+  }
+
+  if (room === "Dreamscape Theatre") return DREAMSCAPE_THEATRE_PRICE;
+  if (room === "Elite Theatre") return ELITE_THEATRE_PRICE;
+  if (room === "The Royal") return THE_ROYAL_THEATRE_PRICE;
+  return 1499;
+}
+
+export function getTheatreOriginalPrice(room?: string, duration?: number): number | undefined {
+  if (!room) return undefined;
+  const dur = duration && duration >= 1 && duration <= 3 ? duration : room === "The Royal" ? 3 : 2;
+  const roomPricing = THEATRE_HOURLY_PRICING[room];
+  return roomPricing?.originalPrices[dur];
+}
 
 export const TIME_ZONE = "Asia/Kolkata";
 
@@ -107,6 +200,8 @@ export const THEATRES = [
   {
     id: 3,
     room: "The Royal",
+    location: "JP Nagar",
+    specs: ["Max 40 people", "150 Inch HD screen", "Dolby 5.1 Sound System", "Luxury Sofa Seating"],
     description: [
       "Beautifully Decorated space with theatre and entertainment access",
       `Complimentary Entry for 15 Members (Additional members – ₹${ADDITIONAL_PERSON_PRICE} per person)`,
@@ -140,6 +235,8 @@ export const THEATRES = [
   {
     id: 2,
     room: "Elite Theatre",
+    location: "JP Nagar",
+    specs: ["Max 10 people", "120 Inch HD screen", "Yamaha 5.1 Sound System", "Recliner Sofas"],
     description: [
       "Premium Decoration Setup",
       "Private Movie Time Experience",
@@ -148,12 +245,16 @@ export const THEATRES = [
       `Upto 4 people (Max 10 people, additional ₹${ADDITIONAL_PERSON_PRICE} per person)`,
     ],
     popular: true,
+    noPeople: 4,
+    hasDiscount: true,
     price: ELITE_THEATRE_PRICE,
     photo: _.shuffle(["/l6.webp", "/l5.webp", "/l3.webp", "/l4.webp"]),
   },
   {
     id: 1,
     room: "Dreamscape Theatre",
+    location: "JP Nagar",
+    specs: ["Max 5 people", "120 Inch HD screen", "Dolby 5.1 Sound System", "Cozy Couch"],
     description: [
       "Private Movie Time Experience",
       "Cozy Romantic Date Decor",
@@ -161,7 +262,8 @@ export const THEATRES = [
       "Access to OTT Platforms",
       `2 people (Max 4 people, additional ₹${ADDITIONAL_PERSON_PRICE} per person)`,
     ],
-    noPeople: 4,
+    noPeople: 2,
+    hasDiscount: true,
     price: DREAMSCAPE_THEATRE_PRICE,
     photo: _.shuffle(["/l16.webp", "/l17.webp", "/l18.webp", "/l19.webp"]),
   },

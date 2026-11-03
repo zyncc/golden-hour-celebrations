@@ -44,6 +44,9 @@ model Reservations {
   writingOnCake   String?
   specialRequests String?
   timeSlot        String
+  slotStartTime   DateTime?
+  slotEndTime     DateTime?
+  duration        Int?
   occasion        String
   name            String
   phone           String

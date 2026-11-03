@@ -12,6 +12,9 @@ export type Reservation = {
   date?: string | undefined;
   room?: string | undefined;
   timeSlot?: string | undefined;
+  slotStartTime?: string | undefined;
+  slotEndTime?: string | undefined;
+  duration?: number | undefined;
   price?: number | undefined;
   cake?: string | undefined;
   photography?: string | undefined;

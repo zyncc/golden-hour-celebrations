@@ -16,6 +16,9 @@ export type ReservationDetails = Prisma.ReservationsGetPayload<{
     date: true;
     room: true;
     timeSlot: true;
+    slotStartTime: true;
+    slotEndTime: true;
+    duration: true;
     occasion: true;
   };
 }>;

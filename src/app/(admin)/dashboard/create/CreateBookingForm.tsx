@@ -233,14 +233,10 @@ export default function CreateBookingForm({ currentDate }: { currentDate: string
   // Check if a time slot is booked
   const isTimeSlotBooked = useCallback(
     (slot: string) => {
-      return data?.find(
-        (reservation: Reservations) =>
-          reservation.timeSlot === slot &&
-          selectedRoom === reservation.room &&
-          reservation.paymentStatus,
-      );
+      if (!selectedDate || !selectedRoom) return false;
+      return isSlotUnavailable(slot, selectedRoom, data, selectedDate);
     },
-    [data, selectedRoom],
+    [data, selectedRoom, selectedDate],
   );
 
   // Handle form submission

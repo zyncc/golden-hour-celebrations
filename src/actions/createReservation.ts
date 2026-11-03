@@ -9,9 +9,8 @@ import {
   BLUEBERRY_CHEESE_CAKE_PRICE,
   CAKE_PRICE,
   CANDLE_LIGHT_ROSE_PATH,
-  DREAMSCAPE_THEATRE_PRICE,
-  ELITE_THEATRE_PRICE,
   FOG_EFFECT_PRICE,
+  getTheatrePrice,
   LED_LETTER_LIGHT_AGE,
   LED_LETTER_LIGHT_NAME,
   MIDNIGHT_CHARGE,
@@ -19,11 +18,10 @@ import {
   PHOTOGRAPHY_PRICE,
   RASMALAI_CAKE_PRICE,
   THE_ROYAL_THEATRE_ADVANCE_AMOUNT,
-  THE_ROYAL_THEATRE_PRICE,
   TIME_ZONE,
 } from "@/lib/constants";
 import prisma from "@/lib/prisma";
-import { parseSlotStart } from "@/lib/utils";
+import { FormatDate, getSlotInterval, hasMidnightCharge, parseSlotStart } from "@/lib/utils";
 import { ManualBookingSchema, payReservationSchema } from "@/lib/zodSchemas";
 import { Temporal } from "@js-temporal/polyfill";
 import { randomUUID } from "crypto";
@@ -42,32 +40,35 @@ export async function createReservation(
   let advanceAmountPrice =
     reservation?.room == "The Royal" ? THE_ROYAL_THEATRE_ADVANCE_AMOUNT : ADVANCE_AMOUNT;
 
-  const plainDate = Temporal.PlainDate.from(reservation.date!);
-  const plainTime = parseSlotStart(reservation.timeSlot!);
-
-  const zonedDateTime = plainDate.toZonedDateTime({
-    plainTime,
-    timeZone: TIME_ZONE,
-  });
-
-  // Selected booking instant (absolute UTC)
-  const selectedInstant = zonedDateTime.toInstant();
-
-  // Current instant (absolute UTC, server trusted)
-  const nowInstant = Temporal.Now.instant();
+  const { startDate: slotStartTime, endDate: slotEndTime, durationHours } = getSlotInterval(
+    reservation.date!,
+    reservation.timeSlot!,
+  );
 
   // Check if selected date time is greater than current time
-  if (Temporal.Instant.compare(selectedInstant, nowInstant) <= 0) {
+  if (slotStartTime.getTime() <= Date.now()) {
     throw new Error("Cannot book a past date or time slot");
   }
 
-  if (reservation.room === "Elite Theatre") {
-    total += ELITE_THEATRE_PRICE;
-  } else if (reservation.room === "Dreamscape Theatre") {
-    total += DREAMSCAPE_THEATRE_PRICE;
-  } else if (reservation.room === "The Royal") {
-    total += THE_ROYAL_THEATRE_PRICE;
+  // Ensure slot does not exceed 1:00 AM closing time
+  const plainDate = Temporal.PlainDate.from(reservation.date!);
+  const closingInstant = plainDate
+    .add({ days: 1 })
+    .toZonedDateTime({
+      plainTime: { hour: 1, minute: 0 },
+      timeZone: TIME_ZONE,
+    })
+    .toInstant();
+
+  if (slotEndTime.getTime() > closingInstant.epochMilliseconds) {
+    throw new Error("Booking time cannot exceed 1:00 AM closing time");
   }
+
+  total += getTheatrePrice(
+    reservation.room,
+    reservation.duration || Math.round(durationHours),
+    reservation.timeSlot,
+  );
 
   if (reservation?.cake) {
     if (reservation.cake == "Rasmalai Cake") {
@@ -91,10 +92,7 @@ export async function createReservation(
     total += CANDLE_LIGHT_ROSE_PATH;
   }
 
-  if (
-    reservation?.timeSlot === "10PM - 12AM" ||
-    reservation?.timeSlot === "10:30PM - 12:30AM"
-  ) {
+  if (hasMidnightCharge(reservation?.timeSlot)) {
     total += MIDNIGHT_CHARGE;
   }
 
@@ -143,20 +141,46 @@ export async function createReservation(
     throw new Error("Invalid DATA");
   }
 
+  // Check overlapping bookings in the database using actual timestamps
   const checkExistingBookings = await prisma.reservations.findFirst({
     where: {
-      date: new Date(data.date),
       room: data.room,
-      timeSlot: data.timeSlot,
       paymentStatus: true,
+      OR: [
+        {
+          slotStartTime: { lt: slotEndTime },
+          slotEndTime: { gt: slotStartTime },
+        },
+        {
+          slotStartTime: null,
+          date: {
+            gte: new Date(slotStartTime.getTime() - 24 * 60 * 60 * 1000),
+            lte: new Date(slotEndTime.getTime() + 24 * 60 * 60 * 1000),
+          },
+        },
+      ],
     },
   });
-  console.log("Existing Booking", checkExistingBookings);
+
   if (checkExistingBookings) {
-    return {
-      title: "Error creating Reservation",
-      description: "Someone has booked another reservation at the same Time Slot!",
-    };
+    if (!checkExistingBookings.slotStartTime) {
+      const istDateStr = FormatDate(new Date(checkExistingBookings.date));
+      const legacyInterval = getSlotInterval(istDateStr, checkExistingBookings.timeSlot);
+      if (
+        slotStartTime.getTime() < legacyInterval.endDate.getTime() &&
+        slotEndTime.getTime() > legacyInterval.startDate.getTime()
+      ) {
+        return {
+          title: "Slot Unavailable",
+          description: "Someone has booked another reservation that overlaps with this time slot!",
+        };
+      }
+    } else {
+      return {
+        title: "Slot Unavailable",
+        description: "Someone has booked another reservation that overlaps with this time slot!",
+      };
+    }
   }
 
   try {
@@ -169,7 +193,10 @@ export async function createReservation(
         nameToDisplay: data.nameToDisplay,
         writingOnCake: data.writingOnCake,
         specialRequests: data.specialRequests,
-        date: new Date(zonedDateTime.epochMilliseconds),
+        date: slotStartTime,
+        slotStartTime: slotStartTime,
+        slotEndTime: slotEndTime,
+        duration: reservation.duration || Math.round(durationHours),
         email: data.email,
         findUs: data.findus,
         name: data.name,
@@ -202,49 +229,69 @@ export async function CreateManualBooking(data: Data) {
     throw new Error("Unauthorized");
   }
 
-  const plainDate = Temporal.PlainDate.from(data.date);
-  const plainTime = parseSlotStart(data.timeSlot);
-
-  const zonedDateTime = plainDate.toZonedDateTime({
-    plainTime,
-    timeZone: TIME_ZONE,
-  });
-
-  // Selected booking instant (absolute UTC)
-  const selectedInstant = zonedDateTime.toInstant();
-
-  // Current instant (absolute UTC, server trusted)
-  const nowInstant = Temporal.Now.instant();
+  const { startDate: slotStartTime, endDate: slotEndTime, durationHours } = getSlotInterval(
+    data.date,
+    data.timeSlot,
+  );
 
   // Check if selected date time is greater than current time
-  if (Temporal.Instant.compare(selectedInstant, nowInstant) <= 0) {
+  if (slotStartTime.getTime() <= Date.now()) {
     throw new Error("Cannot book a past date or time slot");
+  }
+
+  // Ensure slot does not exceed 1:00 AM closing time
+  const plainDate = Temporal.PlainDate.from(data.date);
+  const closingInstant = plainDate
+    .add({ days: 1 })
+    .toZonedDateTime({
+      plainTime: { hour: 1, minute: 0 },
+      timeZone: TIME_ZONE,
+    })
+    .toInstant();
+
+  if (slotEndTime.getTime() > closingInstant.epochMilliseconds) {
+    throw new Error("Booking time cannot exceed 1:00 AM closing time");
   }
 
   const { advanceAmount, discount = 0, ...rest } = data;
   const checkExistingBookings = await prisma.reservations.findFirst({
     where: {
-      date: new Date(zonedDateTime.epochMilliseconds),
       room: data.room,
       paymentStatus: true,
+      OR: [
+        {
+          slotStartTime: { lt: slotEndTime },
+          slotEndTime: { gt: slotStartTime },
+        },
+        {
+          slotStartTime: null,
+          date: {
+            gte: new Date(slotStartTime.getTime() - 24 * 60 * 60 * 1000),
+            lte: new Date(slotEndTime.getTime() + 24 * 60 * 60 * 1000),
+          },
+        },
+      ],
     },
   });
 
-  console.log("Existing Booking", checkExistingBookings);
-
   if (checkExistingBookings) {
-    throw new Error("Someone has booked another reservation at the same Time Slot!");
+    if (!checkExistingBookings.slotStartTime) {
+      const istDateStr = FormatDate(new Date(checkExistingBookings.date));
+      const legacyInterval = getSlotInterval(istDateStr, checkExistingBookings.timeSlot);
+      if (
+        slotStartTime.getTime() < legacyInterval.endDate.getTime() &&
+        slotEndTime.getTime() > legacyInterval.startDate.getTime()
+      ) {
+        throw new Error("Someone has booked another reservation that overlaps with this time slot!");
+      }
+    } else {
+      throw new Error("Someone has booked another reservation that overlaps with this time slot!");
+    }
   }
 
   let total = 0;
 
-  if (data.room === "Dreamscape Theatre") {
-    total += DREAMSCAPE_THEATRE_PRICE;
-  } else if (data.room === "Elite Theatre") {
-    total += ELITE_THEATRE_PRICE;
-  } else if (data.room === "The Royal") {
-    total += THE_ROYAL_THEATRE_PRICE;
-  }
+  total += getTheatrePrice(data.room, data.duration || Math.round(durationHours), data.timeSlot);
 
   if (data.cake) {
     if (data.cake == "Rasmalai Cake") {
@@ -261,7 +308,7 @@ export async function CreateManualBooking(data: Data) {
   if (data.photography === "photoshoot") total += PHOTOGRAPHY_PRICE;
   else if (data.photography === "video") total += PHOTOGRAPHY_AND_VIDEO_PRICE;
 
-  if (data.timeSlot === "10PM - 12AM" || data.timeSlot === "10:30PM - 12:30AM") {
+  if (hasMidnightCharge(data.timeSlot)) {
     total += MIDNIGHT_CHARGE;
   }
 
@@ -286,7 +333,10 @@ export async function CreateManualBooking(data: Data) {
   const booking = await prisma.reservations.create({
     data: {
       ...rest,
-      date: new Date(zonedDateTime.epochMilliseconds),
+      date: slotStartTime,
+      slotStartTime: slotStartTime,
+      slotEndTime: slotEndTime,
+      duration: data.duration || Math.round(durationHours),
       discount,
       balanceAmount,
       advanceAmount,

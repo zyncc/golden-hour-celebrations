@@ -2351,6 +2351,7 @@ export namespace Prisma {
     balanceAmount: number | null
     advanceAmount: number | null
     noOfPeople: number | null
+    duration: number | null
     discount: number | null
   }
 
@@ -2358,6 +2359,7 @@ export namespace Prisma {
     balanceAmount: number | null
     advanceAmount: number | null
     noOfPeople: number | null
+    duration: number | null
     discount: number | null
   }
 
@@ -2371,6 +2373,9 @@ export namespace Prisma {
     writingOnCake: string | null
     specialRequests: string | null
     timeSlot: string | null
+    slotStartTime: Date | null
+    slotEndTime: Date | null
+    duration: number | null
     occasion: string | null
     name: string | null
     phone: string | null
@@ -2403,6 +2408,9 @@ export namespace Prisma {
     writingOnCake: string | null
     specialRequests: string | null
     timeSlot: string | null
+    slotStartTime: Date | null
+    slotEndTime: Date | null
+    duration: number | null
     occasion: string | null
     name: string | null
     phone: string | null
@@ -2435,6 +2443,9 @@ export namespace Prisma {
     writingOnCake: number
     specialRequests: number
     timeSlot: number
+    slotStartTime: number
+    slotEndTime: number
+    duration: number
     occasion: number
     name: number
     phone: number
@@ -2463,6 +2474,7 @@ export namespace Prisma {
     balanceAmount?: true
     advanceAmount?: true
     noOfPeople?: true
+    duration?: true
     discount?: true
   }
 
@@ -2470,6 +2482,7 @@ export namespace Prisma {
     balanceAmount?: true
     advanceAmount?: true
     noOfPeople?: true
+    duration?: true
     discount?: true
   }
 
@@ -2483,6 +2496,9 @@ export namespace Prisma {
     writingOnCake?: true
     specialRequests?: true
     timeSlot?: true
+    slotStartTime?: true
+    slotEndTime?: true
+    duration?: true
     occasion?: true
     name?: true
     phone?: true
@@ -2515,6 +2531,9 @@ export namespace Prisma {
     writingOnCake?: true
     specialRequests?: true
     timeSlot?: true
+    slotStartTime?: true
+    slotEndTime?: true
+    duration?: true
     occasion?: true
     name?: true
     phone?: true
@@ -2547,6 +2566,9 @@ export namespace Prisma {
     writingOnCake?: true
     specialRequests?: true
     timeSlot?: true
+    slotStartTime?: true
+    slotEndTime?: true
+    duration?: true
     occasion?: true
     name?: true
     phone?: true
@@ -2666,6 +2688,9 @@ export namespace Prisma {
     writingOnCake: string | null
     specialRequests: string | null
     timeSlot: string
+    slotStartTime: Date | null
+    slotEndTime: Date | null
+    duration: number | null
     occasion: string
     name: string
     phone: string
@@ -2717,6 +2742,9 @@ export namespace Prisma {
     writingOnCake?: boolean
     specialRequests?: boolean
     timeSlot?: boolean
+    slotStartTime?: boolean
+    slotEndTime?: boolean
+    duration?: boolean
     occasion?: boolean
     name?: boolean
     phone?: boolean
@@ -2751,6 +2779,9 @@ export namespace Prisma {
     writingOnCake?: boolean
     specialRequests?: boolean
     timeSlot?: boolean
+    slotStartTime?: boolean
+    slotEndTime?: boolean
+    duration?: boolean
     occasion?: boolean
     name?: boolean
     phone?: boolean
@@ -2773,7 +2804,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type ReservationsOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "balanceAmount" | "advanceAmount" | "room" | "noOfPeople" | "nameToDisplay" | "writingOnCake" | "specialRequests" | "timeSlot" | "occasion" | "name" | "phone" | "email" | "findUs" | "date" | "orderID" | "paymentID" | "paymentStatus" | "notes" | "cake" | "photography" | "fogEntry" | "rosePath" | "ledLetterName" | "ledLetterAge" | "manualBooking" | "discount" | "createdAt" | "updatedAt", ExtArgs["result"]["reservations"]>
+  export type ReservationsOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "balanceAmount" | "advanceAmount" | "room" | "noOfPeople" | "nameToDisplay" | "writingOnCake" | "specialRequests" | "timeSlot" | "slotStartTime" | "slotEndTime" | "duration" | "occasion" | "name" | "phone" | "email" | "findUs" | "date" | "orderID" | "paymentID" | "paymentStatus" | "notes" | "cake" | "photography" | "fogEntry" | "rosePath" | "ledLetterName" | "ledLetterAge" | "manualBooking" | "discount" | "createdAt" | "updatedAt", ExtArgs["result"]["reservations"]>
 
   export type $ReservationsPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Reservations"
@@ -2788,6 +2819,9 @@ export namespace Prisma {
       writingOnCake: string | null
       specialRequests: string | null
       timeSlot: string
+      slotStartTime: Date | null
+      slotEndTime: Date | null
+      duration: number | null
       occasion: string
       name: string
       phone: string
@@ -3209,6 +3243,9 @@ export namespace Prisma {
     readonly writingOnCake: FieldRef<"Reservations", 'String'>
     readonly specialRequests: FieldRef<"Reservations", 'String'>
     readonly timeSlot: FieldRef<"Reservations", 'String'>
+    readonly slotStartTime: FieldRef<"Reservations", 'DateTime'>
+    readonly slotEndTime: FieldRef<"Reservations", 'DateTime'>
+    readonly duration: FieldRef<"Reservations", 'Int'>
     readonly occasion: FieldRef<"Reservations", 'String'>
     readonly name: FieldRef<"Reservations", 'String'>
     readonly phone: FieldRef<"Reservations", 'String'>
@@ -6643,6 +6680,9 @@ export namespace Prisma {
     writingOnCake: 'writingOnCake',
     specialRequests: 'specialRequests',
     timeSlot: 'timeSlot',
+    slotStartTime: 'slotStartTime',
+    slotEndTime: 'slotEndTime',
+    duration: 'duration',
     occasion: 'occasion',
     name: 'name',
     phone: 'phone',
@@ -6912,6 +6952,9 @@ export namespace Prisma {
     writingOnCake?: StringNullableFilter<"Reservations"> | string | null
     specialRequests?: StringNullableFilter<"Reservations"> | string | null
     timeSlot?: StringFilter<"Reservations"> | string
+    slotStartTime?: DateTimeNullableFilter<"Reservations"> | Date | string | null
+    slotEndTime?: DateTimeNullableFilter<"Reservations"> | Date | string | null
+    duration?: IntNullableFilter<"Reservations"> | number | null
     occasion?: StringFilter<"Reservations"> | string
     name?: StringFilter<"Reservations"> | string
     phone?: StringFilter<"Reservations"> | string
@@ -6944,6 +6987,9 @@ export namespace Prisma {
     writingOnCake?: SortOrder
     specialRequests?: SortOrder
     timeSlot?: SortOrder
+    slotStartTime?: SortOrder
+    slotEndTime?: SortOrder
+    duration?: SortOrder
     occasion?: SortOrder
     name?: SortOrder
     phone?: SortOrder
@@ -6980,6 +7026,9 @@ export namespace Prisma {
     writingOnCake?: StringNullableFilter<"Reservations"> | string | null
     specialRequests?: StringNullableFilter<"Reservations"> | string | null
     timeSlot?: StringFilter<"Reservations"> | string
+    slotStartTime?: DateTimeNullableFilter<"Reservations"> | Date | string | null
+    slotEndTime?: DateTimeNullableFilter<"Reservations"> | Date | string | null
+    duration?: IntNullableFilter<"Reservations"> | number | null
     occasion?: StringFilter<"Reservations"> | string
     name?: StringFilter<"Reservations"> | string
     phone?: StringFilter<"Reservations"> | string
@@ -7011,6 +7060,9 @@ export namespace Prisma {
     writingOnCake?: SortOrder
     specialRequests?: SortOrder
     timeSlot?: SortOrder
+    slotStartTime?: SortOrder
+    slotEndTime?: SortOrder
+    duration?: SortOrder
     occasion?: SortOrder
     name?: SortOrder
     phone?: SortOrder
@@ -7051,6 +7103,9 @@ export namespace Prisma {
     writingOnCake?: StringNullableWithAggregatesFilter<"Reservations"> | string | null
     specialRequests?: StringNullableWithAggregatesFilter<"Reservations"> | string | null
     timeSlot?: StringWithAggregatesFilter<"Reservations"> | string
+    slotStartTime?: DateTimeNullableWithAggregatesFilter<"Reservations"> | Date | string | null
+    slotEndTime?: DateTimeNullableWithAggregatesFilter<"Reservations"> | Date | string | null
+    duration?: IntNullableWithAggregatesFilter<"Reservations"> | number | null
     occasion?: StringWithAggregatesFilter<"Reservations"> | string
     name?: StringWithAggregatesFilter<"Reservations"> | string
     phone?: StringWithAggregatesFilter<"Reservations"> | string
@@ -7426,6 +7481,9 @@ export namespace Prisma {
     writingOnCake?: string | null
     specialRequests?: string | null
     timeSlot: string
+    slotStartTime?: Date | string | null
+    slotEndTime?: Date | string | null
+    duration?: number | null
     occasion: string
     name: string
     phone: string
@@ -7458,6 +7516,9 @@ export namespace Prisma {
     writingOnCake?: string | null
     specialRequests?: string | null
     timeSlot: string
+    slotStartTime?: Date | string | null
+    slotEndTime?: Date | string | null
+    duration?: number | null
     occasion: string
     name: string
     phone: string
@@ -7489,6 +7550,9 @@ export namespace Prisma {
     writingOnCake?: NullableStringFieldUpdateOperationsInput | string | null
     specialRequests?: NullableStringFieldUpdateOperationsInput | string | null
     timeSlot?: StringFieldUpdateOperationsInput | string
+    slotStartTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    slotEndTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    duration?: NullableIntFieldUpdateOperationsInput | number | null
     occasion?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
@@ -7520,6 +7584,9 @@ export namespace Prisma {
     writingOnCake?: NullableStringFieldUpdateOperationsInput | string | null
     specialRequests?: NullableStringFieldUpdateOperationsInput | string | null
     timeSlot?: StringFieldUpdateOperationsInput | string
+    slotStartTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    slotEndTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    duration?: NullableIntFieldUpdateOperationsInput | number | null
     occasion?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
@@ -7552,6 +7619,9 @@ export namespace Prisma {
     writingOnCake?: string | null
     specialRequests?: string | null
     timeSlot: string
+    slotStartTime?: Date | string | null
+    slotEndTime?: Date | string | null
+    duration?: number | null
     occasion: string
     name: string
     phone: string
@@ -7583,6 +7653,9 @@ export namespace Prisma {
     writingOnCake?: NullableStringFieldUpdateOperationsInput | string | null
     specialRequests?: NullableStringFieldUpdateOperationsInput | string | null
     timeSlot?: StringFieldUpdateOperationsInput | string
+    slotStartTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    slotEndTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    duration?: NullableIntFieldUpdateOperationsInput | number | null
     occasion?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
@@ -7614,6 +7687,9 @@ export namespace Prisma {
     writingOnCake?: NullableStringFieldUpdateOperationsInput | string | null
     specialRequests?: NullableStringFieldUpdateOperationsInput | string | null
     timeSlot?: StringFieldUpdateOperationsInput | string
+    slotStartTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    slotEndTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    duration?: NullableIntFieldUpdateOperationsInput | number | null
     occasion?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
@@ -8130,6 +8206,9 @@ export namespace Prisma {
     writingOnCake?: SortOrder
     specialRequests?: SortOrder
     timeSlot?: SortOrder
+    slotStartTime?: SortOrder
+    slotEndTime?: SortOrder
+    duration?: SortOrder
     occasion?: SortOrder
     name?: SortOrder
     phone?: SortOrder
@@ -8156,6 +8235,7 @@ export namespace Prisma {
     balanceAmount?: SortOrder
     advanceAmount?: SortOrder
     noOfPeople?: SortOrder
+    duration?: SortOrder
     discount?: SortOrder
   }
 
@@ -8169,6 +8249,9 @@ export namespace Prisma {
     writingOnCake?: SortOrder
     specialRequests?: SortOrder
     timeSlot?: SortOrder
+    slotStartTime?: SortOrder
+    slotEndTime?: SortOrder
+    duration?: SortOrder
     occasion?: SortOrder
     name?: SortOrder
     phone?: SortOrder
@@ -8201,6 +8284,9 @@ export namespace Prisma {
     writingOnCake?: SortOrder
     specialRequests?: SortOrder
     timeSlot?: SortOrder
+    slotStartTime?: SortOrder
+    slotEndTime?: SortOrder
+    duration?: SortOrder
     occasion?: SortOrder
     name?: SortOrder
     phone?: SortOrder
@@ -8227,6 +8313,7 @@ export namespace Prisma {
     balanceAmount?: SortOrder
     advanceAmount?: SortOrder
     noOfPeople?: SortOrder
+    duration?: SortOrder
     discount?: SortOrder
   }
 

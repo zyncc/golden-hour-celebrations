@@ -14,33 +14,46 @@ export async function GET(req: Request) {
 
   const startInstant = plainDate.toZonedDateTime({ timeZone: TIME_ZONE }).toInstant();
 
-  // Start of next day IST → UTC instant (exclusive end)
+  // End of day IST
   const endInstant = plainDate
     .add({ days: 1 })
-    .subtract({ seconds: 1 })
     .toZonedDateTime({ timeZone: TIME_ZONE })
     .toInstant();
 
-  console.log(startInstant.toString(), endInstant.toString());
+  // A wide window to catch bookings spanning midnight or overlapping adjacent days
+  const windowStart = new Date(startInstant.epochMilliseconds - 12 * 60 * 60 * 1000);
+  const windowEnd = new Date(endInstant.epochMilliseconds + 12 * 60 * 60 * 1000);
+
+  const dayStartDate = new Date(startInstant.epochMilliseconds);
+  const dayEndDate = new Date(endInstant.epochMilliseconds);
 
   const response = await prisma.reservations.findMany({
     where: {
-      date: {
-        gte: new Date(startInstant.epochMilliseconds),
-        lt: new Date(endInstant.epochMilliseconds),
-      },
       paymentStatus: true,
+      OR: [
+        {
+          slotStartTime: { lt: dayEndDate },
+          slotEndTime: { gt: dayStartDate },
+        },
+        {
+          date: {
+            gte: windowStart,
+            lt: windowEnd,
+          },
+        },
+      ],
     },
     select: {
       paymentStatus: true,
       date: true,
       room: true,
       timeSlot: true,
+      slotStartTime: true,
+      slotEndTime: true,
+      duration: true,
       occasion: true,
     },
   });
-
-  console.log(response);
 
   return NextResponse.json(response);
 }
