@@ -1,17 +1,23 @@
 "use client";
 
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
-  DREAMSCAPE_TIME_SLOTS,
-  ELITE_TIME_SLOTS,
-  ROYAL_TIME_SLOTS,
+  SLOT_HOURS,
+  getTimeSlotsForDuration,
 } from "@/lib/constants";
 import type { ReservationDetails } from "@/lib/types";
-import { FormatDate, isSlotUnavailable } from "@/lib/utils";
+import { FormatDate, getAvailableSlotsCount, isSlotUnavailable } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
+
+const THEATRES = [
+  { name: "Dreamscape Theatre", title: "Dreamscape Theatre" },
+  { name: "Elite Theatre", title: "Elite Theatre" },
+  { name: "The Royal", title: "The Royal Theatre" },
+];
 
 export default function SlotsClient({
   reservations,
@@ -20,6 +26,7 @@ export default function SlotsClient({
 }) {
   const currentDate = new Date();
   const [date, setDate] = useState<string | undefined>(FormatDate(currentDate));
+  const [duration, setDuration] = useState<number>(1);
   const nextMonthDate = new Date(
     currentDate.getFullYear(),
     currentDate.getMonth() + 1,
@@ -38,6 +45,9 @@ export default function SlotsClient({
       return data;
     },
   });
+
+  const slots = getTimeSlotsForDuration(duration);
+
   return (
     <div className="flex flex-col gap-5 lg:flex-row lg:items-start">
       <Card className="h-fit w-fit mx-auto lg:mx-0">
@@ -54,66 +64,72 @@ export default function SlotsClient({
           />
         </CardContent>
       </Card>
-      <div className="grid w-full flex-1 grid-cols-1 gap-5 lg:grid-cols-2">
+      <div className="flex flex-1 flex-col gap-5 w-full">
         <Card>
-          <CardHeader>DreamScape Theatre</CardHeader>
-          <CardContent className="grid grid-cols-1 gap-5">
-            {DREAMSCAPE_TIME_SLOTS.map((slot) => {
-              const unavailable = isSlotUnavailable(
-                slot,
-                "Dreamscape Theatre",
-                data,
-                date!,
-              );
+          <CardHeader className="pb-3">
+            <CardTitle className="text-base font-semibold">Select Slot Hour</CardTitle>
+          </CardHeader>
+          <CardContent className="flex flex-wrap gap-2.5">
+            {SLOT_HOURS.map((hr) => {
+              const isSelected = duration === hr;
               return (
                 <Button
-                  key={slot}
-                  disabled={unavailable}
-                  variant={unavailable ? "destructive" : "outline"}
-                  className={`flex-1 whitespace-nowrap ${unavailable && "line-through"}`}
+                  key={hr}
+                  type="button"
+                  variant={isSelected ? "default" : "outline"}
+                  onClick={() => setDuration(hr)}
+                  className="rounded-full px-5 font-medium"
                 >
-                  {slot}
+                  {hr} hour
                 </Button>
               );
             })}
           </CardContent>
         </Card>
-        <Card>
-          <CardHeader>Elite Theatre</CardHeader>
-          <CardContent className="grid grid-cols-1 gap-5">
-            {ELITE_TIME_SLOTS.map((slot) => {
-              const unavailable = isSlotUnavailable(slot, "Elite Theatre", data, date!);
-              return (
-                <Button
-                  key={slot}
-                  disabled={unavailable}
-                  variant={unavailable ? "destructive" : "outline"}
-                  className={`flex-1 whitespace-nowrap ${unavailable && "line-through"}`}
-                >
-                  {slot}
-                </Button>
-              );
-            })}
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader>The Royal Theatre</CardHeader>
-          <CardContent className="grid grid-cols-1 gap-5">
-            {ROYAL_TIME_SLOTS.map((slot) => {
-              const unavailable = isSlotUnavailable(slot, "The Royal", data, date!);
-              return (
-                <Button
-                  key={slot}
-                  disabled={unavailable}
-                  variant={unavailable ? "destructive" : "outline"}
-                  className={`flex-1 whitespace-nowrap ${unavailable && "line-through"}`}
-                >
-                  {slot}
-                </Button>
-              );
-            })}
-          </CardContent>
-        </Card>
+
+        <div className="grid w-full grid-cols-1 gap-5 lg:grid-cols-2">
+          {THEATRES.map((theatre) => {
+            const availableCount = getAvailableSlotsCount(
+              duration,
+              theatre.name,
+              data,
+              date,
+            );
+
+            return (
+              <Card key={theatre.name}>
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
+                  <span className="font-semibold text-lg">{theatre.title}</span>
+                  <Badge variant={availableCount > 0 ? "outline" : "secondary"}>
+                    {availableCount} slots available
+                  </Badge>
+                </CardHeader>
+                <CardContent className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  {slots.map((slot) => {
+                    const unavailable = isSlotUnavailable(
+                      slot,
+                      theatre.name,
+                      data,
+                      date!,
+                    );
+                    return (
+                      <Button
+                        key={slot}
+                        disabled={unavailable}
+                        variant={unavailable ? "destructive" : "outline"}
+                        className={`flex-1 whitespace-nowrap text-xs sm:text-sm ${
+                          unavailable ? "line-through opacity-80" : ""
+                        }`}
+                      >
+                        {slot}
+                      </Button>
+                    );
+                  })}
+                </CardContent>
+              </Card>
+            );
+          })}
+        </div>
       </div>
     </div>
   );

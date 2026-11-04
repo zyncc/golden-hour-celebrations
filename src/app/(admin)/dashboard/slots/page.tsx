@@ -12,17 +12,29 @@ export default async function SlotsPage() {
   // Start of next day IST → UTC instant (exclusive end)
   const endInstant = todayIST
     .add({ days: 1 })
-    .subtract({ seconds: 1 })
     .toZonedDateTime({ timeZone: TIME_ZONE })
     .toInstant();
 
+  const dayStartDate = new Date(startInstant.epochMilliseconds);
+  const dayEndDate = new Date(endInstant.epochMilliseconds);
+  const windowStart = new Date(startInstant.epochMilliseconds - 12 * 60 * 60 * 1000);
+  const windowEnd = new Date(endInstant.epochMilliseconds + 12 * 60 * 60 * 1000);
+
   const reservations = await prisma.reservations.findMany({
     where: {
-      date: {
-        gte: new Date(startInstant.epochMilliseconds),
-        lt: new Date(endInstant.epochMilliseconds),
-      },
       paymentStatus: true,
+      OR: [
+        {
+          slotStartTime: { lt: dayEndDate },
+          slotEndTime: { gt: dayStartDate },
+        },
+        {
+          date: {
+            gte: windowStart,
+            lt: windowEnd,
+          },
+        },
+      ],
     },
     select: {
       paymentStatus: true,

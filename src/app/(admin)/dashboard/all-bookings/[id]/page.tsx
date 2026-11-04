@@ -105,6 +105,13 @@ export default async function ReservationDetails({
                 {reservationData.timeSlot && (
                   <Field label="Time Slot" value={reservationData.timeSlot} type="text" />
                 )}
+                {reservationData.duration && (
+                  <Field
+                    label="Duration"
+                    value={`${reservationData.duration} hour(s)`}
+                    type="text"
+                  />
+                )}
                 {reservationData.room && (
                   <Field label="Room" value={reservationData.room} type="text" />
                 )}

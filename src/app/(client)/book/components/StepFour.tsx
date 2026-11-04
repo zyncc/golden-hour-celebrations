@@ -4,6 +4,7 @@ import { createOrder } from "@/actions/createOrder";
 import { createReservation } from "@/actions/createReservation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Separator } from "@/components/ui/separator";
 import { Spinner } from "@/components/ui/spinner";
 import { Switch } from "@/components/ui/switch";
@@ -38,6 +39,7 @@ export default function StepFour() {
   const { Razorpay } = useRazorpay();
   const [pending, setPending] = useState(false);
   const [payFull, setPayFull] = useState(false);
+  const [agreedToTerms, setAgreedToTerms] = useState(false);
   if (!reservation) {
     redirect("?step=1");
   }
@@ -82,10 +84,7 @@ export default function StepFour() {
           setPending(false);
         },
       },
-      callback_url:
-        process.env.NODE_ENV == "development"
-          ? `${process.env.NEXT_PUBLIC_BASE_URL}/success?orderId=${orderID}`
-          : `https://goldenhourcelebrations.in/success?orderId=${orderID}`,
+      callback_url: `${process.env.NEXT_PUBLIC_BASE_URL}/success?orderId=${orderID}`,
       prefill: {
         name: reservation?.name,
         email: reservation?.email,
@@ -423,10 +422,38 @@ export default function StepFour() {
                     </span>
                   </div>
                 )}
+                <div className="mt-4 flex items-start gap-2">
+                  <Checkbox
+                    id="terms"
+                    checked={agreedToTerms}
+                    onCheckedChange={(checked) => setAgreedToTerms(checked === true)}
+                  />
+                  <label
+                    htmlFor="terms"
+                    className="text-muted-foreground cursor-pointer text-sm leading-snug select-none"
+                  >
+                    By creating a Reservation you are agreeing to our{" "}
+                    <Link
+                      href={"/terms"}
+                      target="_blank"
+                      className="text-blue-600 underline"
+                    >
+                      terms
+                    </Link>{" "}
+                    &{" "}
+                    <Link
+                      href={"/privacy"}
+                      target="_blank"
+                      className="text-blue-600 underline"
+                    >
+                      privacy policy
+                    </Link>
+                  </label>
+                </div>
                 <Button
-                  className="bg-primary mt-4 w-full"
+                  className="bg-primary w-full"
                   size="lg"
-                  disabled={pending}
+                  disabled={pending || !agreedToTerms}
                   onClick={() => handlePayButton()}
                 >
                   {pending ? (
@@ -438,16 +465,6 @@ export default function StepFour() {
                     </div>
                   )}
                 </Button>
-                <p className="text-muted-foreground mt-4 text-center text-sm">
-                  By creating a Reservation you are agreeing to our{" "}
-                  <Link href={"/terms"} className="text-blue-600 underline">
-                    terms
-                  </Link>{" "}
-                  &{" "}
-                  <Link href={"/privacy"} className="text-blue-600 underline">
-                    privacy policy
-                  </Link>
-                </p>
               </CardContent>
             </Card>
           </div>

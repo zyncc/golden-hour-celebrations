@@ -14,9 +14,9 @@ import {
 import { useReservation } from "@/context/ReservationStore";
 import {
   ADDITIONAL_PERSON_PRICE,
-  getTimeSlotsForDuration,
   getTheatreOriginalPrice,
   getTheatrePrice,
+  getTimeSlotsForDuration,
   SLOT_HOURS,
   THEATRES,
 } from "@/lib/constants";
@@ -32,14 +32,7 @@ import { useQuery } from "@tanstack/react-query";
 import Autoplay from "embla-carousel-autoplay";
 import Fade from "embla-carousel-fade";
 import useEmblaCarousel from "embla-carousel-react";
-import {
-  Monitor,
-  Sofa,
-  Users,
-  Utensils,
-  Video,
-  Volume2,
-} from "lucide-react";
+import { Monitor, Sofa, Users, Utensils, Video, Volume2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -178,8 +171,8 @@ export default function StepOne() {
       />
 
       <div className="flex w-full">
-        <div className="mx-auto w-full">
-          <div className="grid grid-cols-1 gap-6 pb-6 md:grid-cols-2">
+        <div className="mx-auto w-full min-w-0">
+          <div className="grid min-w-0 grid-cols-1 gap-6 pb-6 md:grid-cols-2">
             {THEATRES.map((pkg, index) => {
               const currentHour = selectedHours[pkg.room] ?? 1;
               const currentPrice = getTheatrePrice(pkg.room, currentHour);
@@ -194,7 +187,7 @@ export default function StepOne() {
               return (
                 <Card
                   key={index}
-                  className="relative overflow-hidden rounded-2xl border border-border/80 p-0 shadow-sm transition-all hover:shadow-md"
+                  className="border-border/80 relative min-w-0 overflow-hidden rounded-2xl border p-0 shadow-sm transition-all hover:shadow-md"
                 >
                   <div className="flex flex-col">
                     <div className="relative">
@@ -204,7 +197,7 @@ export default function StepOne() {
                     <div className="flex flex-col p-4 sm:p-6">
                       <div className="mb-3 space-y-2">
                         <div className="flex items-center justify-between">
-                          <h2 className="text-2xl font-bold tracking-tight text-foreground">
+                          <h2 className="text-foreground text-2xl font-bold tracking-tight">
                             {pkg.room}
                           </h2>
                           {pkg.popular && (
@@ -219,35 +212,30 @@ export default function StepOne() {
                       </div>
                       <div className="mb-4 flex flex-wrap gap-2">
                         {pkg.specs?.map((spec, i) => (
-                          <Badge
-                            key={i}
-                            variant={'outline'}
-                          >
+                          <Badge key={i} variant={"outline"}>
                             {i === 0 && (
-                              <Users className="h-3.5 w-3.5 text-muted-foreground" />
+                              <Users className="text-muted-foreground h-3.5 w-3.5" />
                             )}
                             {i === 1 && (
-                              <Video className="h-3.5 w-3.5 text-muted-foreground" />
+                              <Video className="text-muted-foreground h-3.5 w-3.5" />
                             )}
                             {i === 2 && (
-                              <Volume2 className="h-3.5 w-3.5 text-muted-foreground" />
+                              <Volume2 className="text-muted-foreground h-3.5 w-3.5" />
                             )}
                             {i === 3 && (
-                              <Sofa className="h-3.5 w-3.5 text-muted-foreground" />
+                              <Sofa className="text-muted-foreground h-3.5 w-3.5" />
                             )}
                             {spec}
                           </Badge>
                         ))}
                       </div>
-                      <Badge variant={'secondary'} className="mb-2">
+                      <Badge variant={"secondary"} className="mb-2">
                         <Utensils className="h-4 w-4 shrink-0 text-amber-600 dark:text-amber-400" />
                         <span>Add Cake, Decorations, Lights etc in next step</span>
                       </Badge>
 
-                      
-
-                      <ul className="mb-5 grow space-y-2 text-sm text-muted-foreground">
-                        <p className="font-semibold text-foreground text-xs uppercase tracking-wider">
+                      <ul className="text-muted-foreground mb-5 grow space-y-2 text-sm">
+                        <p className="text-foreground text-xs font-semibold tracking-wider uppercase">
                           Includes
                         </p>
                         {pkg.description.slice(0, 4).map((feature) => (
@@ -278,7 +266,7 @@ export default function StepOne() {
                               render={
                                 <Button
                                   variant="link"
-                                  className="p-0 text-xs text-primary underline"
+                                  className="text-primary p-0 text-xs underline"
                                 >
                                   More Details
                                 </Button>
@@ -314,7 +302,9 @@ export default function StepOne() {
                                     <div className="space-y-2 pl-7 text-sm">
                                       <div className="rounded-md p-3">
                                         <p>
-                                          <strong>120-Inch Fixed Frame Projector Screen</strong>
+                                          <strong>
+                                            120-Inch Fixed Frame Projector Screen
+                                          </strong>
                                         </p>
                                         <p className="text-muted-foreground">
                                           A giant screen that brings movies to life in
@@ -336,7 +326,7 @@ export default function StepOne() {
                               render={
                                 <Button
                                   variant="link"
-                                  className="p-0 text-xs text-primary underline"
+                                  className="text-primary p-0 text-xs underline"
                                 >
                                   More Details
                                 </Button>
@@ -349,7 +339,7 @@ export default function StepOne() {
                                 </DialogTitle>
                               </DialogHeader>
                               <div className="max-h-[80vh] flex-1 overflow-y-auto px-6 pb-6">
-                                <p className="text-sm text-muted-foreground">
+                                <p className="text-muted-foreground text-sm">
                                   From high-end tech to soft, cinematic vibes — Elite
                                   Theatre gives you everything you need for a private
                                   theatre night that feels grand, yet personal.
@@ -366,7 +356,7 @@ export default function StepOne() {
                               render={
                                 <Button
                                   variant="link"
-                                  className="p-0 text-xs text-primary underline"
+                                  className="text-primary p-0 text-xs underline"
                                 >
                                   More Details
                                 </Button>
@@ -379,7 +369,7 @@ export default function StepOne() {
                                 </DialogTitle>
                               </DialogHeader>
                               <div className="max-h-[80vh] overflow-y-auto px-6 pb-6">
-                                <p className="text-sm text-muted-foreground">
+                                <p className="text-muted-foreground text-sm">
                                   Experience unparalleled luxury in The Royal. Perfect for
                                   large gatherings, our space comfortably accommodates up
                                   to 40 guests.
@@ -392,9 +382,11 @@ export default function StepOne() {
 
                       {/* Slot Hour Selector on card */}
                       <div className="mb-1">
-                        <p className="text-sm font-semibold text-foreground mb-2">Select slot hour</p>
-                      {/* Title & Badge */}
-                        <div className="flex flex-wrap gap-2">
+                        <p className="text-foreground mb-2 text-sm font-semibold">
+                          Select slot hour
+                        </p>
+                        {/* Title & Badge */}
+                        <div className="flex w-full min-w-0 flex-col gap-1.5 sm:flex-row sm:gap-2">
                           {SLOT_HOURS.map((hr) => {
                             const count = getAvailableSlotsCount(
                               hr,
@@ -405,26 +397,21 @@ export default function StepOne() {
                             const isSelected = currentHour === hr;
 
                             return (
-                              <button
+                              <Button
                                 key={hr}
-                                type="button"
                                 onClick={() => {
                                   setSelectedHours((prev) => ({
                                     ...prev,
                                     [pkg.room]: hr,
                                   }));
                                 }}
-                                className={cn(
-                                  "flex items-center gap-2 rounded-full px-4 py-1.5 text-sm font-medium border transition-all cursor-pointer",
-                                  isSelected
-                                    ? "bg-primary text-primary-foreground border-primary"
-                                    : "bg-background text-foreground border-border hover:border-primary/50",
-                                )}
+                                className="flex-1 p-2"
+                                variant={isSelected ? "default" : "outline"}
                               >
-                                <span>{hr} hour</span>
+                                <span className="whitespace-nowrap">{hr} hour</span>
                                 <span
                                   className={cn(
-                                    "text-xs px-1.5 py-0.5 rounded-full font-medium",
+                                    "rounded-full px-1.5 py-0.5 text-[10px] font-medium whitespace-nowrap sm:text-xs",
                                     isSelected
                                       ? "bg-primary-foreground/20 text-primary-foreground"
                                       : "bg-muted text-muted-foreground",
@@ -432,14 +419,14 @@ export default function StepOne() {
                                 >
                                   {reservation?.date ? `${count} slots` : "-"}
                                 </span>
-                              </button>
+                              </Button>
                             );
                           })}
                         </div>
                       </div>
                       <div className="mt-5 flex flex-wrap items-center justify-between gap-3 border-t pt-4">
                         <div>
-                          <span className="text-xs text-muted-foreground block">
+                          <span className="text-muted-foreground block text-xs">
                             Starting from
                           </span>
                           <div className="flex items-baseline gap-2">
@@ -448,18 +435,19 @@ export default function StepOne() {
                                 {formatCurrency(originalPrice)}
                               </span>
                             )}
-                            <span className="text-2xl sm:text-3xl font-extrabold text-foreground">
+                            <span className="text-foreground text-2xl font-extrabold sm:text-3xl">
                               {formatCurrency(currentPrice)}
                             </span>
                           </div>
-                          <p className="text-xs text-muted-foreground mt-0.5">
-                            + ₹{ADDITIONAL_PERSON_PRICE}/person after {pkg.noPeople} People
+                          <p className="text-muted-foreground mt-0.5 text-xs">
+                            + ₹{ADDITIONAL_PERSON_PRICE}/person after {pkg.noPeople}{" "}
+                            People
                           </p>
                         </div>
                         <Button
                           type="button"
                           onClick={() => handleOpenSlotDialog(pkg.room)}
-                          className="rounded-full font-semibold px-6 py-2.5 transition-all border-none cursor-pointer"
+                          className="cursor-pointer rounded-full border-none px-6 py-2.5 font-semibold transition-all"
                         >
                           Select Slot
                         </Button>
@@ -477,64 +465,126 @@ export default function StepOne() {
         open={dialogState.open}
         onOpenChange={(open) => setDialogState((prev) => ({ ...prev, open }))}
       >
-        <DialogContent className="sm:max-w-3xl p-0 overflow-hidden rounded-2xl max-h-[90vh] flex flex-col">
-          <DialogHeader className="p-4 sm:p-6 pb-2 border-b">
+        <DialogContent className="flex max-h-[90vh] flex-col overflow-hidden rounded-2xl p-0 sm:max-w-3xl">
+          <DialogHeader className="border-b p-4 pb-2 sm:p-6">
             <div className="flex items-center justify-between">
               <div>
-                <DialogTitle className="text-xl sm:text-2xl font-bold">
+                <DialogTitle className="text-xl font-bold sm:text-2xl">
                   Select Time Slot
                 </DialogTitle>
-                <p className="text-xs sm:text-sm text-muted-foreground mt-1">
-                  {dialogState.room} • {reservation?.date || "No date selected"}
+                <p className="text-muted-foreground mt-1 text-xs sm:text-sm">
+                  {dialogState.room}
                 </p>
               </div>
             </div>
           </DialogHeader>
+          <div className="flex-1 space-y-5 overflow-y-auto p-4 sm:p-6">
+            <div>
+              <h3 className="text-foreground mb-3 text-sm font-bold">Slot Hour</h3>
+              <div className="grid grid-cols-3 gap-2.5">
+                {SLOT_HOURS.map((hr) => {
+                  const count = dialogState.room
+                    ? getAvailableSlotsCount(
+                        hr,
+                        dialogState.room,
+                        data,
+                        reservation?.date,
+                      )
+                    : 0;
+                  const isSelected = dialogState.duration === hr;
 
-          <div className="p-4 sm:p-6 overflow-y-auto flex-1">
-            <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
-              <div className="md:col-span-4 space-y-4">
+                  return (
+                    <Button
+                      key={hr}
+                      type="button"
+                      onClick={() => {
+                        setDialogState((prev) => ({
+                          ...prev,
+                          duration: hr,
+                          selectedSlot: undefined,
+                        }));
+                      }}
+                      variant={isSelected ? "default" : "outline"}
+                      className="flex h-auto flex-col gap-1 px-1 py-1.5 text-xs sm:flex-row sm:gap-1.5 sm:px-3 sm:py-2 sm:text-sm"
+                    >
+                      <span className="whitespace-nowrap">{hr} hour</span>
+                      <Badge
+                        variant={"outline"}
+                        className="px-1.5 py-0.5 text-[10px] sm:text-xs"
+                      >
+                        {count} slots
+                      </Badge>
+                    </Button>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Time slots */}
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <h3 className="text-foreground text-sm font-bold">Time slots</h3>
+                {isLoading && (
+                  <span className="text-muted-foreground text-xs">
+                    Checking availability...
+                  </span>
+                )}
+              </div>
+
+              <div className="grid max-h-[40vh] grid-cols-2 gap-2.5 overflow-y-auto pr-1">
+                {getTimeSlotsForDuration(dialogState.duration).map((slot) => {
+                  const unavailable =
+                    !reservation?.date ||
+                    (dialogState.room
+                      ? isSlotUnavailable(slot, dialogState.room, data, reservation.date)
+                      : false);
+
+                  const isSelected = dialogState.selectedSlot === slot;
+
+                  if (unavailable) {
+                    return (
+                      <Button
+                        key={slot}
+                        disabled
+                        className="cursor-not-allowed"
+                        variant={"destructive"}
+                      >
+                        {slot}
+                      </Button>
+                    );
+                  }
+                  return (
+                    <Button
+                      key={slot}
+                      onClick={() => {
+                        setDialogState((prev) => ({
+                          ...prev,
+                          selectedSlot: slot,
+                        }));
+                      }}
+                      variant={isSelected ? "default" : "outline"}
+                    >
+                      {slot}
+                    </Button>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-muted/10 flex items-center justify-between gap-4 border-t p-4 sm:p-5">
+            <div className="text-xs sm:text-sm">
+              {dialogState.selectedSlot ? (
+                <p className="text-foreground font-medium">
+                  Selected:{" "}
+                  <span className="font-bold text-emerald-600 dark:text-emerald-400">
+                    {dialogState.selectedSlot}
+                  </span>{" "}
+                  ({dialogState.duration} hr)
+                </p>
+              ) : (
                 <div>
-                  <h3 className="text-sm font-bold text-foreground mb-3">Slot Hour</h3>
-                  <div className="flex flex-col gap-2.5">
-                    {SLOT_HOURS.map((hr) => {
-                      const count = dialogState.room
-                        ? getAvailableSlotsCount(
-                            hr,
-                            dialogState.room,
-                            data,
-                            reservation?.date,
-                          )
-                        : 0;
-                      const isSelected = dialogState.duration === hr;
-
-                      return (
-                        <Button
-                          key={hr}
-                          type="button"
-                          onClick={() => {
-                            setDialogState((prev) => ({
-                              ...prev,
-                              duration: hr,
-                              selectedSlot: undefined,
-                            }));
-                          }}
-                          variant={isSelected ? "default" : "outline"}
-                        >
-                          <span>{hr} hour</span>
-                          <Badge
-                            variant={'outline'}
-                          >
-                            {count} slots
-                          </Badge>
-                        </Button>
-                      );
-                    })}
-                  </div>
-                </div>
-
-                <div className="rounded-xl border border-border/60 bg-muted/20 p-3.5 space-y-1.5">
-                  <span className="text-xs text-muted-foreground block">
+                  <span className="text-muted-foreground block text-xs">
                     Starting from
                   </span>
                   <div className="flex items-baseline gap-2">
@@ -543,86 +593,15 @@ export default function StepOne() {
                         {formatCurrency(activeDialogOriginalPrice)}
                       </span>
                     )}
-                    <span className="text-xl font-bold text-foreground">
+                    <span className="text-foreground text-xl font-bold">
                       {formatCurrency(activeDialogPrice)}
                     </span>
                   </div>
-                  <p className="text-xs text-muted-foreground">
+                  <p className="text-muted-foreground text-xs">
                     + ₹{ADDITIONAL_PERSON_PRICE}/person after{" "}
                     {activeTheatre?.noPeople || 2} People
                   </p>
                 </div>
-              </div>
-
-              <div className="md:col-span-8 space-y-3">
-                <div className="flex items-center justify-between">
-                  <h3 className="text-sm font-bold text-foreground">Time slots</h3>
-                  {isLoading && (
-                    <span className="text-xs text-muted-foreground">
-                      Checking availability...
-                    </span>
-                  )}
-                </div>
-
-                <div className="grid grid-cols-2 gap-2.5 max-h-[50vh] overflow-y-auto pr-1">
-                  {getTimeSlotsForDuration(dialogState.duration).map((slot) => {
-                    const unavailable =
-                      !reservation?.date ||
-                      (dialogState.room
-                        ? isSlotUnavailable(
-                            slot,
-                            dialogState.room,
-                            data,
-                            reservation.date,
-                          )
-                        : false);
-
-                    const isSelected = dialogState.selectedSlot === slot;
-
-                    if (unavailable) {
-                      return (
-                       <Button
-                        key={slot}
-                        disabled
-                        className="cursor-not-allowed"
-                        variant={"destructive"}
-                      >
-                        {slot}
-                      </Button>
-                      );
-                    }
-                    return (
-                      <Button
-                        key={slot}
-                        onClick={() => {
-                          setDialogState((prev) => ({
-                            ...prev,
-                            selectedSlot: slot,
-                          }));
-                        }}
-                        variant={isSelected ? "default" : "outline"}
-                      >
-                        {slot}
-                      </Button>
-                    );
-                  })}
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="border-t p-4 sm:p-5 bg-muted/10 flex items-center justify-between gap-4">
-            <div className="text-xs sm:text-sm">
-              {dialogState.selectedSlot ? (
-                <p className="font-medium text-foreground">
-                  Selected:{" "}
-                  <span className="font-bold text-emerald-600 dark:text-emerald-400">
-                    {dialogState.selectedSlot}
-                  </span>{" "}
-                  ({dialogState.duration} hr)
-                </p>
-              ) : (
-                <p className="text-muted-foreground">Select an available time slot</p>
               )}
             </div>
 

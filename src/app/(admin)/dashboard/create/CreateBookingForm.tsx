@@ -1,6 +1,7 @@
 "use client";
 
 import { CreateManualBooking } from "@/actions/createReservation";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -29,11 +30,9 @@ import {
   CAKE_PRICE,
   CAKES,
   CANDLE_LIGHT_ROSE_PATH,
-  DREAMSCAPE_THEATRE_PRICE,
-  DREAMSCAPE_TIME_SLOTS,
-  ELITE_THEATRE_PRICE,
-  ELITE_TIME_SLOTS,
   FOG_EFFECT_PRICE,
+  getTheatrePrice,
+  getTimeSlotsForDuration,
   LED_LETTER_LIGHT_AGE,
   LED_LETTER_LIGHT_NAME,
   MIDNIGHT_CHARGE,
@@ -41,13 +40,17 @@ import {
   PHOTOGRAPHY_AND_VIDEO_PRICE,
   PHOTOGRAPHY_PRICE,
   RASMALAI_CAKE_PRICE,
-  ROYAL_TIME_SLOTS,
-  THE_ROYAL_THEATRE_PRICE,
+  SLOT_HOURS,
 } from "@/lib/constants";
 import formatCurrency from "@/lib/formatCurrency";
-import { cn, FormatDate, isSlotUnavailable } from "@/lib/utils";
+import {
+  cn,
+  FormatDate,
+  getAvailableSlotsCount,
+  hasMidnightCharge,
+  isSlotUnavailable,
+} from "@/lib/utils";
 import { ManualBookingSchema } from "@/lib/zodSchemas";
-import type { Reservations } from "@/prisma/generated/prisma/client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQuery } from "@tanstack/react-query";
 import { format } from "date-fns";
@@ -75,6 +78,7 @@ export default function CreateBookingForm({ currentDate }: { currentDate: string
   const [fogEntry, setFogEntry] = useState(false);
   const [rosePath, setRosePath] = useState(false);
   const [selectedTimeSlot, setSelectedTimeSlot] = useState<string>("");
+  const [duration, setDuration] = useState<number>(1);
   const [wantsLedName, setWantsLedName] = useState(false);
   const [wantsLedAge, setWantsLedAge] = useState(false);
 
@@ -85,6 +89,7 @@ export default function CreateBookingForm({ currentDate }: { currentDate: string
       email: "",
       date: undefined,
       timeSlot: undefined,
+      duration: 1,
       phone: "",
       occasion: undefined,
       room: undefined,
@@ -126,13 +131,9 @@ export default function CreateBookingForm({ currentDate }: { currentDate: string
     let ledLetterCost = 0;
     let midnightCharge = 0;
 
-    // Base room price
-    if (selectedRoom === "Dreamscape Theatre") {
-      basePrice = DREAMSCAPE_THEATRE_PRICE;
-    } else if (selectedRoom === "Elite Theatre") {
-      basePrice = ELITE_THEATRE_PRICE;
-    } else if (selectedRoom === "The Royal") {
-      basePrice = THE_ROYAL_THEATRE_PRICE;
+    // Base room price using getTheatrePrice
+    if (selectedRoom) {
+      basePrice = getTheatrePrice(selectedRoom, duration, selectedTimeSlot);
     }
 
     // Extra people charges
@@ -171,7 +172,7 @@ export default function CreateBookingForm({ currentDate }: { currentDate: string
     if (wantsLedAge) ledLetterCost += LED_LETTER_LIGHT_AGE;
 
     // Midnight charges
-    if (selectedTimeSlot === "10PM - 12AM" || selectedTimeSlot === "10:30PM - 12:30AM") {
+    if (hasMidnightCharge(selectedTimeSlot)) {
       midnightCharge = MIDNIGHT_CHARGE;
     }
 
@@ -200,6 +201,7 @@ export default function CreateBookingForm({ currentDate }: { currentDate: string
     };
   }, [
     selectedRoom,
+    duration,
     noOfPeople,
     selectedCake,
     fogEntry,
@@ -222,13 +224,11 @@ export default function CreateBookingForm({ currentDate }: { currentDate: string
     form.resetField("timeSlot");
   }, [selectedRoom, selectedDate, form]);
 
-  // Get available time slots based on selected room
+  // Get available time slots based on selected duration
   const availableTimeSlots = useMemo(() => {
-    if (selectedRoom === "Dreamscape Theatre") return DREAMSCAPE_TIME_SLOTS;
-    if (selectedRoom === "Elite Theatre") return ELITE_TIME_SLOTS;
-    if (selectedRoom === "The Royal") return ROYAL_TIME_SLOTS;
-    return [];
-  }, [selectedRoom]);
+    if (!selectedRoom) return [];
+    return getTimeSlotsForDuration(duration);
+  }, [selectedRoom, duration]);
 
   // Check if a time slot is booked
   const isTimeSlotBooked = useCallback(
@@ -416,17 +416,54 @@ export default function CreateBookingForm({ currentDate }: { currentDate: string
             <CardHeader>
               <CardTitle className="text-xl">Time Slot Selection</CardTitle>
               <p className="text-muted-foreground text-sm">
-                Choose your preferred time slot
+                Choose duration and your preferred time slot
               </p>
             </CardHeader>
-            <CardContent>
+            <CardContent className="space-y-6">
+              {/* Duration Selector */}
+              <div>
+                <FormLabel className="text-sm font-medium">Select Slot Hour</FormLabel>
+                <div className="mt-2 grid grid-cols-3 gap-2 max-w-sm sm:max-w-md">
+                  {SLOT_HOURS.map((hr) => {
+                    const isSelected = duration === hr;
+                    const count =
+                      selectedRoom && selectedDate
+                        ? getAvailableSlotsCount(hr, selectedRoom, data, selectedDate)
+                        : 0;
+
+                    return (
+                      <Button
+                        key={hr}
+                        type="button"
+                        variant={isSelected ? "default" : "outline"}
+                        onClick={() => {
+                          setDuration(hr);
+                          form.setValue("duration", hr);
+                          form.resetField("timeSlot");
+                          setSelectedTimeSlot("");
+                        }}
+                        className="flex flex-col sm:flex-row h-auto py-2 px-2 sm:px-3 gap-1 sm:gap-2 text-xs sm:text-sm"
+                      >
+                        <span>{hr} hour</span>
+                        <Badge
+                          variant={isSelected ? "secondary" : "outline"}
+                          className="text-[10px] sm:text-xs"
+                        >
+                          {selectedDate && selectedRoom ? `${count} slots` : "-"}
+                        </Badge>
+                      </Button>
+                    );
+                  })}
+                </div>
+              </div>
+
               <FormField
                 control={form.control}
                 name="timeSlot"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel className="text-sm font-medium">
-                      Available Time Slots
+                      Available Time Slots ({duration} hour)
                     </FormLabel>
                     <div className="mt-4 grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-4">
                       {availableTimeSlots.map((slot) => {
@@ -854,7 +891,7 @@ export default function CreateBookingForm({ currentDate }: { currentDate: string
                   </CardHeader>
                   <CardContent className="space-y-3">
                     <div className="flex justify-between text-sm">
-                      <span>{selectedRoom} Base Price:</span>
+                      <span>{selectedRoom} ({duration} hr) Base Price:</span>
                       <span className="font-medium">
                         {formatCurrency(calculatedAmounts.basePrice)}
                       </span>
