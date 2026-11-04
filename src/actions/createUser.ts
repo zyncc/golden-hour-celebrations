@@ -1,6 +1,7 @@
 "use server";
 
 import prisma from "@/lib/prisma";
+import { revalidatePath } from "next/cache";
 
 type user = {
   name: string;
@@ -10,17 +11,35 @@ type user = {
 
 export async function CreateUser(user: user) {
   try {
-    await prisma.user.create({
+    const email = user.email.trim().toLowerCase();
+    const phoneNumber = user.phone.trim();
+    const name = user.name.trim();
+
+    const existingUser = await prisma.user.findFirst({
+      where: {
+        OR: [{ email }, { phoneNumber }],
+      },
+    });
+
+    if (existingUser) {
+      return existingUser;
+    }
+
+    const newUser = await prisma.user.create({
       data: {
-        name: user.name,
-        email: user.email,
+        name,
+        email,
         emailVerified: false,
-        phoneNumber: user.phone,
+        phoneNumber,
         phoneNumberVerified: false,
         role: "user",
       },
     });
+
+    revalidatePath("/dashboard");
+    return newUser;
   } catch (e) {
-    console.log(e);
+    console.error("Error creating user:", e);
   }
 }
+

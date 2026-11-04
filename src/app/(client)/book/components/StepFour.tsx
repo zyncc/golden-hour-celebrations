@@ -52,6 +52,7 @@ export default function StepFour() {
         description: order.error,
         duration: 5000,
       });
+      setPending(false);
       return;
     }
     const orderID = order.orderId;
@@ -61,6 +62,7 @@ export default function StepFour() {
         description: err.description,
         duration: 5000,
       });
+      setPending(false);
       return;
     }
     const options: RazorpayOrderOptions = {

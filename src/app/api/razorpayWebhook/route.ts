@@ -24,6 +24,22 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Invalid signature" }, { status: 200 });
     }
 
+    const findReservation = await prisma.reservations.findUnique({
+      where: {
+        orderID,
+      },
+    });
+
+    if (!findReservation) {
+      console.log("Reservation not found");
+      return NextResponse.json({ error: "Reservation not found" }, { status: 200 });
+    }
+
+    if (findReservation.paymentStatus) {
+      console.log("Payment already processed");
+      return NextResponse.json({ error: "Payment already processed" }, { status: 200 });
+    }
+
     const updatedReservation = await prisma.reservations.update({
       where: {
         orderID,

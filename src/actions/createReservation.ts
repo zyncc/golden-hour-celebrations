@@ -1,6 +1,7 @@
 "use server";
 
 import { auth } from "@/auth";
+import { CreateUser } from "@/actions/createUser";
 import { Reservation } from "@/context/ReservationStore";
 import ReservationConfirmationEmail from "@/emails/receipt";
 import {
@@ -213,6 +214,12 @@ export async function createReservation(
         rosePath: data.rosePath,
       },
     });
+
+    await CreateUser({
+      name: data.name,
+      email: data.email,
+      phone: data.phone,
+    });
   } catch (e) {
     console.log(e);
   }
@@ -344,6 +351,12 @@ export async function CreateManualBooking(data: Data) {
       orderID: randomUUID(),
       manualBooking: true,
     },
+  });
+
+  await CreateUser({
+    name: data.name,
+    email: data.email,
+    phone: data.phone,
   });
 
   const resend = new Resend(process.env.RESEND_API_KEY);
