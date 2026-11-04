@@ -7,7 +7,7 @@ export const emailValidator = z.object({
 export const getStepThreeFormSchema = (room: string) => {
   let maxPeopleAllowed;
   if (room === "Dreamscape Theatre") {
-    maxPeopleAllowed = 4;
+    maxPeopleAllowed = 5;
   } else if (room === "The Royal") {
     maxPeopleAllowed = 40;
   } else {

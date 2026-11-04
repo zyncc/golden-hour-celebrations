@@ -184,7 +184,7 @@ export default function StepThreeForm() {
             </Field>
 
             {/* Number of People */}
-            {reservation.room === "Elite Theatre" ? (
+            {reservation.room === "Dreamscape Theatre" ? (
               <Field>
                 <FieldLabel>Number of People</FieldLabel>
                 <FieldContent>
@@ -195,7 +195,7 @@ export default function StepThreeForm() {
                     className="text-base"
                     data-invalid={!!errors.noOfPeople}
                   />
-                  <FieldDescription>Minimum 2, maximum 10 people</FieldDescription>
+                  <FieldDescription>Minimum 2, maximum 5 people</FieldDescription>
                   <FieldError
                     errors={errors.noOfPeople ? [errors.noOfPeople] : undefined}
                   />
@@ -212,7 +212,7 @@ export default function StepThreeForm() {
                     className="text-base"
                     data-invalid={!!errors.noOfPeople}
                   />
-                  <FieldDescription>Minimum 2, maximum 4 people</FieldDescription>
+                  <FieldDescription>Minimum 2, maximum 10 people</FieldDescription>
                   <FieldError
                     errors={errors.noOfPeople ? [errors.noOfPeople] : undefined}
                   />
